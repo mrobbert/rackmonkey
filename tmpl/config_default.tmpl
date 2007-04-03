@@ -1,0 +1,55 @@
+<?xml version="1.0"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+
+<!-- 
+########################################################################
+# RackMonkey - Know Your Racks - http://www.rackmonkey.org
+# Version 1.2.%BUILD%
+# (C)2007 Will Green (wgreen at users.sourceforge.net)
+# Config template
+########################################################################
+-->
+
+<head>
+	<title>Configure | RackMonkey</title>
+	<link rel="stylesheet" type="text/css" title="Monkey Style" href="<TMPL_VAR NAME=web_root>/styles/rackmonkey.css" />
+	<script type="text/javascript" src="<TMPL_VAR NAME=web_root>/javascript/racklib.js"></script>
+</head>
+
+<body>
+
+<TMPL_INCLUDE NAME="nav.ssi">
+
+<p></p>
+
+<table style="border: 1px solid black;">
+	<tr>
+		<td class="row_silver_conf"><a href="<TMPL_VAR NAME=base_url>?view=domain">Domains</a></td>
+		<td class="row_silver_conf">Typically a DNS domain, such as example.com</td>
+	</tr>
+	<tr>
+		<td class="row_white_conf"><a href="<TMPL_VAR NAME=base_url>?view=hardware">Hardware</a></td>
+		<td class="row_white_conf">The hardware model of a device, such an Apple Xserve</td>
+	</tr>	
+	<tr>
+		<td class="row_silver_conf"><a href="<TMPL_VAR NAME=base_url>?view=os">Operating Systems</a></td>
+		<td class="row_silver_conf">The operating system of a device, such as Solaris</td>
+	</tr>
+	<tr>
+		<td class="row_white_conf"><a href="<TMPL_VAR NAME=base_url>?view=org">Organisations</a></td>
+		<td class="row_white_conf">Customers, suppliers, manufacturers</td>
+	</tr>
+	<tr>
+		<td class="row_silver_conf"><a href="<TMPL_VAR NAME=base_url>?view=role">Roles</a></td>
+		<td class="row_silver_conf">The primary function of a device, such as running a database</td>
+	</tr>
+	<tr>
+		<td class="row_white_conf"><a href="<TMPL_VAR NAME=base_url>?view=service">Service Levels</a></td>
+		<td class="row_white_conf">The level of support you provide on the device</td>
+	</tr>	
+</table>	
+
+<TMPL_INCLUDE NAME="footer.ssi">
+</body>
+</html>

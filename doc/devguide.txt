@@ -1,0 +1,151 @@
+Developer Guide to RackMonkey v1.2
+==================================
+
+Creating Custom Views
+---------------------
+You can create a custom view in RackMonkey without writing any code. To create
+your new view you need to choose a type of object (device, rack, service) and a
+view type to base your template on. 
+
+The views available are:
+<need_to_fill_in>
+
+The view types available are:
+
+default:	A list view of this sort of object
+create:		A view for creating a new object
+edit:		A view for editing an object
+single:		A view of a single object
+physical:	A specialised view used only with rack objects
+manage:		A view only used with rows
+
+The view type you choose determines what sort of data is sent to the template.
+
+To make your new template create a file called:
+
+	<view>_<view-type>_<arbitary-name>.tmpl
+	
+For example, to create a new edit view for rooms, you might call your template:
+
+	room_edit_foo.tmpl
+	
+You may find it easiest to copy the exiting room_edit.tmpl to get you started.
+
+Provided your template file is in the RackMonkey template directory you can view
+it at once using:
+
+	rackmonkey.pl?view=<view>&view_type=<view-type>
+
+For our example above this would be:
+
+	rackmonkey.pl?view=room&view_type=edit_foo
+
+Remember, the first word of the view_type determines what sort of data your
+template gets sent. If your template doesn't work, check its view type is one
+of the allowed values above (physical only works with rack), and that you have
+used the singular for the type. For example, view=device will work, but
+view=devices will not.
+
+You can now edit your template however you like. You can also edit other
+templates to link to your new template, so it becomes a full part of
+RackMonkey. 
+
+RackMonkey uses HTML::Template to parse templates. You can include a variable:
+
+	<TMPL_VAR ESCAPE=HTML NAME=var_name>
+	
+Replacing var_name with the variable you want to include. Looking at the 
+existing templates is a good way to see what's possible (eg. loops). For more
+information on HTML::Template see:
+
+	http://html-template.sourceforge.net/
+
+Note that the included templates will be updated in future versions of
+RackMonkey, so you may wish to include links to your custom templates in a
+separate file for ease of updating. This also means it's best not to make
+extensive changes to the included templates, but to make a new template, then
+edit it.
+
+You can include one template in another like this:
+
+	<TMPL_INCLUDE NAME="filename">
+	
+Where filename is the name of the file to include from the template directory.
+
+A reference to the template variables available is included in Appendix B at the
+end of this guide.
+
+
+
+Porting RackMonkey to Another Database
+--------------------------------------
+If neither SQLite nor Postgres is appropriate for you, you may consider porting
+RackMonkey::Engine to another database. Before you do this, I would strongly
+advise you try using SQLite and Postgres first, as porting RackMonkey to a
+new database isn't for the faint-hearted.
+
+Key database features used by RackMonkey (with example):
+
+ * Transactions
+   Updating the OS of twenty servers only succeeds if they all update.
+ * Foreign key constraints
+   Deleting a rack which contains any devices will fail.
+ * Readable views (views are never updated directly)
+   CREATE VIEW customer AS SELECT * FROM org WHERE customer = 1;
+   
+If the database you are porting to doesn't have these features you may be able
+to emulate them: for example Foreign key constraints are emulated with triggers
+when RackMonkey is used with SQLite. Not supporting these features will require
+you change the RackMonkey code, which will lead to maintenance problems: what
+do you do when an update to RackMonkey is released, or you need to move to
+another database?
+
+A good port should:
+
+ * Support transactions, foreign key constraints and readable views
+ * Not execute different SQL on different databases (excluding the initial
+   schema, which will be database specific).
+ * Pass all unit tests
+
+If you believe specific SQL in RackMonkey would benefit from changes to make it
+more portable, please get in touch.
+
+
+
+Appendix A: RackMonkey Engine Methods
+--------------------------------------
+This section has yet to incorporating from the POD. For now use:
+
+	perldoc Engine.pm.
+
+
+
+Appendix B: Template Variables
+------------------------------
+
+System Variables
+----------------
+The following system variables are available in all templates and ensure that
+templates are portable, no matter where RackMonkey is installed.
+
+base_url - URL of the RackMonkey application, e.g. /cgi-bin/apps/rackmonkey.pl
+web_root - Base URL of web content, e.g. /apps/rackmonkey
+
+
+Building Templates
+------------------
+
+Create
+------
+None.
+
+Default
+-------
+
+Edit
+----
+
+Single
+------
+
+

@@ -1,0 +1,57 @@
+<?xml version="1.0"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+
+<!-- 
+########################################################################
+# RackMonkey - Know Your Racks - http://www.rackmonkey.org
+# Version 1.2.%BUILD%
+# (C)2007 Will Green (wgreen at users.sourceforge.net)
+# Rack physical template
+########################################################################
+-->
+
+<head>
+	<title>Rack Device Layout | RackMonkey</title>
+	<link rel="stylesheet" type="text/css" title="Monkey Style" href="<TMPL_VAR NAME=web_root>/styles/rackmonkey.css" />
+	<script type="text/javascript" src="<TMPL_VAR NAME=web_root>/javascript/racklib.js"></script>
+</head>
+
+<body>
+
+<TMPL_INCLUDE NAME="nav.ssi">
+
+
+<!-- temporary navigation -->
+<p>
+<a href="<TMPL_VAR NAME=base_url>?view=building&amp;view_type=default">View Building Summary</a> | <a href="<TMPL_VAR NAME=base_url>?view=room&amp;view_type=default">View Room Summary</a> | <a href="<TMPL_VAR NAME=base_url>?view=rack&amp;view_type=default">View Rack Summary</a>
+</p>
+<!--- end of temporary navigation -->
+
+<TMPL_LOOP NAME=rack_list>
+<table class="rack_physical">
+<tr>
+	<th colspan="2">
+		Rack <TMPL_VAR NAME=name>
+	</th>
+</tr>
+<TMPL_LOOP NAME=rack_layout>
+	<tr>
+		<td class="rack_physical_num"><TMPL_VAR NAME=rack_pos></td>
+		
+		<TMPL_IF NAME=hardware_size><td rowspan="<TMPL_VAR NAME=hardware_size>" <TMPL_IF NAME=name>class="rack_physical_dev"<TMPL_ELSE>class="rack_physical_empty"</TMPL_IF>>
+		<TMPL_IF NAME=name> <a title="View details for <TMPL_VAR ESCAPE=HTML NAME=name><TMPL_UNLESS NAME=domain_meta_default_data>.<TMPL_VAR ESCAPE=HTML NAME=domain_name></TMPL_UNLESS>" href="<TMPL_VAR NAME=base_url>?view=device&amp;view_type=single&amp;id=<TMPL_VAR NAME=id>"><TMPL_VAR ESCAPE=HTML NAME=name></a></TMPL_IF>
+		<TMPL_IF NAME=hardware_name>(<TMPL_VAR NAME=hardware_manufacturer_name> <TMPL_VAR NAME=hardware_name>)</TMPL_IF>
+		<TMPL_IF NAME=name> [<a title="Edit device '<TMPL_VAR ESCAPE=HTML NAME=name>'" href="<TMPL_VAR NAME=base_url>?view=device&amp;view_type=edit&amp;id=<TMPL_VAR NAME=id>">Edit</a>]
+		<TMPL_ELSE><a title="Add a device in this rack at this location" href="<TMPL_VAR NAME=base_url>?view=device&amp;view_type=create&amp;rack=<TMPL_VAR NAME=rack_id>&amp;position=<TMPL_VAR NAME=rack_pos>">(+)</a></TMPL_IF></td></TMPL_IF>
+	</tr></TMPL_LOOP>
+</table>
+</TMPL_LOOP>
+
+<p>
+<br style="clear: both" />
+</p>
+<TMPL_INCLUDE NAME="footer.ssi">
+
+</body>
+</html>

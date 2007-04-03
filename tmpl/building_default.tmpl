@@ -1,0 +1,69 @@
+<?xml version="1.0"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+
+<!-- 
+########################################################################
+# RackMonkey - Know Your Racks - http://www.rackmonkey.org
+# Version 1.2.%BUILD%
+# (C)2007 Will Green (wgreen at users.sourceforge.net)
+# Building default (table) template
+########################################################################
+-->
+
+<head>
+	<title>Buildings | RackMonkey</title>
+	<link rel="stylesheet" type="text/css" title="Monkey Style" href="<TMPL_VAR NAME=web_root>/styles/rackmonkey.css" />
+	<script type="text/javascript" src="<TMPL_VAR NAME=web_root>/javascript/racklib.js"></script>
+</head>
+
+<body>
+
+<TMPL_INCLUDE NAME="nav.ssi">
+
+<!-- temporary navigation -->
+<p>
+	<a href="<TMPL_VAR NAME=base_url>?view=room&amp;view_type=default">View Room Summary</a> | <a href="<TMPL_VAR NAME=base_url>?view=rack&amp;view_type=default">View Rack Summary</a>
+</p>
+<!--- end of temporary navigation -->
+
+<p>
+	<a href="<TMPL_VAR NAME=base_url>?view=building&amp;view_type=create"><img src="<TMPL_VAR NAME=web_root>/graphics/buttons/new.gif" width="47" height="21" alt="New" /></a>
+</p>
+
+<TMPL_IF NAME=buildings>
+<table>
+	<tr>
+		<th>&nbsp;</th>
+		<th>
+			<a class="sort" title="Sort by name" href="<TMPL_VAR NAME=base_url>?view=building&amp;order_by=building.name">Building</a>
+		</th>
+		<th>
+			<a class="sort" title="Sort by short name" href="<TMPL_VAR NAME=base_url>?view=building&amp;order_by=building.name_short">Short Name</a>
+		</th>		
+		<th>
+			<a class="sort" title="Sort by notes" href="<TMPL_VAR NAME=base_url>?view=building&amp;order_by=building.notes">Notes</a>
+		</th>		
+	</tr>
+	<TMPL_LOOP NAME=buildings>
+	<TMPL_IF NAME="__odd__">
+	<tr class="row_silver">
+	<TMPL_ELSE>
+	<tr class="row_white">
+	</TMPL_IF>
+		<td><TMPL_UNLESS NAME=meta_default_data><input type="checkbox" disabled="disabled" name="<TMPL_VAR NAME=id>" /></TMPL_UNLESS></td>
+		<td><a title="View details for this building" href="<TMPL_VAR NAME=base_url>?view=building&amp;view_type=single&amp;id=<TMPL_VAR NAME=id>"><TMPL_VAR ESCAPE=HTML NAME=name></a></td>
+		<td><TMPL_VAR ESCAPE=HTML NAME=name_short></td>
+		<td><TMPL_VAR ESCAPE=HTML NAME=notes></td>
+	</tr></TMPL_LOOP>
+</table>
+<TMPL_ELSE>
+<p>
+	There are no building entries in RackMonkey, use the New button to add some.
+</p>
+</TMPL_IF>
+
+<TMPL_INCLUDE NAME="footer.ssi">
+
+</body>
+</html>

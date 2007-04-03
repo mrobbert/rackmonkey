@@ -1,0 +1,58 @@
+<?xml version="1.0"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+
+<!-- 
+########################################################################
+# RackMonkey - Know Your Racks - http://www.rackmonkey.org
+# Version 1.2.%BUILD%
+# (C)2006 Will Green (wgreen at users.sourceforge.net)
+# Service Level edit template
+########################################################################
+-->
+
+<head>
+	<title>Edit <TMPL_VAR ESCAPE=HTML NAME=name> | RackMonkey</title>
+	<link rel="stylesheet" type="text/css" title="Monkey Style" href="<TMPL_VAR NAME=web_root>/styles/rackmonkey.css" />
+</head>
+
+<body>
+
+<TMPL_INCLUDE NAME="nav.ssi">
+
+<form style="margin-top: 15px;" method="post" action="<TMPL_VAR NAME=base_url>">
+<table class="form">
+<tr>
+	<th class="form">edit service level</th>
+</tr>
+<tr>
+	<td class="form">
+		<label>Name</label><br />
+		<input type="text" size="60" name="name" value="<TMPL_VAR ESCAPE=HTML NAME=name>" />
+		<br /><br />
+		
+		<label>Description</label><br />
+		<textarea name="descript" cols="55" rows="4"><TMPL_VAR ESCAPE=HTML NAME=descript></textarea>
+		<br /><br />
+		
+		<label>Notes</label><br />
+		<textarea name="notes" cols="55" rows="4"><TMPL_VAR ESCAPE=HTML NAME=notes></textarea>
+		
+		<hr/>
+		
+		<a href="<TMPL_VAR NAME=base_url>?view=service&amp;view_type=single&amp;id=<TMPL_VAR NAME=id>"><img style="float: left;" src="<TMPL_VAR NAME=web_root>/graphics/buttons/cancel.gif" width="48" height="21" alt="Cancel" /></a>
+		<button style="float: right;" type="submit">Save</button>
+		<input type="hidden" name="view" value="service" />
+		<input type="hidden" name="view_type" value="single" />
+		<input type="hidden" name="id" value="<TMPL_VAR NAME=id>" />
+		<input type="hidden" name="act" value="update" />
+		<input type="hidden" name="act_on" value="service" />
+		<input type="hidden" name="act_id" value="<TMPL_VAR NAME=id>" />		
+	</td>
+</tr>
+</table>
+</form>
+
+<TMPL_INCLUDE NAME="footer.ssi">
+</body>
+</html>

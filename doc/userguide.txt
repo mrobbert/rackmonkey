@@ -1,0 +1,28 @@
+User Guide to RackMonkey v1.2
+=============================
+
+First Steps
+===========
+
+- Install sample data
+
+- Get basic information about your set up into the system.
+
+* Add your own company as an organisation
+* Add one or more domains for your servers, e.g. flux.org.uk
+* Add your locations (buildings, rooms etc.)
+
+Optional
+* Add service levels
+* Add extra roles if the included roles aren't suitable
+* Add extra operating systems - decide at what level of granuality you want versioning, e.g. Windows Server/2000 SP4 or Windows 2000 Server/SP4...
+
+Add some hardware
+* Sample hardware is only an example, you will need to add your own hardware (servers, switches etc.)
+
+
+- You are now ready to add devices
+
+* You can from devices view
+* You can add from location view, which is more convienient if you're adding devices a rack at a time
+* Import basic list from text file

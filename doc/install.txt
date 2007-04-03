@@ -1,0 +1,303 @@
+########################################################################
+# RackMonkey - Know Your Racks - http://www.rackmonkey.org
+# Version 1.2.%BUILD%
+# (C)2007 Will Green (wgreen at users.sourceforge.net)
+# Install document for RackMonkey v1.1
+########################################################################
+
+NB. This document still needs updating for RackMonkey v1.2.
+
+Introduction
+============
+This doc briefly explains how to install RackMonkey. Please consult the
+README before performing an install. See the CHANGES document for what's
+new in this release.
+
+
+Obtaining RackMonkey
+====================
+Visit http://www.rackmonkey.org or check a release out of CVS on
+Sourceforge.net (project name rackmonkey).
+
+
+Requirements
+============
+RackMonkey has minimal system requirements, and most unix-based
+operating system already have all or nearly all the required software.
+It has been tested on the following operating systems:
+
+* FreeBSD 5.3 (i386)
+* Solaris 9 (sparc)
+* Mac OS X 10.4 (ppc)
+
+* Solaris 10 (i386) - In progress
+* RHEL 4 (i386) - In progress
+
+
+Needed to install RackMonkey
+----------------------------
+* Web server (e.g. Apache - may work under mod_perl, not tested)
+
+* One of the following databases (see README for more):
+
+	- SQLite v3 or higher
+		SQLite3 can be obtained from http://www.sqlite.org
+		NB. Mac OS X 10.4 or higher has this installed by default
+	- PostgreSQL v8 or higher
+		Postgres can be obtained from http://www.postgresql.org
+	
+* Perl 5.61 or higher (5.84 or higher recommended) with the following modules:
+
+	- DBI
+	- CGI
+	- HTML::Template	
+	- Date::Manip
+	- DBI driver for your choice of database, either:
+		- DBD::SQLite v1.09+ - for SQLite
+		- DBD::Pg - for Postgres
+
+The easiest way to install modules is with the CPAN shell. You generally need
+to be root in order to do this. 
+
+	perl -eshell -MCPAN
+	
+On OS X from a terminal you can use sudo to temporarily become root:
+
+	sudo perl -eshell -MCPAN
+
+Then enter your usual admin password when prompted.
+	
+
+Once the shell has started (you may be prompted to configure it):
+
+	install DBI
+	install CGI
+	install HTML::Template
+
+If using SQLite:
+
+	install DBD::SQLite
+
+If using Postgres:
+	
+	install DBD::Pg
+
+
+File Installation
+=================
+Once you have the files from CVS or have uncompressed an archive you
+should have a directory with the following content:
+
+INSTALL 		This install document
+README			Read this before you start
+RackMonkey		RackMonkey Perl modules
+rackmonkey.pl		Main RackMonkey script
+sql			SQL to create the RackMonkey database
+tmpl			HTML::Template files for the web interface
+www			Web space files, e.g. images, css files
+
+Copy the rackmonkey.pl file and RackMonkey directory to a suitable
+location on your web server (e.g. /cgi-bin) and ensure that
+rackmonkey.pl is executable by the web server user (chmod 755
+rackmonkey.pl is probably what you want). The script assumes the perl
+you wish to run it with is /usr/local/bin/perl, if this isn't the case
+open rackmonkey.pl and amend the #! line. 
+
+NB. RackMonkey/Conf.pm will contain the username/password for your
+database, this shouldn't reside in normal web space.
+
+Copy the tmpl directory to somewhere that can be read by the web server,
+but ideally not in web space.
+
+Copy the contents of the www directory to somewhere within web space
+where you want to serve web content from, e.g. /rackmonkey within the
+web root.
+
+
+Configuring RackMonkey
+======================
+Open RackMonkey/Conf.pm in your favourite editor. The following values
+must be set for your installation (other options can be ignored during
+installation).
+
+For SQLite3:
+------------
+When using SQLite you need to choose a filesystem path for your
+database, for example to create your database in
+/home/rack/rackmonkey.db, use:
+	
+use constant DBDCONNECT => 'dbi:SQLite:dbname=/home/rack/rackmonkey.db';
+
+NB. This path must be writable by the web server and should not be
+within	web space, or users will be able to download your database. As
+we're using SQLite you can leave the DBUSER and DBPASS values blank.
+
+For Postgres:
+-------------
+If using Postgres you need to create a database for rackmonkey and grant
+suitable permissions to a user. For information on how to do this please
+see http://www.postgresql.org/docs/. If you've not done much database
+administration before, you may find it easier to use SQLite (see above).
+	
+Postgres databases are created in a location specified by the Postgres
+configuration, so you only need to provide a database name, e.g.
+
+use constant DBDCONNECT => 'dbi:Pg:dbname=rackmonkey';
+
+You also need to specify the user and password you created, e.g.
+		
+use constant DBUSER => 'rackmonkey';
+use constant DBPASS => '7jhH#98*';
+
+For All Databases
+-----------------
+TMPLPATH sets the filesystem path to your template files, something
+like:
+
+use constant TMPLPATH => '/home/wg/rm/rackmonkey/tmpl';
+
+WWWPATH sets the path within web space that your web content resides,
+something like:
+
+use constant WWWPATH => '/rackmonkey';
+	
+
+Creating Database Schema
+========================
+
+For SQLite3
+-----------
+Make a note of the path you specified for DBDCONNECT, then simply run:
+
+	sqlite3 [PATH] < sql/schema.sqlite.sql
+	
+You should then change the permissions of this file and its parent directory
+to be readable by your web server. For example, you might change the owner
+to 'www' if that is the user your server runs under.
+
+	
+For Postgres
+------------
+Run the following (you may need to specify a username/password):
+
+	psql [DBNAME] < sql/schema.postgres.sql
+
+Where [DBNAME] is the name of the database you created.
+
+
+Default Data
+------------
+If this is the first time you've installed RackMonkey you should
+install the default data. This contains common companies, roles etc. to
+help get you started quickly. To do this run:
+
+	sqlite3 [PATH] < sql/default_data.sql
+
+or
+
+	psql [DBNAME] < sql/default_data.sql
+
+	
+Running the App
+===============
+You can now start the app by pointing your browser at the location of
+the rackmonkey.pl script. If you have any issues see the
+Troubleshooting section below.
+
+Assuming all is well you can now start to use the software. To begin
+with you should create at least one of the following (in this order):
+
+	* Building
+	* Room
+	* Rack
+	
+You can now begin to create device entries to populate your rack. To
+alter the look of the main page edit main.tmpl within the tmpl
+directory.
+
+For further information on using RackMonkey click on 'Help' in the
+RackMonkey menu.
+
+
+Bugs and Feature Requests
+=========================
+To review the current list of bugs and feature requests, or to submit
+new ones, please visit:
+	
+	 http://www.rackmonkey.org/todo
+
+
+Troubleshooting
+===============
+If you have issues running RackMonkey the following section should help.
+If you're still stuck please log a support request at:
+
+	http://sourceforge.net/tracker/?group_id=151623&atid=781547
+
+When logging a support request please include as much detail as
+possible, including database software and revision, and any error
+messages.
+
+Internal Server Error
+---------------------
+If you get an 'Internal Server Error' check your web server error log.
+Common causes of this error are:
+
+	* The #! line at the top of rackmonkey.pl doesn't point at perl
+		This is the usual cause of errors of the form: 
+		[error] (2)No such file or directory: exec of rackmonkey.pl failed
+		Try running 'which perl' then setting the #! line at the top of the
+		script to match.
+	* Permissions incorrect for rackmonkey.pl
+		chmod 755 rackmonkey.pl usually solves this
+	* ExecCGI isn't turned on for the directory
+		Edit your Apache configuration to allow CGIs to be run from this location
+	* Missing modules
+		This is usually indicated by an error of the form:
+		Can't locate MODULE.pm in @INC ....
+	* DOS line endings on files
+		If you have DOS line endings on files it can break the #! line
+		Try extracting the files again, or use dos2unix.
+	* Perl version isn't at least 5.61
+		Run perl -v to check version number
+
+
+Missing Database
+----------------
+If you get an error of the form:
+
+	DBI connect('dbname=/data/rack.db','',...) failed: unable to open
+	database file(1) at dbdimp.c line 94 at /content/rackmonkey.pl line 45 
+
+Check your config to ensure your database path in DBDCONNECT is correct.
+
+	
+Unable to Edit/Create Entries
+-----------------------------
+If RackMonkey is able to display entries without issue, but when you try
+to create or edit an entry you get a message similar to the following:
+
+	"...unable to open database file(1)..."
+	"...attempt to write a readonly database(1)..." 
+
+You should check the permission on the SQLite database file and the
+directory in which it resides. The web servers needs to be able to
+write to the file and the directory.
+
+This error can only occur when using SQLite, as other databases engines
+don't make direct use of files in the same way.
+
+Permission Denied for Relation <table>
+--------------------------------------
+If you're using Postgres and get an error of the form:
+
+	"...permission denied for relation <table>..."
+
+You haven't granted appropriate permissions to the role (a user in Postgres
+speak) you're using to connect to the database. Try running a command of
+the form:
+
+	grant ALL ON <table>,<table>_id_seq to <role>;
+
+Where <role> is the role you're using to connect from RackMonkey, and
+<table> is the relation mentioned in the error message.

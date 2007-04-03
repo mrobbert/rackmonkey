@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+
+<!-- 
+########################################################################
+# RackMonkey - Know Your Racks - http://www.rackmonkey.org
+# Version 1.2.%BUILD%
+# (C)2007 Will Green (wgreen at users.sourceforge.net)
+# Rack create template
+########################################################################
+-->
+
+<head>
+	<title>Create Rack | RackMonkey</title>
+	<link rel="stylesheet" type="text/css" title="Monkey Style" href="<TMPL_VAR NAME=web_root>/styles/rackmonkey.css" />
+	<script type="text/javascript" src="<TMPL_VAR NAME=web_root>/javascript/racklib.js"></script>
+</head>
+
+<body>
+
+<TMPL_INCLUDE NAME="nav.ssi">
+
+<form method="post" action="<TMPL_VAR NAME=base_url>">
+<p>
+	<input type="hidden" name="view" value="physical" />
+	<input type="hidden" name="insert" value="1" />
+</p>
+
+<table style="background: silver; border: none">
+<tr>
+	<th class="form" colspan="2">Create Rack</th>
+</tr>
+<tr>
+	<td>Name:</td>
+	<td><input type="text" size="48" name="name" value="" /></td>
+</tr>
+<tr>
+	<td>Room:</td>
+	<td>
+		<select name="room">
+		<option value="0">Select from list:</option><TMPL_LOOP NAME=roomlist>
+		<option value="<TMPL_VAR NAME=id>"><TMPL_VAR NAME=name> in <TMPL_VAR NAME=building_name></option></TMPL_LOOP>
+		</select>
+	</td>
+</tr>
+<tr>
+	<td>Size (RU):</td>
+	<td><input type="text" size="48" name="size" value="<TMPL_VAR NAME=size>" /></td>
+</tr>
+<tr>
+	<td colspan="2">Notes<br /><textarea name="notes" cols="60" rows="8"></textarea></td>
+</tr>
+</table>
+
+<p>
+	<input type="image" src="<TMPL_VAR NAME=web_root>/graphics/buttons/create.gif" name="submit" value="create" />
+	<a href="<TMPL_VAR NAME=base_url>?view=rack_table"><img src="<TMPL_VAR NAME=web_root>/graphics/buttons/cancel.gif" alt="cancel" width="71" height="28" /></a>
+</p>
+
+</form>
+
+<TMPL_INCLUDE NAME="footer.ssi">
+
+</body>
+</html>

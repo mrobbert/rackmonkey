@@ -1,0 +1,91 @@
+<?xml version="1.0"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+
+<!-- 
+########################################################################
+# RackMonkey - Know Your Racks - http://www.rackmonkey.org
+# Version 1.2.%BUILD%
+# (C)2007 Will Green (wgreen at users.sourceforge.net)
+# Device all table template
+########################################################################
+-->
+
+<head>
+	<title>Devices: All Detail | RackMonkey</title>
+	<link rel="stylesheet" type="text/css" title="Monkey Style" href="<TMPL_VAR NAME=web_root>/styles/rackmonkey.css" />
+	<script type="text/javascript" src="<TMPL_VAR NAME=web_root>/javascript/racklib.js"></script>
+</head>
+
+<body>
+
+<TMPL_INCLUDE NAME="nav.ssi">
+
+<p style="float: left; margin-right: 30px;">
+		<a href="<TMPL_VAR NAME=base_url>?view=device&amp;view_type=create"><img src="<TMPL_VAR NAME=web_root>/graphics/buttons/new.gif" width="47" height="21" alt="New" /></a>
+</p>
+
+<form method="get" action="<TMPL_VAR NAME=base_url>">
+<p>
+	<input type="hidden" name="view" value="device"/>
+	<label>View Type </label>
+	<select name="view_type" onchange="submit()">
+		<option value="default">Default</option>
+		<option value="default_asset">Asset</option>
+		<option selected="selected" value="default_extended">Extended</option>
+	</select>
+</p>
+</form>
+
+<table style="clear:both" id="disTable">
+	<tr>
+		<th>
+			<a class="sort" title="Sort by name" href="<TMPL_VAR NAME=base_url>?view=device&amp;view_type=all&amp;order_by=device.name">Device</a> 
+		</th>
+		<th>
+			<a class="sort" title="Sort by rack" href="<TMPL_VAR NAME=base_url>?view=device&amp;view_type=all&amp;order_by=device.rack">Location</a>
+		</th>	
+		<th>
+			<a class="sort" title="Sort by role" href="<TMPL_VAR NAME=base_url>?view=device&amp;view_type=all&amp;order_by=device.role">Role</a>
+		</th>			
+		<th>
+			<a class="sort" title="Sort by hardware type" href="<TMPL_VAR NAME=base_url>?view=device&amp;view_type=all&amp;order_by=device.hardware">Hardware</a>
+		</th>	
+		<th>
+			<a class="sort" title="Sort by operating system" href="<TMPL_VAR NAME=base_url>?view=device&amp;view_type=all&amp;order_by=device.os">OS</a>
+		</th>	
+		<th>
+			<a class="sort" title="Sort by serial number" href="<TMPL_VAR NAME=base_url>?view=device&amp;view_type=all&amp;view_type=asset&amp;order_by=device.serial">Serial</a>
+		</th>		
+		<th>
+			<a class="sort" title="Sort by asset tag" href="<TMPL_VAR NAME=base_url>?view=device&amp;view_type=all&amp;view_type=asset&amp;order_by=device.asset">Asset</a>
+		</th>		
+		<th>
+			<a class="sort" title="Sort by customer" href="<TMPL_VAR NAME=base_url>?view=device&amp;view_type=all&amp;order_by=device.customer">Customer</a>
+		</th>	
+		<th>
+			<a class="sort" title="Sort by service level" href="<TMPL_VAR NAME=base_url>?view=device&amp;view_type=all&amp;order_by=device.service_level">SLA</a>
+		</th>	
+	</tr><TMPL_LOOP NAME=devices>
+	<TMPL_IF NAME="__odd__">
+	<tr class="row_silver">
+	<TMPL_ELSE>
+	<tr class="row_white">
+	</TMPL_IF>
+		<td><a title="View details for this device" href="<TMPL_VAR NAME=base_url>?view=device&amp;view_type=single&amp;id=<TMPL_VAR NAME=id>"><TMPL_VAR ESCAPE=HTML NAME=name><TMPL_UNLESS NAME=domain_meta_default_data>.<TMPL_VAR ESCAPE=HTML NAME=domain_name></TMPL_UNLESS></a></td>
+		<td><TMPL_VAR ESCAPE=HTML NAME=rack_name> [<TMPL_VAR NAME=rack_pos>] in <TMPL_VAR ESCAPE=HTML NAME=room_name></td>
+		<td><TMPL_VAR ESCAPE=HTML NAME=room_name><TMPL_UNLESS building_meta_default_data> in <TMPL_VAR ESCAPE=HTML NAME=building_name></TMPL_UNLESS></td>
+		<td><TMPL_VAR ESCAPE=HTML NAME=role_name></td>
+		<td><TMPL_VAR ESCAPE=HTML NAME=hardware_name></td>
+		<td><TMPL_VAR ESCAPE=HTML NAME=os_name><TMPL_IF NAME=os_version> <TMPL_VAR ESCAPE=HTML NAME=os_version></TMPL_IF></td>
+		<td><TMPL_IF NAME=serial><TMPL_VAR ESCAPE=HTML NAME=serial><TMPL_ELSE>-</TMPL_IF></td>
+		<td><TMPL_IF NAME=asset><TMPL_VAR ESCAPE=HTML NAME=asset><TMPL_ELSE>-</TMPL_IF></td>		
+		<td><TMPL_VAR ESCAPE=HTML NAME=customer_name></td>
+		<td><TMPL_VAR ESCAPE=HTML NAME=service_name></td>
+	</tr></TMPL_LOOP>
+</table>
+
+<TMPL_INCLUDE NAME="footer.ssi">
+
+</body>
+</html>

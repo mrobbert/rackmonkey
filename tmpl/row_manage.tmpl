@@ -1,0 +1,108 @@
+<?xml version="1.0"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+
+<!-- 
+########################################################################
+# RackMonkey - Know Your Racks - http://www.rackmonkey.org
+# Version 1.2.%BUILD%
+# (C)2007 Will Green (wgreen at users.sourceforge.net)
+# Row management template
+########################################################################
+-->
+
+<head>
+	<title>Manage Rows in <TMPL_VAR ESCAPE=HTML NAME=name> in <TMPL_VAR ESCAPE=HTML NAME=building_name> | RackMonkey</title>
+	<link rel="stylesheet" type="text/css" title="Monkey Style" href="<TMPL_VAR NAME=web_root>/styles/rackmonkey.css" />
+	<script type="text/javascript" src="<TMPL_VAR NAME=web_root>/javascript/racklib.js"></script>
+	 
+	<script type="text/javascript">
+	// array of row data to populate form
+	var rowData = new Array();
+	<TMPL_LOOP NAME=rows>rowData[<TMPL_VAR ESCAPE=HTML NAME=id>] = ['<TMPL_VAR ESCAPE=HTML NAME=name>', '<TMPL_VAR ESCAPE=HTML NAME=room_pos>'];
+	</TMPL_LOOP>
+	
+	function arrayLoop()
+	{
+		for (i in rowData)
+		{
+			alert(rowData[i][0]);
+		}
+	}
+	
+	function populateRows(fieldName, rowArray)
+	{
+		//removeChildNodes(fieldName);
+	
+		var tableBody = document.createElement("tbody");
+		
+		for (i in rowArray)
+		{
+			var row = document.createElement("tr");
+			
+			var rowPosCell = document.createElement("td");
+			var rowPosText = document.createTextNode(rowArray[i][1]);
+			rowPosCell.appendChild(rowPosText);
+			row.appendChild(rowPosCell);
+			
+			var rowNameCell = document.createElement("td");
+			var rowNameInput = document.createElement("input");
+			rowNameInput.type = 'text';
+			rowNameInput.size = 12;
+			rowNameInput.value = rowArray[i][0];
+			rowNameCell.appendChild(rowNameInput);
+			row.appendChild(rowNameCell);
+
+			var rowDeleteCell = document.createElement("td");
+			var rowDeleteButton = document.createElement("input");
+			rowDeleteButton.type = 'button';
+			rowDeleteButton.value = 'X';
+			rowDeleteButton.width = 40;
+			rowDeleteCell.appendChild(rowDeleteButton);
+			row.appendChild(rowDeleteCell);			
+
+			tableBody.appendChild(row);
+		}
+
+		field = document.getElementById(fieldName);
+		field.appendChild(tableBody);
+	}
+	</script>
+	
+</head>
+
+<body onload="populateRows('rowlist', rowData);">
+
+<TMPL_INCLUDE NAME="nav.ssi">
+
+<form style="margin-top: 15px;" method="post" action="<TMPL_VAR NAME=base_url>">
+<table class="form">
+<tr>
+	<th class="form">manage rows</th>
+</tr>
+<tr>
+	<td class="form">
+		<label>Room</label><br />
+		<TMPL_VAR ESCAPE=HTML NAME=name> in <TMPL_VAR ESCAPE=HTML NAME=building_name>
+		<br /><br />	
+		<input disabled="disabled" <TMPL_IF has_rows>checked="checked"</TMPL_IF> type="checkbox" name="has_rows" /> Organised into Rows (not yet changable)
+		<br /><br />	
+		<table id="rowlist">
+		<tr>
+			<th>#</th><th>Row Name</th><th>&nbsp;</th>
+		</tr>
+		</table>
+		<p><input type="button" value="Add Row" /></p>
+		
+		<hr/>
+		
+		<a href="<TMPL_VAR NAME=base_url>?view=room&amp;view_type=single&amp;id=<TMPL_VAR NAME=id>"><img style="float: left;" src="<TMPL_VAR NAME=web_root>/graphics/buttons/cancel.gif" width="48" height="21" alt="Cancel" /></a>
+		<button style="float: right;" type="submit">Save</button>	<!-- need to add warning if changed to not organised by rows, as this will remove current rack in row layout -->
+	</td>
+</tr>
+</table>
+</form>	
+
+<TMPL_INCLUDE NAME="footer.ssi">
+</body>
+</html>

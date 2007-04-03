@@ -1,0 +1,63 @@
+<?xml version="1.0"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+
+<!-- 
+########################################################################
+# RackMonkey - Know Your Racks - http://www.rackmonkey.org
+# Version 1.2.%BUILD%
+# (C)2007 Will Green (wgreen at users.sourceforge.net)
+# Room edit template
+########################################################################
+-->
+
+<head>
+	<title>Edit <TMPL_VAR ESCAPE=HTML NAME=room_name> in <TMPL_VAR ESCAPE=HTML NAME=building_name> | RackMonkey</title>
+	<link rel="stylesheet" type="text/css" title="Monkey Style" href="<TMPL_VAR NAME=web_root>/styles/rackmonkey.css" />
+	<script type="text/javascript" src="<TMPL_VAR NAME=web_root>/javascript/racklib.js"></script>
+</head>
+
+<body>
+
+<TMPL_INCLUDE NAME="nav.ssi">
+
+<form style="margin-top: 15px;" method="post" action="<TMPL_VAR NAME=base_url>">
+<table class="form">
+<tr>
+	<th class="form">edit room</th>
+</tr>
+<tr>
+	<td class="form">
+		<label>Name</label><br />
+		<input type="text" size="60" name="name" value="<TMPL_VAR ESCAPE=HTML NAME=name>" />
+		<br /><br />
+		
+		<label>In Building [<a href="<TMPL_VAR NAME=base_url>?view=building&amp;view_type=create&amp;return_view=room&amp;return_view_type=edit&amp;return_view_id=<TMPL_VAR NAME=id>">add</a>]</label><br />
+		<select name="building_id"><!-- <TMPL_VAR NAME=building> <TMPL_VAR ESCAPE=HTML NAME=building_name> --><TMPL_LOOP NAME=buildinglist>
+		<option <TMPL_IF NAME=selected>selected="selected"</TMPL_IF> value="<TMPL_VAR NAME=id>"><TMPL_VAR ESCAPE=HTML NAME=name></option></TMPL_LOOP>
+		</select>
+		<br /><br />
+		
+		<label>Notes</label><br />
+		<textarea name="notes" cols="55" rows="4"><TMPL_VAR ESCAPE=HTML NAME=notes></textarea>
+		<p class="updated"><a href="<TMPL_VAR NAME=base_url>?view=room&amp;view_type=single&amp;id=<TMPL_VAR NAME=id>">Manage Rows &amp; Racks in this Room</a> (unsaved changes on this page will be lost)</p>	
+		
+		<hr/>
+		
+		<a href="<TMPL_VAR NAME=base_url>?view=room&amp;view_type=single&amp;id=<TMPL_VAR NAME=id>"><img style="float: left;" src="<TMPL_VAR NAME=web_root>/graphics/buttons/cancel.gif" width="48" height="21" alt="Cancel" /></a>
+		<button style="float: right;" type="submit">Save</button>
+		<input type="hidden" name="view" value="room" />
+		<input type="hidden" name="view_type" value="single" />
+		<input type="hidden" name="id" value="<TMPL_VAR NAME=id>" />
+		<input type="hidden" name="act" value="update" />
+		<input type="hidden" name="act_on" value="room" />
+		<input type="hidden" name="act_id" value="<TMPL_VAR NAME=id>" />
+	</td>
+</tr>
+</table>
+</form>	
+
+<TMPL_INCLUDE NAME="footer.ssi">
+
+</body>
+</html>

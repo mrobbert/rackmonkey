@@ -1,0 +1,35 @@
+package RackMonkey::Conf;
+########################################################################
+# RackMonkey - Know Your Racks - http://www.rackmonkey.org
+# Version 1.2.%BUILD%
+# (C)2007 Will Green (wgreen at users.sourceforge.net)
+# Configuration settings for RackMonkey
+########################################################################
+
+use strict;
+use warnings;
+
+our $VERSION = '1.2.%BUILD%';
+our $AUTHOR = 'Will Green (wgreen at users.sourceforge.net)';
+
+use base 'Exporter';
+our @EXPORT = qw/DBDCONNECT DBUSER DBPASS TMPLPATH WWWPATH MAXNOTE MAXSTRING MAXRACKSIZE SHORTTEXTLEN SHORTURLLEN DATEFORMAT/;
+
+# Database Connection Settings
+use constant DBDCONNECT => 'dbi:SQLite:dbname=/home/rack/db/rackmonkey.db';
+use constant DBUSER => '';
+use constant DBPASS => '';
+
+# Path & URL Constants
+use constant TMPLPATH => '/home/rack/rackmonkey/tmpl';
+use constant WWWPATH => '/rackmonkey';
+
+# Preference Constants - 
+use constant MAXNOTE =>	4095; 		# Max length of note fields
+use constant MAXSTRING => 255;		# Max length of simple strings
+use constant MAXRACKSIZE => 255; 	# Max rack size in rack units (U)
+use constant SHORTTEXTLEN  => 32; 	# Shorten long text for table views
+use constant SHORTURLLEN  => 64; 	# Shorten long URLs for display
+use constant DATEFORMAT => '%Y-%m-%d';	# Format used to display dates (not currently used)
+
+1;

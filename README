@@ -1,0 +1,67 @@
+########################################################################
+# RackMonkey - Know Your Racks - http://www.rackmonkey.org
+# Version 1.2.%BUILD%
+# (C)2007 Will Green (wgreen at users.sourceforge.net)
+# README document
+########################################################################
+
+Introduction
+------------
+Thank you for choosing to try RackMonkey v1.2, I hope you find it useful
+in bringing (and keeping) order in your data centres.
+
+Security
+--------
+You should be aware that RackMonkey has not been fully security-hardened,
+so should not be deployed on unprotected public web sites.
+
+Database Support
+----------------
+RackMonkey supports SQLite or PostgreSQL (Postgres). SQLite is trivial
+to configure, but lacks some of the features of Postgres. Your choice of
+database will not affect the features available in RackMonkey, so it
+really comes down to personal preference. If you're not sure I'd
+recommend choosing SQLite as there isn't any configuration to do.
+
+mod_perl
+--------
+RackMonkey has not undergone any formal testing under mod_perl. Testing
+under mod_perl is planned for the near future, until then you should be
+careful with running RackMonkey under mod_perl.
+
+Installation
+------------
+Please read the doc/install.txt file.
+
+Developer Guide
+---------------
+If you'd like to extend RackMonkey or integrate it into other applications,
+please read doc/devguide.txt.
+
+Licence
+-------
+This software is licensed under the GPL. See doc/licence.txt for details.
+
+Example Data
+------------
+RackMonkey includes example data to demostrate the software and get you
+started. The inclusion of a particular product does not imply an
+endorsement by the author. Please don't complain your favourite
+product is not included!
+
+Acknowledgements 
+----------------
+I would like to thank the following for their assistance:
+
+	* Piers Kent
+	* Tim Sweetman
+	* Nicola Worthington
+
+Further Information
+-------------------
+Visit the RackMonkey web site:
+	http://www.rackmonkey.org
+
+Join the announce list:
+	http://lists.sourceforge.net/lists/listinfo/rackmonkey-announce
+

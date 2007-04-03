@@ -1,0 +1,278 @@
+/*
+#######################################################################
+# RackMonkey - Know Your Racks - http://www.rackmonkey.org
+# Version 1.2.%BUILD%
+# (C)2007 Will Green (wgreen at users.sourceforge.net)
+# Default RackMonkey CSS style
+########################################################################
+*/
+
+/* New CSS */
+
+/* Generic */
+body 
+{
+  	color: black;
+  	background: white;
+  	font-family: helvetica, sans-serif;
+}
+
+table.form
+{
+	border: solid 1px #000;
+	width: 400px;
+	margin-top: 10px;
+}
+
+th.form
+{
+	background: #444;
+	color: #FFF;
+	font-variant: small-caps;
+	padding: 5px;
+	vertical-align: middle;
+	padding-bottom: 6px;
+}
+
+td.form
+{
+	background: #CCC;
+	padding: 12px;
+}
+
+label
+{
+	color: #666;
+	font-weight: bold;
+	font-size: 12px;
+}
+
+button
+{
+	background: #EEE;
+	border-left: solid 2px #FFF;
+	border-top: solid 2px #FFF;
+	border-right: solid 2px #999;
+	border-bottom: solid 2px #999;
+	min-width: 50px;
+	text-align: center;
+}
+
+th
+{
+	text-align: left;
+	background: #444;
+	color: #FFF;
+	border: solid 1px #000;
+	padding: 5px;
+}
+
+th.corner
+{
+	border-right: none;
+	border-top: none;
+	background: #FFF;
+}
+
+a.sort:link
+{
+	color: white;
+}
+
+a.sort:visited
+{
+	color: white;
+}
+
+.small
+{
+	font-size: x-small;
+  	font-family: verdana, helvetica, sans-serif;
+}
+
+.updated
+{
+	padding-top: 8px;
+	padding-bottom: 0px;
+	margin-bottom: 0px;
+	font-size: x-small;
+	clear: both;
+	text-align: left;
+  	font-family: verdana, helvetica, sans-serif;
+}
+
+
+/* Room */
+td.room_row
+{
+	border: solid;
+	border-width: 1px;
+	border-color: #000;
+	padding: 3px;
+	width: 25px;
+	background: #777;
+	color: #FFF;
+	text-align: center;
+}
+
+td
+{
+	border: solid;
+	border-width: 1px;
+	padding: 4px;
+	background: transparent;
+}
+
+td.yesno
+{
+	text-align: center;
+}
+
+
+.row_silver_conf
+{
+	border: none; 
+	background: #EAEAEA; 
+	padding: 8px;
+}
+
+.row_white_conf
+{
+	border: none; 
+	background: #FFF; 
+	padding: 8px;
+}
+
+.row_silver
+{
+	border: none; 
+	background: #EAEAEA; 
+}
+
+.row_white
+{
+	border: none; 
+	background: #FFF; 
+}
+
+
+/* Old CSS */
+
+table.building
+{
+	width: 600px;
+	margin-bottom: 8px;
+}
+
+p.footer
+{
+	font-family: verdana, sans-serif;
+	font-size: x-small;
+}
+
+.minimal
+{
+	margin: 0px;
+	padding: 0px;
+}
+
+.rack_physical_num
+{
+	font-family: verdana, sans-serif;
+	font-size: x-small;
+	text-align: right;
+	color: white;
+	border-color: black;
+	background-color: #444;
+}
+
+.rack_physical_dev
+{
+	font-family: verdana, sans-serif;
+	font-size: x-small;
+	background-color: #DDD;
+	width: 200px;
+}
+
+.rack_physical_empty
+{
+	font-family: verdana, sans-serif;
+	font-size: x-small;
+	background-color: white;
+	width: 200px;
+}
+
+.rack_physical
+{
+	float: left;
+	border-spacing: 0px;
+	border-width: 1px;
+	border-collapse: collapse;
+}
+
+.showhide
+{
+	font-family: verdana, sans-serif;
+	font-size: x-small;
+	font-weight: normal;
+}
+
+
+table
+{
+	border: none; 
+	border-collapse: collapse;
+}
+
+td.navLogo
+{
+	width: 110px;
+	border: none;
+}
+
+td.navForm
+{
+	width: 5px;
+	border: none;
+}
+
+tr.notes
+{
+	background-color: #E9E9E9;
+}
+
+.notes
+{
+	font-size: small;
+}
+
+.navbar
+{
+	border: none;
+	padding-top: 0px;
+	padding-bottom: 0px;
+	margin-top: 0px;
+	margin-bottom: 0px;
+	padding-left: 4px;
+	border-bottom: solid;
+	border-width: 1px;
+}
+
+img
+{
+	border: 0px;
+}
+
+img.navimg
+{
+	vertical-align: bottom;
+}
+
+img.editimg
+{
+	float: right;
+	vertical-align: bottom;
+}
+
+
+

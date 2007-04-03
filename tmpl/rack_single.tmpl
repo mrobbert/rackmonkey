@@ -1,0 +1,53 @@
+<?xml version="1.0"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+
+<!-- 
+########################################################################
+# RackMonkey - Know Your Racks - http://www.rackmonkey.org
+# Version 1.2.%BUILD%
+# (C)2007 Will Green (wgreen at users.sourceforge.net)
+# Rack single view template
+########################################################################
+-->
+
+<head>
+	<title><TMPL_VAR ESCAPE=HTML NAME=name> in <TMPL_VAR ESCAPE=HTML NAME=building_name> | RackMonkey</title>
+	<link rel="stylesheet" type="text/css" title="Monkey Style" href="<TMPL_VAR NAME=web_root>/styles/rackmonkey.css" />
+	<script type="text/javascript" src="<TMPL_VAR NAME=web_root>/javascript/racklib.js"></script>
+</head>
+
+<body>
+
+<TMPL_INCLUDE NAME="nav.ssi">
+
+<table class="form">
+<tr>
+	<th class="form">
+		<a href="<TMPL_VAR NAME=base_url>?view=rack&amp;view_type=create"><img style="float:right; margin-left: 4px;" src="<TMPL_VAR NAME=web_root>/graphics/buttons/new.gif" width="47" height="21" alt="New" /></a>
+		<a href="<TMPL_VAR NAME=base_url>?view=rack"><img style="float:right; margin-left: 4px;" src="<TMPL_VAR NAME=web_root>/graphics/buttons/view_all.gif" width="55" height="21" alt="View All" /></a>
+		racks
+	</th>
+</tr>
+<tr>
+	<td class="form">
+		<label>Name</label><br />
+		<TMPL_VAR ESCAPE=HTML NAME=name>
+		<br /><br />
+		
+		<label>Notes</label><br />
+		<TMPL_IF NAME=notes><TMPL_VAR ESCAPE=HTML NAME=notes><TMPL_ELSE>&nbsp;-</TMPL_IF>
+		
+		<hr/>
+		
+		<TMPL_UNLESS NAME=meta_default_data><a href="<TMPL_VAR NAME=base_url>?view=rack&amp;view_type=default&amp;act=delete&amp;act_on=rack&amp;act_id=<TMPL_VAR NAME=id>"><img style="float:left;" src="<TMPL_VAR NAME=web_root>/graphics/buttons/delete.gif" width="48" height="21" alt="Delete" /></a></TMPL_UNLESS>
+		<a href="<TMPL_VAR NAME=base_url>?view=rack&amp;view_type=edit&amp;id=<TMPL_VAR NAME=id>"><img style="float:right;" src="<TMPL_VAR NAME=web_root>/graphics/buttons/edit.gif" width="48" height="21" alt="Edit" /></a>
+		<p class="updated">Entry last updated by <TMPL_VAR ESCAPE=HTML NAME=meta_update_user> at <TMPL_VAR ESCAPE=HTML NAME=meta_update_time> GMT</p>
+	</td>
+</tr>
+</table>
+
+<TMPL_INCLUDE NAME="footer.ssi">
+
+</body>
+</html>

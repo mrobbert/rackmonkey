@@ -1,0 +1,58 @@
+<?xml version="1.0"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+
+<!-- 
+########################################################################
+# RackMonkey - Know Your Racks - http://www.rackmonkey.org
+# Version 1.2.%BUILD%
+# (C)2007 Will Green (wgreen at users.sourceforge.net)
+# App create template
+########################################################################
+-->
+
+<head>
+	<title>Create Application | RackMonkey</title>
+	<link rel="stylesheet" type="text/css" title="Monkey Style" href="<TMPL_VAR NAME=web_root>/styles/rackmonkey.css" />
+	<script type="text/javascript" src="<TMPL_VAR NAME=web_root>/javascript/racklib.js"></script>
+</head>
+
+<body>
+
+<TMPL_INCLUDE NAME="nav.ssi">
+
+<form style="margin-top: 15px;" method="post" action="<TMPL_VAR NAME=base_url>">
+<table class="form">
+<tr>
+	<th class="form">create application</th>
+</tr>
+<tr>
+	<td class="form">
+		<label>Name</label><br />
+		<input type="text" size="60" name="name" value="" />
+		<br /><br />
+		
+		<label>Description</label><br />
+		<textarea name="descript" cols="55" rows="4"></textarea>
+		<br /><br />
+		
+		<label>Notes</label><br />
+		<textarea name="notes" cols="55" rows="4"></textarea>
+		
+		<hr/>
+		
+		<a href="<TMPL_VAR NAME=base_url>?view=app&amp;view_type=default"><img style="float: left;" src="<TMPL_VAR NAME=web_root>/graphics/buttons/cancel.gif" width="48" height="21" alt="Cancel" /></a>
+		<button style="float: right;" type="submit">Save</button>
+		<input type="hidden" name="view" value="app" />
+		<input type="hidden" name="view_type" value="single" />
+		<input type="hidden" name="act" value="insert" />
+		<input type="hidden" name="act_on" value="app" />
+		<input type="hidden" name="act_id" value="<TMPL_VAR NAME=app>" />		
+	</td>
+</tr>
+</table>
+</form>
+
+<TMPL_INCLUDE NAME="footer.ssi">
+</body>
+</html>
