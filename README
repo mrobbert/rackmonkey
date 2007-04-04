@@ -33,6 +33,11 @@ Installation
 ------------
 Please read the doc/install.txt file.
 
+User Documentation
+------------------
+Once installed you should read doc/userguide.txt for advice on getting
+started with RackMonkey.
+
 Developer Guide
 ---------------
 If you'd like to extend RackMonkey or integrate it into other applications,
