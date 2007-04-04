@@ -1,5 +1,12 @@
 Developer Guide to RackMonkey v1.2
 ==================================
+This document is at an early stage, but I hope it will help you extend and 
+customise RackMonkey.
+
+Contents
+--------
+To be added.
+
 
 Creating Custom Views
 ---------------------
@@ -75,6 +82,25 @@ Where filename is the name of the file to include from the template directory.
 A reference to the template variables available is included in Appendix B at the
 end of this guide.
 
+
+Running Unit Test
+-----------------
+RackMonkey includes a growing list of unit tests.
+
+To run RackMonkey unit tests create a test database with the schema but no data
+in it. Update t/*.t to point at the test database (a configuration file for test
+databases will be added in due course). Run the tests from the directory
+containing the t directory (usually trunk). e.g.
+
+		$ t/building.t 
+		1..34
+		ok 1 - calling getBuildingCount
+		ok 2 - no building records stored at the start of the test
+		<snip>
+
+If you want to run the tests from another directory you'll need to edit the use
+lib path in the scripts. A more flexible mechanism for including the correct
+path in @INC will be added soon.
 
 
 Porting RackMonkey to Another Database
