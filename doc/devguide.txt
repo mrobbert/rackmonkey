@@ -140,7 +140,7 @@ more portable, please get in touch.
 
 Appendix A: RackMonkey Engine Methods
 --------------------------------------
-This section has yet to incorporating from the POD. For now use:
+This section has yet to be incorporated from the POD. For now use:
 
 	perldoc Engine.pm.
 
