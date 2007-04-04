@@ -24,7 +24,7 @@ use constant DBPASS => '';
 use constant TMPLPATH => '/home/rack/rackmonkey/tmpl';
 use constant WWWPATH => '/rackmonkey';
 
-# Preference Constants - 
+# Preference Constants
 use constant MAXNOTE =>	4095; 		# Max length of note fields
 use constant MAXSTRING => 255;		# Max length of simple strings
 use constant MAXRACKSIZE => 255; 	# Max rack size in rack units (U)
