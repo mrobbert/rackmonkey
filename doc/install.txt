@@ -214,7 +214,7 @@ help get you started quickly. To do this run:
 
 	sqlite3 [PATH] < sql/sample_data.sql
 
-or
+	or
 
 	psql [DBNAME] < sql/sample_data.sql
 
@@ -225,7 +225,7 @@ You can now start the app by pointing your browser at the location of
 the rackmonkey.pl script. If you have any issues with running 
 RackMonkey see the Troubleshooting section below.
 
-For advice on using RackMonkey see: userguide.txt
+For advice on using RackMonkey see: doc/userguide.txt
 
 
 

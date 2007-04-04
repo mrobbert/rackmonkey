@@ -229,7 +229,7 @@ CREATE UNIQUE INDEX room_building_unique ON room (name, building); -- ensure bui
 -- Thanks to http://www.sqlite.org/cvstrac/wiki?p=ForeignKeyTriggers
 ------------------------------------------------------------------------
 
--- NEED TO FINISHING ADDING CONSTRAINTS
+-- NEED TO FINISH ADDING CONSTRAINTS
 
 --
 -- Table: Room
