@@ -17,6 +17,11 @@ sub enlighten
 	my $errStr = shift;
 	my $newErrStr = "An error occured.";
 	
+	# DBI Connection errors
+	if ($errStr =~ /^DBI connect/)
+	{
+		$newErrStr = "Couldn't connect to RackMonkey database.\nCheck your database is available and that your configuration file is correct.";
+	}
 	
 	# foreign key constraints - should ensure there is one of these for each foreign key constraint and they work on all DB
 	if ($errStr =~ /fkd_hardware_manufacturer_id/)
