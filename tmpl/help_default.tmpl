@@ -6,8 +6,8 @@
 ########################################################################
 # RackMonkey - Know Your Racks - http://www.rackmonkey.org
 # Version 1.2.%BUILD%
-# (C)2006 Will Green (wgreen at users.sourceforge.net)
-# Help page template
+# (C)2007 Will Green (wgreen at users.sourceforge.net)
+# RackMonkey help template
 ########################################################################
 -->
 
@@ -21,64 +21,9 @@
 
 <h3>General Help</h3>
 <p>
-For full functionality you need a browser with decent CSS support and JavaScript and cookies enabled.
-Most buttons and links provide additional information as a tooltip if you hover over them for a few seconds.
-For help with server configuration and set up see the INSTALL file. For advice on integrating RackMonkey with
-other systems see the DEVGUIDE file.
+This page needs updating for v1.2.
 </p>
 
-<h3>Bugs &amp; Forthcoming Features</h3>
-<p>
-You can see a list of bugs and forthcoming features on the <a href="http://www.rackmonkey.org/todo">RackMonkey todo</a> page.
-</p>
-
-<h3>Getting Started</h3>
-<p>
-Before you can create any device entries you need to create at least one building, one room, one row, and one rack
-in that order. If you room doesn't have rows of racks, just create one row and place all your racks within it.
-You probably also want to create appropriate organisation, role, and hardware (a model of hardware, e.g. Sun T2000) 
-entries before adding devices (an individual piece of hardware).
-<p>
-NB. Organisations have a customer field. If this is checked the organisation shows up in the customer dropdown for
-devices. If unchecked the organisation only shows up as a hardware or OS manufacturer.
-</p>
-
-<h3>Using the Interface</h3>
-<p>
-<strong>Hiding/Showing a Column:</strong>
-Click on the 'X' next to the name of the column you wish to hide. To show all the columns again, click on 'Show all' next to the name column.
-RackMonkey remembers which columns you wish to display, provided you have cookies enabled.
-</p>
-
-<p>
-<strong>Sorting by Column</strong>
-You can sort by a given column by clicking on its name in the table header. At present the sort only works by database id for some fields, so items may not be sorted alphabetically.
-</p>
-
-<p>
-<strong>Adding Items</strong>
-There are generally two ways to add an item. Using the [New &lt;item&gt;] link at the top of a view: e.g. you can add a room at the top of the room view.
-The second method is to use the [+] buttons within the views themselves: e.g. you can add a room to a specific building by clicking on the [+] at the start
-of that building's room list in the building view.
-</p>
-
-
-<p>
-<strong>Editing/Creating Forms</strong>
-The following buttons appear on edit/create forms:
-</p>
-<ul>
-	<li><strong>Create</strong> creates a new entry using the values specified. Some values (e.g. name) must be unqiue, you will receive an error if you use an existing one.</li>
-	<li><strong>Save</strong> stores the changes you've made to an existing record.</li>
-	<li><strong>Cancel</strong> takes you back to the view of the entry (edit), or back to the list of entries (create).</li>
-	<li><strong>Delete</strong> permanently removes the displayed record from the database; once removed it cannot be restored.</li>
-</ul>
-
-<p>
-<strong>Note on Deleting:</strong>
-You can only delete an entry if all its dependancies have also been deleted. For example, if a building contains no rooms you'll see the option [Delete Empty Building] in building view, otherwise this is hidden.
-The delete button is always displayed in edit view, but you'll get an error if you use it and the item has dependancies.
-</p>
 
 <TMPL_INCLUDE NAME="footer.ssi">
 </body>
