@@ -60,7 +60,6 @@ Needed to install RackMonkey
 	- DBI
 	- CGI
 	- HTML::Template	
-	- Date::Manip
 	- DBI driver for your choice of database, either:
 		- DBD::SQLite v1.09+ - for SQLite
 		- DBD::Pg - for Postgres
