@@ -16,7 +16,7 @@ use DBI;
 use Data::Dumper; 
 use Test::Simple tests => 34;
 
-use lib '../';
+use lib 'perl';
 use RackMonkey::Engine;
 use RackMonkey::Error;
 use RackMonkey::Helper;
@@ -25,7 +25,7 @@ our $VERSION = '1.2.%BUILD%';
 our $AUTHOR = 'Will Green (wgreen at users.sourceforge.net)';
 
 # Database Connection Settings - should make external
-use constant DBDCONNECT => 'dbi:SQLite:dbname=/Users/reflux/Sites/rackmonkey/db/test.db';
+use constant DBDCONNECT => 'dbi:SQLite:dbname=/tmp/rackmonkey/test.db';
 use constant DBUSER => '';
 use constant DBPASS => '';
 
