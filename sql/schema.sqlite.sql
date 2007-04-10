@@ -264,6 +264,30 @@ END;
 -- Table: Row
 --
 
+-- Prevent inserts into row table unless room exists
+CREATE TRIGGER fki_row_room_id
+BEFORE INSERT ON row
+FOR EACH ROW BEGIN
+	SELECT RAISE(ROLLBACK, 'insert on table "row" violates foreign key constraint "fki_row_room_id"')
+ 	WHERE NEW.room IS NOT NULL AND (SELECT id FROM room WHERE id = new.room) IS NULL;
+END;
+
+-- Prevent updates on row table unless room exists
+CREATE TRIGGER fku_row_room_id
+BEFORE UPDATE ON row
+FOR EACH ROW BEGIN
+	SELECT RAISE(ROLLBACK, 'update on table "row" violates foreign key constraint "fku_row_room_id"')
+	WHERE NEW.room IS NOT NULL AND (SELECT id FROM room WHERE id = NEW.room) IS NULL;
+END;
+
+-- Prevent deletions of room used by the row table
+CREATE TRIGGER fkd_row_room_id
+BEFORE DELETE ON room
+FOR EACH ROW BEGIN
+	SELECT RAISE(ROLLBACK, 'delete on table "room" violates foreign key constraint "fkd_row_room_id"')
+	WHERE (SELECT room FROM row WHERE room = OLD.id) IS NOT NULL;
+END;
+
 --
 -- Table: Rack
 --
