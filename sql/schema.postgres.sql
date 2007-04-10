@@ -160,7 +160,7 @@ CREATE TABLE device
 (
 	id SERIAL PRIMARY KEY,
 	name VARCHAR NOT NULL,
-	domain_name INTEGER REFERENCES domain,
+	domain INTEGER REFERENCES domain,
 	rack INTEGER REFERENCES rack,
 	rack_pos INTEGER NOT NULL,
 	hardware INTEGER REFERENCES hardware,
