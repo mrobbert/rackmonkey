@@ -14,7 +14,7 @@ use 5.006_001;
 use DBI;
 
 use Data::Dumper; 
-use Test::Simple tests => 34;
+use Test::Simple tests => 39;
 
 use lib 'perl';
 use RackMonkey::Engine;
@@ -34,8 +34,6 @@ my $dbh = DBI->connect(DBDCONNECT,DBUSER,DBPASS, {AutoCommit => 1, RaiseError =>
 my $backend = new RackMonkey::Engine($dbh);
 
 
-# need to test short building name
-
 my $count;
 eval { $count = $backend->getBuildingCount(); };
 ok(!$@, "calling getBuildingCount");
@@ -47,13 +45,13 @@ ok(($@ =~ /No such building id/), "retrieving non-existent building");
 
 my $building2A;
 my $id2A;
-my $newBuilding2A = {'name' => 'Telehouse', 'notes' => 'foo'};
+my $newBuilding2A = {'name' => 'Telehouse', 'name_short' => 'THDO', 'notes' => 'foo'};
 eval { $building2A = $backend->updateBuilding(time, 'EngineTest', $newBuilding2A); };
 ok(!$@, "creating new building");
 $id2A = $backend->getLastInsertId;
 eval { $building2A = $backend->getBuilding($id2A) };
 ok (!$@, "calling getBuilding() on new building id");
-ok ((($$building2A{'name'} eq 'Telehouse') && ($$building2A{'notes'} eq 'foo')), "retrieved building is correct");
+ok ((($$building2A{'name'} eq 'Telehouse') && ($$building2A{'name_short'} eq 'THDO') && ($$building2A{'notes'} eq 'foo')), "retrieved building is correct");
 
 
 eval { $backend->updateBuilding(time, 'EngineTest', $newBuilding2A); };
@@ -72,7 +70,7 @@ ok($@, "building name beginning with space forbidden");
 
 my ($building5A, $building5B);
 my ($id5A, $id5B);
-my $newBuilding5A = {'name' => 'Aardvark House', 'notes' => 'bar'};
+my $newBuilding5A = {'name' => 'Aardvark House', 'name_short' => 'AH', 'notes' => 'bar'};
 my $newBuilding5B = {'name' => '8A&B_ .a-0', 'notes' => 'qux'};
 eval 
 { 
@@ -94,11 +92,9 @@ eval
 	$building5A = $backend->getBuilding($id5A);
 };
 ok(!$@, "retrieval of all three buildings");
-ok	(	(($$building2A{'name'} eq 'Telehouse') && ($$building2A{'notes'} eq 'foo') && 
-		($$building5A{'name'} eq 'Aardvark House')  && ($$building5A{'notes'} eq 'bar') &&
-		($$building5B{'name'} eq '8A&B_ .a-0')  && ($$building5B{'notes'} eq 'qux')),
-		"all three retrieved buildings are correct" );
-
+ok((($$building2A{'name'} eq 'Telehouse') && ($$building2A{'name_short'} eq 'THDO') && ($$building2A{'notes'} eq 'foo')), "first building is correct" );
+ok((($$building5A{'name'} eq 'Aardvark House')  && ($$building5A{'name_short'} eq 'AH') && ($$building5A{'notes'} eq 'bar')), "second building is correct" );
+ok((($$building5B{'name'} eq '8A&B_ .a-0')  && (not defined $$building5B{'name_short'}) && ($$building5B{'notes'} eq 'qux')), "third building is correct" );
 
 my $buildingList;
 eval { $buildingList = $backend->getBuildingList(); };
@@ -107,6 +103,9 @@ ok((scalar(@$buildingList) == 3), "three buildings in retrieved list");
 ok(($$buildingList[0]{'name'} eq '8A&B_ .a-0'), "first building name retrieved correctly (default sort order)");
 ok(($$buildingList[1]{'name'} eq 'Aardvark House'), "second building name retrieved correctly (default sort order)");
 ok(($$buildingList[2]{'name'} eq 'Telehouse'), "third building name retrieved correctly (default sort order)");
+ok((not defined $$buildingList[0]{'name_short'}), "first building short name retrieved correctly (default sort order)");
+ok(($$buildingList[1]{'name_short'} eq 'AH'), "second building short name retrieved correctly (default sort order)");
+ok(($$buildingList[2]{'name_short'} eq 'THDO'), "third building short name retrieved correctly (default sort order)");
 ok(($$buildingList[0]{'notes'} eq 'qux'), "first building notes retrieved correctly (default sort order)");
 ok(($$buildingList[1]{'notes'} eq 'bar'), "second building notes retrieved correctly (default sort order)");
 ok(($$buildingList[2]{'notes'} eq 'foo'), "third building notes retrieved correctly (default sort order)");
