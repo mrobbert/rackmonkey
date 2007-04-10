@@ -46,9 +46,8 @@ ok(($@ =~ /No such building id/), "retrieving non-existent building");
 my $building2A;
 my $id2A;
 my $newBuilding2A = {'name' => 'Telehouse', 'name_short' => 'THDO', 'notes' => 'foo'};
-eval { $building2A = $backend->updateBuilding(time, 'EngineTest', $newBuilding2A); };
+eval { $id2A = $backend->updateBuilding(time, 'EngineTest', $newBuilding2A); };
 ok(!$@, "creating new building");
-$id2A = $backend->getLastInsertId;
 eval { $building2A = $backend->getBuilding($id2A) };
 ok (!$@, "calling getBuilding() on new building id");
 ok ((($$building2A{'name'} eq 'Telehouse') && ($$building2A{'name_short'} eq 'THDO') && ($$building2A{'notes'} eq 'foo')), "retrieved building is correct");
@@ -74,10 +73,8 @@ my $newBuilding5A = {'name' => 'Aardvark House', 'name_short' => 'AH', 'notes' =
 my $newBuilding5B = {'name' => '8A&B_ .a-0', 'notes' => 'qux'};
 eval 
 { 
-	$backend->updateBuilding(time, 'EngineTest', $newBuilding5A);
-	$id5A = $backend->getLastInsertId;
-	$backend->updateBuilding(time, 'EngineTest', $newBuilding5B); 
-	$id5B = $backend->getLastInsertId;
+	$id5A = $backend->updateBuilding(time, 'EngineTest', $newBuilding5A);
+	$id5B = $backend->updateBuilding(time, 'EngineTest', $newBuilding5B); 
 };
 ok(!$@, "creation of two further buildings");
 eval { $count = $backend->getBuildingCount(); };
