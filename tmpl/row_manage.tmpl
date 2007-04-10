@@ -86,13 +86,15 @@
 		<TMPL_VAR ESCAPE=HTML NAME=name> in <TMPL_VAR ESCAPE=HTML NAME=building_name>
 		<br /><br />	
 		<input disabled="disabled" <TMPL_IF has_rows>checked="checked"</TMPL_IF> type="checkbox" name="has_rows" /> Organised into Rows (not yet changable)
-		<br /><br />	
+		<br /><br />
+		<TMPL_IF has_rows>
 		<table id="rowlist">
 		<tr>
 			<th>#</th><th>Row Name</th><th>&nbsp;</th>
 		</tr>
 		</table>
 		<p><input type="button" value="Add Row" /></p>
+		</TMPL_IF>
 		
 		<hr/>
 		
