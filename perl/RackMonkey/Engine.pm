@@ -1445,7 +1445,7 @@ The following methods are generic and don't apply to a particular type of RackMo
 
 =head2 new($dbh)
 
-Create a new RackMonkey::Engine object and connect it to the database handle identified bu $dbh. For example:
+Create a new RackMonkey::Engine object and connect it to the database handle identified by $dbh. For example:
 
 	my $dbh = DBI->connect(DBDCONNECT, DBUSER, DBPASS);
 	my $backend = new RackMonkey::Engine($dbh);
