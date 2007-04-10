@@ -90,9 +90,7 @@ eval
 	{
 		my $updateUser = $ENV{'REMOTE_USER'} || $ENV{'REMOTE_ADDR'};
 		$act = 'update' if ($act eq 'insert');
-		$backend->performAct($cgi->param('act_on'), $act, $updateUser, scalar($cgi->Vars));
-		
-		my $lastCreatedId = $backend->getLastInsertId;
+		my $lastCreatedId = $backend->performAct($cgi->param('act_on'), $act, $updateUser, scalar($cgi->Vars));
 		$id = $lastCreatedId if (!$id); # use lastCreatedId if there isn't an id
 		
 		my $redirectURL = "$fullURL?view=$view&view_type=$viewType";

@@ -76,12 +76,6 @@ sub getEntryId # This won't work for things like rooms, where the name might not
 	return $$entry{'id'};
 }
 
-sub getLastInsertId # works with Postgres and SQLite, but will need altering for other DB, need to check how it deals with multiple requests from different processes
-{
-	my $self = shift;
-	return $self->dbh->last_insert_id(undef, undef, undef, undef);
-}
-
 sub performAct
 {
 	my ($self, $type, $act, $updateUser, $record) = @_;
@@ -100,7 +94,7 @@ sub performAct
 	my $updateTime = sprintf('%04d-%02d-%02d %02d:%02d:%02d', $year, $month, $day, $hour, $min, $sec);
 		
 	$type = $act.ucfirst($type);
-	$self->$type($updateTime, $updateUser, $record);
+	return $self->$type($updateTime, $updateUser, $record);
 }
 
 
@@ -155,18 +149,22 @@ sub updateBuilding
 {
 	my ($self, $updateTime, $updateUser, $record) = @_;
 	die "RMERR: Unable to update building. No building record specified.\nError occured" unless ($record);
-		
+	
+	my ($sth, $newId);
+
 	if ($$record{'act_id'})
 	{	
-		my $sth = $self->dbh->prepare(qq!UPDATE building SET name = ?, name_short = ?, notes = ?, meta_update_time = ?, meta_update_user = ? WHERE id = ?!);
+		$sth = $self->dbh->prepare(qq!UPDATE building SET name = ?, name_short = ?, notes = ?, meta_update_time = ?, meta_update_user = ? WHERE id = ?!);
 		my $ret = $sth->execute($self->_validateBuildingUpdate($record), $updateTime, $updateUser, $$record{'act_id'});
 		die "RMERR: Update failed. This building may have been removed before the update occured.\nError occured" if ($ret eq '0E0');
 	}
 	else
 	{
-		my $sth = $self->dbh->prepare(qq!INSERT INTO building (name, name_short, notes, meta_update_time, meta_update_user) VALUES(?, ?, ?, ?, ?)!);
+		$sth = $self->dbh->prepare(qq!INSERT INTO building (name, name_short, notes, meta_update_time, meta_update_user) VALUES(?, ?, ?, ?, ?)!);
 		$sth->execute($self->_validateBuildingUpdate($record), $updateTime, $updateUser);
+		$newId = $self->_getLastInsertId();
 	}
+	return $newId || $$record{'act_id'};
 }
 
 sub deleteBuilding
@@ -323,7 +321,7 @@ sub updateRoom
 	my ($self, $updateTime, $updateUser, $record) = @_;
 	die "RMERR: Unable to update room. No room record specified.\nError occured" unless ($record);
 		
-	my $sth;
+	my ($sth, $newId);
 	
 	if ($$record{'act_id'})
 	{	
@@ -333,9 +331,29 @@ sub updateRoom
 	}
 	else
 	{
-		$sth = $self->dbh->prepare(qq!INSERT INTO room (name, building, notes, meta_update_time, meta_update_user) VALUES(?, ?, ?, ?, ?)!);
-		$sth->execute($self->_validateRoomUpdate($record), $updateTime, $updateUser);
+		$self->dbh->{AutoCommit} = 0;    # need to update room and row table together
+		eval
+		{
+			$sth = $self->dbh->prepare(qq!INSERT INTO room (name, building, notes, meta_update_time, meta_update_user) VALUES(?, ?, ?, ?, ?)!);
+			$sth->execute($self->_validateRoomUpdate($record), $updateTime, $updateUser);
+			$newId = $self->_getLastInsertId();
+			my $hiddenRow = {'name' => '-', room => "$newId", 'room_pos' => 0, 'hidden_row' => 1, 'notes' => ''}; 
+			$self->updateRow($updateTime, $updateUser, $hiddenRow);
+			$self->dbh->commit();
+		};
+		if ($@)
+		{
+			my $errorMsg = $@;
+			eval { $self->dbh->rollback(); };
+			if ($@)
+			{
+				die "RMERR: Room creation failed - $errorMsg\nIn addition transaction roll back failed - $@\nError occured";
+			}
+			die "RMERR: Room creation failed - $errorMsg\nError occured";
+		}
+		$self->dbh->{AutoCommit} = 1; 
 	}
+	return $newId || $$record{'act_id'};
 }
 
 sub deleteRoom
@@ -343,9 +361,29 @@ sub deleteRoom
 	my ($self, $updateTime, $updateUser, $record) = @_;
 	my $deleteId = (ref $record eq 'HASH') ? $$record{'act_id'} : $record;
 	die "RMERR: Delete failed. No room id specified.\nError occured" unless ($deleteId);
-	my $sth = $self->dbh->prepare('DELETE FROM room WHERE id = ?');
-	my $ret = $sth->execute($deleteId);
-	die "RMERR: Delete failed. This room does not currently exist, it may have been removed already.\nError occured" if ($ret eq '0E0');
+	
+	my ($ret, $sth);
+	$self->dbh->{AutoCommit} = 0;    # need to delete room and hidden rows together
+	eval
+	{
+		$sth = $self->dbh->prepare('DELETE FROM row WHERE hidden_row = 1 AND room = ?');
+		$sth->execute($deleteId);
+		$sth = $self->dbh->prepare('DELETE FROM room WHERE id = ?');
+		$ret = $sth->execute($deleteId);
+		$self->dbh->commit();
+	};
+	if ($@)
+	{
+		my $errorMsg = $@;
+		eval { $self->dbh->rollback(); };
+		if ($@)
+		{
+			die "RMERR: Room deletion failed - $errorMsg\nIn addition transaction roll back failed - $@\nError occured";
+		}
+		die "RMERR: Room deletion failed - $errorMsg\nError occured";
+	}	
+	$self->dbh->{AutoCommit} = 1; 
+	die "RMERR: This room does not currently exist, it may have been removed already.\nError occured" if ($ret eq '0E0');
 }
 
 sub deleteRoomList
@@ -416,6 +454,23 @@ sub getRowList
 	return $sth->fetchall_arrayref({});
 }
 
+sub updateRow
+{
+	my ($self, $updateTime, $updateUser, $record) = @_;
+	die "RMERR: Unable to update row. No row record specified.\nError occured" unless ($record);
+		
+	if ($$record{'act_id'})
+	{	
+		my $sth = $self->dbh->prepare(qq!UPDATE row SET name = ?, room = ?, room_pos = ?, hidden_row = ?, notes = ?, meta_update_time = ?, meta_update_user = ? WHERE id = ?!);
+		my $ret = $sth->execute($self->_validateRowUpdate($record), $updateTime, $updateUser, $$record{'act_id'});
+		die "RMERR: Update failed. This row may have been removed before the update occured.\nError occured" if ($ret eq '0E0');
+	}
+	else
+	{
+		my $sth = $self->dbh->prepare(qq!INSERT INTO row (name, room, room_pos, hidden_row, notes, meta_update_time, meta_update_user) VALUES(?, ?, ?, ?, ?, ?, ?)!);
+		$sth->execute($self->_validateRowUpdate($record), $updateTime, $updateUser);
+	}
+}
 
 # extra row subs that include room, building information
 
@@ -472,6 +527,15 @@ sub getRowCountInRoom
 	$sth->execute($room);
 	my $countRef = $sth->fetch;
 	return $$countRef[0];
+}
+
+sub _validateRowUpdate
+{
+	my ($self, $record) = @_;
+	die "RMERR_INTERNAL: Unable to validate row. No building record specified.\nError occured" unless ($record);
+	checkName($$record{'name'});
+	checkNotes($$record{'notes'});
+	return ($$record{'name'}, $$record{'room'}, $$record{'room_pos'}, $$record{'hidden_row'}, $$record{'notes'});
 }
 
 
@@ -1321,7 +1385,13 @@ sub validateServiceUpdate
 }
 
 
-######## Internal DB Handle access - users of this class should not use this method ########
+######## Private methods - users of this class should not use these methods ########
+sub _getLastInsertId # works with Postgres and SQLite, but will need altering for other DB, need to check how it deals with multiple requests from different processes
+{
+	my $self = shift;
+	return $self->dbh->last_insert_id(undef, undef, undef, undef);
+}
+
 sub dbh
 {
 	my $self = shift;
@@ -1370,7 +1440,6 @@ The following methods are generic and don't apply to a particular type of RackMo
  getListBasic($table)
  getListBasicSelected($table, $selectedId)
  getEntryId($name, $table)
- getLastInsertId()
  performAct() 
 
 
