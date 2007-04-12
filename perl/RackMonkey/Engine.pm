@@ -124,6 +124,7 @@ sub getBuildingCount
 	my $sth = $self->dbh->prepare(qq!
 		SELECT count(*) 
 		FROM building 
+		WHERE meta_default_data = 0
 	!);
 	$sth->execute();
 	return ($sth->fetchrow_array)[0];
@@ -225,7 +226,8 @@ sub getRoomCount
 	my $self = shift;
 	my $sth = $self->dbh->prepare(qq!
 		SELECT count(*) 
-		FROM room 
+		FROM room
+		WHERE meta_default_data = 0
 	!);
 	$sth->execute();
 	return ($sth->fetchrow_array)[0];
@@ -1467,21 +1469,22 @@ will produce undefined results.
 
 Gets a hash reference to one building specified by $id. If there is no such building the library dies.
 
-=head2 getBuildingCount
+=head2 getBuildingCount()
 
-Returns the number of buildings stored in RackMonkey.
+Returns the number of real buildings stored in RackMonkey. Meta buildings (such as 'unknown') are not counted.
 
 =head2 getBuildingList([$orderBy])
 
-Gets a list of all buildings, ordered by building property $orderBy. If $orderBy is not specified, buildings are ordered by their name
-(but with default data, such as 'unknown', last in the list). If no buildings exist the returned list will be empty. Returns a reference to an array of hash
-references. One hash reference per building.
+Gets a list of all buildings ordered by the property $orderBy. If $orderBy is not specified, buildings are ordered
+by their name (but with default data, such as 'unknown', last in the list). If no buildings exist the returned list
+will be empty. Returns a reference to an array of hash references. One hash reference per building.
 
 =head2 updateBuilding($updateTime, $updateUser, $record)
 
-Updates or creates a building entry based on the hash ref $record. If $$record{'id'} exists, an update will be performed,
+Updates or creates a building entry based on the hash ref $record. If $$record{'id'} is specified an update will be performed,
 otherwise a new building will be created. $updateTime and $updateUser set the update time and user associated with this
-update. Both are strings, and may be empty. If the engine tries to update a record, but no record is updated, the Engine dies.
+update. Both are strings, and may be empty. If the engine tries to update a record, but no record is updated, the Engine
+dies. Returns the id of the updated or created building.
 
 =head2 deleteBuilding($self, $updateTime, $updateUser, $record)
 
@@ -1492,8 +1495,8 @@ the update time and user associated with this delete; at present they are disgua
 
 =head2 deleteBuildingList($updateTime, $updateUser, $buildingList)
 
-Deletes all the buildings, specified by id in the array ref $buildingList. For example, to delete buildings with the id: 4, 6, 88:
-$buildingList = [4, 6, 88]; The delete is performed as a single transaction, so either all the deletes succeed, or the Engine dies.
+Deletes all the buildings (specified by id) in the array ref $buildingList. For example, to delete buildings with the id: 4, 6, 88:
+$buildingList = [4, 6, 88]; The delete is performed as a single transaction: unless all the deletes succeed the Engine dies. 
 
 
 =head1 ROOM METHODS
@@ -1510,39 +1513,40 @@ $buildingList = [4, 6, 88]; The delete is performed as a single transaction, so 
 
 =head2 getRoom($id)
 
-Gets a hash reference to one room specified by $id. If there is no such room the library dies.
+Gets a hash reference to one room specified by $id. If there is no such room the engine dies.
 
 =head2 getRoomCount()
 
-Returns the number of rooms stored in RackMonkey.
+Returns the number of real rooms stored in RackMonkey. Meta rooms (such as 'unknown') are not counted.
 
 =head2 getRoomList([$orderBy])
 
-Gets a list of all rooms, ordered by room property $orderBy. If $orderBy is not specified, rooms are ordered by their building, then their name
-(but with default data, such as 'unknown', last in the list). If no rooms exist the returned list will be empty. Returns a reference to an array of hash
-references. One hash reference per room.
+Gets a list of all rooms ordered by the property $orderBy. If $orderBy is not specified, rooms are ordered by their building, then
+their name (but with default data, such as 'unknown', last in the list). If no rooms exist the returned list will be empty. Returns
+a reference to an array of hash references. One hash reference per room.
 
 =head2 getRoomListInBuilding($building [, $orderBy])
 
-As for getRoomList, but limits rooms returned to those in the building identified by the id $building. If no rooms exist in that building the returned list will be empty.
-
+As for getRoomList, but limits rooms returned to those in the building identified by the id $building. If the building doesn't
+exist, or is empty of rooms, the returned list will be empty.
 
 =head2 getRoomListBasic()
 
 Because rooms reside in buildings, the common getListBasic() is often not what you want. getRoomListBasic works just like getListBasic(),
 but returns the building name too. If no rooms exist the returned list will be empty.
 
-
 =head2 getRoomListBasicSelected($selectedId)
 
 As getRoomListBasic(), but also returns 'selected' for the room identified by the id $selectedId. This method is useful for generating lists
-for dropdowns with a value selected. If no room matches $selectedId, no error is raised and no room is selected. If no rooms exist the returned list will be empty.
+for dropdowns with a value selected. If no room matches $selectedId, no error is raised and no room is selected. If no rooms exist the
+returned list will be empty.
 
 =head2 updateRoom($updateTime, $updateUser, $record)
 
-Updates or creates a room entry based on the hash ref $record. If $$record{'id'} exists, an update will be performed,
+Updates or creates a room entry based on the hash ref $record. If $$record{'id'} is specified an update will be performed,
 otherwise a new room will be created. $updateTime and $updateUser set the update time and user associated with this
-update. Both are strings, and may be empty. If the engine tries to update a record, but no record is updated, the Engine dies.
+update. Both are strings, and may be empty. If the engine tries to update a record, but no record is updated, the Engine
+dies. Returns the id of the updated or created building.
 
 =head2 deleteRoom($updateTime, $updateUser, $record)
 
@@ -1553,8 +1557,8 @@ the update time and user associated with this delete; at present they are disgua
 
 =head2 deleteRoomList($updateTime, $updateUser, $roomList)
 
-Deletes all the rooms, specified by id in the array ref $roomList. For example, to delete rooms with the id: 4, 6, 88:
-$roomList = [4, 6, 88]; The delete is performed as a single transaction, so either all the deletes succeed, or the Engine dies. 
+Deletes all the rooms (specified by id) in the array ref $roomList. For example, to delete rooms with the id: 4, 6, 88:
+$roomList = [4, 6, 88]; The delete is performed as a single transaction: unless all the deletes succeed the Engine dies. 
  
  
 =head1 BUGS
