@@ -13,8 +13,8 @@ use 5.006_001;
 
 use DBI;
 
-use Data::Dumper; 
-use Test::Simple tests => 2;
+use Data::Dumper;
+use Test::Simple tests => 3;
 
 use lib 'perl';
 use RackMonkey::Engine;
@@ -39,14 +39,25 @@ eval { $count = $backend->getRoomCount(); };
 ok(!$@, "calling getRoomCount");
 ok(($count == 0), "no room records stored at the start of the test");
 
+eval { $backend->getRoom(1); };
+ok(($@ =~ /No such room id/), "retrieving non-existent building");
 
 die "Buildings already exist, tests must be performed on an empty building table.\n" if ($backend->getBuildingCount() != 0);
 my $newBuildingA = {'name' => 'Aldgate House', 'notes' => ''};
 my $newBuildingB = {'name' => 'Barbican House', 'notes' => ''};
 
+my ($buildIdA, $buildIdB);
+
 eval 
 {
-	$backend->updateBuilding(time, 'EngineTest', $newBuildingA); 
-	$backend->updateBuilding(time, 'EngineTest', $newBuildingB); 
+	$buildIdA = $backend->updateBuilding(time, 'EngineTest', $newBuildingA); 
+	$buildIdB = $backend->updateBuilding(time, 'EngineTest', $newBuildingB); 
 };
-die "Couldn't create buildings to add rooms to. Run the building unit tests.\n" if ($@);
+die "Couldn't create buildings to add rooms to - $@" if ($@);
+
+eval 
+{
+	$backend->deleteBuilding(time, 'EngineTest', $buildIdA); 
+	$backend->deleteBuilding(time, 'EngineTest', $buildIdB); 
+};
+die "Couldn't delete buildings - $@\n" if ($@);
