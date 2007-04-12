@@ -6,6 +6,8 @@
 # RackMonkey Engine building unit test script
 ########################################################################
 
+# Need to add tests for deleteBuildingList and for excluding meta buildings from getBuildingCount
+
 use strict;
 use warnings;
 
@@ -28,7 +30,6 @@ our $AUTHOR = 'Will Green (wgreen at users.sourceforge.net)';
 use constant DBDCONNECT => 'dbi:SQLite:dbname=/tmp/rackmonkey/test.db';
 use constant DBUSER => '';
 use constant DBPASS => '';
-
 
 my $dbh = DBI->connect(DBDCONNECT,DBUSER,DBPASS, {AutoCommit => 1, RaiseError => 1, PrintError => 0});
 my $backend = new RackMonkey::Engine($dbh);
@@ -132,4 +133,3 @@ ok((scalar(@$buildingList) == 0), "no buildings in retrieved list");
 eval { $count = $backend->getBuildingCount(); };
 ok(!$@, "calling getBuildingCount");
 ok(($count == 0), "no building records stored at the end of the test");
-
