@@ -87,6 +87,13 @@ sub performAct
 	die "RMERR: You cannot use the username 'install', it's reserved for use by Rackmonkey.\nError occured" if (lc($updateUser) eq 'install');
 	die "RMERR: You cannot use the username 'rackmonkey', it's reserved for use by Rackmonkey.\nError occured" if (lc($updateUser) eq 'rackmonkey');
 	
+	# if we have an act_id turn it into a normal id
+	if ($$record{'act_id'})
+	{
+		$$record{'id'} = $$record{'act_id'};
+		delete $$record{'act_id'};
+	}
+	
 	# calculate update time (always GMT)
 	my ($sec, $min, $hour, $day, $month, $year) = (gmtime)[0,1,2,3,4,5];
 	$year += 1900;
@@ -153,10 +160,10 @@ sub updateBuilding
 	
 	my ($sth, $newId);
 
-	if ($$record{'act_id'})
+	if ($$record{'id'})
 	{	
 		$sth = $self->dbh->prepare(qq!UPDATE building SET name = ?, name_short = ?, notes = ?, meta_update_time = ?, meta_update_user = ? WHERE id = ?!);
-		my $ret = $sth->execute($self->_validateBuildingUpdate($record), $updateTime, $updateUser, $$record{'act_id'});
+		my $ret = $sth->execute($self->_validateBuildingUpdate($record), $updateTime, $updateUser, $$record{'id'});
 		die "RMERR: Update failed. This building may have been removed before the update occured.\nError occured" if ($ret eq '0E0');
 	}
 	else
@@ -165,13 +172,13 @@ sub updateBuilding
 		$sth->execute($self->_validateBuildingUpdate($record), $updateTime, $updateUser);
 		$newId = $self->_getLastInsertId();
 	}
-	return $newId || $$record{'act_id'};
+	return $newId || $$record{'id'};
 }
 
 sub deleteBuilding
 {
 	my ($self, $updateTime, $updateUser, $record) = @_;
-	my $deleteId = (ref $record eq 'HASH') ? $$record{'act_id'} : $record;
+	my $deleteId = (ref $record eq 'HASH') ? $$record{'id'} : $record;
 	die "RMERR: Delete failed. No building id specified.\nError occured" unless ($deleteId);
 	my $sth = $self->dbh->prepare('DELETE FROM building WHERE id = ?');
 	my $ret = $sth->execute($deleteId);
@@ -325,10 +332,10 @@ sub updateRoom
 		
 	my ($sth, $newId);
 	
-	if ($$record{'act_id'})
+	if ($$record{'id'})
 	{	
 		$sth = $self->dbh->prepare(qq!UPDATE room SET name = ?, building =?, notes = ?, meta_update_time = ?, meta_update_user = ? WHERE id = ?!);
-		my $ret = $sth->execute($self->_validateRoomUpdate($record), $updateTime, $updateUser, $$record{'act_id'});
+		my $ret = $sth->execute($self->_validateRoomUpdate($record), $updateTime, $updateUser, $$record{'id'});
 		die "RMERR: Update failed. This room may have been removed before the update occured.\nError occured" if ($ret eq '0E0');
 	}
 	else
@@ -355,13 +362,13 @@ sub updateRoom
 		}
 		$self->dbh->{AutoCommit} = 1; 
 	}
-	return $newId || $$record{'act_id'};
+	return $newId || $$record{'id'};
 }
 
 sub deleteRoom
 {
 	my ($self, $updateTime, $updateUser, $record) = @_;
-	my $deleteId = (ref $record eq 'HASH') ? $$record{'act_id'} : $record;
+	my $deleteId = (ref $record eq 'HASH') ? $$record{'id'} : $record;
 	die "RMERR: Delete failed. No room id specified.\nError occured" unless ($deleteId);
 	
 	my ($ret, $sth);
@@ -461,10 +468,10 @@ sub updateRow
 	my ($self, $updateTime, $updateUser, $record) = @_;
 	die "RMERR: Unable to update row. No row record specified.\nError occured" unless ($record);
 		
-	if ($$record{'act_id'})
+	if ($$record{'id'})
 	{	
 		my $sth = $self->dbh->prepare(qq!UPDATE row SET name = ?, room = ?, room_pos = ?, hidden_row = ?, notes = ?, meta_update_time = ?, meta_update_user = ? WHERE id = ?!);
-		my $ret = $sth->execute($self->_validateRowUpdate($record), $updateTime, $updateUser, $$record{'act_id'});
+		my $ret = $sth->execute($self->_validateRowUpdate($record), $updateTime, $updateUser, $$record{'id'});
 		die "RMERR: Update failed. This row may have been removed before the update occured.\nError occured" if ($ret eq '0E0');
 	}
 	else
@@ -699,7 +706,7 @@ sub deleteRack
 {
 	my ($self, $record) = @_;
 	my $sth = $self->dbh->prepare(qq!DELETE FROM rack WHERE id = ?!);
-	$sth->execute($$record{'act_id'});	
+	$sth->execute($$record{'id'});	
 }
 
 # extra rack subs that include row, room, building information
@@ -802,10 +809,10 @@ sub updateHardware # should check if update/insert was successful
 	
 	my $sth;
 	
-	if ($$record{'act_id'}) # if id is supplied peform an update
+	if ($$record{'id'}) # if id is supplied peform an update
 	{	
 		$sth = $self->dbh->prepare(qq!UPDATE hardware SET name = ?, manufacturer =?, size = ?, image = ?, support_url = ?, spec_url = ?, notes = ?, meta_update_time = ?, meta_update_user = ? WHERE id = ?!);
-		$sth->execute($self->validateHardwareUpdate($record), $updateTime, $updateUser, $$record{'act_id'});
+		$sth->execute($self->validateHardwareUpdate($record), $updateTime, $updateUser, $$record{'id'});
 	}
 	else
 	{
@@ -818,7 +825,7 @@ sub deleteHardware # should check we successfully deleted if possible
 {
 	my ($self, $updateTime, $updateUser, $record) = @_;
 	my $sth = $self->dbh->prepare('DELETE FROM hardware WHERE id = ?');
-	$sth->execute($$record{'act_id'});	
+	$sth->execute($$record{'id'});	
 }
 
 sub validateHardwareUpdate
@@ -888,10 +895,10 @@ sub updateOs # should check if update/insert was successful
 
 	my $sth;
 	
-	if ($$record{'act_id'}) # if id is supplied peform an update
+	if ($$record{'id'}) # if id is supplied peform an update
 	{	
 		$sth = $self->dbh->prepare(qq!UPDATE os SET name = ?, manufacturer = ?, notes = ?, meta_update_time = ?, meta_update_user = ? WHERE id = ?!);
-		$sth->execute($self->validateOs($record), $updateTime, $updateUser, $$record{'act_id'});
+		$sth->execute($self->validateOs($record), $updateTime, $updateUser, $$record{'id'});
 	}
 	else
 	{
@@ -904,7 +911,7 @@ sub deleteOs # should check we successfully deleted if possible
 {
 	my ($self, $updateTime, $updateUser, $record) = @_;
 	my $sth = $self->dbh->prepare(qq!DELETE FROM os WHERE id = ?!);
-	$sth->execute($$record{'act_id'});	
+	$sth->execute($$record{'id'});	
 }
 
 sub validateOs
@@ -958,10 +965,10 @@ sub updateOrg # should check if update/insert was successful
 	
 	my $sth;
 	
-	if ($$record{'act_id'}) # if id is supplied peform an update
+	if ($$record{'id'}) # if id is supplied peform an update
 	{	
 		$sth = $self->dbh->prepare(qq!UPDATE org SET name = ?, account_no = ?, customer = ?, software = ?, hardware = ?, descript = ?, home_page = ?, notes = ?, meta_update_time = ?, meta_update_user = ? WHERE id = ?!);
-		$sth->execute($self->validateOrgUpdate($record), $updateTime, $updateUser, $$record{'act_id'});
+		$sth->execute($self->validateOrgUpdate($record), $updateTime, $updateUser, $$record{'id'});
 	}
 	else
 	{
@@ -974,7 +981,7 @@ sub deleteOrg
 {
 	my ($self, $updateTime, $updateUser, $record) = @_;
 	my $sth = $self->dbh->prepare('DELETE FROM org WHERE id = ?');
-	$sth->execute($$record{'act_id'});	
+	$sth->execute($$record{'id'});	
 }
 
 sub validateOrgUpdate
@@ -1039,10 +1046,10 @@ sub updateDomain # should check if update/insert was successful
 	
 	my $sth;
 	
-	if ($$record{'act_id'}) # if id is supplied peform an update
+	if ($$record{'id'}) # if id is supplied peform an update
 	{	
 		$sth = $self->dbh->prepare(qq!UPDATE domain SET name = ?, descript = ?, notes = ?, meta_update_time = ?, meta_update_user = ? WHERE id = ?!);
-		$sth->execute($self->validateDomainUpdate($record), $updateTime, $updateUser, $$record{'act_id'});
+		$sth->execute($self->validateDomainUpdate($record), $updateTime, $updateUser, $$record{'id'});
 	}
 	else
 	{
@@ -1055,7 +1062,7 @@ sub deleteDomain
 {
 	my ($self, $updateTime, $updateUser, $record) = @_;
 	my $sth = $self->dbh->prepare(qq!DELETE FROM domain WHERE id = ?!);
-	$sth->execute($$record{'act_id'});	
+	$sth->execute($$record{'id'});	
 }
 
 sub validateDomainUpdate # Should we remove or warn on domains beginning with . ?
@@ -1220,7 +1227,7 @@ sub deleteDevice
 {
 	my ($self, $record) = @_;
 	my $sth = $self->dbh->prepare('DELETE FROM device WHERE id = ?');
-	$sth->execute($$record{'act_id'});	
+	$sth->execute($$record{'id'});	
 }
 
 sub validateDeviceInput
@@ -1288,10 +1295,10 @@ sub updateRole # should check if update/insert was successful
 	
 	my $sth;
 	
-	if ($$record{'act_id'}) # if id is supplied peform an update
+	if ($$record{'id'}) # if id is supplied peform an update
 	{	
 		$sth = $self->dbh->prepare(qq!UPDATE role SET name = ?, descript = ?, notes = ?, meta_update_time = ?, meta_update_user = ? WHERE id = ?!);
-		$sth->execute($self->validateDomainUpdate($record), $updateTime, $updateUser, $$record{'act_id'});
+		$sth->execute($self->validateDomainUpdate($record), $updateTime, $updateUser, $$record{'id'});
 	}
 	else
 	{
@@ -1304,7 +1311,7 @@ sub deleteRole
 {
 	my ($self, $updateTime, $updateUser, $record) = @_;
 	my $sth = $self->dbh->prepare('DELETE FROM role WHERE id = ?');
-	$sth->execute($$record{'act_id'});	
+	$sth->execute($$record{'id'});	
 }
 
 sub validateRoleUpdate
@@ -1357,10 +1364,10 @@ sub updateService # should check if update/insert was successful
 	
 	my $sth;
 	
-	if ($$record{'act_id'}) # if id is supplied peform an update
+	if ($$record{'id'}) # if id is supplied peform an update
 	{	
 		$sth = $self->dbh->prepare(qq!UPDATE service SET name = ?, descript = ?, notes = ?, meta_update_time = ?, meta_update_user = ? WHERE id = ?!);
-		$sth->execute($self->validateServiceUpdate($record), $updateTime, $updateUser, $$record{'act_id'});
+		$sth->execute($self->validateServiceUpdate($record), $updateTime, $updateUser, $$record{'id'});
 	}
 	else
 	{
@@ -1373,7 +1380,7 @@ sub deleteService
 {
 	my ($self, $updateTime, $updateUser, $record) = @_;
 	my $sth = $self->dbh->prepare('DELETE FROM service WHERE id = ?');
-	$sth->execute($$record{'act_id'});	
+	$sth->execute($$record{'id'});	
 }
 
 sub validateServiceUpdate
@@ -1489,7 +1496,7 @@ dies. Returns the id of the updated or created building.
 =head2 deleteBuilding($self, $updateTime, $updateUser, $record)
 
 Deletes the building whose id identified by $record. deleteBuilding checks whether the record is a hash ref, and if 
-so uses $$record{'act_id'} as the id, otherwise $record is taken to be the id. Support for hash refs allows deleteBuilding
+so uses $$record{'id'} as the id, otherwise $record is taken to be the id. Support for hash refs allows deleteBuilding
 to be called with the same data as an update. If no such building exists or the delete fails the library dies. $updateTime and $updateUser set
 the update time and user associated with this delete; at present they are disguarded.
 
@@ -1551,7 +1558,7 @@ dies. Returns the id of the updated or created building.
 =head2 deleteRoom($updateTime, $updateUser, $record)
 
 Deletes the room whose id identified by $record. deleteRoom checks whether the record is a hash ref, and if 
-so uses $$record{'act_id'} as the id, otherwise $record is taken to be the id. Support for hash refs allows deleteRoom
+so uses $$record{'id'} as the id, otherwise $record is taken to be the id. Support for hash refs allows deleteRoom
 to be called with the same data as an update. If no such room exists or the delete fails the library dies. $updateTime and $updateUser set
 the update time and user associated with this delete; at present they are disguarded.
 
