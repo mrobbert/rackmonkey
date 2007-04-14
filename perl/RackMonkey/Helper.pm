@@ -22,7 +22,8 @@ our @EXPORT = qw/shortStr shortURL httpFixer calculateAge checkName checkNotes/;
 
 sub shortStr
 {
-	my $str = shift || '';
+	my $str = shift;
+	return unless defined $str;
 	if (length($str) > SHORTTEXTLEN)
 	{
 		return substr($str, 0, SHORTTEXTLEN).'...';
@@ -33,6 +34,7 @@ sub shortStr
 sub shortURL
 {
 	my $url = shift;
+	return unless defined $url;
 	if (length($url) > SHORTURLLEN)
 	{
 		return substr($url, 0, SHORTURLLEN).'...';
@@ -42,19 +44,20 @@ sub shortURL
 
 sub httpFixer
 {
-	my $str = shift || "";
-	return '' unless (length($str)); # Don't add to empty strings
-	unless ($str =~ /^\w+:\/\//)  # Does URL begin with a protocol?
+	my $url = shift;
+	return unless defined $url;
+	return unless (length($url)); # Don't add to empty strings
+	unless ($url =~ /^\w+:\/\//)  # Does URL begin with a protocol?
 	{
-		$str = "http://$str";
+		$url = "http://$url";
 	}
-	return $str;
+	return $url;
 }
 
 sub calculateAge
 {
 	my $date = shift;
-	
+	return unless defined $date;
 	my ($year, $month, $day) = $date =~ /(\d{4})-(\d{2})-(\d{2})/;
 	if ($year)
 	{
@@ -63,12 +66,13 @@ sub calculateAge
 		my $age = (time - $startTime) / (86400 * 365.24); # Age in years
 		return sprintf("%.1f", $age);
 	}
-	return "";
+	return '';
 }
 
 sub checkName
 {
 	my $name = shift;
+	die "RMERR: You must specify a name." unless defined $name;
 	unless ($name =~ /^\S+/)
 	{
 		die "RMERR: You must specify a valid name. Names may not begin with white space.\nError occured";
@@ -82,6 +86,7 @@ sub checkName
 sub checkNotes
 {
 	my $notes = shift;
+	return unless defined $notes;
 	unless (length($notes) <= MAXNOTE)
 	{
 		die "RMERR: Notes cannot exceed '.MAXNOTE.' characters.\nError occured";
