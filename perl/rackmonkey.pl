@@ -20,19 +20,6 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
-
-# Interface TODO
-# - templates should all include JS and updated 2007 header
-# - decide whether to have a an </ELSE> for when no data in default views? Should at least say there are no items.
-# - apply alternating colours to all default views
-# - decide on form for order by foo.bar or foo_bar and be consistent
-# - meta locations are considered to be buildings, hide unknown in lower locations (eg. rooms, racks etc.)? But need to include in rack view?
-# - write sub to ensure no items can be put on top of each other, except in meta locations
-# - decide when to use short building names, offer full name on hover
-# - Drop in from column names "in room?"
-# - Use proper buttons on forms everywhere
-
-
 use strict;
 use warnings;
 
@@ -61,16 +48,7 @@ eval
 {
 	my $dbh = DBI->connect(DBDCONNECT, DBUSER, DBPASS, {AutoCommit => 1, RaiseError => 1, PrintError => 0, ShowErrorStatement => 1}); 
 
-	# Get driver version number
-	my ($currentDriver) = DBDCONNECT =~ /dbi:(.*?):/;
-	$currentDriver = "DBD::$currentDriver";
-	my $driverVersion = eval("\$${currentDriver}::VERSION");
-	
-	# If using SQLite, version v1.09 or higher is required in order to support ADD COLUMN
-	if (($currentDriver eq 'DBD::SQLite') && ($driverVersion < 1.09))
-	{
-		die "RMERR: RackMonkey requires DBD::SQLite v1.09 or higher. You are using DBD::SQLite v$driverVersion. Please consult the installation instructions.\nError occured";
-	}
+	checkSupportedDriver();
 
 	my $backend = new RackMonkey::Engine($dbh);
 	
@@ -387,3 +365,22 @@ if ($@)
 	RackMonkey::Error::display($errMsg, $friendlyErrMsg);
 }
 
+sub checkSupportedDriver
+{
+	# Get driver version number
+	my ($currentDriver) = DBDCONNECT =~ /dbi:(.*?):/;
+	$currentDriver = "DBD::$currentDriver";
+	my $driverVersion = eval("\$${currentDriver}::VERSION");
+	
+	# Check we're using SQLite or Postgres
+	unless (($currentDriver eq 'DBD::SQLite') || ($currentDriver eq 'DBD::Pg'))
+	{
+		die "RMERR: You tried to use an unsupported database driver '$currentDriver'. RackMonkey supports SQLite (DBD::SQLite) or Postgres (DBD::Pg).\nError occured";
+	}
+	
+	# If using SQLite, version v1.09 or higher is required in order to support ADD COLUMN
+	if (($currentDriver eq 'DBD::SQLite') && ($driverVersion < 1.09))
+	{
+		die "RMERR: RackMonkey requires DBD::SQLite v1.09 or higher. You are using DBD::SQLite v$driverVersion. Please consult the installation instructions.\nError occured";
+	}
+}
