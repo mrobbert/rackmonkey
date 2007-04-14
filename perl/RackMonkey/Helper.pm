@@ -13,8 +13,7 @@ use Time::Local;
 
 use RackMonkey::Conf;
 
-our $PRODUCTVERSION = '1.1';
-our $VERSION = ('$Revision: 1.4 $' =~ /([\d\.]+)/ );;
+our $VERSION = '1.2.%BUILD%';
 our $AUTHOR = 'Will Green (wgreen at users.sourceforge.net)';
 
 use base 'Exporter';
