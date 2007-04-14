@@ -39,7 +39,6 @@ my $buildingList;
 my ($bdA, $bdIdA, $bdDataA);
 my ($bdB, $bdIdB, $bdDataB);
 my ($bdC, $bdIdC, $bdDataC);
-my ($bdD, $bdIdD, $bdDataD);
 
 $bdDataA = {'name' => 'Telehouse', 'name_short' => 'THDO', 'notes' => 'foo'};
 $bdDataB = {'name' => 'Aardvark House', 'name_short' => 'AH', 'notes' => 'bar'};
