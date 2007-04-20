@@ -1,10 +1,10 @@
 ﻿package RackMonkey::Engine;
-########################################################################
-# RackMonkey - Know Your Racks - http://www.rackmonkey.org
-# Version 1.2.%BUILD%
-# (C)2007 Will Green (wgreen at users.sourceforge.net)
-# DBI Engine for Rackmonkey
-########################################################################
+##############################################################################
+# RackMonkey - Know Your Racks - http://www.rackmonkey.org                   #
+# Version 1.2.%BUILD%                                                        #
+# (C)2007 Will Green (wgreen at users.sourceforge.net)                       #
+# DBI Engine for Rackmonkey                                                  #
+##############################################################################
 
 use strict;
 use warnings;
@@ -20,24 +20,32 @@ our $VERSION = '1.2.%BUILD%';
 our $AUTHOR = 'Will Green (wgreen at users.sourceforge.net)';
 
 
-
-################################################################################
-# Common Methods                                                               #
-################################################################################
+##############################################################################
+# Common Methods                                                             #
+##############################################################################
 
 sub new
 {
-	my $className = shift;
-	my $dbh = shift;
+	my ($className, $dbh) = @_;
 	my $self = {'dbh' => $dbh};
 	bless $self, $className;
+}
+
+sub dbh # should this be a private method?
+{
+	my $self = shift;
+	return $self->{'dbh'};
 }
 
 sub getEntryBasic
 {
 	my ($self, $id, $table) = @_;
 	die 'RMERR: Not a valid table.' unless $table =~ /^[a-z_]+$/;
-	my $sth = $self->dbh->prepare_cached(qq!SELECT id, name FROM $table WHERE id = ?!);
+	my $sth = $self->dbh->prepare_cached(qq!
+		SELECT id, name 
+		FROM $table 
+		WHERE id = ?
+	!);
 	$sth->execute($id);
 	my $entry = $sth->fetchrow_hashref('NAME_lc');
 	die "RMERR: No such entry '$id' in table '$table'.\nError occured" unless defined($$entry{'id'});
@@ -48,7 +56,11 @@ sub getListBasic
 {
 	my ($self, $table) = @_;
 	die "RMERR: Not a valid table." unless $table =~ /^[a-z_]+$/;
-	my $sth = $self->dbh->prepare_cached(qq!SELECT id, name FROM $table ORDER BY meta_default_data DESC, name!);
+	my $sth = $self->dbh->prepare_cached(qq!
+		SELECT id, name 
+		FROM $table 
+		ORDER BY meta_default_data DESC, name
+	!);
 	$sth->execute();
 	return $sth->fetchall_arrayref({});
 }
@@ -57,7 +69,6 @@ sub getListBasicSelected
 {
 	my ($self, $table, $selectedId) = @_;
 	my $list = $self->getListBasic($table);
-
 	for my $item (@$list)
 	{
 		$$item{'selected'} = ($$item{'id'} == $selectedId);
@@ -65,11 +76,17 @@ sub getListBasicSelected
 	return $list;
 }
 
-sub getEntryId # This won't work for things like rooms, where the name might not be unique (rooms in different buildings can share names)
+# This won't work for things like rooms, where the name might not be unique
+# (rooms in different buildings can share names etc.)
+sub getEntryId
 {
 	my ($self, $name, $table) = @_;
 	die 'RMERR: Not a valid table.\nError occured' unless $table =~ /^[a-z]+$/;
-	my $sth = $self->dbh->prepare_cached(qq!SELECT id FROM $table WHERE name = ?!);
+	my $sth = $self->dbh->prepare_cached(qq!
+		SELECT id 
+		FROM $table
+		WHERE name = ?
+	!);
 	$sth->execute($name);
 	my $entry = $sth->fetchrow_hashref('NAME_lc');
 	die 'RMERR: No such entry name.\nError occured' unless defined($$entry{'id'});
@@ -97,11 +114,19 @@ sub performAct
 	return $self->$type($updateTime, $updateUser, $record);
 }
 
+# _getLastInsertId is a private method
+# works with Postgres and SQLite, but will need altering for other DB,
+# need to check how it deals with multiple requests from different processes
+sub _getLastInsertId 
+{
+	my $self = shift;
+	return $self->dbh->last_insert_id(undef, undef, undef, undef);
+}
 
 
-################################################################################
-# Building Methods                                                             #
-################################################################################
+##############################################################################
+# Building Methods                                                           #
+##############################################################################
 
 sub getBuilding
 {
@@ -135,7 +160,7 @@ sub getBuildingList
 	my $self = shift;
 	my $orderBy = shift || '';
 	$orderBy = 'building.name' unless $orderBy =~ /^[a-z_]+\.[a-z_]+$/;
-	$orderBy = $orderBy.', building.name' unless $orderBy eq 'building.name'; # default second ordering is name
+	$orderBy = $orderBy.', building.name' unless $orderBy eq 'building.name';# default second ordering is name
 	$orderBy = 'building.meta_default_data, '.$orderBy; # ensure meta default entries appear last
 	my $sth = $self->dbh->prepare_cached(qq!
 		SELECT building.* 
@@ -195,10 +220,9 @@ sub _validateBuildingUpdate
 }
 
 
-
-################################################################################
-# Room Methods                                                                 #
-################################################################################
+##############################################################################
+# Room Methods                                                               #  
+##############################################################################
 
 sub getRoom
 {
@@ -405,10 +429,9 @@ sub _validateRoomUpdate
 
 
 
-
-#########################
-######## Row API ########
-#########################
+##############################################################################
+# Row Methods                                                                #  
+##############################################################################
 
 sub getRow
 {
@@ -541,9 +564,9 @@ sub _validateRowUpdate
 }
 
 
-#########################
-######## Rack API #######
-#########################
+##############################################################################
+# Rack Methods                                                               #  
+##############################################################################
 
 sub getRack
 {
@@ -754,10 +777,9 @@ sub getRackListBasicSelected
 }
 
 
-
-##############################
-######## Hardware API ########
-##############################
+##############################################################################
+# Hardware Methods                                                           #  
+##############################################################################
 
 sub getHardware
 {
@@ -841,9 +863,9 @@ sub validateHardwareUpdate
 }
 
 
-######################################
-######## Operating System API ########
-######################################
+##############################################################################
+# Operating System Methods                                                   #  
+##############################################################################
 
 sub getOs
 {
@@ -918,9 +940,9 @@ sub validateOs
 }
 
 
-##################################
-######## Organisation API ########
-##################################
+##############################################################################
+# Organisation Methods                                                       #  
+##############################################################################
 
 sub getOrg
 {
@@ -999,9 +1021,9 @@ sub validateOrgUpdate
 }
 
 
-############################
-######## Domain API ########
-############################
+##############################################################################
+# Domain Methods                                                             #  
+##############################################################################
 
 sub getDomain
 {
@@ -1069,9 +1091,9 @@ sub validateDomainUpdate # Should we remove or warn on domains beginning with . 
 }
 
 
-############################
-######## Device API ########
-############################
+##############################################################################
+# Device Methods                                                             #  
+##############################################################################
 
 sub getDevice
 {
@@ -1249,9 +1271,9 @@ sub validateDeviceInput
 }
 
 
-##########################
-######## Role API ########
-##########################
+##############################################################################
+# Role Methods                                                               #  
+##############################################################################
 
 sub getRole
 {
@@ -1318,9 +1340,9 @@ sub validateRoleUpdate
 }
 
 
-###################################
-######## Service Level API ########
-###################################
+##############################################################################
+# Service Level Methods                                                      #  
+##############################################################################
 
 sub getService
 {
@@ -1387,21 +1409,11 @@ sub validateServiceUpdate
 }
 
 
-######## Private methods - users of this class should not use these methods ########
-sub _getLastInsertId # works with Postgres and SQLite, but will need altering for other DB, need to check how it deals with multiple requests from different processes
-{
-	my $self = shift;
-	return $self->dbh->last_insert_id(undef, undef, undef, undef);
-}
-
-sub dbh
-{
-	my $self = shift;
-	return $self->{'dbh'};
-}
+##############################################################################
+# Application Methods                                                        #  
+##############################################################################
 
 1;
-
 
 =head1 NAME
 
@@ -1418,24 +1430,39 @@ RackMonkey::Engine - A DBI-based backend for Rackmonkey
 
 =head1 DESCRIPTION
 
-RackMonkey::Engine sits between the RackMonkey application and the DBI. RackMonkey::Engine abstracts the database implementation to provide a simple API for
-querying and manipulating RackMonkey objects such as buildings, racks, devices, and organisations. At present the Engine works correctly with SQLite v3 and
-Postgres v8. 
+RackMonkey::Engine sits between the RackMonkey application and the DBI.
+RackMonkey::Engine abstracts the database implementation to provide a simple
+API for querying and manipulating RackMonkey objects such as buildings, racks,
+devices, and organisations. At present the Engine works correctly with
+SQLite v3 and Postgres v8. 
 
-By overriding methods in the Engine, other sources of information may be updated or incorporated into RackMonkey. For example, customers might
-be stored in a separate database, or you may wish to update a ticketing system when a device is moved to another rack. For more
-information on getting RackMonkey working with other applications, see the Developer Guide which came with RackMonkey.
+By overriding methods in the Engine, other sources of information may be
+updated or incorporated into RackMonkey. For example, customers might be
+stored in a separate database, or you may wish to update a ticketing system
+when a device is moved to another rack. For more information on getting
+RackMonkey working with other applications, see the Developer Guide.
 
-The rest of this document covers the RackMonkey::Engine methods, organised by the 'type' of thing they operate on:
+The rest of this document covers the RackMonkey::Engine methods, organised by
+the 'type' of thing they operate on:
 
  Common (applicable to all)
  Building
  Room
- ....
+ Row
+ Rack
+ Hardware
+ Operating System
+ Organisation
+ Domain
+ Device
+ Role
+ Service Level
+ Application
 
 =head1 COMMON METHODS
 
-The following methods are generic and don't apply to a particular type of RackMonkey entry.
+The following methods are generic and don't apply to a particular type of
+RackMonkey entry.
 
  new ($dbh)
  getEntryBasic($id, $table)
@@ -1444,17 +1471,16 @@ The following methods are generic and don't apply to a particular type of RackMo
  getEntryId($name, $table)
  performAct() 
 
-
 =head2 new($dbh)
 
-Create a new RackMonkey::Engine object and connect it to the database handle identified by $dbh. For example:
+Create a new RackMonkey::Engine object and connect it to the database handle
+identified by $dbh. For example:
 
 	my $dbh = DBI->connect(DBDCONNECT, DBUSER, DBPASS);
 	my $backend = new RackMonkey::Engine($dbh);
 
-At present RackMonkey works with SQLite v3 and Postgres v8 databases. Using database handles from other databases
-will produce undefined results.
-
+At present RackMonkey works with SQLite v3 and Postgres v8 databases. Using
+database handles from other databases will produce undefined results.
 
 =head1 BUILDING METHODS
 
@@ -1467,36 +1493,47 @@ will produce undefined results.
 
 =head2 getBuilding($id)
 
-Gets a hash reference to one building specified by $id. If there is no such building the library dies.
+Gets a hash reference to one building specified by $id. If there is no such
+building the library dies.
 
 =head2 getBuildingCount()
 
-Returns the number of real buildings stored in RackMonkey. Meta buildings (such as 'unknown') are not counted.
+Returns the number of real buildings stored in RackMonkey. Meta buildings
+(such as 'unknown') are not counted.
 
 =head2 getBuildingList([$orderBy])
 
-Gets a list of all buildings ordered by the property $orderBy. If $orderBy is not specified, buildings are ordered
-by their name (but with default data, such as 'unknown', last in the list). If no buildings exist the returned list
-will be empty. Returns a reference to an array of hash references. One hash reference per building.
+Gets a list of all buildings ordered by the property $orderBy. If $orderBy is
+not specified, buildings are ordered by their name (but with default data,
+such as 'unknown', last in the list). If no buildings exist the returned list
+will be empty. Returns a reference to an array of hash references. One hash
+reference per building.
 
 =head2 updateBuilding($updateTime, $updateUser, $record)
 
-Updates or creates a building entry based on the hash ref $record. If $$record{'id'} is specified an update will be performed,
-otherwise a new building will be created. $updateTime and $updateUser set the update time and user associated with this
-update. Both are strings, and may be empty. If the engine tries to update a record, but no record is updated, the Engine
-dies. Returns the id of the updated or created building.
+Updates or creates a building entry based on the hash ref $record. If
+$$record{'id'} is specified an update will be performed, otherwise a new
+building will be created. $updateTime and $updateUser set the update time and
+user associated with this update. Both are strings, and may be empty. If the
+engine tries to update a record, but no record is updated, the Engine dies.
+Returns the id of the updated or created building.
 
 =head2 deleteBuilding($self, $updateTime, $updateUser, $record)
 
-Deletes the building whose id identified by $record. deleteBuilding checks whether the record is a hash ref, and if 
-so uses $$record{'id'} as the id, otherwise $record is taken to be the id. Support for hash refs allows deleteBuilding
-to be called with the same data as an update. If no such building exists or the delete fails the library dies. $updateTime and $updateUser set
-the update time and user associated with this delete; at present they are disguarded.
+Deletes the building whose id identified by $record. deleteBuilding checks
+whether the record is a hash ref, and if so uses $$record{'id'} as the id,
+otherwise $record is taken to be the id. Support for hash refs allows 
+deleteBuilding to be called with the same data as an update. If no such
+building exists or the delete fails the library dies. $updateTime and 
+$updateUser set the update time and user associated with this delete; at
+present they are disguarded.
 
 =head2 deleteBuildingList($updateTime, $updateUser, $buildingList)
 
-Deletes all the buildings (specified by id) in the array ref $buildingList. For example, to delete buildings with the id: 4, 6, 88:
-$buildingList = [4, 6, 88]; The delete is performed as a single transaction: unless all the deletes succeed the Engine dies. 
+Deletes all the buildings (specified by id) in the array ref $buildingList.
+For example, to delete buildings with the id: 4, 6, 88: 
+$buildingList = [4, 6, 88]; The delete is performed as a single transaction:
+unless all the deletes succeed the Engine dies. 
 
 
 =head1 ROOM METHODS
@@ -1513,52 +1550,65 @@ $buildingList = [4, 6, 88]; The delete is performed as a single transaction: unl
 
 =head2 getRoom($id)
 
-Gets a hash reference to one room specified by $id. If there is no such room the engine dies.
+Gets a hash reference to one room specified by $id. If there is no such room
+the engine dies.
 
 =head2 getRoomCount()
 
-Returns the number of real rooms stored in RackMonkey. Meta rooms (such as 'unknown') are not counted.
+Returns the number of real rooms stored in RackMonkey. Meta rooms (such as
+'unknown') are not counted.
 
 =head2 getRoomList([$orderBy])
 
-Gets a list of all rooms ordered by the property $orderBy. If $orderBy is not specified, rooms are ordered by their building, then
-their name (but with default data, such as 'unknown', last in the list). If no rooms exist the returned list will be empty. Returns
-a reference to an array of hash references. One hash reference per room.
+Gets a list of all rooms ordered by the property $orderBy. If $orderBy is not
+specified, rooms are ordered by their building, then their name (but with
+default data, such as 'unknown', last in the list). If no rooms exist the
+returned list will be empty. Returns a reference to an array of hash
+references. One hash reference per room.
 
 =head2 getRoomListInBuilding($building [, $orderBy])
 
-As for getRoomList, but limits rooms returned to those in the building identified by the id $building. If the building doesn't
-exist, or is empty of rooms, the returned list will be empty.
+As for getRoomList, but limits rooms returned to those in the building 
+identified by the id $building. If the building doesn't exist, or is empty of
+rooms, the returned list will be empty.
 
 =head2 getRoomListBasic()
 
-Because rooms reside in buildings, the common getListBasic() is often not what you want. getRoomListBasic works just like getListBasic(),
-but returns the building name too. If no rooms exist the returned list will be empty.
+Because rooms reside in buildings, the common getListBasic() is often not what 
+you want. getRoomListBasic works just like getListBasic(), but returns the
+building name too. If no rooms exist the returned list will be empty.
 
 =head2 getRoomListBasicSelected($selectedId)
 
-As getRoomListBasic(), but also returns 'selected' for the room identified by the id $selectedId. This method is useful for generating lists
-for dropdowns with a value selected. If no room matches $selectedId, no error is raised and no room is selected. If no rooms exist the
-returned list will be empty.
+As getRoomListBasic(), but also returns 'selected' for the room identified by 
+the id $selectedId. This method is useful for generating lists for dropdowns
+with a value selected. If no room matches $selectedId, no error is raised and
+no room is selected. If no rooms exist the returned list will be empty.
 
 =head2 updateRoom($updateTime, $updateUser, $record)
 
-Updates or creates a room entry based on the hash ref $record. If $$record{'id'} is specified an update will be performed,
-otherwise a new room will be created. $updateTime and $updateUser set the update time and user associated with this
-update. Both are strings, and may be empty. If the engine tries to update a record, but no record is updated, the Engine
-dies. Returns the id of the updated or created building.
+Updates or creates a room entry based on the hash ref $record. If 
+$$record{'id'} is specified an update will be performed, otherwise a new room
+will be created. $updateTime and $updateUser set the update time and user
+associated with this update. Both are strings, and may be empty. If the engine
+tries to update a record, but no record is updated, the Engine dies. Returns
+the id of the updated or created building.
 
 =head2 deleteRoom($updateTime, $updateUser, $record)
 
-Deletes the room whose id identified by $record. deleteRoom checks whether the record is a hash ref, and if 
-so uses $$record{'id'} as the id, otherwise $record is taken to be the id. Support for hash refs allows deleteRoom
-to be called with the same data as an update. If no such room exists or the delete fails the library dies. $updateTime and $updateUser set
-the update time and user associated with this delete; at present they are disguarded.
+Deletes the room whose id identified by $record. deleteRoom checks whether the
+record is a hash ref, and if so uses $$record{'id'} as the id, otherwise 
+$record is taken to be the id. Support for hash refs allows deleteRoom
+to be called with the same data as an update. If no such room exists or the 
+delete fails the library dies. $updateTime and $updateUser set the update time
+and user associated with this delete; at present they are disguarded.
 
 =head2 deleteRoomList($updateTime, $updateUser, $roomList)
 
-Deletes all the rooms (specified by id) in the array ref $roomList. For example, to delete rooms with the id: 4, 6, 88:
-$roomList = [4, 6, 88]; The delete is performed as a single transaction: unless all the deletes succeed the Engine dies. 
+Deletes all the rooms (specified by id) in the array ref $roomList. For
+example, to delete rooms with the id: 4, 6, 88: $roomList = [4, 6, 88]; The
+delete is performed as a single transaction: unless all the deletes succeed
+the Engine dies. 
  
  
 =head1 BUGS
@@ -1567,10 +1617,10 @@ You can view and report bugs at http://www.rackmonkey.org
 
 =head1 LICENSE
 
-This program is free software; you can redistribute it and/or
-modify it under the terms of the GNU General Public License
-as published by the Free Software Foundation; either version 2
-of the License, or (at your option) any later version.
+This program is free software; you can redistribute it and/or modify it under
+the terms of the GNU General Public License as published by the Free Software
+Foundation; either version 2 of the License, or (at your option) any later
+version.
 
 =head1 AUTHOR
 
