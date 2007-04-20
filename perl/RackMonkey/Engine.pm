@@ -87,13 +87,6 @@ sub performAct
 	die "RMERR: You cannot use the username 'install', it's reserved for use by Rackmonkey.\nError occured" if (lc($updateUser) eq 'install');
 	die "RMERR: You cannot use the username 'rackmonkey', it's reserved for use by Rackmonkey.\nError occured" if (lc($updateUser) eq 'rackmonkey');
 	
-	# if we have an act_id turn it into a normal id
-	if ($$record{'act_id'})
-	{
-		$$record{'id'} = $$record{'act_id'};
-		delete $$record{'act_id'};
-	}
-	
 	# calculate update time (always GMT)
 	my ($sec, $min, $hour, $day, $month, $year) = (gmtime)[0,1,2,3,4,5];
 	$year += 1900;

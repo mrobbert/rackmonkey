@@ -68,6 +68,18 @@ eval
 	{
 		my $updateUser = $ENV{'REMOTE_USER'} || $ENV{'REMOTE_ADDR'};
 		$act = 'update' if ($act eq 'insert');
+		my $actData = $cgi->Vars;
+		
+		# delete id, only act_ids should be used be used for acts, ids are used for views
+		delete $$actData{'id'};
+		
+		# convert act_id into a normal id for use by the engine
+		if ($$actData{'act_id'})
+		{
+			$$actData{'id'} = $$actData{'act_id'};
+			delete $$actData{'act_id'};
+		}
+		
 		my $lastCreatedId = $backend->performAct($cgi->param('act_on'), $act, $updateUser, scalar($cgi->Vars));
 		$id = $lastCreatedId if (!$id); # use lastCreatedId if there isn't an id
 		
@@ -356,7 +368,6 @@ eval
 	print $cgi->header();
 	print $template->output;
 };
-
 if ($@)
 {
 	my $errMsg = $@;
