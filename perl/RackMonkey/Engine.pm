@@ -574,6 +574,7 @@ sub getRack
 		SELECT 
 			rack.*,
 			row.name			AS row_name,
+			row.hidden_row		AS row_hidden,
 			room.name			AS room_name,
 			building.name		AS building_name, 
 			building.name_short	AS building_name_short,
@@ -602,6 +603,7 @@ sub getRackList
 		SELECT 
 			rack.*,
 			row.name			AS row_name,
+			row.hidden_row		AS row_hidden,
 			room.name			AS room_name,
 			building.name		AS building_name,
 			building.name_short	AS building_name_short,
@@ -617,7 +619,7 @@ sub getRackList
 	return $sth->fetchall_arrayref({});
 }
 
-sub getRackTableBasic
+sub getRackTableBasic # Rename to list!
 {
 	my $self = shift;
 	my $whereId = shift;
