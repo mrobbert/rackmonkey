@@ -78,14 +78,14 @@
 <form style="margin-top: 15px;" method="post" action="<TMPL_VAR NAME=base_url>">
 <table class="form">
 <tr>
-	<th class="form">manage rows</th>
+	<th class="form">manage rows (not yet supported)</th>
 </tr>
 <tr>
 	<td class="form">
 		<label>Room</label><br />
 		<TMPL_VAR ESCAPE=HTML NAME=name> in <TMPL_VAR ESCAPE=HTML NAME=building_name>
 		<br /><br />	
-		<input disabled="disabled" <TMPL_IF has_rows>checked="checked"</TMPL_IF> type="checkbox" name="has_rows" /> Organised into Rows (not yet changable)
+		<input disabled="disabled" <TMPL_IF has_rows>checked="checked"</TMPL_IF> type="checkbox" name="has_rows" /> Organised into Rows
 		<br /><br />
 		<TMPL_IF has_rows>
 		<table id="rowlist">
@@ -99,7 +99,7 @@
 		<hr/>
 		
 		<a href="<TMPL_VAR NAME=base_url>?view=room&amp;view_type=single&amp;id=<TMPL_VAR NAME=id>"><img style="float: left;" src="<TMPL_VAR NAME=web_root>/graphics/buttons/cancel.gif" width="48" height="21" alt="Cancel" /></a>
-		<button style="float: right;" type="submit">Save</button>	<!-- need to add warning if changed to not organised by rows, as this will remove current rack in row layout -->
+		<!--<button style="float: right;" type="submit">Save</button>-->	<!-- need to add warning if changed to not organised by rows, as this will remove current rack in row layout -->
 	</td>
 </tr>
 </table>
