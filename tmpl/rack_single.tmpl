@@ -34,7 +34,19 @@
 		<label>Name</label><br />
 		<TMPL_VAR ESCAPE=HTML NAME=name>
 		<br /><br />
+
+		<label>Row</label><br />
+		<TMPL_UNLESS NAME=row_hidden><TMPL_VAR ESCAPE=HTML NAME=row_name><TMPL_ELSE>N/A</TMPL_UNLESS>
+		<br /><br />
 		
+		<label>Room</label><br />
+		<TMPL_VAR ESCAPE=HTML NAME=room_name> in <TMPL_VAR ESCAPE=HTML NAME=building_name>
+		<br /><br />
+	
+		<label>Size (U)</label><br />
+		<TMPL_VAR ESCAPE=HTML NAME=size>
+		<br /><br />	
+				
 		<label>Notes</label><br />
 		<TMPL_IF NAME=notes><TMPL_VAR ESCAPE=HTML NAME=notes><TMPL_ELSE>&nbsp;-</TMPL_IF>
 		

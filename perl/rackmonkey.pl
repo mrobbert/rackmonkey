@@ -296,10 +296,12 @@ eval
 				{
 					my $room = $backend->getRoom($id);
 					$$room{'row_count'} = $backend->getRowCountInRoom($id);
+					$selectedBuilding = $$room{'building'} if (!$selectedBuilding); # Use database value for selected if none in CGI - not actually needed in single view
 					$template->param($room);
-					$selectedBuilding = $$room{'building'} if (!$selectedBuilding); # Use database value for selected if none in CGI
 				}
-	
+				
+
+				
 				if (($viewType =~ /^edit/) || ($viewType =~ /^create/))
 				{	
 					$template->param('buildinglist' => $backend->getListBasicSelected('building', $selectedBuilding));
@@ -317,12 +319,6 @@ eval
 			{
 				$template->param('racks' => $backend->getRackList($orderBy));
 			}
-			elsif (($viewType =~ /^edit/) || ($viewType =~ /^single/))
-			{
-				my $rack = $backend->getRack($id);
-				$$rack{'rack_layout'} = $backend->getRackPhysical($id) if ($viewType =~ /^physical/);
-				$template->param($rack);
-			}
 			elsif (($viewType =~ /^physical/))
 			{
 				my @rackIdList = $cgi->param('rack_list');
@@ -337,7 +333,23 @@ eval
 				}
 				
 				$template->param('rack_list' => \@racks);
-			}	
+			}
+			else
+			{
+				my $selectedRoom = $cgi->param('last_created_id') || $cgi->param('room_id') || 0;
+				
+				if (($viewType =~ /^edit/) || ($viewType =~ /^single/))
+				{
+					my $rack = $backend->getRack($id);
+					$template->param($rack);
+					$selectedRoom = $$rack{'room'} if (!$selectedRoom); # Use database value for selected if none in CGI - not actually needed in single view
+				}
+				
+				if (($viewType =~ /^edit/) || ($viewType =~ /^create/))
+				{	
+					$template->param('roomlist' => $backend->getRoomListBasicSelected($selectedRoom));
+				}
+			}
 		}		
 		elsif (($view eq 'config') || ($view eq 'help') || ($view eq 'app'))
 		{

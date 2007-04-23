@@ -575,6 +575,7 @@ sub getRack
 			rack.*,
 			row.name			AS row_name,
 			row.hidden_row		AS row_hidden,
+			room.id				AS room,
 			room.name			AS room_name,
 			building.name		AS building_name, 
 			building.name_short	AS building_name_short,
@@ -604,6 +605,7 @@ sub getRackList
 			rack.*,
 			row.name			AS row_name,
 			row.hidden_row		AS row_hidden,
+			room.id				AS room,
 			room.name			AS room_name,
 			building.name		AS building_name,
 			building.name_short	AS building_name_short,
@@ -630,6 +632,51 @@ sub getRackTableBasic # Rename to list!
 	return $sth->fetchall_arrayref({});
 }
 
+sub updateRack
+{
+	my ($self, $updateTime, $updateUser, $record) = @_;
+	die "RMERR: Unable to update rack. No rack record specified.\nError occured" unless ($record);
+	
+	my ($sth, $newId);
+	
+	# if no row is specified we need to use the default one for the room (lowest id)
+	unless (defined $$record{'row'})
+	{
+		$sth = $self->dbh->prepare(qq!SELECT id FROM row WHERE room = ? ORDER BY id LIMIT 1!);
+		$sth->execute($$record{'room'});
+		$$record{'row'} = ($sth->fetchrow_array)[0];
+		die "RMERR: Unable to update rack. Unable to determine row for rack.\nError occured" unless $$record{'row'};
+	}
+
+	# force row_pos to 0 until rows are supported
+	$$record{'row_pos'} = 0;
+	# hidden racks can't be created directly
+	$$record{'hidden_rack'} = 0;
+	
+	if ($$record{'id'})
+	{	
+		$sth = $self->dbh->prepare(qq!UPDATE rack SET name = ?, row = ?, row_pos = ?, hidden_rack = ?, size = ?, notes = ?, meta_update_time = ?, meta_update_user = ? WHERE id = ?!);
+		my $ret = $sth->execute($$record{'name'}, $$record{'row'}, $$record{'row_pos'}, $$record{'hidden_rack'}, $$record{'size'}, $$record{'notes'}, $updateTime, $updateUser, $$record{'id'});
+		die "RMERR: Update failed. This rack may have been removed before the update occured.\nError occured" if ($ret eq '0E0');
+	}
+	else
+	{
+		$sth = $self->dbh->prepare(qq!INSERT INTO rack (name, row, row_pos, hidden_rack, size, notes, meta_update_time, meta_update_user) VALUES(?, ?, ?, ?, ?, ?, ?, ?)!);
+		$sth->execute($$record{'name'}, $$record{'row'}, $$record{'row_pos'}, $$record{'hidden_rack'}, $$record{'size'}, $$record{'notes'}, $updateTime, $updateUser);
+		$newId = $self->_getLastInsertId();
+	}
+	return $newId || $$record{'id'};
+}
+
+sub deleteRack
+{
+	my ($self, $updateTime, $updateUser, $record) = @_;
+	my $deleteId = (ref $record eq 'HASH') ? $$record{'id'} : $record;
+	die "RMERR: Delete failed. No rack id specified.\nError occured" unless ($deleteId);
+	my $sth = $self->dbh->prepare('DELETE FROM rack WHERE id = ?');
+	my $ret = $sth->execute($deleteId);
+	die "RMERR: Delete failed. This rack does not currently exist, it may have been removed already.\nError occured" if ($ret eq '0E0');
+}
 
 sub getRackPhysical # This method is all rather inelegant
 {
@@ -700,30 +747,6 @@ sub getRackPhysical # This method is all rather inelegant
 	@rackLayout = reverse @rackLayout; # low numbers at bottom of rack - should be configurable
 	
 	return \@rackLayout;
-}
-
-sub updateRack
-{
-	my $self = shift;
-	my $id = shift;
-	eval { $self->getEntryBasic($id, 'rack'); };
-	die 'updateRack: That id is not a rack. Another user may have removed this rack entry.' if ($@);
-	my $sth = $self->dbh->prepare(qq!UPDATE rack SET name = ?, room = ?, size = ?, notes = ? WHERE id = ?!);
-	$sth->execute($self->validateRackInput(@_,$id),$id);
-}
-
-sub createRack
-{
-	my $self = shift;
-	my $sth = $self->dbh->prepare(q!INSERT INTO rack (name, room, size, notes) VALUES(?, ?, ?, ?)!);
-	$sth->execute($self->validateRackInput(@_));
-}
-
-sub deleteRack
-{
-	my ($self, $record) = @_;
-	my $sth = $self->dbh->prepare(qq!DELETE FROM rack WHERE id = ?!);
-	$sth->execute($$record{'id'});	
 }
 
 # extra rack subs that include row, room, building information
