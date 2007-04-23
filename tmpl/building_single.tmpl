@@ -36,7 +36,7 @@
 		<br /><br />
 
 		<label>Short Name</label><br />
-		<TMPL_VAR ESCAPE=HTML NAME=name_short>
+		<TMPL_IF NAME=name_short><TMPL_VAR ESCAPE=HTML NAME=name_short><TMPL_ELSE>&nbsp;-</TMPL_IF>
 		<br /><br />		
 		
 		<label>Rooms [<a href="<TMPL_VAR NAME=base_url>?view=room&amp;view_type=create&amp;building_id=<TMPL_VAR NAME=id>&amp;return_view=building&amp;return_view_type=single&amp;return_view_id=<TMPL_VAR NAME=id>">add</a>]</label><br />
