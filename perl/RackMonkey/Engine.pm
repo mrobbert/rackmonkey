@@ -321,7 +321,7 @@ sub getRoomListBasic
 			room.name
 	!);
 	$sth->execute();
-	return $sth->fetchall_arrayref({'id' => 1, 'name' => 1, 'building_name' => 1});
+	return $sth->fetchall_arrayref({});
 }
 
 sub getRoomListBasicSelected
