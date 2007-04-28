@@ -132,10 +132,19 @@ A good port should:
  * Not execute different SQL on different databases (excluding the initial
    schema, which will be database specific).
  * Pass all unit tests
+ 
+In order to allow a new database driver to be used you will need to edit the
+checkSupportedDriver sub in rackmonkey.pl.
 
 If you believe specific SQL in RackMonkey would benefit from changes to make it
 more portable, please get in touch.
 
+
+Stylistic Conventions in RackMonkey Code/DB
+-------------------------------------------
+* Brace style is BSD/Allman
+* Table names are in the singular: room not rooms
+* All non-junction tables have a primary key called id 
 
 
 Appendix A: RackMonkey Engine Methods
