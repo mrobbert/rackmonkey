@@ -78,7 +78,7 @@ sub checkName
 	}
 	unless (length($name) <= MAXSTRING)
 	{
-		die "RMERR: Names cannot exceed '.MAXSTRING.' characters.\nError occured";
+		die "RMERR: Names cannot exceed ".MAXSTRING." characters.\nError occured";
 	}
 }
 
@@ -88,7 +88,7 @@ sub checkNotes
 	return unless defined $notes;
 	unless (length($notes) <= MAXNOTE)
 	{
-		die "RMERR: Notes cannot exceed '.MAXNOTE.' characters.\nError occured";
+		die "RMERR: Notes cannot exceed ".MAXNOTE." characters.\nError occured";
 	}
 }
 
