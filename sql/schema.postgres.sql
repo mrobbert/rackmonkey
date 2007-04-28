@@ -10,7 +10,7 @@ CREATE TABLE building
 (
 	id SERIAL PRIMARY KEY,
 	name VARCHAR UNIQUE NOT NULL,
-	name_short VARCHAR UNIQUE,
+	name_short VARCHAR,
 	notes VARCHAR,
 	meta_default_data INTEGER NOT NULL DEFAULT 0,
 	meta_update_time VARCHAR,
