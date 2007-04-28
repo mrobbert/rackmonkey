@@ -13,7 +13,7 @@ our $VERSION = '1.2.%BUILD%';
 our $AUTHOR = 'Will Green (wgreen at users.sourceforge.net)';
 
 use base 'Exporter';
-our @EXPORT = qw/DBDCONNECT DBUSER DBPASS TMPLPATH WWWPATH MAXNOTE MAXSTRING MAXRACKSIZE SHORTTEXTLEN SHORTURLLEN DATEFORMAT/;
+our @EXPORT = qw/DBDCONNECT DBUSER DBPASS TMPLPATH WWWPATH DEFAULT_VIEW MAXNOTE MAXSTRING MAXRACKSIZE SHORTTEXTLEN SHORTURLLEN DATEFORMAT/;
 
 # Database Connection Settings
 use constant DBDCONNECT => 'dbi:SQLite:dbname=/home/rack/db/rackmonkey.db';
@@ -25,6 +25,9 @@ use constant TMPLPATH => '/home/rack/rackmonkey/tmpl';
 use constant WWWPATH => '/rackmonkey';
 
 # Preference Constants
+use constant DEFAULT_VIEW => 'rack';	# View loaded when none is specified
+
+# Validation Constants
 use constant MAXNOTE =>	4095; 		# Max length of note fields
 use constant MAXSTRING => 255;		# Max length of simple strings
 use constant MAXRACKSIZE => 255; 	# Max rack size in rack units (U)

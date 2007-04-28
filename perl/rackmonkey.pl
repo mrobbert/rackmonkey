@@ -56,7 +56,7 @@ eval
 	my $baseURL = $fullURL;
 	$baseURL =~ s|(\w+)://([^/:]+)(:\d+)?||; # remove the domain and any port number
 	
-	my $view = $cgi->param('view') || 'building';
+	my $view = $cgi->param('view') || DEFAULT_VIEW;
 	die "View name not valid." unless $view =~/^[a-z_]+$/;
 	my $id = $cgi->param('id'); # View id
 	$id += 0; # force id to be numerical
