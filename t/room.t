@@ -29,35 +29,38 @@ use constant DBDCONNECT => 'dbi:SQLite:dbname=/tmp/rackmonkey/test.db';
 use constant DBUSER => '';
 use constant DBPASS => '';
 
-
 my $dbh = DBI->connect(DBDCONNECT,DBUSER,DBPASS, {AutoCommit => 1, RaiseError => 1, PrintError => 0});
 my $backend = new RackMonkey::Engine($dbh);
-	
 
 my $count;
-eval { $count = $backend->getRoomCount(); };
-ok(!$@, "calling getRoomCount");
-ok(($count == 0), "no room records stored at the start of the test");
+my $roomList;
+my ($rmA, $rmIdA, $rmDataA);
+my ($rmB, $rmIdB, $rmDataB);
+my ($rmC, $rmIdC, $rmDataC);
+my ($bdIdA, $bdIdB);
 
+
+
+eval { $count = $backend->getRoomCount(); };
+ok(!$@, "calling getRoomCount $@");
+ok(($count == 0), "no room records stored at the start of the test");
 eval { $backend->getRoom(1); };
-ok(($@ =~ /No such room id/), "retrieving non-existent building");
+ok(($@ =~ /No such room id/), "retrieving non-existent room");
 
 die "Buildings already exist, tests must be performed on an empty building table.\n" if ($backend->getBuildingCount() != 0);
-my $newBuildingA = {'name' => 'Aldgate House', 'notes' => ''};
-my $newBuildingB = {'name' => 'Barbican House', 'notes' => ''};
-
-my ($buildIdA, $buildIdB);
 
 eval 
 {
-	$buildIdA = $backend->updateBuilding(time, 'EngineTest', $newBuildingA); 
-	$buildIdB = $backend->updateBuilding(time, 'EngineTest', $newBuildingB); 
+	$bdIdA = $backend->updateBuilding(time, 'EngineTest', {'name' => 'Aldgate House'}); 
+	$bdIdB = $backend->updateBuilding(time, 'EngineTest', {'name' => 'Barbican House'}); 
 };
 die "Couldn't create buildings to add rooms to - $@" if ($@);
 
+
+
 eval 
 {
-	$backend->deleteBuilding(time, 'EngineTest', $buildIdA); 
-	$backend->deleteBuilding(time, 'EngineTest', $buildIdB); 
+	$backend->deleteBuilding(time, 'EngineTest', $bdIdA); 
+	$backend->deleteBuilding(time, 'EngineTest', $bdIdB); 
 };
 die "Couldn't delete buildings - $@\n" if ($@);
