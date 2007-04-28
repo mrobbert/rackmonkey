@@ -44,7 +44,7 @@ Path to RackMonkey trunk:   /svnroot/rackmonkey/rackmonkey/trunk
 
 For more information on the RackMonkey subversion repository visit:
 
-	http://www.rackmonkey.org/svn
+    http://www.rackmonkey.org/svn
 
 
 3. Requirements
