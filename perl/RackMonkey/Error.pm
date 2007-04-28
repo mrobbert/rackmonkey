@@ -47,7 +47,7 @@ sub enlighten
 	}
 	
 	# validation errors
-	elsif ($errStr =~ /column (.*?) is not unique/)
+	elsif ($errStr =~ /columns? (.*?) (?:is|are) not unique/)
 	{
 		$newErrStr = "Couldn't create entry.\nAn entry of that type with that $1 already exists, please choose another.";
 	}
