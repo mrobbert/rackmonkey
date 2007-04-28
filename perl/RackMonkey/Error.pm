@@ -90,8 +90,8 @@ sub display # nasty embedded HTML, need to fix
 		</p>
 		
 		<p><strong>To Continue, either:</strong><br />
-		Use the back button to go back to the previous page and correct the problem.<br />
-		Or return to <a href="./rackmonkey.pl">RackMonkey home</a>.
+		Use the web browser back button to return to the previous page and correct the problem.<br />
+		Or go to <a href="./rackmonkey.pl">RackMonkey home</a>.
 		</p>
 		<hr/>
 		<p style='font-size: small'>
