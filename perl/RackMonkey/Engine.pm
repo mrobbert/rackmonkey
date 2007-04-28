@@ -478,26 +478,6 @@ sub getRowList
 	return $sth->fetchall_arrayref({});
 }
 
-sub updateRow
-{
-	my ($self, $updateTime, $updateUser, $record) = @_;
-	die "RMERR: Unable to update row. No row record specified.\nError occured" unless ($record);
-		
-	if ($$record{'id'})
-	{	
-		my $sth = $self->dbh->prepare(qq!UPDATE row SET name = ?, room = ?, room_pos = ?, hidden_row = ?, notes = ?, meta_update_time = ?, meta_update_user = ? WHERE id = ?!);
-		my $ret = $sth->execute($self->_validateRowUpdate($record), $updateTime, $updateUser, $$record{'id'});
-		die "RMERR: Update failed. This row may have been removed before the update occured.\nError occured" if ($ret eq '0E0');
-	}
-	else
-	{
-		my $sth = $self->dbh->prepare(qq!INSERT INTO row (name, room, room_pos, hidden_row, notes, meta_update_time, meta_update_user) VALUES(?, ?, ?, ?, ?, ?, ?)!);
-		$sth->execute($self->_validateRowUpdate($record), $updateTime, $updateUser);
-	}
-}
-
-# extra row subs that include room, building information
-
 sub getRowListInRoom
 {
 	my ($self, $room) = @_;
@@ -551,6 +531,24 @@ sub getRowCountInRoom
 	$sth->execute($room);
 	my $countRef = $sth->fetch;
 	return $$countRef[0];
+}
+
+sub updateRow
+{
+	my ($self, $updateTime, $updateUser, $record) = @_;
+	die "RMERR: Unable to update row. No row record specified.\nError occured" unless ($record);
+		
+	if ($$record{'id'})
+	{	
+		my $sth = $self->dbh->prepare(qq!UPDATE row SET name = ?, room = ?, room_pos = ?, hidden_row = ?, notes = ?, meta_update_time = ?, meta_update_user = ? WHERE id = ?!);
+		my $ret = $sth->execute($self->_validateRowUpdate($record), $updateTime, $updateUser, $$record{'id'});
+		die "RMERR: Update failed. This row may have been removed before the update occured.\nError occured" if ($ret eq '0E0');
+	}
+	else
+	{
+		my $sth = $self->dbh->prepare(qq!INSERT INTO row (name, room, room_pos, hidden_row, notes, meta_update_time, meta_update_user) VALUES(?, ?, ?, ?, ?, ?, ?)!);
+		$sth->execute($self->_validateRowUpdate($record), $updateTime, $updateUser);
+	}
 }
 
 sub _validateRowUpdate
@@ -618,6 +616,32 @@ sub getRackList
 		ORDER BY $orderBy
 	!);
 	$sth->execute();
+	return $sth->fetchall_arrayref({});
+}
+
+sub getRackListInRoom
+{
+	my ($self, $room) = @_;
+	$room += 0; # force room to be numeric
+	my $sth = $self->dbh->prepare(qq!
+		SELECT 
+			rack.*,
+			row.name			AS row_name,
+			row.hidden_row		AS row_hidden,
+			room.id				AS room,
+			room.name			AS room_name,
+			building.name		AS building_name,
+			building.name_short	AS building_name_short,
+			building.meta_default_data	AS building_meta_default_data
+		FROM rack, row, room, building 
+		WHERE
+			rack.row = row.id AND
+			row.room = room.id AND
+			room.building = building.id AND
+			row.room = ?
+		ORDER BY rack.row, rack.row_pos
+	!);
+	$sth->execute($room);
 	return $sth->fetchall_arrayref({});
 }
 

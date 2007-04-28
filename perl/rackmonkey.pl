@@ -297,11 +297,13 @@ eval
 					my $room = $backend->getRoom($id);
 					$$room{'row_count'} = $backend->getRowCountInRoom($id);
 					$selectedBuilding = $$room{'building'} if (!$selectedBuilding); # Use database value for selected if none in CGI - not actually needed in single view
+					if ($viewType =~ /^single/)
+					{
+						$$room{'racks'} = $backend->getRackListInRoom($id); # fix method then use
+					}
 					$template->param($room);
 				}
-				
-
-				
+								
 				if (($viewType =~ /^edit/) || ($viewType =~ /^create/))
 				{	
 					$template->param('buildinglist' => $backend->getListBasicSelected('building', $selectedBuilding));

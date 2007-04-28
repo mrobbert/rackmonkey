@@ -32,13 +32,12 @@
 <table class="rack_physical">
 <tr>
 	<th colspan="2">
-		Rack <TMPL_VAR NAME=name>
+		Rack <TMPL_VAR NAME=name> <a href="<TMPL_VAR NAME=base_url>?view=rack&amp;view_type=edit&amp;id=<TMPL_VAR NAME=id>"><img style="float:right;" src="<TMPL_VAR NAME=web_root>/graphics/buttons/edit.gif" width="48" height="21" alt="Edit" /></a>
 	</th>
 </tr>
 <TMPL_LOOP NAME=rack_layout>
 	<tr>
 		<td class="rack_physical_num"><TMPL_VAR NAME=rack_pos></td>
-		
 		<TMPL_IF NAME=hardware_size><td rowspan="<TMPL_VAR NAME=hardware_size>" <TMPL_IF NAME=name>class="rack_physical_dev"<TMPL_ELSE>class="rack_physical_empty"</TMPL_IF>>
 		<TMPL_IF NAME=name> <a title="View details for <TMPL_VAR ESCAPE=HTML NAME=name><TMPL_UNLESS NAME=domain_meta_default_data>.<TMPL_VAR ESCAPE=HTML NAME=domain_name></TMPL_UNLESS>" href="<TMPL_VAR NAME=base_url>?view=device&amp;view_type=single&amp;id=<TMPL_VAR NAME=id>"><TMPL_VAR ESCAPE=HTML NAME=name></a></TMPL_IF>
 		<TMPL_IF NAME=hardware_name>(<TMPL_VAR NAME=hardware_manufacturer_name> <TMPL_VAR NAME=hardware_name>)</TMPL_IF>
