@@ -28,15 +28,23 @@ in this release.
 
 2. Obtaining RackMonkey
 =======================
+
+Packaged Release
+----------------
 Visit http://www.rackmonkey.org to download a packaged release. Packaged 
 releases are recommended for production use or anyone interested in RackMonkey
 as a user.
 
-If you're a developer, or want to try the current head revision, you can check
-a release out of Subversion.
+Subversion Repository
+---------------------
+If you're a developer you can check a release out of subversion. 
 
 The RackMonkey svn server:  https://rackmonkey.svn.sourceforge.net
 Path to RackMonkey trunk:   /svnroot/rackmonkey/rackmonkey/trunk
+
+For more information on the RackMonkey subversion repository visit:
+
+	http://www.rackmonkey.org/svn
 
 
 3. Requirements
