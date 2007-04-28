@@ -35,6 +35,10 @@
 		<TMPL_VAR ESCAPE=HTML NAME=name>
 		<br /><br />
 
+		<label>Layout</label><br />
+		<a title="View device layout within this rack" href="<TMPL_VAR NAME=base_url>?view=rack&amp;view_type=physical&amp;id=<TMPL_VAR NAME=id>">View Device Layout</a>
+		<br /><br />
+		
 		<label>Row</label><br />
 		<TMPL_UNLESS NAME=row_hidden><TMPL_VAR ESCAPE=HTML NAME=row_name><TMPL_ELSE>N/A</TMPL_UNLESS>
 		<br /><br />
