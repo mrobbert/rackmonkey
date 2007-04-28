@@ -30,7 +30,7 @@
 		<label>Name</label><br />
 		<input type="text" size="60" name="name" value="" />
 		<br /><br />
-		<label>Manufacturer [<a href="http://metahusky.net/~flux/cgi-bin/rackmonkey/rackmonkey.pl?view=org&amp;view_type=create&amp;hardware=1&amp;return_view=hardware&amp;return_view_type=create">add</a>]</label><br />
+		<label>Manufacturer [<a href="<TMPL_VAR NAME=base_url>?view=org&amp;view_type=create&amp;hardware=1&amp;return_view=hardware&amp;return_view_type=create">add</a>]</label><br />
 		<select name="manufacturer_id">
 		<TMPL_LOOP NAME=manufacturerlist>
 		<option<TMPL_IF NAME=selected> selected="selected"</TMPL_IF> value="<TMPL_VAR NAME=id>"><TMPL_VAR ESCAPE=HTML NAME=name></option></TMPL_LOOP>
