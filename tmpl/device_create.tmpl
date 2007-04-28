@@ -39,7 +39,7 @@
 	<td>Rack:</td>
 	<td>
 		<select name="rack"><TMPL_LOOP NAME=racklist>
-		<option <TMPL_IF NAME=selected>selected="selected"</TMPL_IF> value="<TMPL_VAR NAME=id>"><TMPL_VAR NAME=name> in <TMPL_VAR NAME=room_name></option></TMPL_LOOP>
+		<option <TMPL_IF NAME=selected>selected="selected"</TMPL_IF> value="<TMPL_VAR NAME=id>"><TMPL_VAR NAME=name> in <TMPL_VAR NAME=room_name> in <TMPL_IF NAME=building_name_short><TMPL_VAR NAME=building_name_short><TMPL_ELSE><TMPL_VAR NAME=building_name></TMPL_IF></option></TMPL_LOOP>
 		</select>
 	</td></tr>
 <tr>

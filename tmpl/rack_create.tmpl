@@ -39,7 +39,7 @@
 	
 	<label>Room [<a href="<TMPL_VAR NAME=base_url>?view=room&amp;view_type=create&amp;return_view=rack&amp;return_view_type=create">add</a>]</label><br />
 	<select name="room"><!-- <TMPL_VAR NAME=room> <TMPL_VAR ESCAPE=HTML NAME=room_name> <TMPL_VAR ESCAPE=HTML NAME=building_name> --><TMPL_LOOP NAME=roomlist>
-		<option <TMPL_IF NAME=selected>selected="selected"</TMPL_IF> value="<TMPL_VAR NAME=id>"><TMPL_VAR ESCAPE=HTML NAME=name> in <TMPL_VAR ESCAPE=HTML NAME=building_name></option></TMPL_LOOP>
+		<option <TMPL_IF NAME=selected>selected="selected"</TMPL_IF> value="<TMPL_VAR NAME=id>"><TMPL_VAR ESCAPE=HTML NAME=name> in <TMPL_IF NAME=building_name_short><TMPL_VAR NAME=building_name_short><TMPL_ELSE><TMPL_VAR NAME=building_name></TMPL_IF></option></TMPL_LOOP>
 	</select>
 	<br /><br />	
 	
