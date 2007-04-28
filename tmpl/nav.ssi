@@ -1,7 +1,7 @@
 <!-- begin nav bar include: Version 1.2.%BUILD% -->
 <p class="navbar">
 <a href="<TMPL_VAR NAME=base_url>"><img class="navimg" src="<TMPL_VAR NAME=web_root>/graphics/logos/rackmonkey.gif" alt="Home"/></a> &nbsp;
-<a href="<TMPL_VAR NAME=base_url>?view=building"><img class="navimg" src="<TMPL_VAR NAME=web_root>/graphics/tabs/locations.gif" width="80" height="21" title="Buildings, rooms, rows &amp; racks" alt="Locations"/></a>
+<a href="<TMPL_VAR NAME=base_url>?view=rack"><img class="navimg" src="<TMPL_VAR NAME=web_root>/graphics/tabs/locations.gif" width="80" height="21" title="Buildings, rooms, rows &amp; racks" alt="Locations"/></a>
 <a href="<TMPL_VAR NAME=base_url>?view=device"><img class="navimg" src="<TMPL_VAR NAME=web_root>/graphics/tabs/devices.gif" width="67" height="21" title="Devices, such as servers and routers" alt="Devices"/></a>
 <a href="<TMPL_VAR NAME=base_url>?view=app"><img class="navimg" src="<TMPL_VAR NAME=web_root>/graphics/tabs/apps.gif" width="46" height="21" title="Applications and services provided by devices" alt="Apps"/></a>
 <a href="<TMPL_VAR NAME=base_url>?view=config"><img class="navimg" src="<TMPL_VAR NAME=web_root>/graphics/tabs/config.gif" width="62" height="21" title="Configuration of hardware, operation systems, roles, organisations etc." alt="Config"/></a>
