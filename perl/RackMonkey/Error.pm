@@ -46,16 +46,10 @@ sub enlighten
 		$newErrStr = "Couldn't delete that building.\nIt contains one or more rooms.";
 	}
 	
-	# uniqueness errors - should ensure there is one of these for each unique index and they work on all DB
-	if ($errStr =~ /columns name, building are not unique/)
-	{
-		$newErrStr = "A room with this name already exists in this building.\nPlease choose another name."
-	}
-	
 	# validation errors
-	elsif ($errStr =~ /column name is not unique/)
+	elsif ($errStr =~ /column .*? is not unique/)
 	{
-		$newErrStr = "Couldn't create new entry.\nAn entry of that type with that name already exists, please choose another name.";
+		$newErrStr = "Couldn't create entry.\nAn entry of that type with that name already exists, please choose another name.";
 	}
 	
 	# template errors
