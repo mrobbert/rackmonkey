@@ -3,16 +3,16 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
 
 <!-- 
-########################################################################
-# RackMonkey - Know Your Racks - http://www.rackmonkey.org
-# Version 1.2.%BUILD%
-# (C)2007 Will Green (wgreen at users.sourceforge.net)
-# Device create template
-########################################################################
+##############################################################################
+# RackMonkey - Know Your Racks - http://www.rackmonkey.org                   #
+# Version 1.2.%BUILD%                                                        #
+# (C)2007 Will Green (wgreen at users.sourceforge.net)                       #
+# Device create template                                                     #
+##############################################################################
 -->
 
 <head>
-	<title>Create Device | RackMonkey</title>
+	<title>Edit <TMPL_VAR NAME=name> | RackMonkey</title>
 	<link rel="stylesheet" type="text/css" title="Monkey Style" href="<TMPL_VAR NAME=web_root>/styles/rackmonkey.css" />
 </head>
 
@@ -20,103 +20,93 @@
 
 <TMPL_INCLUDE NAME="nav.ssi">
 
-<form method="post" action="<TMPL_VAR NAME=base_url>">
-<p>
-	<input type="hidden" name="id" value="<TMPL_VAR NAME=id>" />
-	<input type="hidden" name="view" value="device" />
-	<input type="hidden" name="insert" value="1" />
-</p>
+<form style="margin-top: 15px;" method="post" action="<TMPL_VAR NAME=base_url>">
+<table class="form">
+<tr>
+	<th class="form">edit device</th>
+</tr>
+<tr>
+	<td class="form">
+		<label>Name</label><br />
+		<input type="text" size="60" name="name" value="<TMPL_VAR NAME=name>" />
+		<br /><br />
 
-<table style="background: silver; border: none">
-<tr>
-	<th class="form" colspan="2">Create Device</th>
-</tr>
-<tr>
-	<td>Name:</td>
-	<td><input type="text" size="48" name="name" value="<TMPL_VAR NAME=name>" /></td>
-</tr>
-<tr>
-	<td>Rack:</td>
-	<td>
-		<select name="rack"><TMPL_LOOP NAME=racklist>
-		<option <TMPL_IF NAME=selected>selected="selected"</TMPL_IF> value="<TMPL_VAR NAME=id>"><TMPL_VAR NAME=name> in <TMPL_VAR NAME=room_name> in <TMPL_IF NAME=building_name_short><TMPL_VAR NAME=building_name_short><TMPL_ELSE><TMPL_VAR NAME=building_name></TMPL_IF></option></TMPL_LOOP>
+		<label>Domain</label><br />
+		<select name="domain"><TMPL_LOOP NAME=domainlist>
+		<option value="<TMPL_VAR NAME=id>"><TMPL_VAR NAME=name></option></TMPL_LOOP>
 		</select>
-	</td></tr>
-<tr>
-	<td>Rack Position:</td>
-	<td><input type="text" size="48" name="rack_pos" value="<TMPL_VAR NAME=rack_pos>" /></td>
-</tr>
-<tr>
-	<td>Hardware:</td>
-	<td>
+		<br /><br />
+		
+		<label>Location</label><br />
+		<select name="rack"><TMPL_LOOP NAME=racklist>
+		<option <TMPL_IF NAME=selected>selected="selected"</TMPL_IF> value="<TMPL_VAR NAME=id>"><TMPL_VAR NAME=name></option></TMPL_LOOP>
+		</select>
+		<br /><br />
+		
+		<label>Rack Position</label><br />
+		<input type="text" size="4" name="rack_pos" value="" />
+		<br /><br />
+		
+		<label>Hardware</label><br />
 		<select name="hardware"><TMPL_LOOP NAME=hardwarelist>
 		<option value="<TMPL_VAR NAME=id>"><TMPL_VAR NAME=name></option></TMPL_LOOP>
 		</select>
-	</td>
-</tr>
-<tr>
-	<td>Serial:</td>
-	<td><input type="text" size="48" name="serial" value="<TMPL_VAR NAME=serial>" /></td>
-</tr>
-<tr>
-	<td>Asset Number:</td>
-	<td><input type="text" size="48" name="asset" value="<TMPL_VAR NAME=asset>" /></td>
-</tr>
-<tr>
-	<td>Purchased:</td>
-	<td><input type="text" size="48" name="purchased" value="<TMPL_VAR NAME=purchased>" /></td>
-</tr>
-<tr>
-	<td>OS:</td>
-	<td>
+		<br /><br />
+
+		<label>Serial Number</label><br />
+		<input type="text" size="32" name="serial_no" value="" />
+		<br /><br />
+		
+		<label>Asset Number</label><br />
+		<input type="text" size="32" name="asset_no" value="" />
+		<br /><br />
+		
+		<label>Purchased (YYYY-MM-DD)</label><br />
+		<input type="text" size="11" name="purchased" value="" />
+		<br /><br />
+
+		<label>OS</label><br />
 		<select name="os"><TMPL_LOOP NAME=oslist>
 		<option value="<TMPL_VAR NAME=id>"><TMPL_VAR NAME=name></option></TMPL_LOOP>
 		</select>
-	</td>
-</tr>
-<tr>
-	<td>Role:</td>
-	<td>
+		<br /><br />		
+
+		<label>Role</label><br />
 		<select name="role"><TMPL_LOOP NAME=rolelist>
 		<option value="<TMPL_VAR NAME=id>"><TMPL_VAR NAME=name></option></TMPL_LOOP>
 		</select>
-	</td>
-</tr>
-<tr>
-	<td>Customer:</td>
-	<td>
+		<br /><br />
+
+		<label>Customer</label><br />
 		<select name="customer"><TMPL_LOOP NAME=customerlist>
 		<option value="<TMPL_VAR NAME=id>"><TMPL_VAR NAME=name></option></TMPL_LOOP>
 		</select>
-	</td>
-</tr>
-<tr>
-	<td>Service Level:</td>
-	<td>
+		<br /><br />
+		
+		<label>Service Level</label><br />
 		<select name="service"><TMPL_LOOP NAME=servicelist>
 		<option value="<TMPL_VAR NAME=id>"><TMPL_VAR NAME=name></option></TMPL_LOOP>
 		</select>
-	</td>
-</tr>
-<tr>
-	<td>Device Status:</td>
-	<td><input type="checkbox" name="in_service" /> In Service &nbsp;&nbsp;&nbsp; <input type="checkbox" name="in_monitoring" /> Monitored</td>
-</tr>
-<tr>
-	<td>Monitor URL:</td>
-	<td><input type="text" size="48" name="monitor" value="<TMPL_VAR NAME=monitor_url>" /></td>
-</tr>
-<tr>
-	<td colspan="2">Notes<br /><textarea name="notes" cols="60" rows="8"><TMPL_VAR NAME=notes></textarea></td>
-</tr>
+		<br /><br />
+
+		<label>Device Status</label><br />
+		<input type="checkbox" checked="checked" name="in_service" /> In Service
+		<br /><br />
+
+		<label>Notes</label><br />
+		<textarea name="notes" cols="55" rows="4"></textarea>
+		<hr/>
+		<a href="<TMPL_VAR NAME=base_url>?view=device&amp;view_type=default"><img style="float: left;" src="<TMPL_VAR NAME=web_root>/graphics/buttons/cancel.gif" width="48" height="21" alt="Cancel" /></a>
+		<button style="float: right;" type="submit">Save</button>
+		<input type="hidden" name="view" value="device" />
+		<input type="hidden" name="view_type" value="single" />
+		<input type="hidden" name="act" value="insert" />
+		<input type="hidden" name="act_on" value="device" />
+		
+		</td>
+	</tr>
 </table>
-
-<p>
-<input type="image" src="<TMPL_VAR NAME=web_root>/graphics/buttons/create.gif" name="submit" value="create" />
-<a href="<TMPL_VAR NAME=base_url>?view=device_table"><img src="<TMPL_VAR NAME=web_root>/graphics/buttons/cancel.gif" alt="cancel" width="71" height="28" /></a>
-</p>
-
-</form>
+</form>	
 
 <TMPL_INCLUDE NAME="footer.ssi">
 

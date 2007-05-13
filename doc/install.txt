@@ -126,9 +126,9 @@ For example, to make rackmonkey.pl executable by all users run:
 
     chmod 755 rackmonkey.pl
 
-The RackMonkey script assumes the perl you wish to use is /usr/bin/perl. To
-use another perl, open rackmonkey.pl in a text editor and amend the #! line.
-You can locate the default perl on your system by running 'which perl'.
+The RackMonkey script uses /usr/bin/env to choose the perl revision to run. If
+you want to specify a specific version of perl, or your env command lives in
+another directory, you need to update the #! line at the top of rackmonkey.pl.
 
 RackMonkey/Conf.pm will contain the username/password for your database,
 this shouldn't reside in normal web space (/cgi-bin is usually OK though). For
@@ -260,10 +260,10 @@ rackmonkey.pl (rather than executing it), check your web server error log.
 
 Common reasons for RackMonkey failing to run are:
 
-* The #! line at the top of rackmonkey.pl doesn't point at perl
+* The #! line at the top of rackmonkey.pl can't find env in /usr/bin
   This is the usual cause of errors of the form: 
       [error] (2)No such file or directory: exec of rackmonkey.pl failed
-  Try running 'which perl' to see where your Perl interpreter lives.
+  You can fix this by editing the #! line to point at env or directly at perl.
 
 * Permissions incorrect set for rackmonkey.pl. Usually solved by running:
       chmod 755 rackmonkey.pl

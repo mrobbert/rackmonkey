@@ -22,9 +22,13 @@ sub enlighten
 	{
 		$newErrStr = "Couldn't connect to RackMonkey database.\nCheck your database is available and that your configuration file is correct.";
 	}
+	elsif ($errStr =~ /attempt to write a readonly database/)
+	{
+		$newErrStr = "Couldn't write to the RackMonkey database.\nCheck the permissions on the database file or see the install document."
+	}
 	
 	# foreign key constraints - should ensure there is one of these for each foreign key constraint and they work on all DB
-	if ($errStr =~ /fkd_hardware_manufacturer_id/)
+	elsif ($errStr =~ /fkd_hardware_manufacturer_id/)
 	{
 		$newErrStr = "Couldn't delete that organisation.\nIt's listed as a manufacturer for one or more pieces of hardware.";
 	}
@@ -36,12 +40,11 @@ sub enlighten
 	{
 		$newErrStr = "Couldn't create operating system entry.\nYou need to choose a manufacturer for this operating system.";
 	}
-	if ($errStr =~ /fkd_os_manufacturer_id/)
+	elsif ($errStr =~ /fkd_os_manufacturer_id/)
 	{
 		$newErrStr = "Couldn't delete that organisation.\nIt's listed as a manufacturer for one or more operating systems.";
 	}
-	
-	if ($errStr =~ /fkd_room_building_id/)
+	elsif ($errStr =~ /fkd_room_building_id/)
 	{
 		$newErrStr = "Couldn't delete that building.\nIt contains one or more rooms.";
 	}

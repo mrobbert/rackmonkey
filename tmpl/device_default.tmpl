@@ -59,9 +59,7 @@
 		<th>
 			<a class="sort" title="Sort by customer" href="<TMPL_VAR NAME=base_url>?view=device&amp;order_by=customer.name">Customer</a>
 		</th>	
-		<th>
-			<a class="sort" title="Sort by service level" href="<TMPL_VAR NAME=base_url>?view=device&amp;order_by=device.service_level">SLA</a>
-		</th>	
+
 	</tr><TMPL_LOOP NAME=devices>
 	<TMPL_IF NAME="__odd__">
 	<tr class="row_silver">
@@ -69,13 +67,12 @@
 	<tr class="row_white">
 	</TMPL_IF>
 		<td><TMPL_VAR NAME=__EVEN__><a title="View details for this device" href="<TMPL_VAR NAME=base_url>?view=device&amp;view_type=single&amp;id=<TMPL_VAR NAME=id>"><TMPL_VAR ESCAPE=HTML NAME=name><TMPL_UNLESS NAME=domain_meta_default_data>.<TMPL_VAR ESCAPE=HTML NAME=domain_name></TMPL_UNLESS></a></td>
-		<td><TMPL_VAR ESCAPE=HTML NAME=rack_name> <TMPL_UNLESS building_meta_default_data>[<TMPL_VAR NAME=rack_pos>]</TMPL_UNLESS></td>
-		<td><TMPL_VAR ESCAPE=HTML NAME=room_name><TMPL_IF building_meta_default_data> in <TMPL_VAR ESCAPE=HTML NAME=building_name></TMPL_IF></td>
+		<td><TMPL_VAR ESCAPE=HTML NAME=rack_name><TMPL_UNLESS NAME=building_meta_default_data> [<TMPL_VAR NAME=rack_pos>]</TMPL_UNLESS></td>
+		<td><TMPL_UNLESS NAME=building_meta_default_data><TMPL_VAR ESCAPE=HTML NAME=room_name> in <TMPL_IF NAME=building_name_short><TMPL_VAR ESCAPE=HTML NAME=building_name_short><TMPL_ELSE><TMPL_VAR ESCAPE=HTML NAME=building_name></TMPL_IF><TMPL_ELSE>N/A</TMPL_UNLESS></td>
 		<td><TMPL_VAR ESCAPE=HTML NAME=role_name></td>
 		<td><TMPL_VAR ESCAPE=HTML NAME=hardware_name></td>
 		<td><TMPL_VAR ESCAPE=HTML NAME=os_name><TMPL_IF NAME=os_version> <TMPL_VAR ESCAPE=HTML NAME=os_version></TMPL_IF></td>
 		<td><TMPL_VAR ESCAPE=HTML NAME=customer_name></td>
-		<td><TMPL_VAR ESCAPE=HTML NAME=service_name></td>
 	</tr></TMPL_LOOP>
 </table>
 

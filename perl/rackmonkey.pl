@@ -1,4 +1,4 @@
-#!/usr/bin/perl
+#!/usr/bin/env perl
 ##############################################################################
 # RackMonkey - Know Your Racks - http://www.rackmonkey.org                   #
 # Version 1.2.%BUILD%                                                        #
@@ -26,12 +26,12 @@ use warnings;
 use 5.006_001;
 
 use DBI;
-use CGI;
 use HTML::Template;
 use Time::Local;
 
 use Data::Dumper; # For debug only
 
+use RackMonkey::CGI;
 use RackMonkey::Engine;
 use RackMonkey::Error;
 use RackMonkey::Helper;
@@ -42,33 +42,27 @@ our $AUTHOR = 'Will Green (wgreen at users.sourceforge.net)';
 
 our ($template, $cgi);
 
-$cgi = new CGI;
+$cgi = new RackMonkey::CGI;
 	
 eval 
 {
 	my $dbh = DBI->connect(DBDCONNECT, DBUSER, DBPASS, {AutoCommit => 1, RaiseError => 1, PrintError => 0, ShowErrorStatement => 1}); 
-
 	checkSupportedDriver();
-
 	my $backend = new RackMonkey::Engine($dbh);
-	
-	my $fullURL = $cgi->url();
-	my $baseURL = $fullURL;
-	$baseURL =~ s|(\w+)://([^/:]+)(:\d+)?||; # remove the domain and any port number
-	
-	my $view = $cgi->param('view') || DEFAULT_VIEW;
-	die "View name not valid." unless $view =~/^[a-z_]+$/;
-	my $id = $cgi->param('id'); # View id
-	$id += 0; # force id to be numerical
-	my $viewType = $cgi->param('view_type') || 'default';
-	my $act =  $cgi->param('act');
-	my $orderBy = $cgi->param('order_by');
+
+	my $fullURL = $cgi->url;
+	my $baseURL = $cgi->baseUrl;
+	my $view = $cgi->view;
+	my $id = $cgi->viewId;
+	my $viewType = $cgi->viewType;
+	my $act =  $cgi->act;
+	my $orderBy = $cgi->orderBy;
 
 	if ($act) # perform act, and return status: 303 (See Other) to redirect to a view
 	{
 		my $updateUser = $ENV{'REMOTE_USER'} || $ENV{'REMOTE_ADDR'};
 		$act = 'update' if ($act eq 'insert');
-		my $actData = $cgi->Vars;
+		my $actData = $cgi->vars;
 		
 		# delete id, only act_ids should be used be used for acts, ids are used for views
 		delete $$actData{'id'};
@@ -80,13 +74,13 @@ eval
 			delete $$actData{'act_id'};
 		}
 		
-		my $lastCreatedId = $backend->performAct($cgi->param('act_on'), $act, $updateUser, scalar($cgi->Vars));
+		my $lastCreatedId = $backend->performAct($cgi->actOn, $act, $updateUser, scalar($cgi->vars));
 		$id = $lastCreatedId if (!$id); # use lastCreatedId if there isn't an id
 		
-		my $redirectURL = "$fullURL?view=$view&view_type=$viewType";
-		$redirectURL .= "&id=$id" if ($id);
-		$redirectURL .= "&last_created_id=$lastCreatedId" if ($lastCreatedId);		
-		print $cgi->redirect(-uri=>$redirectURL, -status=>303);
+		my $redirectUrl = "$fullURL?view=$view&view_type=$viewType";
+		$redirectUrl .= "&id=$id" if ($id);
+		$redirectUrl .= "&last_created_id=$lastCreatedId" if ($lastCreatedId);		
+		$cgi->redirect303($redirectUrl);
 	}
 	else # display a view
 	{
@@ -96,15 +90,15 @@ eval
 		{
 			if ($viewType =~ /^default/)
 			{
-				$template->param('hardware' => $backend->getHardwareList($orderBy));
+				$template->param('hardware' => $backend->hardwareList($orderBy));
 			}
 			else
 			{
-				my $selectedManufacturer = $cgi->param('last_created_id') || 0; # need to sort out this mess of CGI vars and make clearer!
+				my $selectedManufacturer = $cgi->lastCreatedId; # need to sort out this mess of CGI vars and make clearer!
 	
 				if (($viewType =~ /^edit/) || ($viewType =~ /^single/))
 				{
-					my $hardware = $backend->getHardware($id);
+					my $hardware = $backend->hardware($id);
 					$selectedManufacturer = $$hardware{'manufacturer'} if (!$selectedManufacturer); # Use database value for selected if none in CGI
 					$$hardware{'support_url_short'} = shortURL($$hardware{'support_url'}); # not actually needed by edit view
 					$$hardware{'spec_url_short'} = shortURL($$hardware{'spec_url'}); # not actually needed by edit view			
@@ -113,7 +107,7 @@ eval
 	
 				if (($viewType =~ /^edit/) || ($viewType =~ /^create/))
 				{
-					$template->param('manufacturerlist' => $backend->getListBasicSelected('hardware_manufacturer', $selectedManufacturer));
+					$template->param('manufacturerlist' => $cgi->selectItem($backend->listBasicMeta('hardware_manufacturer'), $selectedManufacturer));
 				}
 			}
 		}	
@@ -121,22 +115,22 @@ eval
 		{
 			if ($viewType =~ /^default/)
 			{
-				$template->param('operatingsystems' => $backend->getOsList($orderBy));
+				$template->param('operatingsystems' => $backend->osList($orderBy));
 			}
 			else
 			{
-				my $selectedManufacturer = $cgi->param('last_created_id') || 0; 
+				my $selectedManufacturer = $cgi->lastCreatedId; 
 	
 				if (($viewType =~ /^edit/) || ($viewType =~ /^single/))
 				{
-					my $operatingSystem = $backend->getOs($id);
+					my $operatingSystem = $backend->os($id);
 					$template->param($operatingSystem);
 					$selectedManufacturer = $$operatingSystem{'manufacturer'} if (!$selectedManufacturer); # Use database value for selected if none in CGI
 				}
 	
 				if (($viewType =~ /^edit/) || ($viewType =~ /^create/))
-				{	
-					$template->param('manufacturerlist' => $backend->getListBasicSelected('software_manufacturer', $selectedManufacturer));
+				{
+					$template->param('manufacturerlist' => $cgi->selectItem($backend->listBasicMeta('software_manufacturer'), $selectedManufacturer));
 				}
 			}		
 		}
@@ -144,7 +138,7 @@ eval
 		{
 			if ($viewType =~ /^default/)
 			{
-				my $orgs = $backend->getOrgList($orderBy);
+				my $orgs = $backend->orgList($orderBy);
 				
 				for my $o (@$orgs)
 				{
@@ -154,23 +148,18 @@ eval
 			}
 			elsif (($viewType =~ /^edit/) || ($viewType =~ /^single/))
 			{
-				$template->param($backend->getOrg($id));
+				$template->param($backend->org($id));
 			}
 			elsif ($viewType =~ /^create/)
 			{
-				# normalise input for boolean values
-				my $customer = $cgi->param('customer') ? 1 : 0;
-				my $software = $cgi->param('software') ? 1 : 0;
-				my $hardware = $cgi->param('hardware') ? 1 : 0;
-		
-				$template->param({'customer' => $customer, 'software' => $software, 'hardware' => $hardware});
+				$template->param({'customer' => $cgi->customer, 'software' => $cgi->software, 'hardware' => $cgi->hardware});
 			}
 		}	
 		elsif ($view eq 'domain')
 		{
 			if ($viewType =~ /^default/)
 			{
-				my $domains = $backend->getDomainList($orderBy);
+				my $domains = $backend->domainList($orderBy);
 				for my $d (@$domains)
 				{
 					$$d{'descript_short'} = shortStr($$d{'descript'});
@@ -179,15 +168,15 @@ eval
 			}
 			elsif (($viewType =~ /^edit/) || ($viewType =~ /^single/))
 			{
-				$template->param($backend->getDomain($id));
+				$template->param($backend->domain($id));
 			}
 		}		
 		elsif ($view eq 'device')
 		{
 			if ($viewType =~ /^default/) 
 			{
-				my $devices = $backend->getDeviceList($orderBy);
-				
+				my $devices = $backend->deviceList($orderBy);
+
 				for my $d (@$devices) # calculate age of devices
 				{
 					$$d{'age'} = calculateAge($$d{'purchased'});
@@ -197,17 +186,18 @@ eval
 			}
 			else
 			{
-				my $selectedHardware = $cgi->param('last_created_id') || 0; 
-				my $selectedOs = $cgi->param('last_created_id') || 0; 
-				my $selectedRole = $cgi->param('last_created_id') || 0; 
-				my $selectedCustomer = $cgi->param('last_created_id') || 0; 
-				my $selectedService = $cgi->param('last_created_id') || 0;
-				my $selectedRack = $cgi->param('last_created_id') || 0; 
+				my $selectedHardware = $cgi->lastCreatedId; 
+				my $selectedOs = $cgi->lastCreatedId; 
+				my $selectedRole = $cgi->lastCreatedId; 
+				my $selectedCustomer = $cgi->lastCreatedId; 
+				my $selectedService = $cgi->lastCreatedId;
+				my $selectedRack = $cgi->lastCreatedId; 
+				my $selectedDomain = $cgi->lastCreatedId; 
 				
 
 				if (($viewType =~ /^edit/) || ($viewType =~ /^single/))
 				{
-					my $device = $backend->getDevice($id);
+					my $device = $backend->device($id);
 					$$device{'age'} = calculateAge($$device{'purchased'});
 					$template->param($device);
 
@@ -216,20 +206,22 @@ eval
 						# Use database value for selected if none in CGI
 						$selectedHardware = $$device{'hardware'} if (!$selectedHardware); 
 						$selectedOs = $$device{'os'} if (!$selectedOs);
-						$selectedRole = $$device{'role'} if (!$selectedOs);
+						$selectedRole = $$device{'role'} if (!$selectedRole);
 						$selectedCustomer = $$device{'customer'} if (!$selectedCustomer);
 						$selectedService = $$device{'service'} if (!$selectedService);
-						$selectedRack = $$device{'rack_id'} if (!$selectedRack);
+						$selectedRack = $$device{'rack'} if (!$selectedRack);
+						$selectedDomain = $$device{'domain'} if (!$selectedDomain);
 					}
 				}
 				if (($viewType =~ /^edit/) || ($viewType =~ /^create/))
 				{
-					$template->param('hardwarelist' => $backend->getListBasicSelected('hardware', $selectedHardware));
-					$template->param('oslist' => $backend->getListBasicSelected('os', $selectedOs));
-					$template->param('rolelist' => $backend->getListBasicSelected('role', $selectedRole));
-					$template->param('customerlist' => $backend->getListBasicSelected('customer', $selectedCustomer));
-					$template->param('servicelist' => $backend->getListBasicSelected('service', $selectedService));
-					$template->param('racklist' => $backend->getRackListBasicSelected($selectedRack));
+					$template->param('hardwarelist' => $cgi->selectHardware($backend->hardwareListBasic, $selectedHardware));
+					$template->param('oslist' => $cgi->selectItem($backend->listBasicMeta('os'), $selectedOs));
+					$template->param('rolelist' => $cgi->selectItem($backend->listBasicMeta('role'), $selectedRole));
+					$template->param('customerlist' => $cgi->selectItem($backend->listBasicMeta('customer'), $selectedCustomer));
+					$template->param('servicelist' => $cgi->selectItem($backend->listBasicMeta('service'), $selectedService));
+					$template->param('racklist' => $cgi->selectRack($backend->rackListBasic, $selectedRack));
+					$template->param('domainlist' => $cgi->selectItem($backend->listBasicMeta('domain'), $selectedDomain));
 				}
 			}
 		}	
@@ -237,7 +229,7 @@ eval
 		{
 			if ($viewType =~ /^default/)
 			{
-				my $roles = $backend->getRoleList($orderBy);
+				my $roles = $backend->roleList($orderBy);
 				
 				for my $r (@$roles)
 				{
@@ -247,14 +239,14 @@ eval
 			}
 			elsif (($viewType =~ /^edit/) || ($viewType =~ /^single/))
 			{
-				$template->param($backend->getRole($id));
+				$template->param($backend->role($id));
 			}
 		}	
 		elsif ($view eq 'service')
 		{
 			if ($viewType =~ /^default/)
 			{
-				my $serviceLevels = $backend->getServiceList($orderBy);
+				my $serviceLevels = $backend->serviceList($orderBy);
 				for my $s (@$serviceLevels)
 				{
 					$$s{'descript_short'} = shortStr($$s{'descript'});
@@ -263,21 +255,21 @@ eval
 			}
 			elsif (($viewType =~ /^edit/) || ($viewType =~ /^single/))
 			{
-				$template->param($backend->getService($id));
+				$template->param($backend->service($id));
 			}
 		}		
 		elsif ($view eq 'building')
 		{
 			if ($viewType =~ /^default/)
 			{
-					$template->param('buildings' => $backend->getBuildingList($orderBy));
+					$template->param('buildings' => $backend->buildingList($orderBy));
 			}
 			elsif (($viewType =~ /^edit/) || ($viewType =~ /^single/))
 			{
-				my $building = $backend->getBuilding($id);
+				my $building = $backend->building($id);
 				if ($viewType =~ /^single/)
 				{
-					$$building{'rooms'} = $backend->getRoomListInBuilding($id);
+					$$building{'rooms'} = $backend->roomListInBuilding($id);
 				}
 				$template->param($building);
 			}
@@ -286,51 +278,51 @@ eval
 		{
 			if ($viewType =~ /^default/)
 			{
-					$template->param('rooms' => $backend->getRoomList($orderBy));
+					$template->param('rooms' => $backend->roomList($orderBy));
 			}
 			else
 			{
-				my $selectedBuilding = $cgi->param('last_created_id') || $cgi->param('building_id') || 0;
+				my $selectedBuilding = $cgi->lastCreatedId || $cgi->buildingId;
 	
 				if (($viewType =~ /^edit/) || ($viewType =~ /^single/))
 				{
-					my $room = $backend->getRoom($id);
-					$$room{'row_count'} = $backend->getRowCountInRoom($id);
+					my $room = $backend->room($id);
+					$$room{'row_count'} = $backend->rowCountInRoom($id);
 					$selectedBuilding = $$room{'building'} if (!$selectedBuilding); # Use database value for selected if none in CGI - not actually needed in single view
 					if ($viewType =~ /^single/)
 					{
-						$$room{'racks'} = $backend->getRackListInRoom($id); # fix method then use
+						$$room{'racks'} = $backend->rackListInRoom($id); # fix method then use
 					}
 					$template->param($room);
 				}
 								
 				if (($viewType =~ /^edit/) || ($viewType =~ /^create/))
 				{	
-					$template->param('buildinglist' => $backend->getListBasicSelected('building', $selectedBuilding));
+					$template->param('buildinglist' => $cgi->selectItem($backend->listBasic('building'), $selectedBuilding));
 				}
 			}
 		}
 		elsif ($view eq 'row')
 		{
-			$template->param('rows' => $backend->getRowListInRoom($cgi->param('room_id')));
-			$template->param($backend->getRoom($cgi->param('room_id')));
+			$template->param('rows' => $backend->rowListInRoom($cgi->roomId));
+			$template->param($backend->room($cgi->roomId));
 		}
 		elsif ($view eq 'rack')
 		{
 			if ($viewType =~ /^default/)
 			{
-				$template->param('racks' => $backend->getRackList($orderBy));
+				$template->param('racks' => $backend->rackList($orderBy));
 			}
 			elsif (($viewType =~ /^physical/))
 			{
-				my @rackIdList = $cgi->param('rack_list');
+				my @rackIdList = $cgi->rackList;
 				push (@rackIdList, $id) if (scalar(@rackIdList) == 0); # add current rack id if no list
 				die "RMERR: You need to select at least one rack to display. Error occured at" unless $rackIdList[0];
 				my @racks;
 				for my $rackId (@rackIdList)
 				{
-					my $rack = $backend->getRack($rackId);
-					$$rack{'rack_layout'} = $backend->getRackPhysical($rackId) if ($viewType =~ /^physical/);
+					my $rack = $backend->rack($rackId);
+					$$rack{'rack_layout'} = $backend->rackPhysical($rackId) if ($viewType =~ /^physical/);
 					push @racks, $rack;
 				}
 				
@@ -338,18 +330,18 @@ eval
 			}
 			else
 			{
-				my $selectedRoom = $cgi->param('last_created_id') || $cgi->param('room_id') || 0;
+				my $selectedRoom = $cgi->lastCreatedId || $cgi->roomId;
 				
 				if (($viewType =~ /^edit/) || ($viewType =~ /^single/))
 				{
-					my $rack = $backend->getRack($id);
+					my $rack = $backend->rack($id);
 					$template->param($rack);
 					$selectedRoom = $$rack{'room'} if (!$selectedRoom); # Use database value for selected if none in CGI - not actually needed in single view
 				}
 				
 				if (($viewType =~ /^edit/) || ($viewType =~ /^create/))
 				{	
-					$template->param('roomlist' => $backend->getRoomListBasicSelected($selectedRoom));
+					$template->param('roomlist' => $cgi->selectRoom($backend->roomListBasic, $selectedRoom));
 				}
 			}
 		}		
@@ -372,20 +364,20 @@ eval
 	$template->param('date' => "$currentDate");
 
 	# Support overriding the next view of the template
-	$template->param('return_view' => $cgi->param('return_view'));
-	$template->param('return_view_type' => $cgi->param('return_view_type'));
-	$template->param('return_view_id' => $cgi->param('return_view_id'));
+	$template->param('return_view' => $cgi->returnView);
+	$template->param('return_view_type' => $cgi->returnViewType);
+	$template->param('return_view_id' => $cgi->returnViewId);
 	
 	$template->param('base_url' => $baseURL);
 	$template->param('web_root' => WWWPATH);
 	
-	print $cgi->header();
+	print $cgi->header;
 	print $template->output;
 };
 if ($@)
 {
 	my $errMsg = $@;
-	print $cgi->header();
+	print $cgi->header;
 	my $friendlyErrMsg = RackMonkey::Error::enlighten($errMsg);
 	RackMonkey::Error::display($errMsg, $friendlyErrMsg);
 }

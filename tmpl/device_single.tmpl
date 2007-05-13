@@ -12,7 +12,7 @@
 -->
 
 <head>
-	<title><TMPL_VAR ESCAPE=HTML NAME=name> | RackMonkey</title>
+	<title><TMPL_VAR ESCAPE=HTML NAME=name><TMPL_UNLESS NAME=domain_meta_default_data>.<TMPL_VAR ESCAPE=HTML NAME=domain_name></TMPL_UNLESS> | RackMonkey</title>
 	<link rel="stylesheet" type="text/css" title="Monkey Style" href="<TMPL_VAR NAME=web_root>/styles/rackmonkey.css" />
 </head>
 
@@ -20,7 +20,7 @@
 
 <TMPL_INCLUDE NAME="nav.ssi">
 
-<table class="form">
+<table class="form_wide">
 <tr>
 	<th class="form">
 		<a href="<TMPL_VAR NAME=base_url>?view=device&amp;view_type=create"><img style="float:right; margin-left: 4px;" src="<TMPL_VAR NAME=web_root>/graphics/buttons/new.gif" width="47" height="21" alt="New" /></a>
@@ -30,55 +30,73 @@
 </tr>
 <tr>
 	<td class="form">
+		<div>
 		<label>Name</label><br />
 		<TMPL_VAR ESCAPE=HTML NAME=name><TMPL_UNLESS NAME=domain_meta_default_data>.<TMPL_VAR ESCAPE=HTML NAME=domain_name></TMPL_UNLESS>
 		<br /><br />
+		</div>
 		
-		<label>In Rack</label><br />
-		<TMPL_VAR ESCAPE=HTML NAME=rack_name> [<TMPL_VAR NAME=rack_pos>] &nbsp; <a class="small" title="View details for this rack" href="<TMPL_VAR NAME=base_url>?view=rack&amp;view_type=physical&amp;id=<TMPL_VAR NAME=rack_id>">Details&hellip;</a>
+		<div>
+		<label>Location</label><br />
+		<TMPL_VAR ESCAPE=HTML NAME=rack_name><TMPL_UNLESS NAME=building_meta_default_data> [<TMPL_VAR NAME=rack_pos>] - <TMPL_VAR ESCAPE=HTML NAME=room_name> in <TMPL_VAR ESCAPE=HTML NAME=building_name> &nbsp; <a class="small" title="View contents of this rack" href="<TMPL_VAR NAME=base_url>?view=rack&amp;view_type=physical&amp;id=<TMPL_VAR NAME=rack>">See in rack&hellip;</a></TMPL_UNLESS>
 		<br /><br />
+		</div>
 		
-		<label>In Room</label><br />
-		<TMPL_VAR ESCAPE=HTML NAME=room_name> in <TMPL_VAR ESCAPE=HTML NAME=building_name> &nbsp; <a class="small" title="View details for this room" href="<TMPL_VAR NAME=base_url>?view=room&amp;view_type=single&amp;id=<TMPL_VAR NAME=room_id>">Details&hellip;</a>
-		<br /><br />		
-
+		<div style="float: left; width: 280px">
 		<label>Hardware</label><br />
-		<TMPL_VAR ESCAPE=HTML NAME=hardware_manufacturer_name> <TMPL_VAR ESCAPE=HTML NAME=hardware_name> &nbsp; <a class="small" title="View details for this hardware" href="<TMPL_VAR NAME=base_url>?view=hardware&amp;view_type=single&amp;id=<TMPL_VAR NAME=hardware>">Details&hellip;</a>
+		<TMPL_UNLESS NAME=hardware_meta_default_data><TMPL_VAR ESCAPE=HTML NAME=hardware_manufacturer_name> </TMPL_UNLESS><TMPL_VAR ESCAPE=HTML NAME=hardware_name> (<TMPL_VAR ESCAPE=HTML NAME=hardware_size>U) &nbsp; <a class="small" title="View details for this hardware" href="<TMPL_VAR NAME=base_url>?view=hardware&amp;view_type=single&amp;id=<TMPL_VAR NAME=hardware>">Details&hellip;</a>
 		<br /><br />	
+		</div>
 		
-		<label>Serial Number</label><br />
-		<TMPL_IF NAME=serial><TMPL_VAR ESCAPE=HTML NAME=serial><TMPL_ELSE>&nbsp;-</TMPL_IF>
-		<br /><br />	
-		
-		<label>Asset Number</label><br />
-		<TMPL_IF NAME=asset><TMPL_VAR ESCAPE=HTML NAME=asset><TMPL_ELSE>&nbsp;-</TMPL_IF>
-		<br /><br />	
-
-		<label>Purchased (Age)</label><br />
-		<TMPL_IF NAME=purchased><TMPL_VAR ESCAPE=HTML NAME=purchased><TMPL_IF NAME=age>&nbsp;&nbsp;(<TMPL_VAR ESCAPE=HTML NAME=age> years)</TMPL_IF><TMPL_ELSE>&nbsp;-</TMPL_IF>
-		<br /><br />		
-		
+		<div>
 		<label>Operating System</label><br />
 		<TMPL_VAR ESCAPE=HTML NAME=os_name><TMPL_IF NAME=os_version> <TMPL_VAR ESCAPE=HTML NAME=os_version></TMPL_IF> &nbsp; <a class="small" title="View details for this operating system" href="<TMPL_VAR NAME=base_url>?view=os&amp;view_type=single&amp;id=<TMPL_VAR NAME=os>">Details&hellip;</a>
 		<br /><br />
+		</div>
 		
-		<label>Role (In Service)</label><br />
-		<TMPL_VAR ESCAPE=HTML NAME=role_name>  (<input disabled="disabled" type="checkbox" <TMPL_IF NAME=in_service>checked="checked"</TMPL_IF> />) &nbsp; <a class="small" title="View details for this role" href="<TMPL_VAR NAME=base_url>?view=role&amp;view_type=single&amp;id=<TMPL_VAR NAME=role>">Details&hellip;</a>
-		<br /><br />		
-
+		<div style="float: left; width: 280px">
 		<label>Customer</label><br />
 		<TMPL_VAR ESCAPE=HTML NAME=customer_name> &nbsp; <a class="small" title="View details for this customer" href="<TMPL_VAR NAME=base_url>?view=org&amp;view_type=single&amp;id=<TMPL_VAR NAME=customer>">Details&hellip;</a>
-		<br /><br />		
+		<br /><br />	
+		</div>	
 
+		<div>
 		<label>Service Level</label><br />
 		<TMPL_VAR ESCAPE=HTML NAME=service_name></a> &nbsp; <a class="small" title="View details for this service level" href="<TMPL_VAR NAME=base_url>?view=service&amp;view_type=single&amp;id=<TMPL_VAR NAME=service>">Details&hellip;</a>
+		<br /><br />
+		</div>
+		
+		<div style="float: left; width: 280px">
+		<label>Serial Number</label><br />
+		<TMPL_IF NAME=serial_no><TMPL_VAR ESCAPE=HTML NAME=serial_no><TMPL_ELSE>&nbsp;-</TMPL_IF>
 		<br /><br />	
-
+		</div>
+		
+		<div>
+		<label>Asset Number</label><br />
+		<TMPL_IF NAME=asset_no><TMPL_VAR ESCAPE=HTML NAME=asset_no><TMPL_ELSE>&nbsp;-</TMPL_IF>
+		<br /><br />	
+		</div>
+		
+		<div style="float: left; width: 280px">
+		<label>Role (In Service)</label><br />
+		<TMPL_VAR ESCAPE=HTML NAME=role_name>  (<input disabled="disabled" type="checkbox" <TMPL_IF NAME=in_service>checked="checked"</TMPL_IF> />) &nbsp; <a class="small" title="View details for this role" href="<TMPL_VAR NAME=base_url>?view=role&amp;view_type=single&amp;id=<TMPL_VAR NAME=role>">Details&hellip;</a>
+		<br /><br />
+		</div>
+		
+		<div>
+		<label>Purchased (Age)</label><br />
+		<TMPL_IF NAME=purchased><TMPL_VAR ESCAPE=HTML NAME=purchased><TMPL_IF NAME=age>&nbsp;&nbsp;(<TMPL_VAR ESCAPE=HTML NAME=age> years)</TMPL_IF><TMPL_ELSE>&nbsp;-</TMPL_IF>
+		<br /><br />		
+		</div>
+	
+		<div style="clear: both;">
 		<label>Notes</label><br />
 		<TMPL_IF NAME=notes><TMPL_VAR ESCAPE=HTML NAME=notes><TMPL_ELSE>&nbsp;-</TMPL_IF>
 		<hr/>
 		<TMPL_UNLESS NAME=meta_default_data><a href="<TMPL_VAR NAME=base_url>?view=device&amp;view_type=default&amp;act=delete&amp;act_on=device&amp;act_id=<TMPL_VAR NAME=id>"><img style="float:left;" src="<TMPL_VAR NAME=web_root>/graphics/buttons/delete.gif" width="48" height="21" alt="Delete" /></a></TMPL_UNLESS>
 		<a href="<TMPL_VAR NAME=base_url>?view=device&amp;view_type=edit&amp;id=<TMPL_VAR NAME=id>"><img style="float:right;" src="<TMPL_VAR NAME=web_root>/graphics/buttons/edit.gif" width="48" height="21" alt="Edit" /></a>
+		</div>
 	</td>
 </tr>
 </table>

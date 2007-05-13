@@ -1,9 +1,9 @@
-------------------------------------------------------------------------
--- RackMonkey - Know Your Racks - http://www.rackmonkey.org
--- Version 1.2.%BUILD%
--- (C)2007 Will Green (wgreen at users.sourceforge.net)
--- Database schema for PostgreSQL database
-------------------------------------------------------------------------
+------------------------------------------------------------------------------
+-- RackMonkey - Know Your Racks - http://www.rackmonkey.org                 --
+-- Version 1.2.%BUILD%                                                      --
+-- (C)2007 Will Green (wgreen at users.sourceforge.net)                     --
+-- Database schema for PostgreSQL database                                  --
+------------------------------------------------------------------------------
 
 -- Building the device resides in
 CREATE TABLE building
@@ -162,10 +162,10 @@ CREATE TABLE device
 	name VARCHAR NOT NULL,
 	domain INTEGER REFERENCES domain,
 	rack INTEGER REFERENCES rack,
-	rack_pos INTEGER NOT NULL,
+	rack_pos INTEGER,
 	hardware INTEGER REFERENCES hardware,
-	serial VARCHAR,
-	asset VARCHAR,
+	serial_no VARCHAR,
+	asset_no VARCHAR,
 	purchased CHAR[9],
 	os INTEGER REFERENCES os,
 	os_version VARCHAR, 
@@ -174,7 +174,6 @@ CREATE TABLE device
 	role INTEGER REFERENCES role,
 	monitored INTEGER,
 	in_service INTEGER,
-	monitor_url VARCHAR,
 	notes VARCHAR,
 	meta_default_data INTEGER NOT NULL DEFAULT 0,
 	meta_update_time VARCHAR,

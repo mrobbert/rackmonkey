@@ -41,13 +41,13 @@ my ($bdIdA, $bdIdB);
 
 
 
-eval { $count = $backend->getRoomCount(); };
-ok(!$@, "calling getRoomCount $@");
+eval { $count = $backend->roomCount(); };
+ok(!$@, "calling roomCount $@");
 ok(($count == 0), "no room records stored at the start of the test");
-eval { $backend->getRoom(1); };
+eval { $backend->room(1); };
 ok(($@ =~ /No such room id/), "retrieving non-existent room");
 
-die "Buildings already exist, tests must be performed on an empty building table.\n" if ($backend->getBuildingCount() != 0);
+die "Buildings already exist, tests must be performed on an empty building table.\n" if ($backend->buildingCount() != 0);
 
 eval 
 {

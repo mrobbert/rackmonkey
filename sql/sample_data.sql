@@ -68,8 +68,7 @@ INSERT INTO role (id, name, descript, notes, meta_update_time, meta_update_user)
 INSERT INTO role (id, name, descript, notes, meta_update_time, meta_update_user) VALUES(25, 'Streaming', 			'Streaming Audio/Video Server', 'Sample data included with RackMonkey.', '2007-01-01 00:00:00', 'install');
 INSERT INTO role (id, name, descript, notes, meta_update_time, meta_update_user) VALUES(26, 'Switch', 				'Network Switch', 'Sample data included with RackMonkey.', '2007-01-01 00:00:00', 'install');
 INSERT INTO role (id, name, descript, notes, meta_update_time, meta_update_user) VALUES(27, 'Terminal Server',		'Terminal Server', 'Sample data included with RackMonkey.', '2007-01-01 00:00:00', 'install');
-INSERT INTO role (id, name, descript, notes, meta_update_time, meta_update_user) VALUES(28, 'Unused',				'Unused', 'Sample data included with RackMonkey.', '2007-01-01 00:00:00', 'install');
-INSERT INTO role (id, name, descript, notes, meta_update_time, meta_update_user) VALUES(29, 'Web Server',			'Web Server', 'Sample data included with RackMonkey.', '2007-01-01 00:00:00', 'install');
+INSERT INTO role (id, name, descript, notes, meta_update_time, meta_update_user) VALUES(28, 'Web Server',			'Web Server', 'Sample data included with RackMonkey.', '2007-01-01 00:00:00', 'install');
 
 -- The inclusion of a company or product in this file does not consitute an endorement by the author.
 -- All trademarks are the property of their respective owners.

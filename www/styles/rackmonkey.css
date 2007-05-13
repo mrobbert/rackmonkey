@@ -24,6 +24,13 @@ table.form
 	margin-top: 10px;
 }
 
+table.form_wide
+{
+	border: solid 1px #000;
+	width: 600px;
+	margin-top: 10px;
+}
+
 th.form
 {
 	background: #444;

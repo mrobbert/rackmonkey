@@ -29,67 +29,73 @@
 <tr>
 	<td class="form">
 		<label>Name</label><br />
-		<input type="text" size="60" name="name" value="<TMPL_VAR ESCAPE=HTML NAME=name>" />
+		<input type="text" size="60" name="name" value="<TMPL_VAR NAME=name>" />
 		<br /><br />
-	
-		<label>Rack</label><br />
-		<select name="racklist">
-			<TMPL_LOOP NAME=racklist><option <TMPL_IF NAME=selected>selected="selected"</TMPL_IF> value="<TMPL_VAR NAME=id>"><TMPL_VAR ESCAPE=HTML NAME=name> <TMPL_UNLESS NAME=meta_default_data>in <TMPL_VAR ESCAPE=HTML NAME=room_name> in <TMPL_VAR ESCAPE=HTML NAME=building_name></TMPL_UNLESS></option></TMPL_LOOP>
+
+		<label>Domain</label><br />
+		<select name="domain"><TMPL_LOOP NAME=domainlist>
+		<option <TMPL_IF NAME=selected>selected="selected"</TMPL_IF> value="<TMPL_VAR NAME=id>"><TMPL_VAR NAME=name></option></TMPL_LOOP>
 		</select>
 		<br /><br />
-	
+
+		<label>Location</label><br />
+		<select name="rack"><TMPL_LOOP NAME=racklist>
+		<option <TMPL_IF NAME=selected>selected="selected"</TMPL_IF> value="<TMPL_VAR NAME=id>"><TMPL_VAR NAME=name></option></TMPL_LOOP>
+		</select>
+		<br /><br />
+
 		<label>Rack Position</label><br />
-		<input type="text" size="60" name="name" value="<TMPL_VAR ESCAPE=HTML NAME=rack_pos>" />
+		<input type="text" size="4" name="rack_pos" value="<TMPL_VAR NAME=rack_pos>" />
 		<br /><br />
-	
+
 		<label>Hardware</label><br />
-		<select name="hardware"><!-- <TMPL_VAR NAME=hardware> <TMPL_VAR ESCAPE=HTML NAME=hardware_name> --><TMPL_LOOP NAME=hardwarelist>
-			<option <TMPL_IF NAME=selected>selected="selected"</TMPL_IF> value="<TMPL_VAR NAME=id>"><TMPL_VAR ESCAPE=HTML NAME=name></option></TMPL_LOOP>
+		<select name="hardware"><TMPL_LOOP NAME=hardwarelist>
+		<option <TMPL_IF NAME=selected>selected="selected"</TMPL_IF> value="<TMPL_VAR NAME=id>"><TMPL_VAR NAME=name></option></TMPL_LOOP>
 		</select>
 		<br /><br />
-	
-		<label>Serial</label><br />
-		<input type="text" size="60" name="name" value="<TMPL_VAR ESCAPE=HTML NAME=serial>" />
-		<br /><br />
-	
-		<label>Asset Number</label><br />
-		<input type="text" size="60" name="name" value="<TMPL_VAR ESCAPE=HTML NAME=asset>" />
-		<br /><br />	
-	
-		<label>Purchased</label><br />
-		<input type="text" size="60" name="name" value="<TMPL_VAR ESCAPE=HTML NAME=purchased>" />
-		<br /><br />	
-	
+
 		<label>OS</label><br />
-		<select name="os"><!-- <TMPL_VAR NAME=os> <TMPL_VAR ESCAPE=HTML NAME=os_name> --><TMPL_LOOP NAME=oslist>
-			<option <TMPL_IF NAME=selected>selected="selected"</TMPL_IF> value="<TMPL_VAR NAME=id>"><TMPL_VAR ESCAPE=HTML NAME=name></option></TMPL_LOOP>
+		<select name="os"><TMPL_LOOP NAME=oslist>
+		<option <TMPL_IF NAME=selected>selected="selected"</TMPL_IF> value="<TMPL_VAR NAME=id>"><TMPL_VAR NAME=name></option></TMPL_LOOP>
 		</select>
 		<br /><br />
-	
+		
+		<label>Serial Number</label><br />
+		<input type="text" size="32" name="serial_no" value="<TMPL_VAR NAME=serial_no>" />
+		<br /><br />
+
+		<label>Asset Number</label><br />
+		<input type="text" size="32" name="asset_no" value="<TMPL_VAR NAME=asset_no>" />
+		<br /><br />
+
+		<label>Purchased (YYYY-MM-DD)</label><br />
+		<input type="text" size="11" name="purchased" value="<TMPL_VAR NAME=purchased>" />
+		<br /><br />
+
 		<label>Role</label><br />
-		<select name="role"><!-- <TMPL_VAR NAME=role> <TMPL_VAR ESCAPE=HTML NAME=role_name> --><TMPL_LOOP NAME=rolelist>
-			<option <TMPL_IF NAME=selected>selected="selected"</TMPL_IF> value="<TMPL_VAR NAME=id>"><TMPL_VAR ESCAPE=HTML NAME=name></option></TMPL_LOOP>
+		<select name="role"><TMPL_LOOP NAME=rolelist>
+		<option <TMPL_IF NAME=selected>selected="selected"</TMPL_IF> value="<TMPL_VAR NAME=id>"><TMPL_VAR NAME=name></option></TMPL_LOOP>
 		</select>
 		<br /><br />
-	
+
 		<label>Customer</label><br />
-		<select name="customer"><!-- <TMPL_VAR NAME=customer> <TMPL_VAR ESCAPE=HTML NAME=customer_name> --><TMPL_LOOP NAME=customerlist>
-			<option <TMPL_IF NAME=selected>selected="selected"</TMPL_IF> value="<TMPL_VAR NAME=id>"><TMPL_VAR ESCAPE=HTML NAME=name></option></TMPL_LOOP>
+		<select name="customer"><TMPL_LOOP NAME=customerlist>
+		<option <TMPL_IF NAME=selected>selected="selected"</TMPL_IF> value="<TMPL_VAR NAME=id>"><TMPL_VAR NAME=name></option></TMPL_LOOP>
 		</select>
 		<br /><br />
-	
+
 		<label>Service Level</label><br />
 		<select name="service"><TMPL_LOOP NAME=servicelist>
-			<option <TMPL_IF NAME=selected>selected="selected"</TMPL_IF> value="<TMPL_VAR NAME=id>"><TMPL_VAR NAME=name></option></TMPL_LOOP>
+		<option <TMPL_IF NAME=selected>selected="selected"</TMPL_IF> value="<TMPL_VAR NAME=id>"><TMPL_VAR NAME=name></option></TMPL_LOOP>
 		</select>
 		<br /><br />
-	
-		<label>In Service</label><br />
-		<input type="checkbox" name="in_service" />
+
+		<label>Device Status</label><br />
+		<input <TMPL_IF NAME=in_service>checked="checked"</TMPL_IF> type="checkbox" name="in_service" /> In Service
 		<br /><br />
 
 		<label>Notes</label><br />
-		<textarea name="notes" cols="55" rows="4"><TMPL_VAR ESCAPE=HTML NAME=notes></textarea>
+		<textarea name="notes" cols="55" rows="4"></textarea>
 		<hr/>
 		<a href="<TMPL_VAR NAME=base_url>?view=device&amp;view_type=single&amp;id=<TMPL_VAR NAME=id>"><img style="float: left;" src="<TMPL_VAR NAME=web_root>/graphics/buttons/cancel.gif" width="48" height="21" alt="Cancel" /></a>
 		<button style="float: right;" type="submit">Save</button>
@@ -99,10 +105,10 @@
 		<input type="hidden" name="act" value="update" />
 		<input type="hidden" name="act_on" value="device" />
 		<input type="hidden" name="act_id" value="<TMPL_VAR NAME=id>" />
-	</td>
-</tr>
+		</td>
+	</tr>
 </table>
-</form>	
+</form>
 
 <TMPL_INCLUDE NAME="footer.ssi">
 

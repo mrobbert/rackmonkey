@@ -37,7 +37,7 @@ sub dbh # should this be a private method?
 	return $self->{'dbh'};
 }
 
-sub getEntryBasic
+sub entryBasic
 {
 	my ($self, $id, $table) = @_;
 	die 'RMERR: Not a valid table.' unless $table =~ /^[a-z_]+$/;
@@ -52,45 +52,40 @@ sub getEntryBasic
 	return $entry;
 }
 
-sub getListBasic
+sub listBasic
 {
 	my ($self, $table) = @_;
 	die "RMERR: Not a valid table." unless $table =~ /^[a-z_]+$/;
 	my $sth = $self->dbh->prepare_cached(qq!
-		SELECT id, name 
+		SELECT 
+			id, 
+			name,
+			meta_default_data 
 		FROM $table 
-		ORDER BY meta_default_data DESC, name
+		WHERE meta_default_data = 0
+		ORDER BY 
+			name
 	!);
 	$sth->execute();
 	return $sth->fetchall_arrayref({});
 }
 
-sub getListBasicSelected
+sub listBasicMeta
 {
-	my ($self, $table, $selectedId) = @_;
-	my $list = $self->getListBasic($table);
-	for my $item (@$list)
-	{
-		$$item{'selected'} = ($$item{'id'} == $selectedId);
-	}
-	return $list;
-}
-
-# This won't work for things like rooms, where the name might not be unique
-# (rooms in different buildings can share names etc.)
-sub getEntryId
-{
-	my ($self, $name, $table) = @_;
-	die 'RMERR: Not a valid table.\nError occured' unless $table =~ /^[a-z]+$/;
+	my ($self, $table) = @_;
+	die "RMERR: Not a valid table." unless $table =~ /^[a-z_]+$/;
 	my $sth = $self->dbh->prepare_cached(qq!
-		SELECT id 
-		FROM $table
-		WHERE name = ?
+		SELECT 
+			id, 
+			name,
+			meta_default_data 
+		FROM $table 
+		ORDER BY 
+			meta_default_data DESC,
+			name
 	!);
-	$sth->execute($name);
-	my $entry = $sth->fetchrow_hashref('NAME_lc');
-	die 'RMERR: No such entry name.\nError occured' unless defined($$entry{'id'});
-	return $$entry{'id'};
+	$sth->execute();
+	return $sth->fetchall_arrayref({});
 }
 
 sub performAct
@@ -114,10 +109,10 @@ sub performAct
 	return $self->$type($updateTime, $updateUser, $record);
 }
 
-# _getLastInsertId is a private method
+# _lastInsertId is a private method
 # works with Postgres and SQLite, but will need altering for other DB,
 # need to check how it deals with multiple requests from different processes
-sub _getLastInsertId 
+sub _lastInsertId 
 {
 	my $self = shift;
 	return $self->dbh->last_insert_id(undef, undef, undef, undef);
@@ -128,14 +123,16 @@ sub _getLastInsertId
 # Building Methods                                                           #
 ##############################################################################
 
-sub getBuilding
+sub building
 {
 	my ($self, $id) = @_;
 	die "RMERR: Unable to retrieve building. No building id specified.\nError occured" unless ($id);
 	my $sth = $self->dbh->prepare(qq!
 		SELECT building.* 
 		FROM building 
-		WHERE id = ?
+		WHERE 
+			meta_default_data = 0 AND
+			id = ?
 	!);
 	$sth->execute($id);	
 	my $building = $sth->fetchrow_hashref('NAME_lc');
@@ -143,7 +140,7 @@ sub getBuilding
 	return $building;
 }
 
-sub getBuildingCount
+sub buildingCount
 {
 	my $self = shift;
 	my $sth = $self->dbh->prepare(qq!
@@ -155,16 +152,16 @@ sub getBuildingCount
 	return ($sth->fetchrow_array)[0];
 }
 
-sub getBuildingList
+sub buildingList
 {
 	my $self = shift;
 	my $orderBy = shift || '';
 	$orderBy = 'building.name' unless $orderBy =~ /^[a-z_]+\.[a-z_]+$/;
 	$orderBy = $orderBy.', building.name' unless $orderBy eq 'building.name';# default second ordering is name
-	$orderBy = 'building.meta_default_data, '.$orderBy; # ensure meta default entries appear last
 	my $sth = $self->dbh->prepare_cached(qq!
 		SELECT building.* 
-		FROM building 
+		FROM building
+		WHERE meta_default_data = 0
 		ORDER BY $orderBy
 	!);
 	$sth->execute();
@@ -188,7 +185,7 @@ sub updateBuilding
 	{
 		$sth = $self->dbh->prepare(qq!INSERT INTO building (name, name_short, notes, meta_update_time, meta_update_user) VALUES(?, ?, ?, ?, ?)!);
 		$sth->execute($self->_validateBuildingUpdate($record), $updateTime, $updateUser);
-		$newId = $self->_getLastInsertId();
+		$newId = $self->_lastInsertId();
 	}
 	return $newId || $$record{'id'};
 }
@@ -198,7 +195,7 @@ sub deleteBuilding
 	my ($self, $updateTime, $updateUser, $record) = @_;
 	my $deleteId = (ref $record eq 'HASH') ? $$record{'id'} : $record;
 	die "RMERR: Delete failed. No building id specified.\nError occured" unless ($deleteId);
-	my $sth = $self->dbh->prepare('DELETE FROM building WHERE id = ?');
+	my $sth = $self->dbh->prepare(qq!DELETE FROM building WHERE id = ?!);
 	my $ret = $sth->execute($deleteId);
 	die "RMERR: Delete failed. This building does not currently exist, it may have been removed already.\nError occured" if ($ret eq '0E0');
 }
@@ -224,7 +221,7 @@ sub _validateBuildingUpdate
 # Room Methods                                                               #  
 ##############################################################################
 
-sub getRoom
+sub room
 {
 	my ($self, $id) = @_;
 	die "RMERR: Unable to retrieve room. No room id specified.\nError occured" unless ($id);
@@ -232,10 +229,10 @@ sub getRoom
 		SELECT 
 			room.*, 
 			building.name		AS building_name,
-			building.name_short	AS building_name_short,
-			building.meta_default_data	AS building_meta_default_data			
+			building.name_short	AS building_name_short
 		FROM room, building 
 		WHERE
+			room.meta_default_data = 0 AND
 			room.building = building.id AND
 			room.id = ?
 	!);
@@ -245,7 +242,7 @@ sub getRoom
 	return $room;
 }
 
-sub getRoomCount
+sub roomCount
 {
 	my $self = shift;
 	my $sth = $self->dbh->prepare(qq!
@@ -257,21 +254,20 @@ sub getRoomCount
 	return ($sth->fetchrow_array)[0];
 }
 
-sub getRoomList
+sub roomList
 {
 	my $self = shift;
 	my $orderBy = shift || '';
 	$orderBy = 'building.name' unless $orderBy =~ /^[a-z_]+\.[a-z_]+$/;	# by default, order by building name first
 	$orderBy = $orderBy.', room.name' unless $orderBy eq 'room.name'; # default second ordering is room name
-	$orderBy = 'room.meta_default_data, '.$orderBy; # ensure meta (default) entries appear last
 	my $sth = $self->dbh->prepare(qq!
 		SELECT
 			room.*,
 			building.name		AS building_name,
-			building.name_short	AS building_name_short,
-			building.meta_default_data	AS building_meta_default_data			
+			building.name_short	AS building_name_short
 		FROM room, building
 		WHERE
+			room.meta_default_data = 0 AND
 			room.building = building.id
 		ORDER BY $orderBy
 	!);
@@ -279,22 +275,21 @@ sub getRoomList
 	return $sth->fetchall_arrayref({});
 }
 
-sub getRoomListInBuilding
+sub roomListInBuilding
 {
 	my $self = shift;
 	my $building = shift;
 	$building += 0; # force building to be numeric
 	my $orderBy = shift || '';
 	$orderBy = 'building.name' unless $orderBy =~ /^[a-z_]+\.[a-z_]+$/;	
-	$orderBy = 'building.meta_default_data, '.$orderBy; # ensure meta (default) entries appear last
 	my $sth = $self->dbh->prepare(qq!
 		SELECT
 			room.*,
 			building.name		AS building_name,
-			building.name_short	AS building_name_short,
-			building.meta_default_data	AS building_meta_default_data			
+			building.name_short	AS building_name_short
 		FROM room, building
 		WHERE
+			room.meta_default_data = 0 AND
 			room.building = building.id AND
 			room.building = ?
 		ORDER BY $orderBy
@@ -303,7 +298,7 @@ sub getRoomListInBuilding
 	return $sth->fetchall_arrayref({});
 }
 
-sub getRoomListBasic
+sub roomListBasic
 {
 	my $self = shift;
 	my $sth = $self->dbh->prepare(q!
@@ -311,35 +306,18 @@ sub getRoomListBasic
 			room.id, 
 			room.name, 
 			building.name AS building_name,
-			building.name_short	AS building_name_short,
-			building.meta_default_data	AS building_meta_default_data			
+			building.name_short	AS building_name_short
 		FROM room, building 
 		WHERE 
+			room.meta_default_data = 0 AND
 			room.building = building.id 
 		ORDER BY 
-			room.meta_default_data DESC, 
+			room.meta_default_data DESC,
+			building.name,
 			room.name
 	!);
 	$sth->execute();
 	return $sth->fetchall_arrayref({});
-}
-
-sub getRoomListBasicSelected
-{
-	my ($self, $selectedId) = @_;
-	$selectedId += 0;
-	
-	my $rooms = $self->getRoomListBasic();
-	
-	if ($selectedId)
-	{
-		for my $r (@$rooms)
-		{
-			$$r{'selected'} = ($$r{'id'} == $selectedId);
-		}
-	}
-	
-	return $rooms;
 }
 
 sub updateRoom
@@ -362,7 +340,7 @@ sub updateRoom
 		{
 			$sth = $self->dbh->prepare(qq!INSERT INTO room (name, building, notes, meta_update_time, meta_update_user) VALUES(?, ?, ?, ?, ?)!);
 			$sth->execute($self->_validateRoomUpdate($record), $updateTime, $updateUser);
-			$newId = $self->_getLastInsertId();
+			$newId = $self->_lastInsertId();
 			my $hiddenRow = {'name' => '-', room => "$newId", 'room_pos' => 0, 'hidden_row' => 1, 'notes' => ''}; 
 			$self->updateRow($updateTime, $updateUser, $hiddenRow);
 			$self->dbh->commit();
@@ -392,9 +370,9 @@ sub deleteRoom
 	$self->dbh->{AutoCommit} = 0;    # need to delete room and hidden rows together
 	eval
 	{
-		$sth = $self->dbh->prepare('DELETE FROM row WHERE hidden_row = 1 AND room = ?');
+		$sth = $self->dbh->prepare(qq!DELETE FROM row WHERE hidden_row = 1 AND room = ?!);
 		$sth->execute($deleteId);
-		$sth = $self->dbh->prepare('DELETE FROM room WHERE id = ?');
+		$sth = $self->dbh->prepare(qq!DELETE FROM room WHERE id = ?!);
 		$ret = $sth->execute($deleteId);
 		$self->dbh->commit();
 	};
@@ -432,7 +410,7 @@ sub _validateRoomUpdate
 # Row Methods                                                                #  
 ##############################################################################
 
-sub getRow
+sub row
 {
 	my ($self, $id) = @_;
 	my $sth = $self->dbh->prepare(qq!
@@ -440,10 +418,10 @@ sub getRow
 			row.*,
 			room.name			AS room_name,
 			building.name		AS building_name,
-			building.name_short	AS building_name_short,
-			building.meta_default_data	AS building_meta_default_data			
+			building.name_short	AS building_name_short
 		FROM row, room, building 
 		WHERE
+			row.meta_default_data = 0 AND
 			row.room = room.id AND
 			room.building = building.id AND
 			row.id = ?
@@ -454,22 +432,21 @@ sub getRow
 	return $row;
 }
 
-sub getRowList
+sub rowList
 {
 	my $self = shift;
 	my $orderBy = shift || '';
 	$orderBy = 'building.name, room.name' unless $orderBy =~ /^[a-z_]+\.[a-z_]+$/;	# by default, order by building name and room name first
 	$orderBy = $orderBy.', row.name' unless $orderBy eq 'row.name'; # default third ordering is row name
-	$orderBy = 'row.meta_default_data, '.$orderBy; # ensure meta (default) entries appear last
 	my $sth = $self->dbh->prepare(qq!
 		SELECT 
 			row.*,
 			room.name			AS room_name,
 			building.name		AS building_name,
-			building.name_short	AS building_name_short,
-			building.meta_default_data	AS building_meta_default_data			
+			building.name_short	AS building_name_short
 		FROM row, room, building 
 		WHERE
+			row.meta_default_data = 0 AND
 			row.room = room.id AND
 			room.building = building.id
 		ORDER BY $orderBy
@@ -478,7 +455,7 @@ sub getRowList
 	return $sth->fetchall_arrayref({});
 }
 
-sub getRowListInRoom
+sub rowListInRoom
 {
 	my ($self, $room) = @_;
 	$room += 0; # force room to be numeric
@@ -487,10 +464,10 @@ sub getRowListInRoom
 			row.*,
 			room.name			AS room_name,
 			building.name		AS building_name,
-			building.name_short	AS building_name_short,
-			building.meta_default_data	AS building_meta_default_data			
+			building.name_short	AS building_name_short
 		FROM row, room, building 
 		WHERE
+			row.meta_default_data = 0 AND
 			row.room = room.id AND
 			room.building = building.id AND
 			row.room = ?
@@ -500,7 +477,7 @@ sub getRowListInRoom
 	return $sth->fetchall_arrayref({});
 }
 
-sub getRowListInRoomBasic
+sub rowListInRoomBasic
 {
 	my ($self, $room) = @_;
 	$room += 0; # force room to be numeric
@@ -510,6 +487,7 @@ sub getRowListInRoomBasic
 			row.name
 		FROM row
 		WHERE
+			row.meta_default_data = 0 AND
 			row.room = ?
 		ORDER BY row.name
 	!);
@@ -517,7 +495,7 @@ sub getRowListInRoomBasic
 	return $sth->fetchall_arrayref({});
 }
 
-sub getRowCountInRoom
+sub rowCountInRoom
 {
 	my ($self, $room) = @_;
 	$room += 0; # force room to be numeric
@@ -526,6 +504,7 @@ sub getRowCountInRoom
 			count (*)
 		FROM row
 		WHERE
+			row.meta_default_data = 0 AND
 			row.room = ?
 	!);
 	$sth->execute($room);
@@ -533,22 +512,34 @@ sub getRowCountInRoom
 	return $$countRef[0];
 }
 
+sub deleteRow
+{
+	my ($self, $updateTime, $updateUser, $record) = @_;
+	my $deleteId = (ref $record eq 'HASH') ? $$record{'id'} : $record;
+	die "RMERR: Delete failed. No row id specified.\nError occured" unless ($deleteId);
+	die "RMERR: This method is not yet supported.\nError occured";
+}
+
 sub updateRow
 {
 	my ($self, $updateTime, $updateUser, $record) = @_;
 	die "RMERR: Unable to update row. No row record specified.\nError occured" unless ($record);
+	
+	my ($sth, $newId);
 		
 	if ($$record{'id'})
 	{	
-		my $sth = $self->dbh->prepare(qq!UPDATE row SET name = ?, room = ?, room_pos = ?, hidden_row = ?, notes = ?, meta_update_time = ?, meta_update_user = ? WHERE id = ?!);
+		$sth = $self->dbh->prepare(qq!UPDATE row SET name = ?, room = ?, room_pos = ?, hidden_row = ?, notes = ?, meta_update_time = ?, meta_update_user = ? WHERE id = ?!);
 		my $ret = $sth->execute($self->_validateRowUpdate($record), $updateTime, $updateUser, $$record{'id'});
 		die "RMERR: Update failed. This row may have been removed before the update occured.\nError occured" if ($ret eq '0E0');
 	}
 	else
 	{
-		my $sth = $self->dbh->prepare(qq!INSERT INTO row (name, room, room_pos, hidden_row, notes, meta_update_time, meta_update_user) VALUES(?, ?, ?, ?, ?, ?, ?)!);
+		$sth = $self->dbh->prepare(qq!INSERT INTO row (name, room, room_pos, hidden_row, notes, meta_update_time, meta_update_user) VALUES(?, ?, ?, ?, ?, ?, ?)!);
 		$sth->execute($self->_validateRowUpdate($record), $updateTime, $updateUser);
+		$newId = $self->_lastInsertId();
 	}
+	return $newId || $$record{'id'};
 }
 
 sub _validateRowUpdate
@@ -565,7 +556,7 @@ sub _validateRowUpdate
 # Rack Methods                                                               #  
 ##############################################################################
 
-sub getRack
+sub rack
 {
 	my ($self, $id) = @_;
 	my $sth = $self->dbh->prepare(qq!
@@ -576,10 +567,10 @@ sub getRack
 			room.id				AS room,
 			room.name			AS room_name,
 			building.name		AS building_name, 
-			building.name_short	AS building_name_short,
-			building.meta_default_data	AS building_meta_default_data
-		FROM rack, row, room, building 
+			building.name_short	AS building_name_short
+			FROM rack, row, room, building 
 		WHERE
+			rack.meta_default_data = 0 AND
 			rack.row = row.id AND
 			row.room = room.id AND
 			room.building = building.id AND
@@ -591,13 +582,12 @@ sub getRack
 	return $rack;
 }
 
-sub getRackList
+sub rackList
 {
 	my $self = shift;
 	my $orderBy = shift || '';
 	$orderBy = 'building.name, room.name, row.name, rack.row_pos' unless $orderBy =~ /^[a-z_]+\.[a-z_]+$/;	# by default, order by building name and room name first
 	$orderBy = $orderBy.', rack.row_pos, rack.name' unless ($orderBy eq 'rack.row_pos, rack.name' or $orderBy eq 'rack.name'); # default third ordering is rack name
-	$orderBy = 'rack.meta_default_data, '.$orderBy; # ensure meta (default) entries appear last
 	my $sth = $self->dbh->prepare(qq!
 		SELECT 
 			rack.*,
@@ -606,10 +596,10 @@ sub getRackList
 			room.id				AS room,
 			room.name			AS room_name,
 			building.name		AS building_name,
-			building.name_short	AS building_name_short,
-			building.meta_default_data	AS building_meta_default_data
+			building.name_short	AS building_name_short
 		FROM rack, row, room, building 
 		WHERE
+			rack.meta_default_data = 0 AND
 			rack.row = row.id AND
 			row.room = room.id AND
 			room.building = building.id
@@ -619,7 +609,7 @@ sub getRackList
 	return $sth->fetchall_arrayref({});
 }
 
-sub getRackListInRoom
+sub rackListInRoom
 {
 	my ($self, $room) = @_;
 	$room += 0; # force room to be numeric
@@ -631,10 +621,10 @@ sub getRackListInRoom
 			room.id				AS room,
 			room.name			AS room_name,
 			building.name		AS building_name,
-			building.name_short	AS building_name_short,
-			building.meta_default_data	AS building_meta_default_data
+			building.name_short	AS building_name_short
 		FROM rack, row, room, building 
 		WHERE
+			rack.meta_default_data = 0 AND
 			rack.row = row.id AND
 			row.room = room.id AND
 			room.building = building.id AND
@@ -645,28 +635,25 @@ sub getRackListInRoom
 	return $sth->fetchall_arrayref({});
 }
 
-sub getRackListBasic
+sub rackListBasic
 {
 	my $self = shift;
-	my $sth = $self->dbh->prepare(q!
+
+	my $sth = $self->dbh->prepare(qq!
 		SELECT
 			rack.id,
 			rack.name,
 			rack.meta_default_data,
-			row.id			AS row_id,
-			row.name		AS row_name,
-			room.id			AS room_id, 
 			room.name		AS room_name, 
 			building.name	AS building_name,
-			building.name_short	AS building_name_short,
-			building.meta_default_data AS building_meta_default_data
+			building.name_short	AS building_name_short
 		FROM rack, row, room, building 
 		WHERE
 			rack.row = row.id AND
 			row.room = room.id AND
 			room.building = building.id 
 		ORDER BY 
-			rack.meta_default_data DESC, 
+			rack.meta_default_data DESC,
 			building.name,
 			room.name,
 			row.room_pos,
@@ -676,28 +663,10 @@ sub getRackListBasic
 	return $sth->fetchall_arrayref({});
 }
 
-sub getRackListBasicSelected
-{
-	my ($self, $selectedId) = @_;
-	$selectedId += 0;
-	
-	my $racks = $self->getRackListBasic();
-	
-	if ($selectedId)
-	{
-		for my $r (@$racks)
-		{
-			$$r{'selected'} = ($$r{'id'} == $selectedId);
-		}
-	}
-	
-	return $racks;
-}
-
-sub getRackPhysical # This method is all rather inelegant
+sub rackPhysical # This method is all rather inelegant
 {
 	my ($self, $rackid) = @_;
-	my $devices = $self->getDeviceListInRack($rackid);
+	my $devices = $self->deviceListInRack($rackid);
 
 	my $sth = $self->dbh->prepare(qq!
 		SELECT 
@@ -760,7 +729,7 @@ sub getRackPhysical # This method is all rather inelegant
 		$$r{'rack_pos'} = sprintf($posFormat, $$r{'rack_pos'});
 	}	
 	
-	@rackLayout = reverse @rackLayout; # low numbers at bottom of rack - should be configurable
+	@rackLayout = reverse @rackLayout unless RACKNUMBERINGTOP;  # racks are numbered from the bottom unless configured otherwise
 	
 	return \@rackLayout;
 }
@@ -796,7 +765,7 @@ sub updateRack
 	{
 		$sth = $self->dbh->prepare(qq!INSERT INTO rack (name, row, row_pos, hidden_rack, size, notes, meta_update_time, meta_update_user) VALUES(?, ?, ?, ?, ?, ?, ?, ?)!);
 		$sth->execute($self->_validateRackUpdate($record), $updateTime, $updateUser);
-		$newId = $self->_getLastInsertId();
+		$newId = $self->_lastInsertId();
 	}
 	return $newId || $$record{'id'};
 }
@@ -806,7 +775,7 @@ sub deleteRack
 	my ($self, $updateTime, $updateUser, $record) = @_;
 	my $deleteId = (ref $record eq 'HASH') ? $$record{'id'} : $record;
 	die "RMERR: Delete failed. No rack id specified.\nError occured" unless ($deleteId);
-	my $sth = $self->dbh->prepare('DELETE FROM rack WHERE id = ?');
+	my $sth = $self->dbh->prepare(qq!DELETE FROM rack WHERE id = ?!);
 	my $ret = $sth->execute($deleteId);
 	die "RMERR: Delete failed. This rack does not currently exist, it may have been removed already.\nError occured" if ($ret eq '0E0');
 }
@@ -817,7 +786,7 @@ sub _validateRackUpdate
 	die "RMERR_INTERNAL: Unable to validate rack. No rack record specified.\nError occured" unless ($record);
 	checkName($$record{'name'});
 	checkNotes($$record{'notes'});
-	die "RMERR: Rack sizes must be between 1 and ".MAXRACKSIZE." units.\nError occured" unless (($$record{'size'} > 1) && ($$record{'size'} < MAXRACKSIZE));
+	die "RMERR_INTERNAL: Rack sizes must be between 1 and ".MAXRACKSIZE." units.\nError occured" unless (($$record{'size'} > 1) && ($$record{'size'} < MAXRACKSIZE));
 	return ($$record{'name'}, $$record{'row'}, $$record{'row_pos'}, $$record{'hidden_rack'}, $$record{'size'}, $$record{'notes'});
 }
 
@@ -825,7 +794,7 @@ sub _validateRackUpdate
 # Hardware Methods                                                           #  
 ##############################################################################
 
-sub getHardware
+sub hardware
 {
 	my ($self, $id) = @_;
 	my $sth = $self->dbh->prepare(qq!
@@ -844,53 +813,81 @@ sub getHardware
 	return $hardware;
 }
 
-sub getHardwareList
+sub hardwareList
 {
 	my $self = shift;
 	my $orderBy = shift || '';
 	$orderBy = 'hardware.name' unless $orderBy =~ /^[a-z_]+\.[a-z_]+$/;	
-	$orderBy = 'hardware.meta_default_data, '.$orderBy;
 	my $sth = $self->dbh->prepare(qq!
 		SELECT
 			hardware.*,
 			org.name 				AS manufacturer_name
 		FROM hardware, org
-		WHERE hardware.manufacturer = org.id
+		WHERE
+			hardware.meta_default_data = 0 AND
+			hardware.manufacturer = org.id
 		ORDER BY $orderBy
 	!);
 	$sth->execute();
 	return $sth->fetchall_arrayref({});
 }
 
-sub updateHardware # should check if update/insert was successful
+sub hardwareListBasic
+{
+	my $self = shift;
+	my $sth = $self->dbh->prepare(qq!
+		SELECT
+			hardware.id,
+			hardware.name,
+			hardware.meta_default_data,
+			org.name 				AS manufacturer_name
+		FROM hardware, org
+		WHERE hardware.manufacturer = org.id
+		ORDER BY 
+			hardware.meta_default_data DESC,
+			hardware.name
+	!);
+	$sth->execute();
+	return $sth->fetchall_arrayref({});
+}
+
+sub updateHardware
 {
 	my ($self, $updateTime, $updateUser, $record) = @_;
+	die "RMERR: Unable to update hardware. No hardware record specified.\nError occured" unless ($record);
 	
-	my $sth;
+	my ($sth, $newId);
 	
-	if ($$record{'id'}) # if id is supplied peform an update
+	if ($$record{'id'})
 	{	
 		$sth = $self->dbh->prepare(qq!UPDATE hardware SET name = ?, manufacturer =?, size = ?, image = ?, support_url = ?, spec_url = ?, notes = ?, meta_update_time = ?, meta_update_user = ? WHERE id = ?!);
-		$sth->execute($self->validateHardwareUpdate($record), $updateTime, $updateUser, $$record{'id'});
+		my $ret = $sth->execute($self->_validateHardwareUpdate($record), $updateTime, $updateUser, $$record{'id'});
+		die "RMERR: Update failed. This hardware may have been removed before the update occured.\nError occured" if ($ret eq '0E0');
 	}
 	else
 	{
 		$sth = $self->dbh->prepare(qq!INSERT INTO hardware (name, manufacturer, size, image, support_url, spec_url, notes, meta_update_time, meta_update_user) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?)!);
-		$sth->execute($self->validateHardwareUpdate($record), $updateTime, $updateUser);
+		$sth->execute($self->_validateHardwareUpdate($record), $updateTime, $updateUser);
+		$newId = $self->_lastInsertId();
 	}
+	return $newId || $$record{'id'};
 }
 
-sub deleteHardware # should check we successfully deleted if possible
+sub deleteHardware
 {
 	my ($self, $updateTime, $updateUser, $record) = @_;
-	my $sth = $self->dbh->prepare('DELETE FROM hardware WHERE id = ?');
-	$sth->execute($$record{'id'});	
+	my $deleteId = (ref $record eq 'HASH') ? $$record{'id'} : $record;
+	die "RMERR: Delete failed. No hardware id specified.\nError occured" unless ($deleteId);
+	my $sth = $self->dbh->prepare(qq!DELETE FROM hardware WHERE id = ?!);
+	my $ret = $sth->execute($deleteId);
+	die "RMERR: Delete failed. This hardware does not currently exist, it may have been removed already.\nError occured" if ($ret eq '0E0');
 }
 
-sub validateHardwareUpdate
+sub _validateHardwareUpdate
 {
 	my ($self, $record) = @_;
-	
+	die "RMERR_INTERNAL: Unable to validate hardware. No hardware record specified.\nError occured" unless ($record);
+
 	$$record{'support_url'} = httpFixer($$record{'support_url'});
 	$$record{'spec_url'} = httpFixer($$record{'spec_url'});
 
@@ -911,7 +908,7 @@ sub validateHardwareUpdate
 # Operating System Methods                                                   #  
 ##############################################################################
 
-sub getOs
+sub os
 {
 	my ($self, $id) = @_;
 	my $sth = $self->dbh->prepare(qq!
@@ -930,50 +927,58 @@ sub getOs
 	return $os;
 }
 
-sub getOsList
+sub osList
 {
 	my $self = shift;
 	my $orderBy = shift || '';
 	$orderBy = 'os.name' unless $orderBy =~ /^[a-z_]+\.[a-z_]+$/;
-	$orderBy = 'os.meta_default_data, '.$orderBy;
 	my $sth = $self->dbh->prepare(qq!
 		SELECT 
 			os.*,
 			org.name 			AS manufacturer_name 
 		FROM os, org 
-		WHERE os.manufacturer = org.id
+		WHERE 
+			os.meta_default_data = 0 AND
+			os.manufacturer = org.id
 		ORDER BY $orderBy
 	!);
 	$sth->execute();
 	return $sth->fetchall_arrayref({});
 }
 
-sub updateOs # should check if update/insert was successful
+sub updateOs
 {
 	my ($self, $updateTime, $updateUser, $record) = @_;
+	die "RMERR: Unable to update OS. No OS record specified.\nError occured" unless ($record);
 
-	my $sth;
+	my ($sth, $newId);
 	
-	if ($$record{'id'}) # if id is supplied peform an update
+	if ($$record{'id'})
 	{	
 		$sth = $self->dbh->prepare(qq!UPDATE os SET name = ?, manufacturer = ?, notes = ?, meta_update_time = ?, meta_update_user = ? WHERE id = ?!);
-		$sth->execute($self->validateOs($record), $updateTime, $updateUser, $$record{'id'});
+		my $ret = $sth->execute($self->_validateOsUpdate($record), $updateTime, $updateUser, $$record{'id'});
+		die "RMERR: Update failed. This OS may have been removed before the update occured.\nError occured" if ($ret eq '0E0');
 	}
 	else
 	{
 		$sth = $self->dbh->prepare(qq!INSERT INTO os (name, manufacturer, notes, meta_update_time, meta_update_user) VALUES(?, ?, ?, ?, ?)!);
-		$sth->execute($self->validateOs($record), $updateTime, $updateUser);
+		$sth->execute($self->_validateOsUpdate($record), $updateTime, $updateUser);
+		$newId = $self->_lastInsertId();
 	}
+	return $newId || $$record{'id'};
 }
 
-sub deleteOs # should check we successfully deleted if possible
+sub deleteOs
 {
 	my ($self, $updateTime, $updateUser, $record) = @_;
+	my $deleteId = (ref $record eq 'HASH') ? $$record{'id'} : $record;
+	die "RMERR: Delete failed. No OS id specified.\nError occured" unless ($deleteId);
 	my $sth = $self->dbh->prepare(qq!DELETE FROM os WHERE id = ?!);
-	$sth->execute($$record{'id'});	
+	my $ret = $sth->execute($deleteId);
+	die "RMERR: Delete failed. This OS does not currently exist, it may have been removed already.\nError occured" if ($ret eq '0E0');
 }
 
-sub validateOs
+sub _validateOsUpdate
 {
 	my ($self, $record) = @_;
 	die "RMERR: You must specify a name for the operating system.\nError occured" unless (length($$record{'name'}) > 1);
@@ -988,7 +993,7 @@ sub validateOs
 # Organisation Methods                                                       #  
 ##############################################################################
 
-sub getOrg
+sub org
 {
 	my ($self, $id) = @_;
 	my $sth = $self->dbh->prepare(qq!
@@ -1002,48 +1007,55 @@ sub getOrg
 	return $org;
 }
 
-sub getOrgList
+sub orgList
 {
 	my $self = shift;
 	my $orderBy = shift || '';
 	$orderBy = 'org.name' unless $orderBy =~ /^[a-z_]+\.[a-z_]+$/;
-	$orderBy = 'org.meta_default_data, '.$orderBy;
 	
 	my $sth = $self->dbh->prepare(qq!
 		SELECT org.*
 		FROM org
- 		ORDER BY $orderBy
+		WHERE org.meta_default_data = 0
+		ORDER BY $orderBy
 	!);
 	$sth->execute();
 	return $sth->fetchall_arrayref({});
 }
 
-sub updateOrg # should check if update/insert was successful
+sub updateOrg
 {
 	my ($self, $updateTime, $updateUser, $record) = @_;
+	die "RMERR: Unable to update org. No org record specified.\nError occured" unless ($record);
+
+	my ($sth, $newId);
 	
-	my $sth;
-	
-	if ($$record{'id'}) # if id is supplied peform an update
+	if ($$record{'id'})
 	{	
 		$sth = $self->dbh->prepare(qq!UPDATE org SET name = ?, account_no = ?, customer = ?, software = ?, hardware = ?, descript = ?, home_page = ?, notes = ?, meta_update_time = ?, meta_update_user = ? WHERE id = ?!);
-		$sth->execute($self->validateOrgUpdate($record), $updateTime, $updateUser, $$record{'id'});
+		my $ret = $sth->execute($self->_validateOrgUpdate($record), $updateTime, $updateUser, $$record{'id'});
+		die "RMERR: Update failed. This org may have been removed before the update occured.\nError occured" if ($ret eq '0E0');
 	}
 	else
 	{
 		$sth = $self->dbh->prepare(qq!INSERT INTO org (name, account_no, customer, software, hardware, descript, home_page, notes, meta_update_time, meta_update_user) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?)!);
-		$sth->execute($self->validateOrgUpdate($record), $updateTime, $updateUser);
+		$sth->execute($self->_validateOrgUpdate($record), $updateTime, $updateUser);
+		$newId = $self->_lastInsertId();
 	}
+	return $newId || $$record{'id'};
 }
 
 sub deleteOrg
 {
 	my ($self, $updateTime, $updateUser, $record) = @_;
-	my $sth = $self->dbh->prepare('DELETE FROM org WHERE id = ?');
-	$sth->execute($$record{'id'});	
+	my $deleteId = (ref $record eq 'HASH') ? $$record{'id'} : $record;
+	die "RMERR: Delete failed. No org id specified.\nError occured" unless ($deleteId);
+	my $sth = $self->dbh->prepare(qq!DELETE FROM org WHERE id = ?!);
+	my $ret = $sth->execute($deleteId);
+	die "RMERR: Delete failed. This org does not currently exist, it may have been removed already.\nError occured" if ($ret eq '0E0');
 }
 
-sub validateOrgUpdate
+sub _validateOrgUpdate
 {
 	my ($self, $record) = @_;
 
@@ -1069,7 +1081,7 @@ sub validateOrgUpdate
 # Domain Methods                                                             #  
 ##############################################################################
 
-sub getDomain
+sub domain
 {
 	my ($self, $id) = @_;
 	my $sth = $self->dbh->prepare(qq!
@@ -1083,48 +1095,55 @@ sub getDomain
 	return $domain;
 }
 
-sub getDomainList
+sub domainList
 {
 	my $self = shift;
 	my $orderBy = shift || '';
 	$orderBy = 'domain.name' unless $orderBy =~ /^[a-z_]+\.[a-z_]+$/;
-	$orderBy = 'domain.meta_default_data, '.$orderBy;
 	
 	my $sth = $self->dbh->prepare(qq!
 		SELECT domain.*
 		FROM domain 
+		WHERE domain.meta_default_data = 0
 		ORDER BY $orderBy
 	!);
 	$sth->execute();
 	return $sth->fetchall_arrayref({});
 }
 
-sub updateDomain # should check if update/insert was successful
+sub updateDomain
 {
 	my ($self, $updateTime, $updateUser, $record) = @_;
+	die "RMERR: Unable to update domain. No domain record specified.\nError occured" unless ($record);
+
+	my ($sth, $newId);
 	
-	my $sth;
-	
-	if ($$record{'id'}) # if id is supplied peform an update
+	if ($$record{'id'})
 	{	
 		$sth = $self->dbh->prepare(qq!UPDATE domain SET name = ?, descript = ?, notes = ?, meta_update_time = ?, meta_update_user = ? WHERE id = ?!);
-		$sth->execute($self->validateDomainUpdate($record), $updateTime, $updateUser, $$record{'id'});
+		my $ret = $sth->execute($self->_validateDomainUpdate($record), $updateTime, $updateUser, $$record{'id'});
+		die "RMERR: Update failed. This domain may have been removed before the update occured.\nError occured" if ($ret eq '0E0');		
 	}
 	else
 	{
 		$sth = $self->dbh->prepare(qq!INSERT INTO domain (name, descript, notes, meta_update_time, meta_update_user) VALUES(?, ?, ?, ?, ?)!);
-		$sth->execute($self->validateDomainUpdate($record), $updateTime, $updateUser);
+		$sth->execute($self->_validateDomainUpdate($record), $updateTime, $updateUser);
+		$newId = $self->_lastInsertId();
 	}
+	return $newId || $$record{'id'};
 }
 
 sub deleteDomain
 {
 	my ($self, $updateTime, $updateUser, $record) = @_;
+	my $deleteId = (ref $record eq 'HASH') ? $$record{'id'} : $record;
+	die "RMERR: Delete failed. No domain id specified.\nError occured" unless ($deleteId);
 	my $sth = $self->dbh->prepare(qq!DELETE FROM domain WHERE id = ?!);
-	$sth->execute($$record{'id'});	
+	my $ret = $sth->execute($deleteId);
+	die "RMERR: Delete failed. This domain does not currently exist, it may have been removed already.\nError occured" if ($ret eq '0E0');
 }
 
-sub validateDomainUpdate # Should we remove or warn on domains beginning with . ?
+sub _validateDomainUpdate # Should we remove or warn on domains beginning with . ?
 {
 	my ($self, $record) = @_;
 	die "RMERR: You must specify a name for the domain.\nError occured" unless (length($$record{'name'}) > 1);
@@ -1139,14 +1158,13 @@ sub validateDomainUpdate # Should we remove or warn on domains beginning with . 
 # Device Methods                                                             #  
 ##############################################################################
 
-sub getDevice
+sub device
 {
 	my ($self, $id) = @_;
 	my $sth = $self->dbh->prepare(qq!
 		SELECT 
 			device.*, 
 			rack.name 					AS rack_name,
-			rack.id						AS rack_id,
 			row.name					AS row_name,
 			row.id						AS row_id,
 			room.name					AS room_name,
@@ -1156,6 +1174,8 @@ sub getDevice
 			building.id					AS building_id,	
 			building.meta_default_data	AS building_meta_default_data,
 			hardware.name 				AS hardware_name,
+			hardware.size 				AS hardware_size,
+			hardware.meta_default_data	AS hardware_meta_default_data,
 			hardware_manufacturer.name	AS hardware_manufacturer_name,
 			role.name 					AS role_name, 
 			os.name 					AS os_name, 
@@ -1184,17 +1204,15 @@ sub getDevice
 	return $device;
 }
 
-sub getDeviceList
+sub deviceList
 {
 	my $self = shift;
 	my $orderBy = shift || '';
 	$orderBy = 'device.name' unless $orderBy =~ /^[a-z_]+\.[a-z_]+$/;	
-	$orderBy = 'device.meta_default_data, '.$orderBy;
 	my $sth = $self->dbh->prepare(qq!
 		SELECT 
 			device.*, 
 			rack.name 					AS rack_name,
-			rack.id						AS rack_id,
 			row.name					AS row_name,
 			row.id						AS row_id,
 			room.name					AS room_name,
@@ -1204,6 +1222,8 @@ sub getDeviceList
 			building.id					AS building_id,	
 			building.meta_default_data	AS building_meta_default_data,
 			hardware.name 				AS hardware_name,
+			hardware.size 				AS hardware_size,
+			hardware.meta_default_data	AS hardware_meta_default_data,
 			hardware_manufacturer.name	AS hardware_manufacturer_name,
 			role.name 					AS role_name, 
 			os.name 					AS os_name, 
@@ -1213,6 +1233,7 @@ sub getDeviceList
 			domain.meta_default_data	AS domain_meta_default_data
 		FROM device, rack, row, room, building, hardware, org hardware_manufacturer, role, os, org customer, service, domain 
 		WHERE 
+			device.meta_default_data = 0 AND
 			device.rack = rack.id AND 
 			rack.row = row.id AND
 			row.room = room.id AND
@@ -1230,7 +1251,7 @@ sub getDeviceList
 	return $sth->fetchall_arrayref({});
 }
 
-sub getDeviceListInRack
+sub deviceListInRack
 {
 	my ($self, $rack) = @_;
 	$rack += 0; # force rack to be numerical
@@ -1249,6 +1270,7 @@ sub getDeviceListInRack
 		FROM
 			device, rack, row, room, building, hardware, org hardware_manufacturer, domain
 		WHERE
+			device.meta_default_data = 0 AND
 			device.rack = rack.id AND 
 			rack.row = row.id AND
 			row.room = room.id AND
@@ -1267,51 +1289,44 @@ sub getDeviceListInRack
 
 sub updateDevice
 {
-	my $self = shift;
-	my $id = shift;
-	eval { $self->getEntryBasic($id, 'device'); };
-	die 'RMERR: That id is not a valid device. Another user may have removed this device entry.' if ($@);
-	my $sth = $self->dbh->prepare('UPDATE device SET name = ?, rack =?, rack_pos = ?, hardware = ?, serial = ?, asset = ?, purchased = ?, os = ?, customer = ?, service = ?, role = ?, monitor_url =?, notes = ? WHERE id = ?');
-	$sth->execute($self->validateDeviceInput(@_), $id);
-}
+	my ($self, $updateTime, $updateUser, $record) = @_;
+	die "RMERR: Unable to update device. No building device specified.\nError occured" unless ($record);
+	
+	my ($sth, $newId);
 
-sub createDevice
-{
-	my $self = shift;
-	my $sth = $self->dbh->prepare('INSERT INTO device (name, rack, rack_pos, hardware, serial, asset, purchased, os, customer, service, role, monitor_url, notes) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)');
-	$sth->execute($self->validateDeviceInput(@_));
+	if ($$record{'id'})
+	{	
+		$sth = $self->dbh->prepare(qq!UPDATE device SET name = ?, domain = ?, rack = ?, rack_pos = ?, hardware = ?, serial_no = ?, asset_no = ?, purchased = ?, os = ?, customer = ?, service = ?, role = ?, in_service = ?, notes = ?, meta_update_time = ?, meta_update_user = ? WHERE id = ?!);
+		my $ret = $sth->execute($self->_validateDeviceInput($record), $updateTime, $updateUser, $$record{'id'});
+		die "RMERR: Update failed. This device may have been removed before the update occured.\nError occured" if ($ret eq '0E0');
+	}
+	else
+	{
+		$sth = $self->dbh->prepare(qq!INSERT INTO device (name, domain, rack, rack_pos, hardware, serial_no, asset_no, purchased, os, customer, service, role, in_service, notes, meta_update_time, meta_update_user) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)!);
+		$sth->execute($self->_validateDeviceInput($record), $updateTime, $updateUser);
+		$newId = $self->_lastInsertId();
+	}
+	return $newId || $$record{'id'};
 }
 
 sub deleteDevice
 {
-	my ($self, $record) = @_;
-	my $sth = $self->dbh->prepare('DELETE FROM device WHERE id = ?');
-	$sth->execute($$record{'id'});	
+	my ($self, $updateTime, $updateUser, $record) = @_;
+	my $deleteId = (ref $record eq 'HASH') ? $$record{'id'} : $record;
+	die "RMERR: Delete failed. No device id specified.\nError occured" unless ($deleteId);
+	my $sth = $self->dbh->prepare(qq!DELETE FROM device WHERE id = ?!);
+	my $ret = $sth->execute($deleteId);
+	die "RMERR: Delete failed. This device does not currently exist, it may have been removed already.\nError occured" if ($ret eq '0E0');
 }
 
-sub validateDeviceInput
+sub _validateDeviceInput # doesn't check much at present
 {
-	my ($self, $name, $rack, $rackPos, $hardware, $serial, $asset, $purchased, $os, $customer, $service, $role, $monitor, $notes) = @_;
-	$monitor = httpFixer($monitor);
-	die 'RMERR: Names must be between 1 and '.MAXSTRING.' characters.' unless ((length($name) > 1) && (length($name) <= MAXSTRING));
-	eval { $self->getEntryBasic($rack, 'rack'); };
-	die 'RMERR: That id is not a valid rack. Please check your rack list.' if ($@);
-	die 'RMERR: Rack position must be between 0 and '.MAXRACKSIZE.' units.' unless (($rackPos > 0) && ($rackPos <= MAXRACKSIZE)); # should actually check size of rack here
-	eval { $self->getEntryBasic($hardware, 'hardware'); };
-	die 'RMERR: That id is not a valid piece of hardware. Please check your hardware list.' if ($@);
-	die 'RMERR: Serial number must be between 0 and '.MAXSTRING.' characters.' unless ((length($serial) >= 0) && (length($serial) < MAXSTRING));
-	die 'RMERR: Asset number must be between 0 and '.MAXSTRING.' characters.' unless ((length($asset) >= 0) && (length($asset) < MAXSTRING));
-	eval { $self->getEntryBasic($os, 'os'); };
-	die 'RMERR: That id is not a valid operating system. Please check your os list.' if ($@);
-	eval { $self->getEntryBasic($customer, 'org'); };
-	die 'RMERR: That id is not a valid customer. Please check your organisation list.' if ($@); # should also check it's actually a customer
-	eval { $self->getEntryBasic($service, 'service'); };
-	die 'RMERR: That id is not a valid service level. Please check your service level list list.' if ($@);
-	eval { $self->getEntryBasic($role, 'role'); };
-	die 'RMERR: That id is not a valid role. Please check your role list.' if ($@);	
-	die 'RMERR: Monitoring URLs must be between 0 and '.MAXSTRING.' characters.' unless ((length($monitor) >= 0) && (length($monitor) <= MAXSTRING));
-	die 'RMERR: Notes cannot exceed '.MAXNOTE.' characters.' unless (length($notes) <= MAXNOTE);
-	return ($name, $rack, $rackPos, $hardware, $serial, $asset, $purchased, $os, $customer, $service, $role, $monitor, $notes);
+	my ($self, $record) = @_;
+	die "RMERR_INTERNAL: Unable to validate device. No device record specified.\nError occured" unless ($record);
+	checkName($$record{'name'});
+	checkNotes($$record{'notes'});
+	
+	return ($$record{'name'}, $$record{'domain'}, $$record{'rack'}, $$record{'rack_pos'}, $$record{'hardware'}, $$record{'serial_no'}, $$record{'asset_no'}, $$record{'purchased'}, $$record{'os'}, $$record{'customer'}, $$record{'service'}, $$record{'role'}, $$record{'in_service'}, $$record{'notes'});
 }
 
 
@@ -1319,7 +1334,7 @@ sub validateDeviceInput
 # Role Methods                                                               #  
 ##############################################################################
 
-sub getRole
+sub role
 {
 	my ($self, $id) = @_;
 	my $sth = $self->dbh->prepare(qq!
@@ -1333,54 +1348,61 @@ sub getRole
 	return $role;
 }
 
-sub getRoleList
+sub roleList
 {
 	my $self = shift;
 	my $orderBy = shift || '';
 	$orderBy = 'role.name' unless $orderBy =~ /^[a-z_]+\.[a-z_]+$/;	
-	$orderBy = 'role.meta_default_data, '.$orderBy;
 	my $sth = $self->dbh->prepare(qq!
 		SELECT role.* 
 		FROM role 
+		WHERE role.meta_default_data = 0
 		ORDER BY $orderBy
 	!);
 	$sth->execute();
 	return $sth->fetchall_arrayref({});
 }
 
-sub updateRole # should check if update/insert was successful
+sub updateRole
 {
 	my ($self, $updateTime, $updateUser, $record) = @_;
-	
-	my $sth;
+	die "RMERR: Unable to update role. No role record specified.\nError occured" unless ($record);
+
+	my ($sth, $newId);
 	
 	if ($$record{'id'}) # if id is supplied peform an update
 	{	
 		$sth = $self->dbh->prepare(qq!UPDATE role SET name = ?, descript = ?, notes = ?, meta_update_time = ?, meta_update_user = ? WHERE id = ?!);
-		$sth->execute($self->validateDomainUpdate($record), $updateTime, $updateUser, $$record{'id'});
+		my $ret = $sth->execute($self->_validateRoleUpdate($record), $updateTime, $updateUser, $$record{'id'});
+		die "RMERR: Update failed. This role may have been removed before the update occured.\nError occured" if ($ret eq '0E0');
 	}
 	else
 	{
 		$sth = $self->dbh->prepare(qq!INSERT INTO role (name, descript, notes, meta_update_time, meta_update_user) VALUES(?, ?, ?, ?, ?)!);
-		$sth->execute($self->validateDomainUpdate($record), $updateTime, $updateUser);
+		$sth->execute($self->_validateDomainUpdate($record), $updateTime, $updateUser);
+		$newId = $self->_lastInsertId();
 	}
+	return $newId || $$record{'id'};
 }
 
 sub deleteRole
 {
 	my ($self, $updateTime, $updateUser, $record) = @_;
-	my $sth = $self->dbh->prepare('DELETE FROM role WHERE id = ?');
-	$sth->execute($$record{'id'});	
+	my $deleteId = (ref $record eq 'HASH') ? $$record{'id'} : $record;
+	die "RMERR: Delete failed. No role id specified.\nError occured" unless ($deleteId);
+	my $sth = $self->dbh->prepare(qq!DELETE FROM role WHERE id = ?!);
+	my $ret = $sth->execute($deleteId);
+	die "RMERR: Delete failed. This role does not currently exist, it may have been removed already.\nError occured" if ($ret eq '0E0');
 }
 
-sub validateRoleUpdate
+sub _validateRoleUpdate
 {
 	my ($self, $record) = @_;
 	die "RMERR: You must specify a name for the role.\nError occured" unless (length($$record{'name'}) > 1);
 	die "RMERR: Names must be less than ".MAXSTRING." characters.\nError occured" unless (length($$record{'name'}) <= MAXSTRING);
 	die "RMERR: Descriptions cannot exceed ".MAXSTRING." characters.\nError occured" unless (length($$record{'desc'}) <= MAXSTRING);
 	die "RMERR: Notes cannot exceed ".MAXNOTE." characters.\nError occured" unless (length($$record{'notes'}) <= MAXNOTE);
-	return ($$record{'name'}, $$record{'desc'}, $$record{'notes'});
+	return ($$record{'name'}, $$record{'descript'}, $$record{'notes'});
 }
 
 
@@ -1388,7 +1410,7 @@ sub validateRoleUpdate
 # Service Level Methods                                                      #  
 ##############################################################################
 
-sub getService
+sub service
 {
 	my ($self, $id) = @_;
 	my $sth = $self->dbh->prepare(qq!
@@ -1402,47 +1424,54 @@ sub getService
 	return $service;
 }
 
-sub getServiceList
+sub serviceList
 {
 	my $self = shift;
 	my $orderBy = shift || '';
 	$orderBy = 'service.name' unless $orderBy =~ /^[a-z_]+\.[a-z_]+$/;	
-	$orderBy = 'service.meta_default_data, '.$orderBy;
 	my $sth = $self->dbh->prepare(qq!
 		SELECT service.* 
 		FROM service 
+		WHERE service.meta_default_data = 0
 		ORDER BY $orderBy
 	!);
 	$sth->execute();
 	return $sth->fetchall_arrayref({});
 }
 
-sub updateService # should check if update/insert was successful
+sub updateService
 {
 	my ($self, $updateTime, $updateUser, $record) = @_;
+	die "RMERR: Unable to update service level. No service level record specified.\nError occured" unless ($record);
+
+	my ($sth, $newId);
 	
-	my $sth;
-	
-	if ($$record{'id'}) # if id is supplied peform an update
+	if ($$record{'id'})
 	{	
 		$sth = $self->dbh->prepare(qq!UPDATE service SET name = ?, descript = ?, notes = ?, meta_update_time = ?, meta_update_user = ? WHERE id = ?!);
-		$sth->execute($self->validateServiceUpdate($record), $updateTime, $updateUser, $$record{'id'});
+		my $ret = $sth->execute($self->_validateServiceUpdate($record), $updateTime, $updateUser, $$record{'id'});
+		die "RMERR: Update failed. This service level may have been removed before the update occured.\nError occured" if ($ret eq '0E0');
 	}
 	else
 	{
 		$sth = $self->dbh->prepare(qq!INSERT INTO service (name, descript, notes, meta_update_time, meta_update_user) VALUES(?, ?, ?, ?, ?)!);
-		$sth->execute($self->validateServiceUpdate($record), $updateTime, $updateUser);
+		$sth->execute($self->_validateServiceUpdate($record), $updateTime, $updateUser);
+		$newId = $self->_lastInsertId();
 	}
+	return $newId || $$record{'id'};
 }
 
 sub deleteService
 {
 	my ($self, $updateTime, $updateUser, $record) = @_;
-	my $sth = $self->dbh->prepare('DELETE FROM service WHERE id = ?');
-	$sth->execute($$record{'id'});	
+	my $deleteId = (ref $record eq 'HASH') ? $$record{'id'} : $record;
+	die "RMERR: Delete failed. No service level id specified.\nError occured" unless ($deleteId);
+	my $sth = $self->dbh->prepare(qq!DELETE FROM service WHERE id = ?!);
+	my $ret = $sth->execute($deleteId);
+	die "RMERR: Delete failed. This service level does not currently exist, it may have been removed already.\nError occured" if ($ret eq '0E0');
 }
 
-sub validateServiceUpdate
+sub _validateServiceUpdate
 {
 	my ($self, $record) = @_;
 	die "RMERR: You must specify a name for the service level.\nError occured" unless (length($$record{'name'}) > 1);
@@ -1457,6 +1486,8 @@ sub validateServiceUpdate
 # Application Methods                                                        #  
 ##############################################################################
 
+# Still under development
+
 1;
 
 =head1 NAME
@@ -1469,7 +1500,7 @@ RackMonkey::Engine - A DBI-based backend for Rackmonkey
 
  my $dbh = DBI->connect('dbi:SQLite:dbname=/data/rack/rack.db', '', '');
  my $engine = new RackMonkey::Engine($dbh);
- my $org = $engine->getOrg(1);
+ my $org = $engine->org(1);
  print 'The org with id 1 has the name: '.$$org{'name'};
 
 =head1 DESCRIPTION
@@ -1509,10 +1540,9 @@ The following methods are generic and don't apply to a particular type of
 RackMonkey entry.
 
  new ($dbh)
- getEntryBasic($id, $table)
- getListBasic($table)
- getListBasicSelected($table, $selectedId)
- getEntryId($name, $table)
+ entryBasic($id, $table)
+ listBasic($table)
+ listBasicMeta($table)
  performAct() 
 
 =head2 new($dbh)
@@ -1528,24 +1558,24 @@ database handles from other databases will produce undefined results.
 
 =head1 BUILDING METHODS
 
- getBuilding($id)
- getBuildingCount()
- getBuildingList([$orderBy])
+ building($id)
+ buildingCount()
+ buildingList([$orderBy])
  updateBuilding($updateTime, $updateUser, $record)
  deleteBuilding($updateTime, $updateUser, $record)
  deleteBuildingList($updateTime, $updateUser, $buildingList)
 
-=head2 getBuilding($id)
+=head2 building($id)
 
 Gets a hash reference to one building specified by $id. If there is no such
 building the library dies.
 
-=head2 getBuildingCount()
+=head2 buildingCount()
 
 Returns the number of real buildings stored in RackMonkey. Meta buildings
 (such as 'unknown') are not counted.
 
-=head2 getBuildingList([$orderBy])
+=head2 buildingList([$orderBy])
 
 Gets a list of all buildings ordered by the property $orderBy. If $orderBy is
 not specified, buildings are ordered by their name (but with default data,
@@ -1582,27 +1612,26 @@ unless all the deletes succeed the Engine dies.
 
 =head1 ROOM METHODS
 
- getRoom($id)
- getRoomCount()
- getRoomList([$orderBy])
- getRoomListInBuilding($building [, $orderBy]) 
- getRoomListBasic()
- getRoomListBasicSelected($selectedId)
+ room($id)
+ roomCount()
+ roomList([$orderBy])
+ roomListInBuilding($building [, $orderBy]) 
+ roomListBasic()
  updateRoom($updateTime, $updateUser, $record)
  deleteRoom($updateTime, $updateUser, $record)
  deleteRoomList($updateTime, $updateUser, $roomList)
 
-=head2 getRoom($id)
+=head2 room($id)
 
 Gets a hash reference to one room specified by $id. If there is no such room
 the engine dies.
 
-=head2 getRoomCount()
+=head2 roomCount()
 
 Returns the number of real rooms stored in RackMonkey. Meta rooms (such as
 'unknown') are not counted.
 
-=head2 getRoomList([$orderBy])
+=head2 roomList([$orderBy])
 
 Gets a list of all rooms ordered by the property $orderBy. If $orderBy is not
 specified, rooms are ordered by their building, then their name (but with
@@ -1610,24 +1639,17 @@ default data, such as 'unknown', last in the list). If no rooms exist the
 returned list will be empty. Returns a reference to an array of hash
 references. One hash reference per room.
 
-=head2 getRoomListInBuilding($building [, $orderBy])
+=head2 roomListInBuilding($building [, $orderBy])
 
-As for getRoomList, but limits rooms returned to those in the building 
+As for roomList, but limits rooms returned to those in the building 
 identified by the id $building. If the building doesn't exist, or is empty of
 rooms, the returned list will be empty.
 
-=head2 getRoomListBasic()
+=head2 roomListBasic()
 
-Because rooms reside in buildings, the common getListBasic() is often not what 
-you want. getRoomListBasic works just like getListBasic(), but returns the
+Because rooms reside in buildings, the common listBasic() is often not what 
+you want. roomListBasic works just like listBasic(), but returns the
 building name too. If no rooms exist the returned list will be empty.
-
-=head2 getRoomListBasicSelected($selectedId)
-
-As getRoomListBasic(), but also returns 'selected' for the room identified by 
-the id $selectedId. This method is useful for generating lists for dropdowns
-with a value selected. If no room matches $selectedId, no error is raised and
-no room is selected. If no rooms exist the returned list will be empty.
 
 =head2 updateRoom($updateTime, $updateUser, $record)
 

@@ -10,16 +10,32 @@ INSERT INTO rm_meta(id, name, value) VALUES (1, 'system_version', '1.2');
 INSERT INTO rm_meta(id, name, value) VALUES (2, 'system_build', '%BUILD%');
 
 -- default buildings
-INSERT INTO building (id, name, name_short, notes, meta_default_data, meta_update_time, meta_update_user) VALUES (1, 'unknown', 'unknown', 'Default data included with RackMonkey.', 1, '2007-01-01 00:00:00', 'install');
+INSERT INTO building (id, name, name_short, notes, meta_default_data, meta_update_time, meta_update_user) VALUES (1, 'unknown', 'unknown', 'Default data included with RackMonkey.', 5, '2007-01-01 00:00:00', 'install');
+INSERT INTO building (id, name, name_short, notes, meta_default_data, meta_update_time, meta_update_user) VALUES (2, 'planned', 'plan', 'Default data included with RackMonkey.', 4, '2007-01-01 00:00:00', 'install');
+INSERT INTO building (id, name, name_short, notes, meta_default_data, meta_update_time, meta_update_user) VALUES (3, 'on order', 'order', 'Default data included with RackMonkey.', 3, '2007-01-01 00:00:00', 'install');
+INSERT INTO building (id, name, name_short, notes, meta_default_data, meta_update_time, meta_update_user) VALUES (4, 'being repaired', 'repair', 'Default data included with RackMonkey.', 2, '2007-01-01 00:00:00', 'install');
+INSERT INTO building (id, name, name_short, notes, meta_default_data, meta_update_time, meta_update_user) VALUES (5, 'decommissioned', 'decom', 'Default data included with RackMonkey.', 1, '2007-01-01 00:00:00', 'install');
 
 -- default rooms
-INSERT INTO room (id, name, building, has_rows, notes, meta_default_data, meta_update_time, meta_update_user) VALUES (1, 'unknown', 1, 0, 'Default data included with RackMonkey.', 1, '2007-01-01 00:00:00', 'install');
+INSERT INTO room (id, name, building, has_rows, notes, meta_default_data, meta_update_time, meta_update_user) VALUES (1, 'unknown', 1, 0, 'Default data included with RackMonkey.', 5, '2007-01-01 00:00:00', 'install');
+INSERT INTO room (id, name, building, has_rows, notes, meta_default_data, meta_update_time, meta_update_user) VALUES (2, 'planned', 2, 0, 'Default data included with RackMonkey.', 4, '2007-01-01 00:00:00', 'install');
+INSERT INTO room (id, name, building, has_rows, notes, meta_default_data, meta_update_time, meta_update_user) VALUES (3, 'on order', 3, 0, 'Default data included with RackMonkey.', 3, '2007-01-01 00:00:00', 'install');
+INSERT INTO room (id, name, building, has_rows, notes, meta_default_data, meta_update_time, meta_update_user) VALUES (4, 'being repaired', 4, 0, 'Default data included with RackMonkey.', 2, '2007-01-01 00:00:00', 'install');
+INSERT INTO room (id, name, building, has_rows, notes, meta_default_data, meta_update_time, meta_update_user) VALUES (5, 'decommissioned', 5, 0, 'Default data included with RackMonkey.', 1, '2007-01-01 00:00:00', 'install');
 
 -- default rows
-INSERT INTO row (id, name, room, room_pos, hidden_row, notes, meta_default_data, meta_update_time, meta_update_user) VALUES (1, 'unknown', 1, 1, 1, 'Default data included with RackMonkey.', 1, '2007-01-01 00:00:00', 'install');
+INSERT INTO row (id, name, room, room_pos, hidden_row, notes, meta_default_data, meta_update_time, meta_update_user) VALUES (1, 'unknown', 1, 1, 1, 'Default data included with RackMonkey.', 5, '2007-01-01 00:00:00', 'install');
+INSERT INTO row (id, name, room, room_pos, hidden_row, notes, meta_default_data, meta_update_time, meta_update_user) VALUES (2, 'planned', 2, 1, 1, 'Default data included with RackMonkey.', 4, '2007-01-01 00:00:00', 'install');
+INSERT INTO row (id, name, room, room_pos, hidden_row, notes, meta_default_data, meta_update_time, meta_update_user) VALUES (3, 'on order', 3, 1, 1, 'Default data included with RackMonkey.', 3, '2007-01-01 00:00:00', 'install');
+INSERT INTO row (id, name, room, room_pos, hidden_row, notes, meta_default_data, meta_update_time, meta_update_user) VALUES (4, 'being repaired', 4, 1, 1, 'Default data included with RackMonkey.', 2, '2007-01-01 00:00:00', 'install');
+INSERT INTO row (id, name, room, room_pos, hidden_row, notes, meta_default_data, meta_update_time, meta_update_user) VALUES (5, 'decommissioned', 5, 1, 1, 'Default data included with RackMonkey.', 1, '2007-01-01 00:00:00', 'install');
 
 -- default racks
-INSERT INTO rack (id, name, row, row_pos, notes, meta_default_data, meta_update_time, meta_update_user) VALUES (1, 'unknown', 1, 1, 'Default data included with RackMonkey.', 1, '2007-01-01 00:00:00', 'install');
+INSERT INTO rack (id, name, row, row_pos, notes, meta_default_data, meta_update_time, meta_update_user) VALUES (1, 'unknown', 1, 1, 'Default data included with RackMonkey.', 5, '2007-01-01 00:00:00', 'install');
+INSERT INTO rack (id, name, row, row_pos, notes, meta_default_data, meta_update_time, meta_update_user) VALUES (2, 'planned', 2, 1, 'Default data included with RackMonkey.', 4, '2007-01-01 00:00:00', 'install');
+INSERT INTO rack (id, name, row, row_pos, notes, meta_default_data, meta_update_time, meta_update_user) VALUES (3, 'on order', 3, 1, 'Default data included with RackMonkey.', 3, '2007-01-01 00:00:00', 'install');
+INSERT INTO rack (id, name, row, row_pos, notes, meta_default_data, meta_update_time, meta_update_user) VALUES (4, 'being repaired', 4, 1, 'Default data included with RackMonkey.', 2, '2007-01-01 00:00:00', 'install');
+INSERT INTO rack (id, name, row, row_pos, notes, meta_default_data, meta_update_time, meta_update_user) VALUES (5, 'decommissioned', 5, 1, 'Default data included with RackMonkey.', 1, '2007-01-01 00:00:00', 'install');
 
 -- default organisation
 INSERT INTO org (id, name, account_no, customer, software, hardware, descript, home_page, notes, meta_default_data, meta_update_time, meta_update_user) VALUES(1, 'unknown', NULL, 1, 1, 1, 'Organisation not known.', NULL, 'Default data included with RackMonkey.', 2, '2007-01-01 00:00:00', 'install');
