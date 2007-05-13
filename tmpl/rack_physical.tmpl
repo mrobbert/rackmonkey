@@ -42,7 +42,7 @@
 		<TMPL_IF NAME=name> <a title="View details for <TMPL_VAR ESCAPE=HTML NAME=name><TMPL_UNLESS NAME=domain_meta_default_data>.<TMPL_VAR ESCAPE=HTML NAME=domain_name></TMPL_UNLESS>" href="<TMPL_VAR NAME=base_url>?view=device&amp;view_type=single&amp;id=<TMPL_VAR NAME=id>"><TMPL_VAR ESCAPE=HTML NAME=name></a></TMPL_IF>
 		<TMPL_IF NAME=hardware_name>(<TMPL_VAR NAME=hardware_manufacturer_name> <TMPL_VAR NAME=hardware_name>)</TMPL_IF>
 		<TMPL_IF NAME=name> [<a title="Edit device '<TMPL_VAR ESCAPE=HTML NAME=name>'" href="<TMPL_VAR NAME=base_url>?view=device&amp;view_type=edit&amp;id=<TMPL_VAR NAME=id>">Edit</a>]
-		<TMPL_ELSE><a title="Add a device in this rack at this location" href="<TMPL_VAR NAME=base_url>?view=device&amp;view_type=create&amp;rack=<TMPL_VAR NAME=rack_id>&amp;position=<TMPL_VAR NAME=rack_pos>">(+)</a></TMPL_IF></td></TMPL_IF>
+		<TMPL_ELSE><a title="Add a device in this rack at this location" href="<TMPL_VAR NAME=base_url>?view=device&amp;view_type=create&amp;select_rack=<TMPL_VAR NAME=rack_id>&amp;select_position=<TMPL_VAR NAME=rack_pos>">(+)</a></TMPL_IF></td></TMPL_IF>
 	</tr></TMPL_LOOP>
 </table>
 </TMPL_LOOP>
