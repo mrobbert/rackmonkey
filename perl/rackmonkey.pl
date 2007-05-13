@@ -191,7 +191,7 @@ eval
 				my $selectedRole = $cgi->lastCreatedId; 
 				my $selectedCustomer = $cgi->lastCreatedId; 
 				my $selectedService = $cgi->lastCreatedId;
-				my $selectedRack = $cgi->lastCreatedId; 
+				my $selectedRack = $cgi->selectProperty('rack') || $cgi->lastCreatedId; 
 				my $selectedDomain = $cgi->lastCreatedId; 
 				
 
@@ -222,6 +222,7 @@ eval
 					$template->param('servicelist' => $cgi->selectItem($backend->listBasicMeta('service'), $selectedService));
 					$template->param('racklist' => $cgi->selectRack($backend->rackListBasic, $selectedRack));
 					$template->param('domainlist' => $cgi->selectItem($backend->listBasicMeta('domain'), $selectedDomain));
+					$template->param('rack_pos' => $cgi->selectProperty('position'));
 				}
 			}
 		}	
@@ -282,7 +283,7 @@ eval
 			}
 			else
 			{
-				my $selectedBuilding = $cgi->lastCreatedId || $cgi->buildingId;
+				my $selectedBuilding = $cgi->lastCreatedId || $cgi->id('building');
 	
 				if (($viewType =~ /^edit/) || ($viewType =~ /^single/))
 				{
@@ -304,8 +305,8 @@ eval
 		}
 		elsif ($view eq 'row')
 		{
-			$template->param('rows' => $backend->rowListInRoom($cgi->roomId));
-			$template->param($backend->room($cgi->roomId));
+			$template->param('rows' => $backend->rowListInRoom($cgi->id('room')));
+			$template->param($backend->room($cgi->id('room')));
 		}
 		elsif ($view eq 'rack')
 		{
@@ -330,7 +331,7 @@ eval
 			}
 			else
 			{
-				my $selectedRoom = $cgi->lastCreatedId || $cgi->roomId;
+				my $selectedRoom = $cgi->lastCreatedId || $cgi->id('room');
 				
 				if (($viewType =~ /^edit/) || ($viewType =~ /^single/))
 				{
