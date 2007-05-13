@@ -164,20 +164,12 @@ sub hardware
 	return $self->cgi->param('hardware') ? 1 : 0;	
 }
 
-sub buildingId
+sub id
 {
-	my $self = shift;
-	my $id = $self->cgi->param('building_id');	
+	my ($self, $view) = @_;
+	my $id = $self->cgi->param($view.'_id');	
 	$id += 0;
-	return $id;
-}
-
-sub roomId
-{
-	my $self = shift;
-	my $id = $self->cgi->param('room_id');	
-	$id += 0;
-	return $id;
+	return $id;	
 }
 
 sub rackList
@@ -185,6 +177,14 @@ sub rackList
 	my $self = shift;
 	return $self->cgi->param('rack_list');
 }
+
+sub selectProperty # should get all prefill vars going via this sub
+{
+	my ($self, $property) = @_;
+	return $self->cgi->param('select_'.$property);	
+}
+
+
 
 ##############################################################################
 # Select List Methods                                                        #
