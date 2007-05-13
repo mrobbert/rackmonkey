@@ -318,7 +318,7 @@ eval
 			{
 				my @rackIdList = $cgi->rackList;
 				push (@rackIdList, $id) if (scalar(@rackIdList) == 0); # add current rack id if no list
-				die "RMERR: You need to select at least one rack to display. Error occured at" unless $rackIdList[0];
+				die "RMERR: You need to select at least one rack to display.\nError occured" unless $rackIdList[0];
 				my @racks;
 				for my $rackId (@rackIdList)
 				{
