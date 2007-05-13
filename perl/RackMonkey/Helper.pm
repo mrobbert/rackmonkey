@@ -17,7 +17,7 @@ our $VERSION = '1.2.%BUILD%';
 our $AUTHOR = 'Will Green (wgreen at users.sourceforge.net)';
 
 use base 'Exporter';
-our @EXPORT = qw/shortStr shortURL httpFixer calculateAge checkName checkNotes/;
+our @EXPORT = qw/shortStr shortURL httpFixer calculateAge checkName checkNotes checkDate/;
 
 sub shortStr
 {
@@ -90,6 +90,16 @@ sub checkNotes
 	{
 		die "RMERR: Notes cannot exceed ".MAXNOTE." characters.\nError occured";
 	}
+}
+
+sub checkDate
+{
+	my $date = shift;
+	return unless $date;
+	die "RMERR: Date not in valid format (YYYY-MM-DD).\nError occured" unless $date =~ /^\d{4}-\d\d?-\d\d?$/;
+	my ($year, $month, $day) = split '-', $date;
+	eval { timelocal(0, 0, 12, $day, $month, $year); };
+	die "RMERR: $year-$month-$day is not a valid date of the form YYYY-MM-DD.\n$@\nError occured" if ($@);
 }
 
 1;
