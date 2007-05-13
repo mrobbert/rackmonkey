@@ -130,9 +130,7 @@ sub building
 	my $sth = $self->dbh->prepare(qq!
 		SELECT building.* 
 		FROM building 
-		WHERE 
-			meta_default_data = 0 AND
-			id = ?
+		WHERE id = ?
 	!);
 	$sth->execute($id);	
 	my $building = $sth->fetchrow_hashref('NAME_lc');
@@ -232,7 +230,6 @@ sub room
 			building.name_short	AS building_name_short
 		FROM room, building 
 		WHERE
-			room.meta_default_data = 0 AND
 			room.building = building.id AND
 			room.id = ?
 	!);
@@ -421,7 +418,6 @@ sub row
 			building.name_short	AS building_name_short
 		FROM row, room, building 
 		WHERE
-			row.meta_default_data = 0 AND
 			row.room = room.id AND
 			room.building = building.id AND
 			row.id = ?
@@ -570,7 +566,6 @@ sub rack
 			building.name_short	AS building_name_short
 			FROM rack, row, room, building 
 		WHERE
-			rack.meta_default_data = 0 AND
 			rack.row = row.id AND
 			row.room = room.id AND
 			room.building = building.id AND
@@ -663,7 +658,7 @@ sub rackListBasic
 	return $sth->fetchall_arrayref({});
 }
 
-sub rackPhysical # This method is all rather inelegant
+sub rackPhysical # This method is all rather inelegant and doesn't deal with racks numbered from the top
 {
 	my ($self, $rackid) = @_;
 	my $devices = $self->deviceListInRack($rackid);
@@ -727,6 +722,7 @@ sub rackPhysical # This method is all rather inelegant
 	for my $r (@rackLayout)
 	{
 		$$r{'rack_pos'} = sprintf($posFormat, $$r{'rack_pos'});
+		$$r{'rack_id'} = $rackid; # include rack identifier in each entry - should review this when considering namespacing (see todo)
 	}	
 	
 	@rackLayout = reverse @rackLayout unless RACKNUMBERINGTOP;  # racks are numbered from the bottom unless configured otherwise
@@ -1325,6 +1321,41 @@ sub _validateDeviceInput # doesn't check much at present
 	die "RMERR_INTERNAL: Unable to validate device. No device record specified.\nError occured" unless ($record);
 	checkName($$record{'name'});
 	checkNotes($$record{'notes'});
+	checkDate($$record{'purchased'});
+	
+	# check if we have a meta default location if so set rack position to blank, otherwise check we have a valid rack position
+	my $rack = $self->rack($$record{'rack'});
+	if ($$rack{'meta_default_data'})
+	{
+		$$record{'rack_pos'} = '';
+	}
+	else # location is in a real rack
+	{
+		# get the size of this hardware
+		my $hardware = $self->hardware($$record{'hardware'});
+		my $hardwareSize = $$hardware{'size'};
+		
+	 	unless ($$record{'rack_pos'} > 0 and $$record{'rack_pos'} + $$hardware{'size'} - 1 <= $$rack{'size'})
+		{
+			die "RMERR: The device '".$$record{'name'}."' cannot fit at that location. This rack has ".$$rack{'size'}." units. This device is $hardwareSize U and you placed it at unit ".$$record{'rack_pos'}.".\nError occured";
+		}
+		
+		# ensure the location doesn't overlap any other devices in this rack
+		
+		# get the layout of this rack
+		my $rackLayout = $self->rackPhysical($$record{'rack'});	
+		
+		# quick and dirty check for overlap, consider each position occupied by the new device and check it's empty
+		# doesn't assume the rackPhyiscal method returns in a particular order
+		for ($$record{'rack_pos'} .. $$record{'rack_pos'} + $hardwareSize - 1)
+		{
+			my $pos = $_;
+			for my $r (@$rackLayout)
+			{
+				die "RMERR: Cannot put the device here (position ".$$record{'rack_pos'}." in rack ".$$rack{'name'}.") because it overlaps with the device '".$$r{'name'}."'.\nError occured" if ($$r{'rack_pos'} == $pos and $$r{'name'} and ($$r{'id'} ne $$record{'id'}));
+			}
+		}
+	}
 	
 	return ($$record{'name'}, $$record{'domain'}, $$record{'rack'}, $$record{'rack_pos'}, $$record{'hardware'}, $$record{'serial_no'}, $$record{'asset_no'}, $$record{'purchased'}, $$record{'os'}, $$record{'customer'}, $$record{'service'}, $$record{'role'}, $$record{'in_service'}, $$record{'notes'});
 }
