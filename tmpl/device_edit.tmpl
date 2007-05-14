@@ -3,12 +3,12 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
 
 <!-- 
-########################################################################
-# RackMonkey - Know Your Racks - http://www.rackmonkey.org
-# Version 1.2.%BUILD%
-# (C)2007 Will Green (wgreen at users.sourceforge.net)
-# Device edit template
-########################################################################
+##############################################################################
+# RackMonkey - Know Your Racks - http://www.rackmonkey.org                   #
+# Version 1.2.%BUILD%                                                        #
+# (C)2007 Will Green (wgreen at users.sourceforge.net)                       #
+# Device edit template                                                       #
+##############################################################################	
 -->
 
 <head>
@@ -31,7 +31,6 @@
 		<div style="float: left; width: 280px;">
 		<label>Name</label><br />
 		<input type="text" size="32" name="name" value="<TMPL_VAR NAME=name>" />
-		<br /><br />
 		</div>
 		
 		<div>
@@ -39,19 +38,16 @@
 		<select name="domain"><TMPL_LOOP NAME=domainlist>
 		<option <TMPL_IF NAME=selected>selected="selected"</TMPL_IF> value="<TMPL_VAR NAME=id>"><TMPL_VAR NAME=name></option></TMPL_LOOP>
 		</select>
-		<br /><br />
 		</div>
 
 		<hr />
 		
-		<div style="clear: both;">
 		<div>
 		<label>Location</label><br />
 		Rack Position &nbsp; <input type="text" size="4" name="rack_pos" value="<TMPL_VAR NAME=rack_pos>" /> &nbsp; in &nbsp; 
 		<select name="rack"><TMPL_LOOP NAME=racklist>
 		<option <TMPL_IF NAME=selected>selected="selected"</TMPL_IF> value="<TMPL_VAR NAME=id>"><TMPL_VAR NAME=name></option></TMPL_LOOP>
 		</select>
-		<br /><br />
 		</div>
 		
 		<hr />
@@ -61,7 +57,6 @@
 		<select name="hardware"><TMPL_LOOP NAME=hardwarelist>
 		<option <TMPL_IF NAME=selected>selected="selected"</TMPL_IF> value="<TMPL_VAR NAME=id>"><TMPL_VAR NAME=name></option></TMPL_LOOP>
 		</select>
-		<br /><br />
 		</div>
 		
 		<div>
@@ -69,50 +64,43 @@
 		<select name="os"><TMPL_LOOP NAME=oslist>
 		<option <TMPL_IF NAME=selected>selected="selected"</TMPL_IF> value="<TMPL_VAR NAME=id>"><TMPL_VAR NAME=name></option></TMPL_LOOP>
 		</select>
-		<br /><br />
 		</div>
 		
-		<div style="clear: both; float: left; width: 280px;">
+		<div style="clear: both; float: left; width: 280px; margin-top: 8px;">
 		<label>Role</label><br />
 		<select name="role"><TMPL_LOOP NAME=rolelist>
 		<option <TMPL_IF NAME=selected>selected="selected"</TMPL_IF> value="<TMPL_VAR NAME=id>"><TMPL_VAR NAME=name></option></TMPL_LOOP>
 		</select>
 		<input type="checkbox" <TMPL_IF NAME=in_service>checked="checked"</TMPL_IF> name="in_service" /> In Service
-		<br /><br />
 		</div>
 
-		<div>
+		<div style="margin-top: 8px;">
 		<label>Purchased (YYYY-MM-DD)</label><br />
 		<input type="text" size="11" name="purchased" value="<TMPL_VAR NAME=purchased>" />
-		<br /><br />
 		</div>
 		
-		<div style="clear: both; float: left; width: 280px;">
+		<div style="clear: both; float: left; width: 280px; margin-top: 8px;">
 		<label>Serial Number</label><br />
 		<input type="text" size="32" name="serial_no" value="<TMPL_VAR NAME=serial_no>" />
-		<br /><br />
 		</div>
 
-		<div>
+		<div style="margin-top: 8px;">
 		<label>Asset Number</label><br />
 		<input type="text" size="32" name="asset_no" value="<TMPL_VAR NAME=asset_no>" />
-		<br /><br />
 		</div>
 
-		<div style="clear: both; float: left; width: 280px;">
+		<div style="clear: both; float: left; width: 280px; margin-top: 8px;">
 		<label>Customer</label><br />
 		<select name="customer"><TMPL_LOOP NAME=customerlist>
 		<option <TMPL_IF NAME=selected>selected="selected"</TMPL_IF> value="<TMPL_VAR NAME=id>"><TMPL_VAR NAME=name></option></TMPL_LOOP>
 		</select>
-		<br /><br />
 		</div>
 		
-		<div>
+		<div style="margin-top: 8px;">
 		<label>Service Level</label><br />
 		<select name="service"><TMPL_LOOP NAME=servicelist>
 		<option <TMPL_IF NAME=selected>selected="selected"</TMPL_IF> value="<TMPL_VAR NAME=id>"><TMPL_VAR NAME=name></option></TMPL_LOOP>
 		</select>
-		<br /><br />
 		</div>
 		
 		<hr />
