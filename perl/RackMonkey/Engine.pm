@@ -1321,7 +1321,7 @@ sub _validateDeviceInput # doesn't check much at present
 	die "RMERR_INTERNAL: Unable to validate device. No device record specified.\nError occured" unless ($record);
 	checkName($$record{'name'});
 	checkNotes($$record{'notes'});
-	checkDate($$record{'purchased'});
+	$$record{'purchased'} = checkDate($$record{'purchased'}); # check date and coerce to YYYY-MM-DD format
 	
 	# check if we have a meta default location if so set rack position to blank, otherwise check we have a valid rack position
 	my $rack = $self->rack($$record{'rack'});
