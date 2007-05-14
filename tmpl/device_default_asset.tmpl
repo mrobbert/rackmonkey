@@ -40,28 +40,28 @@
 <table style="clear:both" id="disTable">
 	<tr>
 		<th>
-			<a class="sort" title="Sort by name" href="<TMPL_VAR NAME=base_url>?view=device&amp;view_type=asset&amp;order_by=device.name">Device</a> 
+			<a class="sort" title="Sort by name" href="<TMPL_VAR NAME=base_url>?view=device&amp;view_type=default_asset&amp;order_by=device.name">Device</a> 
 		</th>
 		<th>
-			<a class="sort" title="Sort by rack" href="<TMPL_VAR NAME=base_url>?view=device&amp;view_type=asset&amp;order_by=rack_name">Rack</a>
+			<a class="sort" title="Sort by rack" href="<TMPL_VAR NAME=base_url>?view=device&amp;view_type=default_asset&amp;order_by=rack_name">Rack</a>
 		</th>	
 		<th>
-			<a class="sort" title="Sort by room" href="<TMPL_VAR NAME=base_url>?view=device&amp;view_type=asset&amp;order_by=room_name">Room</a>
+			<a class="sort" title="Sort by room" href="<TMPL_VAR NAME=base_url>?view=device&amp;view_type=default_asset&amp;order_by=room_name">Room</a>
 		</th>		
 		<th>
-			<a class="sort" title="Sort by hardware type" href="<TMPL_VAR NAME=base_url>?view=device&amp;view_type=asset&amp;order_by=device.hardware">Hardware</a>
+			<a class="sort" title="Sort by hardware type" href="<TMPL_VAR NAME=base_url>?view=device&amp;view_type=default_asset&amp;order_by=device.hardware">Hardware</a>
 		</th>
 		<th>
-			<a class="sort" title="Sort by serial number" href="<TMPL_VAR NAME=base_url>?view=device&amp;view_type=asset&amp;order_by=device.serial">Serial</a>
+			<a class="sort" title="Sort by serial number" href="<TMPL_VAR NAME=base_url>?view=device&amp;view_type=default_asset&amp;order_by=device.serial">Serial</a>
 		</th>		
 		<th>
-			<a class="sort" title="Sort by asset tag" href="<TMPL_VAR NAME=base_url>?view=device&amp;view_type=asset&amp;order_by=device.asset">Asset</a>
+			<a class="sort" title="Sort by asset tag" href="<TMPL_VAR NAME=base_url>?view=device&amp;view_type=default_asset&amp;order_by=device.asset">Asset</a>
 		</th>			
 		<th style="text-align: right">
-			<a class="sort" title="Sort by purchase date" href="<TMPL_VAR NAME=base_url>?view=device&amp;view_type=asset&amp;order_by=device.purchased">Purchased</a>
+			<a class="sort" title="Sort by purchase date" href="<TMPL_VAR NAME=base_url>?view=device&amp;view_type=default_asset&amp;order_by=device.purchased">Purchased</a>
 		</th>
 		<th style="text-align: right">
-			<a class="sort" title="Sort by age" href="<TMPL_VAR NAME=base_url>?view=device&amp;view_type=asset&amp;order_by=device.purchased">Age</a>
+			<a class="sort" title="Sort by age" href="<TMPL_VAR NAME=base_url>?view=device&amp;view_type=default_asset&amp;order_by=device.purchased">Age</a>
 		</th>		
 	</tr><TMPL_LOOP NAME=devices>
 	<TMPL_IF NAME="__odd__">
