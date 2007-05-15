@@ -22,7 +22,6 @@ my $log;
 eval
 {
 	my $dbh = DBI->connect(DBDCONNECT, DBUSER, DBPASS, {AutoCommit => 1, RaiseError => 1, PrintError => 0, ShowErrorStatement => 1}); 
-
 	my $sth = $dbh->prepare_cached(qq!
 		SELECT logging.* 
 		FROM logging
@@ -31,10 +30,7 @@ eval
 	$sth->execute();
 	$log = $sth->fetchall_arrayref({});	
 };
-if ($@)
-{
-	die "Unable to retrieve log entries - $@\n";
-}
+die "Unable to retrieve log entries - $@\n" if $@;
 
 $ARGV[0] ||= '';
 

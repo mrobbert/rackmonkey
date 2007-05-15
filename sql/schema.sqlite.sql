@@ -192,6 +192,7 @@ CREATE TABLE device
 	meta_update_user CHAR
 );
 
+
 -- Applications and services provided by the device
 CREATE TABLE app
 (
@@ -203,6 +204,7 @@ CREATE TABLE app
 	meta_update_time CHAR,
 	meta_update_user CHAR
 );
+
 
 -- Relationships applications can have with devices
 CREATE TABLE app_relation
