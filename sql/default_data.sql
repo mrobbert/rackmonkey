@@ -59,3 +59,16 @@ INSERT INTO hardware (id, name, manufacturer, size, image, support_url, spec_url
 -- default roles
 INSERT INTO role (id, name, descript, notes, meta_default_data, meta_update_time, meta_update_user) VALUES(1, 'unknown', 'Role not known.', 'Default data included with RackMonkey.', 2, '2007-01-01 00:00:00', 'install');
 INSERT INTO role (id, name, descript, notes, meta_default_data, meta_update_time, meta_update_user) VALUES(2, 'none', 'Role not currently assigned.', 'Default data included with RackMonkey.', 1, '2007-01-01 00:00:00', 'install');
+
+-- default application relationships
+INSERT INTO application_relationship (id, name) VALUES (1, 'is run on');
+INSERT INTO application_relationship (id, name) VALUES (2, 'is developed on');
+INSERT INTO application_relationship (id, name) VALUES (3, 'is tested on');
+INSERT INTO application_relationship (id, name) VALUES (4, 'is staged on');
+INSERT INTO application_relationship (id, name) VALUES (5, 'is on standby on');
+INSERT INTO application_relationship (id, name) VALUES (6, 'uses');
+
+
+
+
+

@@ -61,7 +61,6 @@ eval
 	if ($act) # perform act, and return status: 303 (See Other) to redirect to a view
 	{
 		my $updateUser = $ENV{'REMOTE_USER'} || $ENV{'REMOTE_ADDR'};
-		$act = 'update' if ($act eq 'insert');
 		my $actData = $cgi->vars;
 		
 		# delete id, only act_ids should be used be used for acts, ids are used for views

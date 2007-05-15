@@ -204,7 +204,40 @@ CREATE TABLE application
 	meta_update_user CHAR
 );
 
--- To store meta information about Rackmonkey database, e.g. revision.
+-- Relationships applications can have with devices
+CREATE TABLE application_relationship
+(
+	id INTEGER PRIMARY KEY AUTOINCREMENT,
+	name CHAR UNIQUE NOT NULL COLLATE NOCASE
+);
+
+
+CREATE TABLE device_application
+(
+	application INTEGER NOT NULL
+		CONSTRAINT fk_application_id REFERENCES application(id),
+	device INTEGER NOT NULL
+		CONSTRAINT fk_device_id REFERENCES device(id),
+	relationship INTEGER NOT NULL
+		CONSTRAINT fk_application_relationship_id REFERENCES application_relationship(id)
+);
+
+
+-- To log changes in RackMonkey entries
+CREATE TABLE logging
+(
+	id INTEGER PRIMARY KEY AUTOINCREMENT,
+	table_changed CHAR NOT NULL COLLATE NOCASE,
+	id_changed INTEGER NOT NULL,
+	name_changed CHAR COLLATE NOCASE,
+	change_type CHAR COLLATE NOCASE,
+	descript CHAR COLLATE NOCASE,
+	update_time CHAR,
+	update_user CHAR
+);
+
+
+-- To store meta information about RackMonkey database, e.g. revision.
 CREATE TABLE rm_meta
 (
 	id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -549,4 +582,81 @@ BEFORE DELETE ON role
 FOR EACH ROW BEGIN
   SELECT RAISE(ROLLBACK, 'delete on table "role" violates foreign key constraint "fkd_device_role_id"')
   WHERE (SELECT role FROM device WHERE role = OLD.id) IS NOT NULL;
+END;
+
+
+--
+-- Table: device_application
+--
+
+-- Prevent inserts into device_application table unless application exists
+CREATE TRIGGER fki_application_id
+BEFORE INSERT ON device_application
+FOR EACH ROW BEGIN
+	SELECT RAISE(ROLLBACK, 'insert on table "device_application" violates foreign key constraint "fki_application_id"')
+ 	WHERE (SELECT id FROM application WHERE id = NEW.application) IS NULL;
+END;
+
+-- Prevent updates on device_application table unless application exists
+CREATE TRIGGER fku_application_id
+BEFORE UPDATE ON device_application
+FOR EACH ROW BEGIN
+	SELECT RAISE(ROLLBACK, 'update on table "device_application" violates foreign key constraint "fku_application_id"')
+	WHERE (SELECT id FROM application WHERE id = NEW.application) IS NULL;
+END;
+
+-- Prevent deletions of applications used by the device_application table
+CREATE TRIGGER fkd_application_id
+BEFORE DELETE ON application
+FOR EACH ROW BEGIN
+	SELECT RAISE(ROLLBACK, 'delete on table "application" violates foreign key constraint "fkd_application_id"')
+	WHERE (SELECT application FROM device_application WHERE application = OLD.id) IS NOT NULL;
+END;
+
+-- Prevent inserts into device_application table unless device exists
+CREATE TRIGGER fki_device_id
+BEFORE INSERT ON device_application
+FOR EACH ROW BEGIN
+	SELECT RAISE(ROLLBACK, 'insert on table "device_application" violates foreign key constraint "fki_device_id"')
+ 	WHERE (SELECT id FROM device WHERE id = NEW.device) IS NULL;
+END;
+
+-- Prevent updates on device_application table unless device exists
+CREATE TRIGGER fku_device_id
+BEFORE UPDATE ON device_application
+FOR EACH ROW BEGIN
+	SELECT RAISE(ROLLBACK, 'update on table "device_application" violates foreign key constraint "fku_device_id"')
+	WHERE (SELECT id FROM device WHERE id = NEW.device) IS NULL;
+END;
+
+-- Prevent deletions of devices used by the device_application table
+CREATE TRIGGER fkd_device_id
+BEFORE DELETE ON device
+FOR EACH ROW BEGIN
+	SELECT RAISE(ROLLBACK, 'delete on table "device" violates foreign key constraint "fkd_device_id"')
+	WHERE (SELECT device FROM device_application WHERE device = OLD.id) IS NOT NULL;
+END;
+
+-- Prevent inserts into device_application table unless relationship exists
+CREATE TRIGGER fki_application_relationship_id
+BEFORE INSERT ON device_application
+FOR EACH ROW BEGIN
+	SELECT RAISE(ROLLBACK, 'insert on table "device_application" violates foreign key constraint "fki_application_relationship_id"')
+ 	WHERE (SELECT id FROM application_relationship WHERE id = NEW.relationship) IS NULL;
+END;
+
+-- Prevent updates on device_application table unless relationship exists
+CREATE TRIGGER fku_application_relationship_id
+BEFORE UPDATE ON device_application
+FOR EACH ROW BEGIN
+	SELECT RAISE(ROLLBACK, 'update on table "device_application" violates foreign key constraint "fku_application_relationship_id"')
+	WHERE (SELECT id FROM application_relationship WHERE id = NEW.relationship) IS NULL;
+END;
+
+-- Prevent deletions of relationships used by the device_application table
+CREATE TRIGGER fkd_application_relationship_id
+BEFORE DELETE ON application_relationship
+FOR EACH ROW BEGIN
+	SELECT RAISE(ROLLBACK, 'delete on table "application_relationship" violates foreign key constraint "fkd_application_relationship_id"')
+	WHERE (SELECT relationship FROM device_application WHERE application = OLD.id) IS NOT NULL;
 END;

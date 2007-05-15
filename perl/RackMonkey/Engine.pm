@@ -92,6 +92,9 @@ sub performAct
 {
 	my ($self, $type, $act, $updateUser, $record) = @_;
 	die "RMERR: '$type' is not a recognised type. This error should not occur, did you manually type this URL?\nError occured" unless $type =~ /^(?:building|room|row|rack|device|hardware|os|service|role|domain|org)$/;
+	my $actStr = $act;
+	my $typeStr = $type;
+	$act = 'update' if ($act eq 'insert');
 	die "RMERR: '$act is not a recognised act. This error should not occur, did you manually type this URL?\nError occured" unless $act =~ /^(?:update|delete)$/;
 	
 	# check username for update is valid
@@ -106,7 +109,13 @@ sub performAct
 	my $updateTime = sprintf('%04d-%02d-%02d %02d:%02d:%02d', $year, $month, $day, $hour, $min, $sec);
 		
 	$type = $act.ucfirst($type);
-	return $self->$type($updateTime, $updateUser, $record);
+	my $lastId = $self->$type($updateTime, $updateUser, $record);
+	
+	# log change (currently only provides basic logging)
+	my $sth = $self->dbh->prepare(qq!INSERT INTO logging (table_changed, id_changed, name_changed, change_type, descript, update_time, update_user) VALUES(?, ?, ?, ?, ?, ?, ?)!);
+	$sth->execute($typeStr, $lastId, $$record{'name'}, $actStr, '',  $updateTime, $updateUser);
+	
+	return $lastId;
 }
 
 # _lastInsertId is a private method
