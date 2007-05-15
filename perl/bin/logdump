@@ -62,15 +62,15 @@ elsif ($ARGV[0] eq '-l')
 else
 {
 	print "\n";
-	print "       Table Action            Name           Changed At      Changed By\n";
-	print "========================================================================\n";
+	print "       Table Action            Name     ID           Changed At      Changed By\n";
+	print "===============================================================================\n";
 
 	for my $line (@$log)
 	{
 		$$line{'name_changed'} ||= '-';
 		$$line{'name_changed'} = substr($$line{'name_changed'}, 0, 19);
 		$$line{'update_time'} = substr($$line{'update_time'}, 0, 16);
-		printf("%12s %6s %19s %16s %15s\n", $$line{'table_changed'}, $$line{'change_type'}, $$line{'name_changed'}, $$line{'update_time'}, $$line{'update_user'});
+		printf("%12s %6s %19s %6s %16s %15s\n", $$line{'table_changed'}, $$line{'change_type'}, $$line{'name_changed'}, $$line{'id_changed'}, $$line{'update_time'}, $$line{'update_user'});
 	}
-	print "========================================================================\n";
+	print "===============================================================================\n";
 }
