@@ -47,7 +47,7 @@ if ($ARGV[0] eq '-h' or $ARGV[0] eq '-?')
 }
 elsif ($ARGV[0] eq '-V' or $ARGV[0] eq '-v')
 {
-	print "RackMonkey log dumper v$VERSION by Will Green.\n";
+	print "RackMonkey Log Dumper v$VERSION by Will Green.\n";
 }
 elsif ($ARGV[0] eq '-l')
 {
