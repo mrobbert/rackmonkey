@@ -37,6 +37,7 @@ if ($@)
 	die "Unable to retrieve log entries - $@\n";
 }
 
+$ARGV[0] ||= '';
 
 if ($ARGV[0] eq '-h' or $ARGV[0] eq '-?')
 {
