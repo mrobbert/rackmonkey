@@ -79,7 +79,7 @@
 		<td><TMPL_VAR ESCAPE=HTML NAME=rack_name><TMPL_UNLESS NAME=building_meta_default_data> [<TMPL_VAR NAME=rack_pos>]</TMPL_UNLESS></td>
 		<td><TMPL_UNLESS NAME=building_meta_default_data><TMPL_VAR ESCAPE=HTML NAME=room_name> in <TMPL_IF NAME=building_name_short><TMPL_VAR ESCAPE=HTML NAME=building_name_short><TMPL_ELSE><TMPL_VAR ESCAPE=HTML NAME=building_name></TMPL_IF><TMPL_ELSE>N/A</TMPL_UNLESS></td>
 		<td><TMPL_VAR ESCAPE=HTML NAME=role_name></td>
-		<td><TMPL_VAR ESCAPE=HTML NAME=hardware_name></td>
+		<td><TMPL_UNLESS NAME=hardware_meta_default_data><TMPL_VAR ESCAPE=HTML NAME=hardware_manufacturer_name> </TMPL_UNLESS><TMPL_VAR ESCAPE=HTML NAME=hardware_name></td>
 		<td><TMPL_VAR ESCAPE=HTML NAME=os_name><TMPL_IF NAME=os_version> <TMPL_VAR ESCAPE=HTML NAME=os_version></TMPL_IF></td>
 		<td><TMPL_IF NAME=serial><TMPL_VAR ESCAPE=HTML NAME=serial><TMPL_ELSE>-</TMPL_IF></td>
 		<td><TMPL_IF NAME=asset><TMPL_VAR ESCAPE=HTML NAME=asset><TMPL_ELSE>-</TMPL_IF></td>		
