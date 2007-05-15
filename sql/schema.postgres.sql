@@ -182,7 +182,7 @@ CREATE TABLE device
 
 
 -- Applications and services provided by the device
-CREATE TABLE application
+CREATE TABLE app
 (
 	id SERIAL PRIMARY KEY,
 	name VARCHAR UNIQUE NOT NULL,
