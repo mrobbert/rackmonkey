@@ -205,12 +205,7 @@ sub deleteBuilding
 	my $sth = $self->dbh->prepare(qq!DELETE FROM building WHERE id = ?!);
 	my $ret = $sth->execute($deleteId);
 	die "RMERR: Delete failed. This building does not currently exist, it may have been removed already.\nError occured" if ($ret eq '0E0');
-}
-
-sub deleteBuildingList
-{
-	my ($self, $updateTime, $updateUser, $buildingList) = @_;
-	die "RMERR: This method is not yet supported.\nError occured";
+	return $deleteId;
 }
 
 sub _validateBuildingUpdate
@@ -394,12 +389,7 @@ sub deleteRoom
 	}	
 	$self->dbh->{AutoCommit} = 1; 
 	die "RMERR: This room does not currently exist, it may have been removed already.\nError occured" if ($ret eq '0E0');
-}
-
-sub deleteRoomList
-{
-	my ($self, $updateTime, $updateUser, $roomList) = @_;
-	die "RMERR: This method is not yet supported.\nError occured";
+	return $deleteId;
 }
 
 sub _validateRoomUpdate
@@ -523,6 +513,7 @@ sub deleteRow
 	my $deleteId = (ref $record eq 'HASH') ? $$record{'id'} : $record;
 	die "RMERR: Delete failed. No row id specified.\nError occured" unless ($deleteId);
 	die "RMERR: This method is not yet supported.\nError occured";
+	return $deleteId;
 }
 
 sub updateRow
@@ -783,6 +774,7 @@ sub deleteRack
 	my $sth = $self->dbh->prepare(qq!DELETE FROM rack WHERE id = ?!);
 	my $ret = $sth->execute($deleteId);
 	die "RMERR: Delete failed. This rack does not currently exist, it may have been removed already.\nError occured" if ($ret eq '0E0');
+	return $deleteId;
 }
 
 sub _validateRackUpdate
@@ -886,6 +878,7 @@ sub deleteHardware
 	my $sth = $self->dbh->prepare(qq!DELETE FROM hardware WHERE id = ?!);
 	my $ret = $sth->execute($deleteId);
 	die "RMERR: Delete failed. This hardware does not currently exist, it may have been removed already.\nError occured" if ($ret eq '0E0');
+	return $deleteId;
 }
 
 sub _validateHardwareUpdate
@@ -981,6 +974,7 @@ sub deleteOs
 	my $sth = $self->dbh->prepare(qq!DELETE FROM os WHERE id = ?!);
 	my $ret = $sth->execute($deleteId);
 	die "RMERR: Delete failed. This OS does not currently exist, it may have been removed already.\nError occured" if ($ret eq '0E0');
+	return $deleteId;
 }
 
 sub _validateOsUpdate
@@ -1058,6 +1052,7 @@ sub deleteOrg
 	my $sth = $self->dbh->prepare(qq!DELETE FROM org WHERE id = ?!);
 	my $ret = $sth->execute($deleteId);
 	die "RMERR: Delete failed. This org does not currently exist, it may have been removed already.\nError occured" if ($ret eq '0E0');
+	return $deleteId;
 }
 
 sub _validateOrgUpdate
@@ -1146,6 +1141,7 @@ sub deleteDomain
 	my $sth = $self->dbh->prepare(qq!DELETE FROM domain WHERE id = ?!);
 	my $ret = $sth->execute($deleteId);
 	die "RMERR: Delete failed. This domain does not currently exist, it may have been removed already.\nError occured" if ($ret eq '0E0');
+	return $deleteId;
 }
 
 sub _validateDomainUpdate # Should we remove or warn on domains beginning with . ?
@@ -1322,6 +1318,7 @@ sub deleteDevice
 	my $sth = $self->dbh->prepare(qq!DELETE FROM device WHERE id = ?!);
 	my $ret = $sth->execute($deleteId);
 	die "RMERR: Delete failed. This device does not currently exist, it may have been removed already.\nError occured" if ($ret eq '0E0');
+	return $deleteId;
 }
 
 sub _validateDeviceInput # doesn't check much at present
@@ -1433,6 +1430,7 @@ sub deleteRole
 	my $sth = $self->dbh->prepare(qq!DELETE FROM role WHERE id = ?!);
 	my $ret = $sth->execute($deleteId);
 	die "RMERR: Delete failed. This role does not currently exist, it may have been removed already.\nError occured" if ($ret eq '0E0');
+	return $deleteId;
 }
 
 sub _validateRoleUpdate
@@ -1509,6 +1507,7 @@ sub deleteService
 	my $sth = $self->dbh->prepare(qq!DELETE FROM service WHERE id = ?!);
 	my $ret = $sth->execute($deleteId);
 	die "RMERR: Delete failed. This service level does not currently exist, it may have been removed already.\nError occured" if ($ret eq '0E0');
+	return $deleteId;
 }
 
 sub _validateServiceUpdate
@@ -1603,7 +1602,6 @@ database handles from other databases will produce undefined results.
  buildingList([$orderBy])
  updateBuilding($updateTime, $updateUser, $record)
  deleteBuilding($updateTime, $updateUser, $record)
- deleteBuildingList($updateTime, $updateUser, $buildingList)
 
 =head2 building($id)
 
@@ -1642,13 +1640,6 @@ building exists or the delete fails the library dies. $updateTime and
 $updateUser set the update time and user associated with this delete; at
 present they are disguarded.
 
-=head2 deleteBuildingList($updateTime, $updateUser, $buildingList)
-
-Deletes all the buildings (specified by id) in the array ref $buildingList.
-For example, to delete buildings with the id: 4, 6, 88: 
-$buildingList = [4, 6, 88]; The delete is performed as a single transaction:
-unless all the deletes succeed the Engine dies. 
-
 
 =head1 ROOM METHODS
 
@@ -1659,7 +1650,6 @@ unless all the deletes succeed the Engine dies.
  roomListBasic()
  updateRoom($updateTime, $updateUser, $record)
  deleteRoom($updateTime, $updateUser, $record)
- deleteRoomList($updateTime, $updateUser, $roomList)
 
 =head2 room($id)
 
@@ -1709,13 +1699,6 @@ to be called with the same data as an update. If no such room exists or the
 delete fails the library dies. $updateTime and $updateUser set the update time
 and user associated with this delete; at present they are disguarded.
 
-=head2 deleteRoomList($updateTime, $updateUser, $roomList)
-
-Deletes all the rooms (specified by id) in the array ref $roomList. For
-example, to delete rooms with the id: 4, 6, 88: $roomList = [4, 6, 88]; The
-delete is performed as a single transaction: unless all the deletes succeed
-the Engine dies. 
- 
  
 =head1 BUGS
 
