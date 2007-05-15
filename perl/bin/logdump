@@ -36,10 +36,11 @@ $ARGV[0] ||= '';
 
 if ($ARGV[0] eq '-h' or $ARGV[0] eq '-?')
 {
-	print "RackMonkey Log Dumper\n";
+	print "RackMonkey Log Dumper\n\n";
 	print "\t-h -?\tdisplay this help\n";
-	print "\t-l\tprint a long listing with more details\n";
-	print "\t-v -V\tdisplay version information\n";
+	print "\t-l\tprint an extended listing\n";
+	print "\t-v -V\tdisplay version information\n\n";
+	print "Please note that all times reported by logdumper are GMT.\n"
 }
 elsif ($ARGV[0] eq '-V' or $ARGV[0] eq '-v')
 {
@@ -47,8 +48,7 @@ elsif ($ARGV[0] eq '-V' or $ARGV[0] eq '-v')
 }
 elsif ($ARGV[0] eq '-l')
 {
-	print "\n";
-	print "       Table Action                     Name     ID          Changed At      Changed By\n";
+	print "       Table Action                     Name     ID       Changed (GMT)      Changed By\n";
 	print "=======================================================================================\n";
 
 	for my $line (@$log)
@@ -61,8 +61,7 @@ elsif ($ARGV[0] eq '-l')
 }
 else
 {
-	print "\n";
-	print "       Table Action                Name     ID       Changed At      Changed By\n";
+	print "       Table Action                Name     ID    Changed (GMT)     Changed By\n";
 	print "===============================================================================\n";
 
 	for my $line (@$log)
