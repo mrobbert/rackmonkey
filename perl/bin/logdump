@@ -67,7 +67,7 @@ elsif ($ARGV[0] eq '-l')
 else
 {
 	print "\n";
-	print "       Table Action            Name        Changed At         Changed By\n";
+	print "       Table Action            Name           Changed At      Changed By\n";
 	print "========================================================================\n";
 
 	for my $line (@$log)
