@@ -10,7 +10,6 @@ use strict;
 use warnings;
 
 use DBI;
-use Data::Dumper;
 
 use lib '../'; # need to be able to find RackMonkey::Conf
 use RackMonkey::Conf;
