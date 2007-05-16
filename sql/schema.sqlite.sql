@@ -214,6 +214,7 @@ CREATE TABLE app_relation
 );
 
 
+-- Relates devices to apps
 CREATE TABLE device_app
 (
 	app INTEGER NOT NULL
