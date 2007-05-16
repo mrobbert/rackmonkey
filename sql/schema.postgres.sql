@@ -166,7 +166,7 @@ CREATE TABLE device
 	hardware INTEGER REFERENCES hardware,
 	serial_no VARCHAR,
 	asset_no VARCHAR,
-	purchased CHAR[9],
+	purchased CHAR(10),
 	os INTEGER REFERENCES os,
 	os_version VARCHAR, 
 	customer INTEGER REFERENCES org,
