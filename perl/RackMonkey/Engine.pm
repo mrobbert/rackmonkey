@@ -797,7 +797,8 @@ sub hardware
 	my $sth = $self->dbh->prepare(qq!
 		SELECT
 			hardware.*,
-			org.name 				AS manufacturer_name
+			org.name 				AS manufacturer_name,
+			org.meta_default_data	As manufacturer_meta_default_data
 		FROM hardware, org
 		WHERE 
 			hardware.manufacturer = org.id AND
@@ -913,7 +914,8 @@ sub os
 	my $sth = $self->dbh->prepare(qq!
 		SELECT 
 			os.*,
-			org.name 			AS manufacturer_name
+			org.name 				AS manufacturer_name,
+			org.meta_default_data	As manufacturer_meta_default_data
 		FROM os, org 
 		WHERE 
 			os.manufacturer = org.id AND
@@ -1179,10 +1181,15 @@ sub device
 			hardware.size 				AS hardware_size,
 			hardware.meta_default_data	AS hardware_meta_default_data,
 			hardware_manufacturer.name	AS hardware_manufacturer_name,
+			hardware_manufacturer.meta_default_data AS hardware_manufacturer_meta_default_data,
 			role.name 					AS role_name, 
-			os.name 					AS os_name, 
+			role.meta_default_data		AS role_meta_default_data,
+			os.name 					AS os_name,
+			os.meta_default_data		AS os_meta_default_data,
 			customer.name 				AS customer_name,
+			customer.meta_default_data	AS customer_meta_default_data,
 			service.name 				AS service_name,
+			service.meta_default_data	AS service_meta_default_data,
 			domain.name					AS domain_name,
 			domain.meta_default_data	AS domain_meta_default_data
 		FROM device, rack, row, room, building, hardware, org hardware_manufacturer, role, os, org customer, service, domain 

@@ -35,7 +35,7 @@
 		<br /><br />
 		
 		<label>Manufacturer</label><br />
-		<TMPL_VAR ESCAPE=HTML NAME=manufacturer_name> &nbsp; <a class="small" title="View details for this organisation" href="<TMPL_VAR NAME=base_url>?view=org&amp;view_type=single&amp;id=<TMPL_VAR NAME=manufacturer>">Details&hellip;</a>
+		<TMPL_VAR ESCAPE=HTML NAME=manufacturer_name><TMPL_UNLESS NAME=manufacturer_meta_default_data> &nbsp; <a class="small" title="View details for this organisation" href="<TMPL_VAR NAME=base_url>?view=org&amp;view_type=single&amp;id=<TMPL_VAR NAME=manufacturer>">Details&hellip;</a></TMPL_UNLESS>
 		<br /><br />
 		
 		<label>Notes</label><br />
