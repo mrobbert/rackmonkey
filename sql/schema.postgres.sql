@@ -194,6 +194,37 @@ CREATE TABLE app
 );
 
 
+-- Relationships applications can have with devices
+CREATE TABLE app_relation
+(
+	id SERIAL PRIMARY KEY,
+	name VARCHAR UNIQUE NOT NULL
+);
+
+
+-- Relates devices to apps
+CREATE TABLE device_app
+(
+	app INTEGER REFERENCES app,
+	device INTEGER REFERENCES device,
+	relation REFERENCES app_relation
+);
+
+
+-- To log changes in RackMonkey entries
+CREATE TABLE logging
+(
+	id SERIAL PRIMARY KEY,
+	table_changed VARCHAR NOT NULL,
+	id_changed INTEGER NOT NULL,
+	name_changed VARCHAR,
+	change_type VARCHAR,
+	descript VARCHAR,
+	update_time VARCHAR,
+	update_user VARCHAR
+);
+
+
 -- To store meta information about Rackmonkey database, e.g. revision.
 CREATE TABLE rm_meta
 (
