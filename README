@@ -2,13 +2,30 @@
 # RackMonkey - Know Your Racks - http://www.rackmonkey.org                   #
 # Version 1.2.%BUILD%                                                        #
 # (C)2007 Will Green (wgreen at users.sourceforge.net)                       #
-# README document for RackMonkey                                             #
+# README for RackMonkey                                                      #
 ##############################################################################
 
 Introduction
 ------------
 Thank you for choosing to try RackMonkey v1.2, I hope you find it useful in
 bringing (and keeping) order in your data centres.
+
+Known Issues v1.2.%BUILD%
+-------------------------
+* Row management is disabled.
+* Application views are disabled.
+* Unracked devices view is disabled.
+* The help view isn't very helpful ;)
+* Numbering of racks from the top doesn't work. Please leave conf as:
+    RACKNUMBERINGTOP => 0;
+* When you use 'add' from an edit/create view all your other changes are lost.
+* When you use 'add' from an edit/create view only one depth of history is
+  remembered (so adding a building from a room from a rack doesn't remember
+  the rack view you came from).
+* Tick entities don't appear in IE 6 on Windows.
+* JavaScript for selecting and deselecting racks in default rack view doesn't 
+  work if there is only one item present.
+* Untested in IE7 (testing is due to begin shortly).
 
 Security
 --------
@@ -25,9 +42,8 @@ there isn't any configuration to do.
 
 mod_perl
 --------
-RackMonkey has not undergone any formal testing under mod_perl. Testing under
-mod_perl is planned for the near future, until then you should be careful with
-running RackMonkey under mod_perl.
+A limited amount of testing has been done under mod_perl, but there may still
+be issues. Use with caution.
 
 Installation
 ------------
