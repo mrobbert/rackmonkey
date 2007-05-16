@@ -93,7 +93,7 @@ a.sort:visited
 
 .small
 {
-	font-size: x-small;
+	font-size: 0.6em;
   	font-family: verdana, helvetica, sans-serif;
 }
 
@@ -102,7 +102,7 @@ a.sort:visited
 	padding-top: 8px;
 	padding-bottom: 0px;
 	margin-bottom: 0px;
-	font-size: x-small;
+	font-size: 0.6em;
 	clear: both;
 	text-align: left;
   	font-family: verdana, helvetica, sans-serif;
@@ -174,7 +174,7 @@ table.building
 p.footer
 {
 	font-family: verdana, sans-serif;
-	font-size: x-small;
+	font-size: 0.6em;
 }
 
 .minimal
@@ -186,7 +186,7 @@ p.footer
 .rack_physical_num
 {
 	font-family: verdana, sans-serif;
-	font-size: x-small;
+	font-size: 0.6em;
 	text-align: right;
 	color: white;
 	border-color: black;
@@ -196,7 +196,7 @@ p.footer
 .rack_physical_dev
 {
 	font-family: verdana, sans-serif;
-	font-size: x-small;
+	font-size: 0.6em;
 	background-color: #DDD;
 	width: 200px;
 }
@@ -204,7 +204,7 @@ p.footer
 .rack_physical_empty
 {
 	font-family: verdana, sans-serif;
-	font-size: x-small;
+	font-size: 0.6em;
 	background-color: white;
 	width: 200px;
 }
@@ -220,7 +220,7 @@ p.footer
 .showhide
 {
 	font-family: verdana, sans-serif;
-	font-size: x-small;
+	font-size: 0.6em;
 	font-weight: normal;
 }
 
