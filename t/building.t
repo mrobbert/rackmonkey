@@ -1,12 +1,12 @@
-#!/usr/bin/perl
-########################################################################
-# RackMonkey - Know Your Racks - http://www.rackmonkey.org
-# Version 1.2.%BUILD%
-# (C)2007 Will Green (wgreen at users.sourceforge.net)
-# RackMonkey Engine building unit test script
-########################################################################
+#!/usr/bin/env perl
+##############################################################################
+# RackMonkey - Know Your Racks - http://www.rackmonkey.org                   #
+# Version 1.2.%BUILD%                                                        #
+# (C)2007 Will Green (wgreen at users.sourceforge.net)                       #
+# RackMonkey Engine building unit test script                                #
+##############################################################################
 
-# Need to add tests for deleteBuildingList and for excluding meta buildings from buildingCount
+# Need to add tests for excluding meta buildings from buildingCount
 
 use strict;
 use warnings;
@@ -15,7 +15,6 @@ use 5.006_001;
 
 use DBI;
 
-use Data::Dumper; 
 use Test::Simple tests => 40;
 
 use lib 'perl';

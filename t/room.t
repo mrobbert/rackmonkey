@@ -1,10 +1,10 @@
-#!/usr/bin/perl
-########################################################################
-# RackMonkey - Know Your Racks - http://www.rackmonkey.org
-# Version 1.2.%BUILD%
-# (C)2007 Will Green (wgreen at users.sourceforge.net)
-# RackMonkey Engine room unit test script
-########################################################################
+#!/usr/bin/env perl
+##############################################################################
+# RackMonkey - Know Your Racks - http://www.rackmonkey.org                   #
+# Version 1.2.%BUILD%                                                        #
+# (C)2007 Will Green (wgreen at users.sourceforge.net)                       #
+# RackMonkey Engine room unit test script                                   #
+##############################################################################
 
 use strict;
 use warnings;
@@ -13,7 +13,6 @@ use 5.006_001;
 
 use DBI;
 
-use Data::Dumper;
 use Test::Simple tests => 3;
 
 use lib 'perl';

@@ -29,8 +29,6 @@ use DBI;
 use HTML::Template;
 use Time::Local;
 
-use Data::Dumper; # For debug only
-
 use RackMonkey::CGI;
 use RackMonkey::Engine;
 use RackMonkey::Error;

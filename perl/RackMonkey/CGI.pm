@@ -12,7 +12,6 @@ use warnings;
 use 5.006_001;
 
 use CGI;
-use Data::Dumper; # For debug only
 
 use RackMonkey::Conf;
 use RackMonkey::Helper;

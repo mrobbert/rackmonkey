@@ -1,9 +1,9 @@
-------------------------------------------------------------------------
--- RackMonkey - Know Your Racks - http://www.rackmonkey.org
--- Version 1.2.%BUILD%
--- (C)2007 Will Green (wgreen at users.sourceforge.net)
--- Sample content for RackMonkey database
-------------------------------------------------------------------------
+------------------------------------------------------------------------------
+-- RackMonkey - Know Your Racks - http://www.rackmonkey.org                 --
+-- Version 1.2.%BUILD%                                                      --
+-- (C)2007 Will Green (wgreen at users.sourceforge.net)                     --
+-- Sample content for RackMonkey database                                   --
+------------------------------------------------------------------------------
 
 -- sample organisations
 INSERT INTO org (name, account_no, customer, software, hardware, descript, home_page, notes, meta_update_time, meta_update_user) VALUES('Apple', 		NULL, 0, 1, 1, 'Apple', 'http://www.apple.com', 'Sample data included with RackMonkey.', '2007-01-01 00:00:00', 'install');

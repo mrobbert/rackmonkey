@@ -11,8 +11,6 @@ use warnings;
 
 use 5.006_001;
 
-use Data::Dumper; # For debug only
-
 use RackMonkey::Conf;
 use RackMonkey::Helper;
 
@@ -1292,7 +1290,6 @@ sub deviceListInRack
 	!);
 	
 	$sth->execute($rack);
-	#die Dumper $sth->fetchall_arrayref({});
 	return $sth->fetchall_arrayref({});		
 }
 
