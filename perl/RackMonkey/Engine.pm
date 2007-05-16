@@ -837,7 +837,8 @@ sub hardwareListBasic
 			hardware.id,
 			hardware.name,
 			hardware.meta_default_data,
-			org.name 				AS manufacturer_name
+			org.name 				AS manufacturer_name,
+			org.meta_default_data	As manufacturer_meta_default_data
 		FROM hardware, org
 		WHERE hardware.manufacturer = org.id
 		ORDER BY 

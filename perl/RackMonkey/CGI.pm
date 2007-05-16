@@ -219,7 +219,7 @@ sub selectRack
 {
 	my ($self, $items, $selectedId) = @_;
 	$items = $self->selectItem($items, $selectedId);
-
+	
 	for my $i (@$items)
 	{
 		$$i{'name'} = $$i{'name'}.' in '.$$i{'room_name'}.' in '.$$i{'building_name'} unless $$i{'meta_default_data'};
@@ -234,7 +234,7 @@ sub selectHardware
 
 	for my $i (@$items)
 	{
-		$$i{'name'} = $$i{'manufacturer_name'}.' '.$$i{'name'} unless $$i{'meta_default_data'};
+		$$i{'name'} = $$i{'manufacturer_name'}.' '.$$i{'name'} unless $$i{'meta_default_data'} or $$i{'manufacturer_meta_default_data'};
 	}
 	return $items;
 }
