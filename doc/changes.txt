@@ -1,15 +1,20 @@
-########################################################################
-# RackMonkey - Know Your Racks - http://www.rackmonkey.org
-# Version 1.2.%BUILD%
-# (C)2007 Will Green (wgreen at users.sourceforge.net)
-# Changes document for RackMonkey
-########################################################################
+##############################################################################
+# RackMonkey - Know Your Racks - http://www.rackmonkey.org                   #
+# Version 1.2.%BUILD%                                                        #
+# (C)2007 Will Green (wgreen at users.sourceforge.net)                       #
+# RackMonkey Changes                                                         #
+##############################################################################
 
-v1.2 - Due for release April 2007
-Complete rewrite with much improved engine and features.
+v1.2.%BUILD% - Released 2007-05-18
+----------------------------------
+First release of v1.2. Complete rewrite with much improved engine and 
+features. This release is alpha quality and has a number of issues. See
+the README file for more information.
 
-v1.1 - Released December 2005
+v1.1-1 - Released 2005-12-04
+----------------------------
 First proper public release, hosted on Soureforge. 
 
 v1.0 - Not publically released
+------------------------------
 Initial experimentation with SQLite backend. 
