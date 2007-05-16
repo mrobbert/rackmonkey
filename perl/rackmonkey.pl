@@ -78,7 +78,6 @@ eval
 		
 		my $redirectUrl = "$fullURL?view=$view&view_type=$viewType";
 		$redirectUrl .= "&id=$id" if ($id);
-		$redirectUrl .= "&last_created_id=$lastCreatedId" if ($lastCreatedId);		
 		$cgi->redirect303($redirectUrl);
 	}
 	else # display a view

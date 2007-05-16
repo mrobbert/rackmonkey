@@ -123,8 +123,8 @@ sub performAct
 # need to check how it deals with multiple requests from different processes
 sub _lastInsertId 
 {
-	my $self = shift;
-	return $self->dbh->last_insert_id(undef, undef, undef, undef);
+    my ($self, $table) = @_;
+    return $self->dbh->last_insert_id(undef, undef, $table, undef);
 }
 
 
@@ -192,7 +192,7 @@ sub updateBuilding
 	{
 		$sth = $self->dbh->prepare(qq!INSERT INTO building (name, name_short, notes, meta_update_time, meta_update_user) VALUES(?, ?, ?, ?, ?)!);
 		$sth->execute($self->_validateBuildingUpdate($record), $updateTime, $updateUser);
-		$newId = $self->_lastInsertId();
+		$newId = $self->_lastInsertId('building');
 	}
 	return $newId || $$record{'id'};
 }
@@ -341,7 +341,7 @@ sub updateRoom
 		{
 			$sth = $self->dbh->prepare(qq!INSERT INTO room (name, building, notes, meta_update_time, meta_update_user) VALUES(?, ?, ?, ?, ?)!);
 			$sth->execute($self->_validateRoomUpdate($record), $updateTime, $updateUser);
-			$newId = $self->_lastInsertId();
+			$newId = $self->_lastInsertId('room');
 			my $hiddenRow = {'name' => '-', room => "$newId", 'room_pos' => 0, 'hidden_row' => 1, 'notes' => ''}; 
 			$self->updateRow($updateTime, $updateUser, $hiddenRow);
 			$self->dbh->commit();
@@ -533,7 +533,7 @@ sub updateRow
 	{
 		$sth = $self->dbh->prepare(qq!INSERT INTO row (name, room, room_pos, hidden_row, notes, meta_update_time, meta_update_user) VALUES(?, ?, ?, ?, ?, ?, ?)!);
 		$sth->execute($self->_validateRowUpdate($record), $updateTime, $updateUser);
-		$newId = $self->_lastInsertId();
+		$newId = $self->_lastInsertId('row');
 	}
 	return $newId || $$record{'id'};
 }
@@ -761,7 +761,7 @@ sub updateRack
 	{
 		$sth = $self->dbh->prepare(qq!INSERT INTO rack (name, row, row_pos, hidden_rack, size, notes, meta_update_time, meta_update_user) VALUES(?, ?, ?, ?, ?, ?, ?, ?)!);
 		$sth->execute($self->_validateRackUpdate($record), $updateTime, $updateUser);
-		$newId = $self->_lastInsertId();
+		$newId = $self->_lastInsertId('rack');
 	}
 	return $newId || $$record{'id'};
 }
@@ -865,7 +865,7 @@ sub updateHardware
 	{
 		$sth = $self->dbh->prepare(qq!INSERT INTO hardware (name, manufacturer, size, image, support_url, spec_url, notes, meta_update_time, meta_update_user) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?)!);
 		$sth->execute($self->_validateHardwareUpdate($record), $updateTime, $updateUser);
-		$newId = $self->_lastInsertId();
+		$newId = $self->_lastInsertId('hardware');
 	}
 	return $newId || $$record{'id'};
 }
@@ -961,7 +961,7 @@ sub updateOs
 	{
 		$sth = $self->dbh->prepare(qq!INSERT INTO os (name, manufacturer, notes, meta_update_time, meta_update_user) VALUES(?, ?, ?, ?, ?)!);
 		$sth->execute($self->_validateOsUpdate($record), $updateTime, $updateUser);
-		$newId = $self->_lastInsertId();
+		$newId = $self->_lastInsertId('os');
 	}
 	return $newId || $$record{'id'};
 }
@@ -1039,7 +1039,7 @@ sub updateOrg
 	{
 		$sth = $self->dbh->prepare(qq!INSERT INTO org (name, account_no, customer, software, hardware, descript, home_page, notes, meta_update_time, meta_update_user) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?)!);
 		$sth->execute($self->_validateOrgUpdate($record), $updateTime, $updateUser);
-		$newId = $self->_lastInsertId();
+		$newId = $self->_lastInsertId('org');
 	}
 	return $newId || $$record{'id'};
 }
@@ -1128,7 +1128,7 @@ sub updateDomain
 	{
 		$sth = $self->dbh->prepare(qq!INSERT INTO domain (name, descript, notes, meta_update_time, meta_update_user) VALUES(?, ?, ?, ?, ?)!);
 		$sth->execute($self->_validateDomainUpdate($record), $updateTime, $updateUser);
-		$newId = $self->_lastInsertId();
+		$newId = $self->_lastInsertId('domain');
 	}
 	return $newId || $$record{'id'};
 }
@@ -1305,7 +1305,7 @@ sub updateDevice
 	{
 		$sth = $self->dbh->prepare(qq!INSERT INTO device (name, domain, rack, rack_pos, hardware, serial_no, asset_no, purchased, os, customer, service, role, in_service, notes, meta_update_time, meta_update_user) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)!);
 		$sth->execute($self->_validateDeviceInput($record), $updateTime, $updateUser);
-		$newId = $self->_lastInsertId();
+		$newId = $self->_lastInsertId('device');
 	}
 	return $newId || $$record{'id'};
 }
@@ -1417,7 +1417,7 @@ sub updateRole
 	{
 		$sth = $self->dbh->prepare(qq!INSERT INTO role (name, descript, notes, meta_update_time, meta_update_user) VALUES(?, ?, ?, ?, ?)!);
 		$sth->execute($self->_validateDomainUpdate($record), $updateTime, $updateUser);
-		$newId = $self->_lastInsertId();
+		$newId = $self->_lastInsertId('role');
 	}
 	return $newId || $$record{'id'};
 }
@@ -1494,7 +1494,7 @@ sub updateService
 	{
 		$sth = $self->dbh->prepare(qq!INSERT INTO service (name, descript, notes, meta_update_time, meta_update_user) VALUES(?, ?, ?, ?, ?)!);
 		$sth->execute($self->_validateServiceUpdate($record), $updateTime, $updateUser);
-		$newId = $self->_lastInsertId();
+		$newId = $self->_lastInsertId('service');
 	}
 	return $newId || $$record{'id'};
 }
