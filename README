@@ -26,6 +26,7 @@ Known Issues v1.2.%BUILD%
 * JavaScript for selecting and deselecting racks in default rack view doesn't 
   work if there is only one item present.
 * Untested in IE7 (testing is due to begin shortly).
+* Allows rack to be resized even when the resize affects devices
 
 Security
 --------
