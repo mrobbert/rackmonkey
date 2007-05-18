@@ -40,7 +40,7 @@ if ($ARGV[0] eq '-h' or $ARGV[0] eq '-?')
 	print "\t-h -?\tdisplay this help\n";
 	print "\t-l\tprint an extended listing\n";
 	print "\t-v -V\tdisplay version information\n\n";
-	print "Please note that all times reported by logdumper are GMT.\n"
+	print "Please note that all times reported by logdump are GMT.\n"
 }
 elsif ($ARGV[0] eq '-V' or $ARGV[0] eq '-v')
 {
