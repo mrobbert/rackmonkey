@@ -20,3 +20,19 @@ function removeChildNodes(node)
 		node.removeChild(node.firstChild);
 	}
 }
+
+function showHide(element)
+{
+	var ele = document.getElementById(element);
+	if(!ele)
+		return true;
+	if(ele.style.display=="none")
+	{
+		ele.style.display="block"
+	} 
+	else 
+	{
+    	ele.style.display="none"
+  	}
+  return true;
+}
