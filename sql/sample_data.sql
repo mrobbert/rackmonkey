@@ -69,4 +69,3 @@ INSERT INTO role (name, descript, notes, meta_update_time, meta_update_user) VAL
 INSERT INTO role (name, descript, notes, meta_update_time, meta_update_user) VALUES('Web Server',			'Web Server', 'Sample data included with RackMonkey.', '2007-01-01 00:00:00', 'install');
 
 -- The inclusion of a company or product in this file does not consitute an endorement by the author.
--- All trademarks are the property of their respective owners.

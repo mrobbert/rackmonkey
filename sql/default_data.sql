@@ -67,8 +67,3 @@ INSERT INTO app_relation (name) VALUES ('is tested on');
 INSERT INTO app_relation (name) VALUES ('is staged on');
 INSERT INTO app_relation (name) VALUES ('is on standby on');
 INSERT INTO app_relation (name) VALUES ('uses');
-
-
-
-
-

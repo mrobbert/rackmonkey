@@ -235,7 +235,7 @@ CREATE TABLE rm_meta
 
 
 -- Indexes
-CREATE UNIQUE INDEX device_name_unique ON device (name, domain); -- ensure name and domain are together unqiue
-CREATE UNIQUE INDEX rack_row_unique ON rack (name, row); -- ensure row and rack name are together unqiue
-CREATE UNIQUE INDEX row_room_unique ON row (name, room); -- ensure room and row name are together unqiue
-CREATE UNIQUE INDEX room_building_unique ON room (name, building); -- ensure building and room name are together unqiue
+CREATE UNIQUE INDEX device_name_unique ON device (name, domain); -- ensure name and domain are together unique
+CREATE UNIQUE INDEX rack_row_unique ON rack (name, row); -- ensure row and rack name are together unique
+CREATE UNIQUE INDEX row_room_unique ON row (name, room); -- ensure room and row name are together unique
+CREATE UNIQUE INDEX room_building_unique ON room (name, building); -- ensure building and room name are together unique
