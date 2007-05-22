@@ -60,10 +60,11 @@
 		</div>
 
 		<div>
-		<label>OS</label><br />
+		<label>OS / Version</label><br />
 		<select name="os"><TMPL_LOOP NAME=oslist>
 		<option value="<TMPL_VAR NAME=id>"><TMPL_VAR NAME=name></option></TMPL_LOOP>
 		</select>
+		<input type="text" size="8" name="os_version" value="" />
 		</div>
 		
 		<div style="clear: both; float: left; width: 280px; margin-top: 8px;">
