@@ -22,21 +22,23 @@ Contents
 1. Introduction
 ===============
 This document explains how to install RackMonkey. Please consult the README
-before performing an install. See the doc/changes.txt document for what's new
-in this release. For information on using RackMonkey see doc/userguide.txt.
+before performing an install as it contains important information on this
+release (including known issues). See the doc/changes.txt document for what's
+new in this release. For information on using RackMonkey see
+doc/userguide.txt.
 
 
 2. Obtaining RackMonkey
 =======================
 
-Packaged Release
-----------------
-Visit http://www.rackmonkey.org to download a packaged release. Packaged 
-releases are recommended for production use or anyone interested in RackMonkey
-as a user. Releases are packaged as bzipped tars (.tar.bz2) and can be
+Release Version
+---------------
+Visit http://www.rackmonkey.org to download a release version. Release
+versions are recommended for production use or anyone interested in RackMonkey
+as a user. Releases are packaged as bzipped tars (.tar.bz2) and can be 
 extracted with (your filename may be different):
 
-    bunzip2 -c rackmonkey_1.2-1.tar.bz2 | tar xf -
+    bunzip2 -c rackmonkey_1.2.2.tar.bz2 | tar xvf -
 
 Subversion Repository
 ---------------------
