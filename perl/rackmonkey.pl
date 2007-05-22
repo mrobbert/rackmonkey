@@ -25,6 +25,8 @@ use warnings;
 
 use 5.006_001;
 
+use Data::Dumper; # should be removed from release versions
+
 use DBI;
 use HTML::Template;
 use Time::Local;
@@ -55,6 +57,7 @@ eval
 	my $viewType = $cgi->viewType;
 	my $act =  $cgi->act;
 	my $orderBy = $cgi->orderBy;
+	my $filterBy = $cgi->filterBy;
 
 	if ($act) # perform act, and return status: 303 (See Other) to redirect to a view
 	{
@@ -171,8 +174,26 @@ eval
 		{
 			if ($viewType =~ /^default/) 
 			{
-				my $devices = $backend->deviceList($orderBy);
+				my $filterBy = $cgi->filterBy;
+				
+				my $customers = $backend->listBasicMeta('customer');
+				unshift @$customers, {'id' => '', name => 'All'};
+				$template->param('customerlist' => $cgi->selectItem($customers, $$filterBy{'device.customer'}));
+				
+				my $roles = $backend->listBasicMeta('role');
+				unshift @$roles, {'id' => '', name => 'All'};
+				$template->param('rolelist' => $cgi->selectItem($roles, $$filterBy{'device.role'}));
 
+				my $hardware = $backend->listBasicMeta('hardware');
+				unshift @$hardware, {'id' => '', name => 'All'};
+				$template->param('hardwarelist' => $cgi->selectItem($hardware, $$filterBy{'device.hardware'}));
+
+				my $os = $backend->listBasicMeta('os');
+				unshift @$os, {'id' => '', name => 'All'};
+				$template->param('oslist' => $cgi->selectItem($os, $$filterBy{'device.os'}));
+								
+				my $devices = $backend->deviceList($orderBy, $filterBy);
+							
 				for my $d (@$devices) # calculate age of devices
 				{
 					$$d{'age'} = calculateAge($$d{'purchased'});
@@ -364,6 +385,9 @@ eval
 	$template->param('return_view' => $cgi->returnView);
 	$template->param('return_view_type' => $cgi->returnViewType);
 	$template->param('return_view_id' => $cgi->returnViewId);
+	
+	# support hiding and showing of filters 
+	$template->param('show_filters' => $cgi->showFilters);
 	
 	$template->param('base_url' => $baseURL);
 	$template->param('web_root' => WWWPATH);

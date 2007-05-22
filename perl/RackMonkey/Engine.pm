@@ -1215,6 +1215,14 @@ sub deviceList
 {
 	my $self = shift;
 	my $orderBy = shift || '';
+	my $filters = shift || {};
+	my $filterBy ='';
+	
+	for my $f (keys %$filters)
+	{
+		$filterBy .= " AND $f=".$$filters{"$f"};
+	}
+	
 	$orderBy = 'device.name' unless $orderBy =~ /^[a-z_]+\.[a-z_]+$/;	
 	my $sth = $self->dbh->prepare(qq!
 		SELECT 
@@ -1252,6 +1260,7 @@ sub deviceList
 			device.customer = customer.id AND
 			device.domain = domain.id AND
 			device.service = service.id
+			$filterBy
 		ORDER BY $orderBy
 	!);
 	$sth->execute();

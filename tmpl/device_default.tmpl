@@ -28,12 +28,35 @@
 <form method="get" action="<TMPL_VAR NAME=base_url>">
 <p>
 	<input type="hidden" name="view" value="device"/>
-	<label>View Type </label>
-	<select name="view_type" onchange="submit()">
+	<label>View Type</label>
+		<select name="view_type" onchange="submit()">
 		<option selected="selected" value="default">Default</option>
 		<option value="default_asset">Asset</option>
 		<option value="default_extended">Extended</option>
 	</select>
+	&nbsp;&nbsp;
+	<a href="#" onclick="javascript:showHide('filters');">Show/Hide Filters</a>
+</p>
+<p style="clear: both" id="filters">
+	<label>Customer</label>
+	<select name="filter_device_customer" onchange="submit()"><TMPL_LOOP NAME=customerlist>
+	<option <TMPL_IF NAME=selected>selected="selected"</TMPL_IF> value="<TMPL_VAR NAME=id>"><TMPL_VAR NAME=name></option></TMPL_LOOP>
+	</select>
+	&nbsp;&nbsp;
+	<label>Role</label>	
+	<select name="filter_device_role" onchange="submit()"><TMPL_LOOP NAME=rolelist>
+	<option <TMPL_IF NAME=selected>selected="selected"</TMPL_IF> value="<TMPL_VAR NAME=id>"><TMPL_VAR NAME=name></option></TMPL_LOOP>
+	</select>
+	&nbsp;&nbsp;
+	<label>Hardware</label>
+	<select name="filter_device_hardware" onchange="submit()"><TMPL_LOOP NAME=hardwarelist>
+	<option <TMPL_IF NAME=selected>selected="selected"</TMPL_IF> value="<TMPL_VAR NAME=id>"><TMPL_VAR NAME=name></option></TMPL_LOOP>
+	</select>
+	&nbsp;&nbsp;
+	<label>OS</label>
+	<select name="filter_device_os" onchange="submit()"><TMPL_LOOP NAME=oslist>
+	<option <TMPL_IF NAME=selected>selected="selected"</TMPL_IF> value="<TMPL_VAR NAME=id>"><TMPL_VAR NAME=name></option></TMPL_LOOP>
+	</select>	
 </p>
 </form>
 

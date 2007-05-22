@@ -99,6 +99,19 @@ sub orderBy
 	return $self->cgi->param('order_by');	
 }
 
+sub filterBy # need to come up with more elegant way to do this
+{
+	my $self = shift;
+	my %filters;
+	
+	$filters{'device.customer'} = $self->cgi->param('filter_device_customer') if ($self->cgi->param('filter_device_customer'));	
+	$filters{'device.role'} = $self->cgi->param('filter_device_role') if ($self->cgi->param('filter_device_role'));	
+	$filters{'device.hardware'} = $self->cgi->param('filter_device_hardware') if ($self->cgi->param('filter_device_hardware'));	
+	$filters{'device.os'} = $self->cgi->param('filter_device_os') if ($self->cgi->param('filter_device_os'));	
+
+	return \%filters;
+}
+
 sub redirect303
 {
 	my ($self, $redirectUrl) = @_;
@@ -177,6 +190,12 @@ sub rackList
 	return $self->cgi->param('rack_list');
 }
 
+sub showFilters
+{
+	my $self = shift;
+	return $self->cgi->param('show_filters');
+}
+
 sub selectProperty # should get all prefill vars going via this sub
 {
 	my ($self, $property) = @_;
@@ -196,7 +215,7 @@ sub selectItem
 
 	for my $i (@$items)
 	{
-		$$i{'selected'} = ($$i{'id'} == $selectedId); # choose selected item
+		$$i{'selected'} = ($$i{'id'} eq $selectedId); # choose selected item
 		$$i{'name'} = '- '.$$i{'name'} if ($$i{'meta_default_data'}); # prefix name with - if it's meta
 	}		
 	return $items;	
