@@ -781,7 +781,7 @@ sub _validateRackUpdate
 	die "RMERR_INTERNAL: Unable to validate rack. No rack record specified.\nError occured" unless ($record);
 	checkName($$record{'name'});
 	checkNotes($$record{'notes'});
-	die "RMERR_INTERNAL: Rack sizes must be between 1 and ".MAXRACKSIZE." units.\nError occured" unless (($$record{'size'} > 1) && ($$record{'size'} < MAXRACKSIZE));
+	die "RMERR_INTERNAL: Rack sizes must be between 1 and ".MAXRACKSIZE." units.\nError occured" unless (($$record{'size'} > 0) && ($$record{'size'} < MAXRACKSIZE));
 	return ($$record{'name'}, $$record{'row'}, $$record{'row_pos'}, $$record{'hidden_rack'}, $$record{'size'}, $$record{'notes'});
 }
 
