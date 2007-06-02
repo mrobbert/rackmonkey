@@ -331,7 +331,12 @@ eval
 			{
 				$template->param('racks' => $backend->rackList($orderBy));
 			}
-			elsif (($viewType =~ /^physical/))
+			elsif ($viewType =~ /^unracked/)
+			{
+				my $devices = $backend->deviceListUnracked;
+				$template->param('devices' => $devices);
+			}
+			elsif ($viewType =~ /^physical/)
 			{
 				my @rackIdList = $cgi->rackList;
 				push (@rackIdList, $id) if (scalar(@rackIdList) == 0); # add current rack id if no list

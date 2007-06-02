@@ -1302,6 +1302,42 @@ sub deviceListInRack
 	return $sth->fetchall_arrayref({});		
 }
 
+sub deviceListUnracked # consider merging this with existing device method
+{
+	my $self = shift;
+	my $sth = $self->dbh->prepare(qq!
+		SELECT 
+			device.*,
+			rack.name 					AS rack_name,
+			building.meta_default_data	AS building_meta_default_data,
+			hardware.name 				AS hardware_name,
+			hardware_manufacturer.name	AS hardware_manufacturer_name,
+			hardware.size				AS hardware_size,
+			domain.name					AS domain_name,
+			domain.meta_default_data	AS domain_meta_default_data,
+			role.name 					AS role_name,
+			os.name 					AS os_name
+			FROM
+			device, rack, row, room, building, hardware, org hardware_manufacturer, domain, role, os
+		WHERE
+			device.meta_default_data = 0 AND
+			building.meta_default_data <> 0 AND
+			device.rack = rack.id AND 
+			rack.row = row.id AND
+			row.room = room.id AND
+			room.building = building.id AND				
+			device.hardware = hardware.id AND
+			hardware.manufacturer = hardware_manufacturer.id AND
+			device.domain = domain.id AND
+			device.role = role.id AND
+			device.os = os.id
+		ORDER BY device.meta_default_data, device.name
+	!);
+	
+	$sth->execute();
+	return $sth->fetchall_arrayref({});
+}
+
 sub updateDevice
 {
 	my ($self, $updateTime, $updateUser, $record) = @_;
@@ -1382,7 +1418,6 @@ sub _validateDeviceInput # doesn't check much at present
 	
 	return ($$record{'name'}, $$record{'domain'}, $$record{'rack'}, $$record{'rack_pos'}, $$record{'hardware'}, $$record{'serial_no'}, $$record{'asset_no'}, $$record{'purchased'}, $$record{'os'}, $$record{'os_version'}, $$record{'customer'}, $$record{'service'}, $$record{'role'}, $$record{'in_service'}, $$record{'notes'});
 }
-
 
 ##############################################################################
 # Role Methods                                                               #  
