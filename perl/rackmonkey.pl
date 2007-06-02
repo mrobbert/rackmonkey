@@ -172,7 +172,12 @@ eval
 		}		
 		elsif ($view eq 'device')
 		{
-			if ($viewType =~ /^default/) 
+			if ($viewType =~ /^unracked/)
+			{
+				my $devices = $backend->deviceListUnracked;
+				$template->param('devices' => $devices);
+			}
+			elsif ($viewType =~ /^default/) 
 			{
 				my $filterBy = $cgi->filterBy;
 				
@@ -330,11 +335,6 @@ eval
 			if ($viewType =~ /^default/)
 			{
 				$template->param('racks' => $backend->rackList($orderBy));
-			}
-			elsif ($viewType =~ /^unracked/)
-			{
-				my $devices = $backend->deviceListUnracked;
-				$template->param('devices' => $devices);
 			}
 			elsif ($viewType =~ /^physical/)
 			{

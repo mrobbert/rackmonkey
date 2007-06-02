@@ -7,12 +7,12 @@
 # RackMonkey - Know Your Racks - http://www.rackmonkey.org                   #
 # Version 1.2.%BUILD%                                                        #
 # (C)2007 Will Green (wgreen at users.sourceforge.net)                       #
-# Rack unracked device template                                              #
+# Device unracked template                                                   #
 ##############################################################################
 -->
 
 <head>
-	<title>Unracked Devices | RackMonkey</title>
+	<title>Devices: Unracked | RackMonkey</title>
 	<link rel="stylesheet" type="text/css" title="Monkey Style" href="<TMPL_VAR NAME=web_root>/styles/rackmonkey.css" />
 	<script type="text/javascript" src="<TMPL_VAR NAME=web_root>/javascript/racklib.js"></script>
 </head>
@@ -21,13 +21,22 @@
 
 <TMPL_INCLUDE NAME="nav.ssi">
 
-<!-- temporary navigation -->
-<p>
-	<a href="<TMPL_VAR NAME=base_url>?view=building&amp;view_type=default">View Building Summary</a> | 
-	<a href="<TMPL_VAR NAME=base_url>?view=room&amp;view_type=default">View Room Summary</a> | 
-	<a href="<TMPL_VAR NAME=base_url>?view=rack">View Rack Summary</a>
+<p style="float: left; margin-right: 30px;">
+		<a href="<TMPL_VAR NAME=base_url>?view=device&amp;view_type=create"><img src="<TMPL_VAR NAME=web_root>/graphics/buttons/new.gif" width="47" height="21" alt="New" /></a>
 </p>
-<!--- end of temporary navigation -->
+
+<form method="get" action="<TMPL_VAR NAME=base_url>">
+<p>
+	<input type="hidden" name="view" value="device"/>
+	<label>View Type</label>
+		<select name="view_type" onchange="submit()">
+		<option value="default">Default</option>
+		<option value="default_asset">Asset</option>
+		<option value="default_extended">Extended</option>
+		<option selected="selected" value="unracked">Unracked</option>
+	</select>
+</p>
+</form>
 
 <table style="clear:both">
 	<tr>
