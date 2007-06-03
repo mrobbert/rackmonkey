@@ -136,29 +136,27 @@ td.yesno
 }
 
 
-.row_silver_conf
+.row_silver_conf td
 {
 	border: none; 
-	background: #EAEAEA; 
+	background: #E4E4E4; 
 	padding: 8px;
 }
 
-.row_white_conf
+.row_white_conf td
 {
 	border: none; 
 	background: #FFF; 
 	padding: 8px;
 }
 
-.row_silver
+.row_silver td
 {
-	border: none; 
-	background: #EAEAEA; 
+	background: #E4E4E4; 
 }
 
-.row_white
+.row_white td
 {
-	border: none; 
 	background: #FFF; 
 }
 
