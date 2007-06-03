@@ -82,6 +82,9 @@ Needed to install RackMonkey
     - DBD::SQLite v1.09+ - for SQLite
     - DBD::Pg - for Postgres
 
+NB. If you check a version out of the subversion repository it may use 
+Data::Dumper for debugging. Packaged versions don't include it.
+
 The easiest way to install modules is with the CPAN shell. You generally need 
 to be root in order to do this. 
 
