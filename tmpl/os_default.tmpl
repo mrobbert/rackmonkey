@@ -36,13 +36,16 @@
 		</th>		
 	</tr>
 	<TMPL_LOOP NAME=operatingsystems>
-	<tr>
+	<TMPL_IF NAME="__odd__">
+	<tr class="row_silver">
+	<TMPL_ELSE>
+	<tr class="row_white">
+	</TMPL_IF>
 		<td><a title="View details for this operating system" href="<TMPL_VAR NAME=base_url>?view=os&amp;view_type=single&amp;id=<TMPL_VAR NAME=id>"><TMPL_VAR ESCAPE=HTML NAME=name></a></td>
 		<td><TMPL_VAR ESCAPE=HTML NAME=manufacturer_name></td>
 	</tr></TMPL_LOOP>
 </table>
 <TMPL_ELSE>
-<p><strong>Operating Systems:</strong> Represent the operating system of a device, such as Solaris or Windows 2000. Detailed version numbers don't need to be included in operating system entries, as they can be recorded against each device (e.g. Windows 2003 SP2, or FreeBSD 6.2).</p>
 <p>There are no operating system entries in RackMonkey, use the New button to add some.</p>
 </TMPL_IF>
 

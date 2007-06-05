@@ -21,12 +21,10 @@
 
 <TMPL_INCLUDE NAME="nav.ssi">
 
-<p style="float: left; margin-right: 30px;">
-		<a href="<TMPL_VAR NAME=base_url>?view=device&amp;view_type=create"><img src="<TMPL_VAR NAME=web_root>/graphics/buttons/new.gif" width="47" height="21" alt="New" /></a> 
-</p>
-
 <form method="get" action="<TMPL_VAR NAME=base_url>">
 <p>
+	<a href="<TMPL_VAR NAME=base_url>?view=device&amp;view_type=create"><img style="float: left; margin-right: 20px" src="<TMPL_VAR NAME=web_root>/graphics/buttons/new.gif" width="47" height="21" alt="New" /></a>
+	
 	<input type="hidden" name="view" value="device"/>
 	<label>View Type</label>
 		<select name="view_type" onchange="submit()">

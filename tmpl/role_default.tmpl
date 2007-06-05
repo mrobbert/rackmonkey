@@ -34,7 +34,11 @@
 			<a class="sort" title="Sort by description" href="<TMPL_VAR NAME=base_url>?view=role&amp;order_by=role.descript">Description</a> 
 		</th>	
 	</tr><TMPL_LOOP NAME=roles>
-	<tr>
+	<TMPL_IF NAME="__odd__">
+	<tr class="row_silver">
+	<TMPL_ELSE>
+	<tr class="row_white">
+	</TMPL_IF>
 		<td><a title="View details for this role" href="<TMPL_VAR NAME=base_url>?view=role&amp;view_type=single&amp;id=<TMPL_VAR NAME=id>"><TMPL_VAR ESCAPE=HTML NAME=name></a></td>
 		<td><TMPL_IF NAME=descript_short><span title="<TMPL_VAR ESCAPE=HTML NAME=descript>"><TMPL_VAR ESCAPE=HTML NAME=descript_short></span><TMPL_ELSE><TMPL_IF NAME=descript><TMPL_VAR ESCAPE=HTML NAME=descript><TMPL_ELSE>-</TMPL_IF></TMPL_IF></td>
 	</tr>
