@@ -390,6 +390,11 @@ eval
 					$template->param('roomlist' => $cgi->selectRoom($backend->roomListBasic, $selectedRoom));
 				}
 			}
+		}
+		elsif ($view eq 'report')
+		{
+			$template->param('device_count' => $backend->deviceCount);
+			$template->param('rack_count' => $backend->rackCount);
 		}		
 		elsif (($view eq 'config') || ($view eq 'help'))
 		{

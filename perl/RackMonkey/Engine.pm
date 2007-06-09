@@ -89,7 +89,7 @@ sub listBasicMeta
 sub performAct
 {
 	my ($self, $type, $act, $updateUser, $record) = @_;
-	die "RMERR: '$type' is not a recognised type. This error should not occur, did you manually type this URL?\nError occured" unless $type =~ /^(?:building|room|row|rack|device|hardware|os|service|role|domain|org|app)$/;
+	die "RMERR: '$type' is not a recognised type. This error should not occur, did you manually type this URL?\nError occured" unless $type =~ /^(?:building|room|row|rack|device|hardware|os|service|role|domain|org|app|report)$/;
 	my $actStr = $act;
 	my $typeStr = $type;
 	$act = 'update' if ($act eq 'insert');
@@ -573,6 +573,18 @@ sub rack
 	my $rack = $sth->fetchrow_hashref('NAME_lc');
 	die "RMERR: No such rack id.\nError occured" unless defined($$rack{'id'});
 	return $rack;
+}
+
+sub rackCount
+{
+	my $self = shift;
+	my $sth = $self->dbh->prepare(qq!
+		SELECT count(*) 
+		FROM rack
+		WHERE meta_default_data = 0
+	!);
+	$sth->execute();
+	return ($sth->fetchrow_array)[0];
 }
 
 sub rackList
@@ -1209,6 +1221,18 @@ sub device
 	my $device = $sth->fetchrow_hashref('NAME_lc');
 	die 'RMERR: No such device id.' unless defined($$device{'id'});
 	return $device;
+}
+
+sub deviceCount
+{
+	my $self = shift;
+	my $sth = $self->dbh->prepare(qq!
+		SELECT count(*) 
+		FROM device
+		WHERE meta_default_data = 0
+	!);
+	$sth->execute();
+	return ($sth->fetchrow_array)[0];
 }
 
 sub deviceList
