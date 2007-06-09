@@ -20,13 +20,9 @@
 <body>
 
 <TMPL_INCLUDE NAME="nav.ssi">
-<!--
 <p>
 		<a href="<TMPL_VAR NAME=base_url>?view=app&amp;view_type=create"><img src="<TMPL_VAR NAME=web_root>/graphics/buttons/new.gif" width="47" height="21" alt="New" /></a>
 </p>
--->
-
-<p>This view is still under development.</p>
 
 <TMPL_IF NAME=apps>
 <table>
@@ -37,10 +33,14 @@
 		<th>
 			<a class="sort" title="Sort by description" href="<TMPL_VAR NAME=base_url>?view=app&amp;order_by=app.descript">Description</a> 
 		</th>	
+		<th>
+			<a class="sort" title="Sort by description" href="<TMPL_VAR NAME=base_url>?view=app&amp;order_by=app.notes">Notes</a> 
+		</th>		
 	</tr><TMPL_LOOP NAME=apps>
 	<tr>
 		<td><a title="View details for this application" href="<TMPL_VAR NAME=base_url>?view=app&amp;view_type=single&amp;id=<TMPL_VAR NAME=id>"><TMPL_VAR ESCAPE=HTML NAME=name></a></td>
 		<td><TMPL_IF NAME=descript_short><span title="<TMPL_VAR ESCAPE=HTML NAME=descript>"><TMPL_VAR ESCAPE=HTML NAME=descript_short></span><TMPL_ELSE><TMPL_IF NAME=descript><TMPL_VAR ESCAPE=HTML NAME=descript><TMPL_ELSE>-</TMPL_IF></TMPL_IF></td>
+		<td><TMPL_IF NAME=notes_short><span title="<TMPL_VAR ESCAPE=HTML NAME=notes>"><TMPL_VAR ESCAPE=HTML NAME=notes_short></span><TMPL_ELSE><TMPL_IF NAME=notes><TMPL_VAR ESCAPE=HTML NAME=notes><TMPL_ELSE>-</TMPL_IF></TMPL_IF></td>
 	</tr>
 	</TMPL_LOOP>
 </table>
