@@ -5,6 +5,7 @@
 <a href="<TMPL_VAR NAME=base_url>?view=device"><img class="navimg" src="<TMPL_VAR NAME=web_root>/graphics/tabs/devices.gif" width="67" height="21" title="Devices, such as servers and routers" alt="Devices"/></a>
 <a href="<TMPL_VAR NAME=base_url>?view=app"><img class="navimg" src="<TMPL_VAR NAME=web_root>/graphics/tabs/apps.gif" width="46" height="21" title="Applications and services provided by devices" alt="Apps"/></a>
 <a href="<TMPL_VAR NAME=base_url>?view=config"><img class="navimg" src="<TMPL_VAR NAME=web_root>/graphics/tabs/config.gif" width="62" height="21" title="Configuration of hardware, operation systems, roles, organisations etc." alt="Config"/></a>
+<a href="<TMPL_VAR NAME=base_url>?view=report"><img class="navimg" src="<TMPL_VAR NAME=web_root>/graphics/tabs/reports.gif" width="69" height="21" title="Reports on the the items in RackMonkey" alt="Reports"/></a>
 <a href="<TMPL_VAR NAME=base_url>?view=help"><img class="navimg" style="margin-left: 50px;" src="<TMPL_VAR NAME=web_root>/graphics/tabs/help.gif" width="47" height="21" title="Help using RackMonkey" alt="Help"/></a>
 </p>
 <!-- end nav bar include -->
