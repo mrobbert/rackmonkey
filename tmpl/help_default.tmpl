@@ -55,6 +55,11 @@ Before you can start adding your devices (servers, routers etc.) to RackMonkey y
 	<li>You can add from rack layout view. This is more convenient if you're adding devices a rack at a time or want to find a free spot for a device. [Locations]</li>
 </ul>
 
+<h3>Customising RackMonkey</h3>
+<ul>
+	<li><strong>Default View:</strong> Edit the value of DEFAULTVIEW in Conf.pm. The starting value is 'rack', but you can set it to any view (try 'device' or 'building').</li>
+	<li><strong>Limits:</strong> RackMonkey sets limits on the size/length of some values. You can amend these by altering the relevant constant in Conf.pm. For example, to set the maximum size of a rack to 50 U, set MAXRACKSIZE to 50.</li>
+</ul>
 <TMPL_INCLUDE NAME="footer.ssi">
 
 </body>
