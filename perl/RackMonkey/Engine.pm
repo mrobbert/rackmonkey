@@ -1620,6 +1620,51 @@ sub appList
 	return $sth->fetchall_arrayref({});
 }
 
+sub appDevicesUsedList
+{
+	my ($self, $id) = @_;
+	my $sth = $self->dbh->prepare_cached(qq!
+		SELECT
+			device.id			AS device_id,
+		 	device.name			AS device_name, 
+			app.name			AS app_name,
+			app_relation.name 	AS app_relation_name,
+			domain.name			AS domain_name,
+			domain.meta_default_data	AS domain_meta_default_data
+		FROM
+			device, app_relation, device_app, app, domain 
+		WHERE
+		 	device_app.app = app.id AND 
+			device_app.device = device.id AND 
+			device_app.relation = app_relation.id AND
+			device.domain = domain.id AND 
+			app.id = ?
+	!);
+	$sth->execute($id);
+	return $sth->fetchall_arrayref({});
+}
+
+sub appOnDeviceList
+{
+	my ($self, $id) = @_;
+	my $sth = $self->dbh->prepare_cached(qq!
+		SELECT DISTINCT
+			app.id				AS app_id,
+			app.name			AS app_name
+		FROM
+			device, app_relation, device_app, app 
+		WHERE
+		 	device_app.app = app.id AND 
+			device_app.device = device.id AND 
+			device_app.relation = app_relation.id AND
+			device.id = ?
+		ORDER BY
+			app.name
+	!);
+	$sth->execute($id);
+	return $sth->fetchall_arrayref({});	
+}
+
 sub updateApp
 {
 	my ($self, $updateTime, $updateUser, $record) = @_;

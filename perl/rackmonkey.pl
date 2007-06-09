@@ -221,6 +221,7 @@ eval
 				{
 					my $device = $backend->device($id);
 					$$device{'age'} = calculateAge($$device{'purchased'});
+					$$device{'apps'} = $backend->appOnDeviceList($id);
 					$template->param($device);
 
 					if ($viewType =~ /^edit/) 
@@ -314,6 +315,8 @@ eval
 			elsif (($viewType =~ /^edit/) || ($viewType =~ /^single/))
 			{
 				my $app = $backend->app($id);
+				my $devices = $backend->appDevicesUsedList($id);
+				$$app{'app_devices'} = $devices;
 				$template->param($app);
 			}
 		}		
