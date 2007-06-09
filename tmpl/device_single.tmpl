@@ -87,6 +87,16 @@
 
 		<hr />
 		
+		<label>Apps</label><br />
+		<TMPL_IF NAME=apps>
+		<TMPL_LOOP NAME=apps>
+		<a title="View details for this app" href="<TMPL_VAR NAME=base_url>?view=app&amp;view_type=single&amp;id=<TMPL_VAR NAME=app_id>"><TMPL_VAR ESCAPE=HTML NAME=app_name></a><TMPL_UNLESS __last__>,</TMPL_UNLESS>
+		</TMPL_LOOP>
+		<TMPL_ELSE>This device supports no apps.</TMPL_IF>
+		<br /><br />
+		
+		<hr />
+		
 		<div style="clear: both;">
 		<label>Notes</label><br />
 		<TMPL_IF NAME=notes><TMPL_VAR ESCAPE=HTML NAME=notes><TMPL_ELSE>&nbsp;-</TMPL_IF>
