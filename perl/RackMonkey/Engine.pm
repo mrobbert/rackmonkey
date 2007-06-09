@@ -89,7 +89,7 @@ sub listBasicMeta
 sub performAct
 {
 	my ($self, $type, $act, $updateUser, $record) = @_;
-	die "RMERR: '$type' is not a recognised type. This error should not occur, did you manually type this URL?\nError occured" unless $type =~ /^(?:building|room|row|rack|device|hardware|os|service|role|domain|org)$/;
+	die "RMERR: '$type' is not a recognised type. This error should not occur, did you manually type this URL?\nError occured" unless $type =~ /^(?:building|room|row|rack|device|hardware|os|service|role|domain|org|app)$/;
 	my $actStr = $act;
 	my $typeStr = $type;
 	$act = 'update' if ($act eq 'insert');
@@ -1577,7 +1577,90 @@ sub _validateServiceUpdate
 # Application Methods                                                        #  
 ##############################################################################
 
-# Still under development
+sub app
+{
+	my ($self, $id) = @_;
+	die "RMERR: Unable to retrieve app. No app id specified.\nError occured" unless ($id);
+	my $sth = $self->dbh->prepare(qq!
+		SELECT app.* 
+		FROM app 
+		WHERE id = ?
+	!);
+	$sth->execute($id);	
+	my $app = $sth->fetchrow_hashref('NAME_lc');
+	die "RMERR: No such app id.\nError occured" unless defined($$app{'id'});
+	return $app;
+}
+
+sub appCount
+{
+	my $self = shift;
+	my $sth = $self->dbh->prepare(qq!
+		SELECT count(*) 
+		FROM app 
+		WHERE meta_default_data = 0
+	!);
+	$sth->execute();
+	return ($sth->fetchrow_array)[0];
+}
+
+sub appList
+{
+	my $self = shift;
+	my $orderBy = shift || '';
+	$orderBy = 'app.name' unless $orderBy =~ /^[a-z_]+\.[a-z_]+$/;
+	$orderBy = $orderBy.', app.name' unless $orderBy eq 'app.name';# default second ordering is name
+	my $sth = $self->dbh->prepare_cached(qq!
+		SELECT app.* 
+		FROM app
+		WHERE meta_default_data = 0
+		ORDER BY $orderBy
+	!);
+	$sth->execute();
+	return $sth->fetchall_arrayref({});
+}
+
+sub updateApp
+{
+	my ($self, $updateTime, $updateUser, $record) = @_;
+	die "RMERR: Unable to update app. No app record specified.\nError occured" unless ($record);
+	
+	my ($sth, $newId);
+
+	if ($$record{'id'})
+	{	
+		$sth = $self->dbh->prepare(qq!UPDATE app SET name = ?, descript = ?, notes = ?, meta_update_time = ?, meta_update_user = ? WHERE id = ?!);
+		my $ret = $sth->execute($self->_validateAppUpdate($record), $updateTime, $updateUser, $$record{'id'});
+		die "RMERR: Update failed. This app may have been removed before the update occured.\nError occured" if ($ret eq '0E0');
+	}
+	else
+	{
+		$sth = $self->dbh->prepare(qq!INSERT INTO app (name, descript, notes, meta_update_time, meta_update_user) VALUES(?, ?, ?, ?, ?)!);
+		$sth->execute($self->_validateAppUpdate($record), $updateTime, $updateUser);
+		$newId = $self->_lastInsertId('app');
+	}
+	return $newId || $$record{'id'};
+}
+
+sub deleteApp
+{
+	my ($self, $updateTime, $updateUser, $record) = @_;
+	my $deleteId = (ref $record eq 'HASH') ? $$record{'id'} : $record;
+	die "RMERR: Delete failed. No app id specified.\nError occured" unless ($deleteId);
+	my $sth = $self->dbh->prepare(qq!DELETE FROM app WHERE id = ?!);
+	my $ret = $sth->execute($deleteId);
+	die "RMERR: Delete failed. This app does not currently exist, it may have been removed already.\nError occured" if ($ret eq '0E0');
+	return $deleteId;
+}
+
+sub _validateAppUpdate
+{
+	my ($self, $record) = @_;
+	die "RMERR_INTERNAL: Unable to validate app. No app record specified.\nError occured" unless ($record);
+	checkName($$record{'name'});
+	checkNotes($$record{'notes'});
+	return ($$record{'name'}, $$record{'descript'}, $$record{'notes'});
+}
 
 1;
 

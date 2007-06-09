@@ -297,6 +297,26 @@ eval
 				$template->param($building);
 			}
 		}
+		elsif ($view eq 'app')
+		{
+			if ($viewType =~ /^default/)
+			{
+					my $apps = $backend->appList($orderBy);
+					for my $a (@$apps)
+					{
+						$$a{'descript_short'} = shortStr($$a{'descript'});
+						$$a{'notes_short'} = shortStr($$a{'notes'});
+						
+					}
+					$template->param('apps' => $apps);
+					
+			}
+			elsif (($viewType =~ /^edit/) || ($viewType =~ /^single/))
+			{
+				my $app = $backend->app($id);
+				$template->param($app);
+			}
+		}		
 		elsif ($view eq 'room')
 		{
 			if ($viewType =~ /^default/)
@@ -368,7 +388,7 @@ eval
 				}
 			}
 		}		
-		elsif (($view eq 'config') || ($view eq 'help') || ($view eq 'app'))
+		elsif (($view eq 'config') || ($view eq 'help'))
 		{
 			# do nothing - pages are static content
 		}
