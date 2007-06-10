@@ -92,8 +92,7 @@
 		<TMPL_LOOP NAME=apps>
 		<a title="View details for this app" href="<TMPL_VAR NAME=base_url>?view=app&amp;view_type=single&amp;id=<TMPL_VAR NAME=app_id>"><TMPL_VAR ESCAPE=HTML NAME=app_name></a><TMPL_UNLESS __last__>,</TMPL_UNLESS>
 		</TMPL_LOOP>
-		<TMPL_ELSE>This device supports no apps.</TMPL_IF>
-		<br /><br />
+		<TMPL_ELSE>No apps are hosted on this device.</TMPL_IF>
 		
 		<hr />
 		
