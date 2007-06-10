@@ -37,10 +37,12 @@
 			
 		<label>Description</label><br />
 		<TMPL_IF NAME=descript><TMPL_VAR ESCAPE=HTML NAME=descript><TMPL_ELSE>&nbsp;-</TMPL_IF>
-		<br /><br />	
-		
+
+		<TMPL_IF NAME=notes>
+		<br /><br />
 		<label>Notes</label><br />
-		<TMPL_IF NAME=notes><TMPL_VAR ESCAPE=HTML NAME=notes><TMPL_ELSE>&nbsp;-</TMPL_IF>		
+		<TMPL_VAR ESCAPE=HTML NAME=notes>
+		</TMPL_IF>	
 
 		<hr/>
 		

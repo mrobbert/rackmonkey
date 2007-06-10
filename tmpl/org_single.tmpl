@@ -57,10 +57,12 @@
 		
 		<label>Home Page</label><br />
 		<TMPL_IF NAME=home_page><a href="<TMPL_VAR ESCAPE=HTML NAME=home_page>"><TMPL_VAR ESCAPE=HTML NAME=home_page></a><TMPL_ELSE>&nbsp;-</TMPL_IF>
-		<br /><br />			
 		
+		<TMPL_IF NAME=notes>
+		<br /><br />
 		<label>Notes</label><br />
-		<TMPL_IF NAME=notes><TMPL_VAR ESCAPE=HTML NAME=notes><TMPL_ELSE>&nbsp;-</TMPL_IF>		
+		<TMPL_VAR ESCAPE=HTML NAME=notes>
+		</TMPL_IF>		
 		
 		<hr/>
 		

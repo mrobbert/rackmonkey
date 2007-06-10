@@ -53,10 +53,12 @@
 		<a title="View details for this rack" href="<TMPL_VAR NAME=base_url>?view=rack&amp;view_type=single&amp;id=<TMPL_VAR NAME=id>"><TMPL_VAR ESCAPE=HTML NAME=name></a><TMPL_UNLESS __last__>,</TMPL_UNLESS>
 		</TMPL_LOOP>
 		<TMPL_ELSE>This room contains no racks.</TMPL_IF>
+
+		<TMPL_IF NAME=notes>
 		<br /><br />
-		
 		<label>Notes</label><br />
-		<TMPL_IF NAME=notes><TMPL_VAR ESCAPE=HTML NAME=notes><TMPL_ELSE>&nbsp;-</TMPL_IF>
+		<TMPL_VAR ESCAPE=HTML NAME=notes>
+		</TMPL_IF>
 		
 		<hr/>
 		

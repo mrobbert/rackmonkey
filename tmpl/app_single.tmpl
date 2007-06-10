@@ -50,9 +50,10 @@
 		<TMPL_ELSE>This application does not use any devices.<br /><br />
 		</TMPL_IF>
 		
+		<TMPL_IF NAME=notes>
 		<label>Notes</label><br />
-		<TMPL_IF NAME=notes><TMPL_VAR ESCAPE=HTML NAME=notes><TMPL_ELSE>&nbsp;-</TMPL_IF>		
-
+		<TMPL_VAR ESCAPE=HTML NAME=notes>
+		</TMPL_IF>
 		<hr/>
 		
 		<TMPL_UNLESS NAME=meta_default_data><a href="<TMPL_VAR NAME=base_url>?view=app&amp;view_type=default&amp;act=delete&amp;act_on=app&amp;act_id=<TMPL_VAR NAME=id>"><img style="float:left;" src="<TMPL_VAR NAME=web_root>/graphics/buttons/delete.gif" width="48" height="21" alt="Delete" /></a></TMPL_UNLESS>
