@@ -47,7 +47,7 @@
 			<li><TMPL_VAR ESCAPE=HTML NAME=app_relation_name> <TMPL_VAR ESCAPE=HTML NAME=device_name><TMPL_UNLESS NAME=domain_meta_default_data>.<TMPL_VAR ESCAPE=HTML NAME=domain_name></TMPL_UNLESS> <a class="small" title="View details for this device" href="<TMPL_VAR NAME=base_url>?view=device&amp;view_type=single&amp;id=<TMPL_VAR NAME=device_id>">Details&hellip;</a></li>
 		</TMPL_LOOP>
 		</ul>
-		<TMPL_ELSE>This application does not use any devices.<br /><br />
+		<TMPL_ELSE>This app does not use any devices.<br /><br />
 		</TMPL_IF>
 		
 		<TMPL_IF NAME=notes>
