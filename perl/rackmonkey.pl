@@ -310,7 +310,6 @@ eval
 						
 					}
 					$template->param('apps' => $apps);
-					
 			}
 			elsif (($viewType =~ /^edit/) || ($viewType =~ /^single/))
 			{
@@ -318,6 +317,11 @@ eval
 				my $devices = $backend->appDevicesUsedList($id);
 				$$app{'app_devices'} = $devices;
 				$template->param($app);
+			}
+			elsif ($viewType =~ /^manage/)
+			{
+				my $devices = $backend->appDevicesUsedList($id);
+				$template->param('devices' => $devices);
 			}
 		}		
 		elsif ($view eq 'room')
