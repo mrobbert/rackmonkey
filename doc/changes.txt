@@ -5,12 +5,19 @@
 # RackMonkey Changes                                                         #
 ##############################################################################
 
-v1.2.2 - Released ?
+v1.2.2 - Released 2007-06-21
 ----------------------------
 * Added support for operating system versions.
 * Added ability to perform basic filtering of devices in default views.
 * Added basic view of unracked devices.
+* Added alternating row colours to default (table) views.
+* Added basic help content to help view.
+* Added a basic reporting view (this will be expanded in later releases).
+* Added applications view (though attaching applications to devices is not
+  yet supported in this release).
+* Note section is hidden to reduce clutter if there aren't any notes. 
 * Fixed a bug preventing the creation of 1 U racks.
+* Fixed the location of the 'New' button in device default views in IE 6.
 
 v1.2.1 - Released 2007-05-18
 ----------------------------

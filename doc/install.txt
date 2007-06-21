@@ -14,9 +14,10 @@ Contents
      5. Configuring RackMonkey
      6. Database Set Up
      7. Running RackMonkey
-     8. Troubleshooting
-     9. Logging Support Requests
-    10. Bugs and Feature Requests
+	 8. Upgrading from v1.2.1
+     9. Troubleshooting
+    10. Logging Support Requests
+    11. Bugs and Feature Requests
     
 
 1. Introduction
@@ -112,6 +113,9 @@ If using Postgres:
 
 4. Installing RackMonkey
 ========================
+If you are upgrading from v1.2.1 don't follow this section, instead scroll
+down to section 8. Upgrading from v1.2.1.
+
 Once you have obtained a copy of RackMonkey (see section 2) you should have a
 directory with the following layout:
 
@@ -253,7 +257,55 @@ reading userguide.txt. If you're having trouble getting RackMonkey to run,
 read the next section.
 
 
-8. Troubleshooting
+8. Upgrading from v1.2.1
+========================
+Upgrading from v1.2.1 is straightforward: there are no database schema
+changes. Upgrading from v1.1 is not supported.
+
+Despite the fact there are no schema changes in this release, you should take
+a backup of the RackMonkey database before proceeding.
+
+To perform the actual upgrade, uncompress the new release in a temporary
+location, then follow these steps (you may wish to take backups of any files
+you delete):
+
+* Upgrade Templates: delete all the existing templates and copy the new
+  templates into the existing template directory.
+* Upgrade web content: delete all the existing web (www) content and copy the 
+  new content into the existing directory.
+* Upgrade docs: overwrite the existing docs with the new versions.
+* Upgrade code: copy the contents of the perl/RackMonkey directory into your 
+  existing perl/RackMonkey directory (your existing conf will work find and 
+  won't be over-written). Now copy the new rackmonkey.pl script over the 
+  existing one.
+
+The following step is optional, but recommended:
+------------------------------------------------
+Update the build number in your database (this won't affect functionality, but
+ensures it matches your code). Connect to your RackMonkey database and run the
+following SQL (this step will be automated in future):
+
+	UPDATE rm_meta SET VALUE='1.2.2' WHERE name='system_build';
+	
+If running under mod_perl
+-------------------------
+If you're running RackMonkey under mod_perl you must restart or HUP your
+mod_perl instance. This ensures mod_perl reads the new modules.
+
+The upgrade is now complete. No reconfiguration is required, your updated
+RackMonkey is ready to use. If you experience any problems with the upgrade 
+you should consult the Troubleshooting section (below).
+
+Reverting to v1.2.1
+-------------------
+* Take a copy of RackMonkey/Conf.pm
+* Download v1.2.1 from http://www.rackmonkey.org/download
+* Do a fresh install of v1.2.1 following it's instructions, but skipping
+  configuration
+* Copy your saved Conf.pm into the perl/RackMonkey directory.
+
+
+9. Troubleshooting
 ==================
 This section deals with system issues which prevent RackMonkey running or
 using its database. For help with using RackMonkey see userguide.txt.
@@ -338,8 +390,8 @@ Where <role> is the role you're using to connect from RackMonkey, and <table>
 is the relation mentioned in the error message.
 
 
-9. Logging Support Requests
-===========================
+10. Logging Support Requests
+============================
 If you have issues running RackMonkey please check the troubleshooting section
 of this document (above) and the RackMonkey FAQ:
 
@@ -353,7 +405,7 @@ When logging a support request please include as much detail as possible:
 operating system, database software and revision, and any error messages.
 
 
-10. Bugs and Feature Requests
+11. Bugs and Feature Requests
 =============================
 To review the current list of bugs and feature requests, or to submit
 new ones, please visit:

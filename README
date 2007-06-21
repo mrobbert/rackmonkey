@@ -10,12 +10,19 @@ Introduction
 Thank you for choosing to try RackMonkey v1.2, I hope you find it useful in
 bringing (and keeping) order in your data centres.
 
-Known Issues v1.2.%BUILD%
--------------------------
+Release Highlights
+------------------
+* Added support for operating system versions.
+* Added ability to perform basic filtering of devices in default views.
+* Added basic view of unracked devices.
+* Added basic reporting.
+
+For more information on what's new in this release see doc/changes.txt.
+
+Known Issues v1.2.2
+-------------------
 * Row management is disabled.
-* Application views are disabled.
-* Unracked devices view is disabled.
-* The help view isn't very helpful ;)
+* App/Device relationship management is disabled.
 * Numbering of racks from the top doesn't work. Please leave conf as:
     RACKNUMBERINGTOP => 0;
 * When you use 'add' from an edit/create view all your other changes are lost.
@@ -26,7 +33,10 @@ Known Issues v1.2.%BUILD%
 * JavaScript for selecting and deselecting racks in default rack view doesn't 
   work if there is only one item present.
 * Untested in IE7 (testing is due to begin shortly).
-* Allows rack to be resized even when the resize affects devices
+* Allows rack to be resized even when the resize affects devices.
+* Show/hide for device filters is crude and doesn't remember settings.
+* Using or resetting filters removes sort order from device default views and
+  vice-versa.
 
 Security
 --------
@@ -46,8 +56,8 @@ mod_perl
 A limited amount of testing has been done under mod_perl, but there may still
 be issues. Use with caution.
 
-Installation
-------------
+Installation or Upgrading
+-------------------------
 Please read the doc/install.txt file.
 
 User Documentation

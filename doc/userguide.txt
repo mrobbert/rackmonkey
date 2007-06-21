@@ -8,6 +8,7 @@
 User Guide to RackMonkey v1.2
 =============================
 This document is at a very early stage. Updates will be forthcoming shortly.
+You can also get help by selecting the 'Help' tab from within RackMonkey.
 
 First Steps
 ===========
