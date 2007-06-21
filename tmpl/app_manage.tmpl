@@ -23,15 +23,20 @@
 
 <table class="form">
 <tr>
-	<th class="form">manage apps</th>
+	<th class="form">manage app devices (not yet supported)</th>
 </tr>
 <tr>
 	<td class="form">
+		<TMPL_IF NAME=devices>
 		<TMPL_LOOP NAME=devices>
-		<TMPL_VAR ESCAPE=HTML NAME=app_relation_name> <TMPL_VAR ESCAPE=HTML NAME=device_name><TMPL_UNLESS NAME=domain_meta_default_data>.<TMPL_VAR ESCAPE=HTML NAME=domain_name></TMPL_UNLESS> [<a title="Delete this app/device relationship" href="">x</a>]<br />
+		<TMPL_VAR ESCAPE=HTML NAME=app_relation_name> <TMPL_VAR ESCAPE=HTML NAME=device_name><TMPL_UNLESS NAME=domain_meta_default_data>.<TMPL_VAR ESCAPE=HTML NAME=domain_name></TMPL_UNLESS> <!--[<a title="Delete this app/device relationship" href="">x</a>]--><br />
 		</TMPL_LOOP>
+		<TMPL_ELSE>
+		No devices are associated with this app.
+		</TMPL_IF>
 		<hr />
 		<!-- Need to add drop down for type of relationship and device here -->
+		<a href="<TMPL_VAR NAME=base_url>?view=app&amp;view_type=single&amp;id=<TMPL_VAR NAME=id>"><img style="float: left;" src="<TMPL_VAR NAME=web_root>/graphics/buttons/cancel.gif" width="48" height="21" alt="Cancel" /></a>
 	</td>
 </tr>
 </table>

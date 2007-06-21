@@ -797,6 +797,17 @@ sub _validateRackUpdate
 	return ($$record{'name'}, $$record{'row'}, $$record{'row_pos'}, $$record{'hidden_rack'}, $$record{'size'}, $$record{'notes'});
 }
 
+sub totalSizeRack
+{
+	my $self = shift;
+	my $sth = $self->dbh->prepare(qq!
+		SELECT SUM(size) 
+		FROM rack; 
+	!);
+	$sth->execute();
+	return ($sth->fetchrow_array)[0];	
+}
+
 ##############################################################################
 # Hardware Methods                                                           #  
 ##############################################################################
@@ -913,6 +924,25 @@ sub _validateHardwareUpdate
 	return ($$record{'name'}, $$record{'manufacturer_id'}, $$record{'size'}, $$record{'image'}, $$record{'support_url'}, $$record{'spec_url'}, $$record{'notes'});
 }
 
+sub hardwareDeviceCount
+{
+	my $self = shift;
+	my $sth = $self->dbh->prepare(qq!
+		SELECT 
+			hardware.name AS hardware, 
+			org.name AS manufacturer,
+			COUNT(device.id) AS num_devices 
+		FROM device, hardware, org 
+		WHERE 
+			device.hardware = hardware.id AND
+			hardware.manufacturer = org.id 
+		GROUP BY hardware.id 
+		ORDER BY num_devices DESC
+		LIMIT 10;
+	!);
+	$sth->execute();
+	return $sth->fetchall_arrayref({});
+}
 
 ##############################################################################
 # Operating System Methods                                                   #  
@@ -1089,6 +1119,22 @@ sub _validateOrgUpdate
 	return ($$record{'name'}, $$record{'account_no'}, $$record{'customer'}, $$record{'software'}, $$record{'hardware'}, $$record{'descript'}, $$record{'home_page'}, $$record{'notes'});
 }
 
+sub customerDeviceCount
+{
+	my $self = shift;
+	my $sth = $self->dbh->prepare(qq!
+		SELECT 
+			org.name AS customer, 
+			COUNT(device.id) AS num_devices 
+		FROM device, org 
+		WHERE device.customer = org.id 
+		GROUP BY org.id 
+		ORDER BY num_devices DESC
+		LIMIT 10;
+	!);
+	$sth->execute();
+	return $sth->fetchall_arrayref({});
+}
 
 ##############################################################################
 # Domain Methods                                                             #  
@@ -1442,6 +1488,19 @@ sub _validateDeviceInput # doesn't check much at present
 	
 	return ($$record{'name'}, $$record{'domain'}, $$record{'rack'}, $$record{'rack_pos'}, $$record{'hardware'}, $$record{'serial_no'}, $$record{'asset_no'}, $$record{'purchased'}, $$record{'os'}, $$record{'os_version'}, $$record{'customer'}, $$record{'service'}, $$record{'role'}, $$record{'in_service'}, $$record{'notes'});
 }
+
+sub totalSizeDevice
+{
+	my $self = shift;
+	my $sth = $self->dbh->prepare(qq!
+		SELECT SUM(size) 
+		FROM hardware, device 
+		WHERE device.hardware = hardware.id;
+	!);
+	$sth->execute();
+	return ($sth->fetchrow_array)[0];	
+}
+
 
 ##############################################################################
 # Role Methods                                                               #  

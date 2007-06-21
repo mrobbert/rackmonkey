@@ -322,6 +322,7 @@ eval
 			{
 				my $devices = $backend->appDevicesUsedList($id);
 				$template->param('devices' => $devices);
+				$template->param('id' => $id);
 			}
 		}		
 		elsif ($view eq 'room')
@@ -399,6 +400,12 @@ eval
 		{
 			$template->param('device_count' => $backend->deviceCount);
 			$template->param('rack_count' => $backend->rackCount);
+			my $rackSize = $backend->totalSizeRack;
+			my $deviceSize = $backend->totalSizeDevice;
+			$template->param('total_rack_space' => $rackSize);
+			$template->param('free_rack_space' => $rackSize - $deviceSize);
+			$template->param('customer_device_count' => $backend->customerDeviceCount);
+			$template->param('hardware_device_count' => $backend->hardwareDeviceCount);
 		}		
 		elsif (($view eq 'config') || ($view eq 'help'))
 		{
