@@ -25,8 +25,6 @@ use warnings;
 
 use 5.006_001;
 
-use Data::Dumper; # should be removed from release versions
-
 use DBI;
 use HTML::Template;
 use Time::Local;
