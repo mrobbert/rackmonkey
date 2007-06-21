@@ -931,7 +931,8 @@ sub hardwareDeviceCount
 		SELECT 
 			hardware.name AS hardware, 
 			org.name AS manufacturer,
-			COUNT(device.id) AS num_devices 
+			COUNT(device.id) AS num_devices,
+			hardware.meta_default_data AS hardware_meta_default_data 
 		FROM device, hardware, org 
 		WHERE 
 			device.hardware = hardware.id AND

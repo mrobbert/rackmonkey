@@ -46,7 +46,7 @@
 <table>
 <tr><th>Count</th><th>Hardware</th></tr>
 <TMPL_LOOP NAME=hardware_device_count>
-<tr><td><TMPL_VAR NAME=num_devices></td><td><TMPL_VAR NAME=manufacturer> <TMPL_VAR NAME=hardware></td></tr>
+<tr><td><TMPL_VAR NAME=num_devices></td><td><TMPL_UNLESS NAME=hardware_meta_default_data><TMPL_VAR ESCAPE=HTML NAME=manufacturer> </TMPL_UNLESS><TMPL_VAR NAME=hardware></td></tr>
 </TMPL_LOOP>
 </table>
 	
