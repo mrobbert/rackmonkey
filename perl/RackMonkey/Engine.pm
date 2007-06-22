@@ -937,7 +937,7 @@ sub hardwareDeviceCount
 		WHERE 
 			device.hardware = hardware.id AND
 			hardware.manufacturer = org.id 
-		GROUP BY hardware.id 
+		GROUP BY hardware.name, org.name, hardware_meta_default_data
 		ORDER BY num_devices DESC
 		LIMIT 10;
 	!);
@@ -1129,7 +1129,7 @@ sub customerDeviceCount
 			COUNT(device.id) AS num_devices 
 		FROM device, org 
 		WHERE device.customer = org.id 
-		GROUP BY org.id 
+		GROUP BY org.name 
 		ORDER BY num_devices DESC
 		LIMIT 10;
 	!);
