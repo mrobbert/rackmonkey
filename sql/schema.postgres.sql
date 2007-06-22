@@ -207,7 +207,7 @@ CREATE TABLE device_app
 (
 	app INTEGER REFERENCES app,
 	device INTEGER REFERENCES device,
-	relation REFERENCES app_relation
+	relation INTEGER REFERENCES app_relation
 );
 
 
