@@ -5,6 +5,10 @@
 # RackMonkey Changes                                                         #
 ##############################################################################
 
+v1.2.2-1 - Released 2007-06-22
+------------------------------
+* Fixed issues with using v1.2.2 with Postgres. SQLite users are not affected.
+
 v1.2.2 - Released 2007-06-21
 ----------------------------
 * Added support for operating system versions.

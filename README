@@ -10,6 +10,12 @@ Introduction
 Thank you for choosing to try RackMonkey v1.2, I hope you find it useful in
 bringing (and keeping) order in your data centres.
 
+Changes from v1.2.2 to v1.2.2-1
+-------------------------------
+There were a couple of bugs affecting Postgres users of v1.2.2, these have
+been resolved in this updated release. See doc/install.txt for upgrade
+details. SQLite users were not affected, so don't need to upgrade.
+
 Release Highlights
 ------------------
 * Added support for operating system versions.
@@ -19,8 +25,8 @@ Release Highlights
 
 For more information on what's new in this release see doc/changes.txt.
 
-Known Issues v1.2.2
--------------------
+Known Issues v1.2.2-1
+---------------------
 * Row management is disabled.
 * App/Device relationship management is disabled.
 * Numbering of racks from the top doesn't work. Please leave conf as:
