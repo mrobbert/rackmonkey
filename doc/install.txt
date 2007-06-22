@@ -14,7 +14,7 @@ Contents
      5. Configuring RackMonkey
      6. Database Set Up
      7. Running RackMonkey
-	 8. Upgrading RackMonkey
+     8. Upgrading RackMonkey
      9. Troubleshooting
     10. Logging Support Requests
     11. Bugs and Feature Requests
