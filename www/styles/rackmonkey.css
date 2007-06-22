@@ -196,7 +196,7 @@ p.footer
 	font-family: verdana, sans-serif;
 	font-size: 0.6em;
 	background-color: #DDD;
-	width: 200px;
+	width: 220px;
 }
 
 .rack_physical_empty
@@ -204,7 +204,7 @@ p.footer
 	font-family: verdana, sans-serif;
 	font-size: 0.6em;
 	background-color: white;
-	width: 200px;
+	width: 220px;
 }
 
 .rack_physical
