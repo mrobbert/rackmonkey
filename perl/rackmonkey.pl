@@ -60,6 +60,8 @@ eval
 	if ($act) # perform act, and return status: 303 (See Other) to redirect to a view
 	{
 		my $updateUser = $ENV{'REMOTE_USER'} || $ENV{'REMOTE_ADDR'};
+		die "RMERR: You are logged in as 'guest'. Guest users can't update RackMonkey. Error occured " if (lc($updateUser) eq 'guest');
+		
 		my $actData = $cgi->vars;
 		
 		# delete id, only act_ids should be used be used for acts, ids are used for views
