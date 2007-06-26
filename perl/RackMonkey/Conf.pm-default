@@ -13,7 +13,7 @@ our $VERSION = '1.2.%BUILD%';
 our $AUTHOR = 'Will Green (wgreen at users.sourceforge.net)';
 
 use base 'Exporter';
-our @EXPORT = qw/DBDCONNECT DBUSER DBPASS TMPLPATH WWWPATH DEFAULTVIEW RACKNUMBERINGTOP MAXNOTE MAXSTRING MAXRACKSIZE SHORTTEXTLEN SHORTURLLEN DATEFORMAT/;
+our @EXPORT = qw/DBDCONNECT DBUSER DBPASS TMPLPATH WWWPATH DEFAULTVIEW RACKNUMBERINGTOP MAXNOTE MAXSTRING MAXRACKSIZE SHORTTEXTLEN SHORTURLLEN DATEFORMAT DELLQUERY/;
 
 # Database Connection Settings
 use constant DBDCONNECT => 'dbi:SQLite:dbname=/home/rack/db/rackmonkey.db';
@@ -36,4 +36,7 @@ use constant SHORTTEXTLEN  => 32; 	# Shorten long text for table views
 use constant SHORTURLLEN  => 64; 	# Shorten long URLs for display
 use constant DATEFORMAT => '%Y-%m-%d';	# Format used to display dates (not currently used)
 
+# Remote site queries
+#use constant DELLQUERY = 'http://support.dell.com/support/topics/global.aspx/support/my_systems_info/en/details?c=us&cs=04&l=en&s=bsd&ServiceTag='; # US
+use constant DELLQUERY = 'http://support.dell.com/support/topics/global.aspx/support/my_systems_info/en/details?c=uk&cs=04&l=en&s=bsd&ServiceTag='; # UK
 1;

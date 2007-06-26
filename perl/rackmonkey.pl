@@ -212,7 +212,7 @@ eval
 				{
 					$$d{'age'} = calculateAge($$d{'purchased'});
 				}
-				
+
 				$template->param('devices' => $devices);
 			}
 			else
@@ -225,12 +225,17 @@ eval
 				my $selectedRack = $cgi->selectProperty('rack') || $cgi->lastCreatedId; 
 				my $selectedDomain = $cgi->lastCreatedId; 
 				
-
 				if (($viewType =~ /^edit/) || ($viewType =~ /^single/))
 				{
 					my $device = $backend->device($id);
 					$$device{'age'} = calculateAge($$device{'purchased'});
 					$$device{'apps'} = $backend->appOnDeviceList($id);
+
+					if (($viewType =~ /^single/) && (lc($$device{'hardware_manufacturer_name'}) =~ /dell/)) # kludgey!
+					{
+						$template->param('dell_query' => DELLQUERY);
+					}
+					
 					$template->param($device);
 
 					if ($viewType =~ /^edit/) 

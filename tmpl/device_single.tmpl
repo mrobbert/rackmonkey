@@ -67,7 +67,7 @@
 
 		<div style="clear: both; float: left; width: 280px; margin-top: 8px;">
 		<label>Serial Number</label><br />
-		<TMPL_IF NAME=serial_no><TMPL_VAR ESCAPE=HTML NAME=serial_no><TMPL_ELSE>&nbsp;-</TMPL_IF>
+		<TMPL_IF NAME=serial_no><TMPL_VAR ESCAPE=HTML NAME=serial_no><TMPL_IF NAME=dell_query> <a class="small" href="<TMPL_VAR ESCAPE=HTML NAME=dell_query><TMPL_VAR ESCAPE=HTML NAME=serial_no>">Query Dell&hellip;</a></TMPL_IF><TMPL_ELSE>&nbsp;-</TMPL_IF>
 		</div>
 		
 		<div style="margin-top: 8px;">
