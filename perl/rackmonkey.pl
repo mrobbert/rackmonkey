@@ -25,6 +25,8 @@ use warnings;
 
 use 5.006_001;
 
+use Data::Dumper; # remove from release versions
+
 use DBI;
 use HTML::Template;
 use Time::Local;
@@ -63,6 +65,13 @@ eval
 		die "RMERR: You are logged in as 'guest'. Guest users can't update RackMonkey. Error occured " if (lc($updateUser) eq 'guest');
 		
 		my $actData = $cgi->vars;
+		
+		# Trim whitespace from the start and end of all submitted values
+		for (values %$actData)
+		{
+			s/^\s+//;
+	        s/\s+$//;
+		}
 		
 		# delete id, only act_ids should be used be used for acts, ids are used for views
 		delete $$actData{'id'};
