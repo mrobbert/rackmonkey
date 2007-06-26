@@ -1294,7 +1294,17 @@ sub deviceList
 		$filterBy .= " AND $f=".$$filters{"$f"};
 	}
 	
-	$orderBy = 'device.name' unless $orderBy =~ /^[a-z_]+\.[a-z_]+$/;	
+	$orderBy = 'device.name' unless $orderBy =~ /^[a-z_]+\.[a-z_]+$/;
+
+	# ensure meta_default entries appear last - need a better way to do this
+	$orderBy = 'room.meta_default_data, '.$orderBy if ($orderBy =~ /^room.name/);	
+	$orderBy = 'rack.meta_default_data, '.$orderBy if ($orderBy =~ /^rack.name/);	
+	$orderBy = 'role.meta_default_data, '.$orderBy if ($orderBy =~ /^role.name/);	
+	$orderBy = 'hardware.meta_default_data, '.$orderBy if ($orderBy =~ /^hardware.name/);	
+	$orderBy = 'os.meta_default_data, '.$orderBy if ($orderBy =~ /^os.name/);	
+	$orderBy = 'customer.meta_default_data, '.$orderBy if ($orderBy =~ /^customer.name/);	
+	$orderBy = 'service.meta_default_data, '.$orderBy if ($orderBy =~ /^service.name/);	
+	
 	my $sth = $self->dbh->prepare(qq!
 		SELECT 
 			device.*, 

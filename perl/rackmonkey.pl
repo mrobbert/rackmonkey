@@ -433,6 +433,7 @@ eval
 	
 	$template->param('base_url' => $baseURL);
 	$template->param('web_root' => WWWPATH);
+	$template->param('order_by' => $orderBy);
 	
 	print $cgi->header;
 	print $template->output;
