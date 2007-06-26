@@ -96,7 +96,8 @@ sub actOn
 sub orderBy
 {
 	my $self = shift;
-	if ($self->cgi->param('order_desc') == 1)
+	my $orderDesc = $self->cgi->param('order_desc') || '';
+	if ($orderDesc eq '1')
 	{
 		return $self->cgi->param('order_by').' DESC';	
 	}
