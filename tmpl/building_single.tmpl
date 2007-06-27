@@ -39,10 +39,10 @@
 		<TMPL_IF NAME=name_short><TMPL_VAR ESCAPE=HTML NAME=name_short><TMPL_ELSE>&nbsp;-</TMPL_IF>
 		<br /><br />		
 		
-		<label>Rooms [<a href="<TMPL_VAR NAME=base_url>?view=room&amp;view_type=create&amp;building_id=<TMPL_VAR NAME=id>&amp;return_view=building&amp;return_view_type=single&amp;return_view_id=<TMPL_VAR NAME=id>">add</a>]</label><br />
+		<label>Rooms [<a href="<TMPL_VAR NAME=base_url>?view=room&amp;view_type=create&amp;building_id=<TMPL_VAR ESCAPE=URL NAME=id>&amp;return_view=building&amp;return_view_type=single&amp;return_view_id=<TMPL_VAR ESCAPE=URL NAME=id>">add</a>]</label><br />
 		<TMPL_IF NAME=rooms>
 		<TMPL_LOOP NAME=rooms>
-		<a title="View details for this room" href="<TMPL_VAR NAME=base_url>?view=room&amp;view_type=single&amp;id=<TMPL_VAR NAME=id>"><TMPL_VAR ESCAPE=HTML NAME=name></a><TMPL_UNLESS __last__>,</TMPL_UNLESS>
+		<a title="View details for this room" href="<TMPL_VAR NAME=base_url>?view=room&amp;view_type=single&amp;id=<TMPL_VAR ESCAPE=URL NAME=id>"><TMPL_VAR ESCAPE=HTML NAME=name></a><TMPL_UNLESS __last__>,</TMPL_UNLESS>
 		</TMPL_LOOP>
 		<TMPL_ELSE>This building contains no rooms.</TMPL_IF>
 
@@ -53,8 +53,8 @@
 		</TMPL_IF>
 		<hr/>
 		
-		<TMPL_UNLESS NAME=meta_default_data><a href="<TMPL_VAR NAME=base_url>?view=building&amp;view_type=default&amp;act=delete&amp;act_on=building&amp;act_id=<TMPL_VAR NAME=id>"><img style="float:left;" src="<TMPL_VAR NAME=web_root>/graphics/buttons/delete.gif" width="48" height="21" alt="Delete" /></a></TMPL_UNLESS>
-		<a href="<TMPL_VAR NAME=base_url>?view=building&amp;view_type=edit&amp;id=<TMPL_VAR NAME=id>"><img style="float:right;" src="<TMPL_VAR NAME=web_root>/graphics/buttons/edit.gif" width="48" height="21" alt="Edit" /></a>
+		<TMPL_UNLESS NAME=meta_default_data><a href="<TMPL_VAR NAME=base_url>?view=building&amp;view_type=default&amp;act=delete&amp;act_on=building&amp;act_id=<TMPL_VAR ESCAPE=URL NAME=id>"><img style="float:left;" src="<TMPL_VAR NAME=web_root>/graphics/buttons/delete.gif" width="48" height="21" alt="Delete" /></a></TMPL_UNLESS>
+		<a href="<TMPL_VAR NAME=base_url>?view=building&amp;view_type=edit&amp;id=<TMPL_VAR ESCAPE=URL NAME=id>"><img style="float:right;" src="<TMPL_VAR NAME=web_root>/graphics/buttons/edit.gif" width="48" height="21" alt="Edit" /></a>
 
 		<p class="updated">Entry last updated by <TMPL_VAR ESCAPE=HTML NAME=meta_update_user> at <TMPL_VAR ESCAPE=HTML NAME=meta_update_time> GMT</p>
 	</td>
