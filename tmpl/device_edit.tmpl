@@ -30,13 +30,13 @@
 	<td class="form">
 		<div style="float: left; width: 280px;">
 		<label>Name</label><br />
-		<input type="text" size="32" name="name" value="<TMPL_VAR NAME=name>" />
+		<input type="text" size="32" name="name" value="<TMPL_VAR ESCAPE=HTML NAME=name>" />
 		</div>
 		
 		<div>
 		<label>Domain</label><br />
 		<select name="domain"><TMPL_LOOP NAME=domainlist>
-		<option <TMPL_IF NAME=selected>selected="selected"</TMPL_IF> value="<TMPL_VAR NAME=id>"><TMPL_VAR NAME=name></option></TMPL_LOOP>
+		<option <TMPL_IF NAME=selected>selected="selected"</TMPL_IF> value="<TMPL_VAR ESCAPE=HTML NAME=id>"><TMPL_VAR NAME=name></option></TMPL_LOOP>
 		</select>
 		</div>
 
@@ -108,7 +108,7 @@
 
 		<div style="clear: both;">
 		<label>Notes</label><br />
-		<textarea name="notes" cols="55" rows="4"></textarea>
+		<textarea name="notes" cols="55" rows="4"><TMPL_VAR ESCAPE=HTML NAME=notes></textarea>
 		<hr/>
 		<a href="<TMPL_VAR NAME=base_url>?view=device&amp;view_type=single&amp;id=<TMPL_VAR NAME=id>"><img style="float: left;" src="<TMPL_VAR NAME=web_root>/graphics/buttons/cancel.gif" width="48" height="21" alt="Cancel" /></a>
 		<button style="float: right;" type="submit">Save</button>
