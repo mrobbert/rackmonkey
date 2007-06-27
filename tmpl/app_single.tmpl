@@ -39,12 +39,12 @@
 		<TMPL_IF NAME=descript><TMPL_VAR ESCAPE=HTML NAME=descript><TMPL_ELSE>&nbsp;-</TMPL_IF>
 		<br /><br />	
 		
-		<label>Devices Used [<a href="<TMPL_VAR NAME=base_url>?view=app&amp;view_type=manage&amp;id=<TMPL_VAR NAME=id>&amp;return_view=app&amp;return_view_type=single&amp;return_view_id=<TMPL_VAR NAME=id>">manage</a>]</label><br />
+		<label>Devices Used [<a href="<TMPL_VAR NAME=base_url>?view=app&amp;view_type=manage&amp;id=<TMPL_VAR ESCAPE=URL NAME=id>&amp;return_view=app&amp;return_view_type=single&amp;return_view_id=<TMPL_VAR ESCAPE=URL NAME=id>">manage</a>]</label><br />
 		
 		<TMPL_IF NAME=app_devices>
 		<ul style="margin-top: 0px; padding-left: 1.5em">
 		<TMPL_LOOP NAME=app_devices>
-			<li><TMPL_VAR ESCAPE=HTML NAME=app_relation_name> <TMPL_VAR ESCAPE=HTML NAME=device_name><TMPL_UNLESS NAME=domain_meta_default_data>.<TMPL_VAR ESCAPE=HTML NAME=domain_name></TMPL_UNLESS> <a class="small" title="View details for this device" href="<TMPL_VAR NAME=base_url>?view=device&amp;view_type=single&amp;id=<TMPL_VAR NAME=device_id>">Details&hellip;</a></li>
+			<li><TMPL_VAR ESCAPE=HTML NAME=app_relation_name> <TMPL_VAR ESCAPE=HTML NAME=device_name><TMPL_UNLESS NAME=domain_meta_default_data>.<TMPL_VAR ESCAPE=HTML NAME=domain_name></TMPL_UNLESS> <a class="small" title="View details for this device" href="<TMPL_VAR NAME=base_url>?view=device&amp;view_type=single&amp;id=<TMPL_VAR ESCAPE=URL NAME=device_id>">Details&hellip;</a></li>
 		</TMPL_LOOP>
 		</ul>
 		<TMPL_ELSE>This app does not use any devices.<br /><br />
@@ -56,8 +56,8 @@
 		</TMPL_IF>
 		<hr/>
 		
-		<TMPL_UNLESS NAME=meta_default_data><a href="<TMPL_VAR NAME=base_url>?view=app&amp;view_type=default&amp;act=delete&amp;act_on=app&amp;act_id=<TMPL_VAR NAME=id>"><img style="float:left;" src="<TMPL_VAR NAME=web_root>/graphics/buttons/delete.gif" width="48" height="21" alt="Delete" /></a></TMPL_UNLESS>
-		<a href="<TMPL_VAR NAME=base_url>?view=app&amp;view_type=edit&amp;id=<TMPL_VAR NAME=id>"><img style="float:right;" src="<TMPL_VAR NAME=web_root>/graphics/buttons/edit.gif" width="48" height="21" alt="Edit" /></a>		
+		<TMPL_UNLESS NAME=meta_default_data><a href="<TMPL_VAR NAME=base_url>?view=app&amp;view_type=default&amp;act=delete&amp;act_on=app&amp;act_id=<TMPL_VAR ESCAPE=URL NAME=id>"><img style="float:left;" src="<TMPL_VAR NAME=web_root>/graphics/buttons/delete.gif" width="48" height="21" alt="Delete" /></a></TMPL_UNLESS>
+		<a href="<TMPL_VAR NAME=base_url>?view=app&amp;view_type=edit&amp;id=<TMPL_VAR ESCAPE=URL NAME=id>"><img style="float:right;" src="<TMPL_VAR NAME=web_root>/graphics/buttons/edit.gif" width="48" height="21" alt="Edit" /></a>		
 
 		<p class="updated">Entry last updated by <TMPL_VAR ESCAPE=HTML NAME=meta_update_user> at <TMPL_VAR ESCAPE=HTML NAME=meta_update_time> GMT</p>
 	</td>
