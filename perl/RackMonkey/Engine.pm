@@ -1393,6 +1393,7 @@ sub deviceListUnracked # consider merging this with existing device method
 			building.meta_default_data	AS building_meta_default_data,
 			hardware.name 				AS hardware_name,
 			hardware_manufacturer.name	AS hardware_manufacturer_name,
+			hardware.meta_default_data	AS hardware_meta_default_data,
 			hardware.size				AS hardware_size,
 			domain.name					AS domain_name,
 			domain.meta_default_data	AS domain_meta_default_data,
