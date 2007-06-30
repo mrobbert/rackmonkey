@@ -41,14 +41,14 @@
 		
 		<hr/>
 		
-		<a href="<TMPL_VAR NAME=base_url>?view=domain&amp;view_type=single&amp;id=<TMPL_VAR NAME=id>"><img style="float: left;" src="<TMPL_VAR NAME=web_root>/graphics/buttons/cancel.gif" width="48" height="21" alt="Cancel" /></a>
+		<a href="<TMPL_VAR NAME=base_url>?view=domain&amp;view_type=single&amp;id=<TMPL_VAR ESCAPE=URL NAME=id>"><img style="float: left;" src="<TMPL_VAR NAME=web_root>/graphics/buttons/cancel.gif" width="48" height="21" alt="Cancel" /></a>
 		<button style="float: right;" type="submit">Save</button>
 		<input type="hidden" name="view" value="domain" />
 		<input type="hidden" name="view_type" value="single" />
-		<input type="hidden" name="id" value="<TMPL_VAR NAME=id>" />
+		<input type="hidden" name="id" value="<TMPL_VAR ESCAPE=HTML NAME=id>" />
 		<input type="hidden" name="act" value="update" />
 		<input type="hidden" name="act_on" value="domain" />
-		<input type="hidden" name="act_id" value="<TMPL_VAR NAME=id>" />		
+		<input type="hidden" name="act_id" value="<TMPL_VAR ESCAPE=HTML NAME=id>" />		
 	</td>
 </tr>
 </table>
