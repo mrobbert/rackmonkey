@@ -417,6 +417,7 @@ eval
 			my $rackSize = $backend->totalSizeRack;
 			my $deviceSize = $backend->totalSizeDevice;
 			$template->param('total_rack_space' => $rackSize);
+			$template->param('used_rack_space' => $deviceSize);
 			$template->param('free_rack_space' => $rackSize - $deviceSize);
 			$template->param('customer_device_count' => $backend->customerDeviceCount);
 			$template->param('hardware_device_count' => $backend->hardwareDeviceCount);
