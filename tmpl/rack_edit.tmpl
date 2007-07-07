@@ -21,7 +21,7 @@
 
 <TMPL_INCLUDE NAME="nav.ssi">
 
-<form  method="post" action="<TMPL_VAR NAME=base_url>">
+<form  method="get" action="<TMPL_VAR NAME=base_url>">
 <table class="form">
 <tr>
 	<th class="form">edit rack</th>
@@ -34,7 +34,7 @@
 	<br /><br />
 
 	<label>Row</label><br />
-	<span style="font-size: smaller">Not yet supported.</span>
+	<span style="font-size: smaller">Editing not yet supported.</span>
 	<br /><br />
 	
 	<label>Room [<a href="<TMPL_VAR NAME=base_url>?view=room&amp;view_type=create&amp;return_view=rack&amp;return_view_id=<TMPL_VAR NAME=id>&amp;return_view_type=edit">add</a>]</label><br />
@@ -46,6 +46,10 @@
 	<label>Size (U)</label><br />
 	<input type="text" size="4" name="size" value="<TMPL_VAR NAME=size>" />
 	<br /><br />	
+	
+	<!-- hidden fields to maintain row and row_pos values until they can be edited in the GUI -->
+	<input type="hidden" name="row" value="<TMPL_VAR NAME=row>" />
+	<input type="hidden" name="row_pos" value="<TMPL_VAR NAME=row_pos>" />
 	
 	<label>Notes</label><br />
 	<textarea name="notes" cols="55" rows="4"><TMPL_VAR ESCAPE=HTML NAME=notes></textarea>

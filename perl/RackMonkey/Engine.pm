@@ -11,6 +11,8 @@ use warnings;
 
 use 5.006_001;
 
+use Data::Dumper;
+
 use RackMonkey::Conf;
 use RackMonkey::Helper;
 
@@ -757,7 +759,8 @@ sub updateRack
 	}
 
 	# force row_pos to 0 until rows are supported
-	$$record{'row_pos'} = 0;
+	$$record{'row_pos'} = 0 unless (defined $$record{'row_pos'});
+	
 	# hidden racks can't be created directly
 	$$record{'hidden_rack'} = 0;
 	
