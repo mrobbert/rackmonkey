@@ -44,7 +44,7 @@
 		<br /><br />
 		
 		<label>Image File</label><br />
-		<TMPL_IF NAME=image><TMPL_VAR NAME=image><TMPL_ELSE>&nbsp;-</TMPL_IF>
+		<TMPL_IF NAME=image><TMPL_VAR ESCAPE=HTML NAME=image><TMPL_ELSE>&nbsp;-</TMPL_IF>
 		<br /><br />
 		
 		<label>Support URL</label><br />
@@ -61,8 +61,8 @@
 		</TMPL_IF>
 		
 		<hr/>
-		<TMPL_UNLESS NAME=meta_default_data><a href="<TMPL_VAR NAME=base_url>?view=hardware&amp;view_type=default&amp;act=delete&amp;act_on=hardware&amp;act_id=<TMPL_VAR NAME=id>"><img style="float:left;" src="<TMPL_VAR NAME=web_root>/graphics/buttons/delete.gif" width="48" height="21" alt="Delete" /></a></TMPL_UNLESS>
-		<a href="<TMPL_VAR NAME=base_url>?view=hardware&amp;view_type=edit&amp;id=<TMPL_VAR NAME=id>"><img style="float:right;" src="<TMPL_VAR NAME=web_root>/graphics/buttons/edit.gif" width="48" height="21" alt="Edit" /></a>
+		<TMPL_UNLESS NAME=meta_default_data><a href="<TMPL_VAR NAME=base_url>?view=hardware&amp;view_type=default&amp;act=delete&amp;act_on=hardware&amp;act_id=<TMPL_VAR ESCAPE=URL NAME=id>"><img style="float:left;" src="<TMPL_VAR NAME=web_root>/graphics/buttons/delete.gif" width="48" height="21" alt="Delete" /></a></TMPL_UNLESS>
+		<a href="<TMPL_VAR NAME=base_url>?view=hardware&amp;view_type=edit&amp;id=<TMPL_VAR ESCAPE=URL NAME=id>"><img style="float:right;" src="<TMPL_VAR NAME=web_root>/graphics/buttons/edit.gif" width="48" height="21" alt="Edit" /></a>
 
 		<p class="updated">Entry last updated by <TMPL_VAR ESCAPE=HTML NAME=meta_update_user> at <TMPL_VAR ESCAPE=HTML NAME=meta_update_time> GMT</p>
 	</td>

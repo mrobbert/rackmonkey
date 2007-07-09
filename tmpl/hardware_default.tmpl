@@ -50,9 +50,9 @@
 	<TMPL_ELSE>
 	<tr class="row_white">
 	</TMPL_IF>
-		<td><a title="View details for this hardware" href="<TMPL_VAR NAME=base_url>?view=hardware&amp;view_type=single&amp;id=<TMPL_VAR NAME=id>"><TMPL_VAR ESCAPE=HTML NAME=name></a></td>
+		<td><a title="View details for this hardware" href="<TMPL_VAR NAME=base_url>?view=hardware&amp;view_type=single&amp;id=<TMPL_VAR ESCAPE=URL NAME=id>"><TMPL_VAR ESCAPE=HTML NAME=name></a></td>
 		<td><TMPL_VAR ESCAPE=HTML NAME=manufacturer_name></td>
-		<td><TMPL_VAR NAME=size></td>
+		<td><TMPL_VAR ESCAPE=HTML NAME=size></td>
 		<td><TMPL_IF NAME=support_url><a title="View support page for this hardware" href="<TMPL_VAR ESCAPE=HTML NAME=support_url>">&gt;&gt;</a><TMPL_ELSE>-</TMPL_IF></td>
 		<td><TMPL_IF NAME=spec_url><a title="View specification page for this hardware" href="<TMPL_VAR ESCAPE=HTML NAME=spec_url>">&gt;&gt;</a><TMPL_ELSE>-</TMPL_IF></td>
 	</tr></TMPL_LOOP>

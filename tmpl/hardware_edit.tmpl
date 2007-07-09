@@ -31,9 +31,9 @@
 		<label>Name</label><br />
 		<input type="text" size="60" name="name" value="<TMPL_VAR ESCAPE=HTML NAME=name>" />
 		<br /><br />
-		<label>Manufacturer [<a href="<TMPL_VAR NAME=base_url>?view=org&amp;view_type=create&amp;hardware=1&amp;return_view=hardware&amp;return_view_type=edit&amp;return_view_id=<TMPL_VAR NAME=id>">add</a>]</label><br />
+		<label>Manufacturer [<a href="<TMPL_VAR NAME=base_url>?view=org&amp;view_type=create&amp;hardware=1&amp;return_view=hardware&amp;return_view_type=edit&amp;return_view_id=<TMPL_VAR ESCAPE=URL NAME=id>">add</a>]</label><br />
 		<select name="manufacturer_id"><TMPL_LOOP NAME=manufacturerlist>
-		<option<TMPL_IF NAME=selected> selected="selected"</TMPL_IF> value="<TMPL_VAR NAME=id>"><TMPL_VAR ESCAPE=HTML NAME=name></option></TMPL_LOOP>
+		<option<TMPL_IF NAME=selected> selected="selected"</TMPL_IF> value="<TMPL_VAR ESCAPE=HTML NAME=id>"><TMPL_VAR ESCAPE=HTML NAME=name></option></TMPL_LOOP>
 		</select>
 		<br /><br />
 		<label>Size (U)</label><br />
@@ -51,14 +51,14 @@
 		<label>Notes</label><br />
 		<textarea name="notes" cols="55" rows="4"><TMPL_VAR ESCAPE=HTML NAME=notes></textarea>
 		<hr/>
-		<a href="<TMPL_VAR NAME=base_url>?view=hardware&amp;view_type=single&amp;id=<TMPL_VAR NAME=id>"><img style="float: left;" src="<TMPL_VAR NAME=web_root>/graphics/buttons/cancel.gif" width="48" height="21" alt="Cancel" /></a>
+		<a href="<TMPL_VAR NAME=base_url>?view=hardware&amp;view_type=single&amp;id=<TMPL_VAR ESCAPE=URL NAME=id>"><img style="float: left;" src="<TMPL_VAR NAME=web_root>/graphics/buttons/cancel.gif" width="48" height="21" alt="Cancel" /></a>
 		<button style="float: right;" type="submit">Save</button>
 		<input type="hidden" name="view" value="hardware" />
 		<input type="hidden" name="view_type" value="single" />
-		<input type="hidden" name="id" value="<TMPL_VAR NAME=id>" />
+		<input type="hidden" name="id" value="<TMPL_VAR ESCAPE=HTML NAME=id>" />
 		<input type="hidden" name="act" value="update" />
 		<input type="hidden" name="act_on" value="hardware" />
-		<input type="hidden" name="act_id" value="<TMPL_VAR NAME=id>" />
+		<input type="hidden" name="act_id" value="<TMPL_VAR ESCAPE=HTML NAME=id>" />
 	</td>
 </tr>
 </table>
