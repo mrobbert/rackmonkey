@@ -41,12 +41,14 @@
 	<TMPL_ELSE>
 	<tr class="row_white">
 	</TMPL_IF>
-		<td><a title="View details for this operating system" href="<TMPL_VAR NAME=base_url>?view=os&amp;view_type=single&amp;id=<TMPL_VAR NAME=id>"><TMPL_VAR ESCAPE=HTML NAME=name></a></td>
+		<td><a title="View details for this operating system" href="<TMPL_VAR NAME=base_url>?view=os&amp;view_type=single&amp;id=<TMPL_VAR ESCAPE=URL NAME=id>"><TMPL_VAR ESCAPE=HTML NAME=name></a></td>
 		<td><TMPL_VAR ESCAPE=HTML NAME=manufacturer_name></td>
 	</tr></TMPL_LOOP>
 </table>
 <TMPL_ELSE>
-<p>There are no operating system entries in RackMonkey, use the New button to add some.</p>
+<p>
+	There are no operating system entries in RackMonkey, use the 'New' button to add some.
+</p>
 </TMPL_IF>
 
 <TMPL_INCLUDE NAME="footer.ssi">

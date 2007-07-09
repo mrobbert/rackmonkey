@@ -34,7 +34,7 @@
 		<label>Manufacturer [<a href="<TMPL_VAR NAME=base_url>?view=org&amp;view_type=create&amp;software=1&amp;return_view=os&amp;return_view_type=create">add</a>]</label><br />
 		<select name="manufacturer_id">
 		<TMPL_LOOP NAME=manufacturerlist>
-		<option<TMPL_IF NAME=selected> selected="selected"</TMPL_IF> value="<TMPL_VAR NAME=id>"><TMPL_VAR ESCAPE=HTML NAME=name></option></TMPL_LOOP>
+		<option<TMPL_IF NAME=selected> selected="selected"</TMPL_IF> value="<TMPL_VAR ESCAPE=URL NAME=id>"><TMPL_VAR ESCAPE=HTML NAME=name></option></TMPL_LOOP>
 		</select>
 		<br /><br />
 		<label>Notes</label><br />
