@@ -65,7 +65,7 @@
 		<input type="hidden" name="view" value="<TMPL_VAR ESCAPE=HTML NAME=return_view>" />
 		<input type="hidden" name="view_type" value="<TMPL_VAR ESCAPE=HTML NAME=return_view_type>" />
 		<input type="hidden" name="id" value="<TMPL_VAR ESCAPE=HTML NAME=return_view_id>" />
-		<a href="<TMPL_VAR NAME=base_url>?view=<TMPL_VAR ESCAPE=HTML NAME=return_view>&amp;view_type=<TMPL_VAR ESCAPE=HTML NAME=return_view_type>&amp;id=<TMPL_VAR ESCAPE=HTML NAME=return_view_id>"><img style="float: left;" src="<TMPL_VAR NAME=web_root>/graphics/buttons/cancel.gif" width="48" height="21" alt="Cancel" /></a>
+		<a href="<TMPL_VAR NAME=base_url>?view=<TMPL_VAR ESCAPE=URL NAME=return_view>&amp;view_type=<TMPL_VAR ESCAPE=URL NAME=return_view_type>&amp;id=<TMPL_VAR ESCAPE=URL NAME=return_view_id>"><img style="float: left;" src="<TMPL_VAR NAME=web_root>/graphics/buttons/cancel.gif" width="48" height="21" alt="Cancel" /></a>
 		<TMPL_ELSE>
 		<input type="hidden" name="view" value="org" />
 		<input type="hidden" name="view_type" value="single" />

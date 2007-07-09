@@ -50,7 +50,7 @@
 	<TMPL_ELSE>
 	<tr class="row_white">
 	</TMPL_IF>
-		<td><a title="View details for this organisation" href="<TMPL_VAR NAME=base_url>?view=org&amp;view_type=single&amp;id=<TMPL_VAR NAME=id>"><TMPL_VAR ESCAPE=HTML NAME=name></a></td>
+		<td><a title="View details for this organisation" href="<TMPL_VAR NAME=base_url>?view=org&amp;view_type=single&amp;id=<TMPL_VAR ESCAPE=URL NAME=id>"><TMPL_VAR ESCAPE=HTML NAME=name></a></td>
 		<td><TMPL_IF NAME=descript_short><span title="<TMPL_VAR ESCAPE=HTML NAME=descript>"><TMPL_VAR ESCAPE=HTML NAME=descript_short></span><TMPL_ELSE><TMPL_IF NAME=descript><TMPL_VAR ESCAPE=HTML NAME=descript><TMPL_ELSE>-</TMPL_IF></TMPL_IF></td>
 		<td class="yesno"><TMPL_IF NAME=customer>Y<TMPL_ELSE>N</TMPL_IF></td>
 		<td class="yesno"><TMPL_IF NAME=software>Y<TMPL_ELSE>N</TMPL_IF></td>
