@@ -672,7 +672,8 @@ sub rackListBasic
 
 sub rackPhysical # This method is all rather inelegant and doesn't deal with racks numbered from the top
 {
-	my ($self, $rackid) = @_;
+	my ($self, $rackid, $selectDev) = @_;
+	$selectDev ||= 0;
 	my $devices = $self->deviceListInRack($rackid);
 
 	my $sth = $self->dbh->prepare(qq!
@@ -709,7 +710,7 @@ sub rackPhysical # This method is all rather inelegant and doesn't deal with rac
 				{
 					$position--;
 					$size--;
-					$rackLayout[$position] = {'rack_pos' => $position, 'id' => 0, 'name' => '', 'hardware_size' => '0'};
+					$rackLayout[$position] = {'rack_pos' => $position, 'id' => 0, 'name' => '', 'hardware_size' => 0};
 				}
 			}
 		}
@@ -717,6 +718,7 @@ sub rackPhysical # This method is all rather inelegant and doesn't deal with rac
 		{
 			$rackLayout[$position] = {'rack_pos' => $position, 'id' => 0, 'name' => '', 'hardware_size' => '1'};	
 		}
+		$rackLayout[$position]{'is_selected'} = ($rackLayout[$position]{'id'} == $selectDev); # flag the selected device
 		$position--;
 	}
 	shift @rackLayout; # remove superfluous last entry

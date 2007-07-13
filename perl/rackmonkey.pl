@@ -387,10 +387,9 @@ eval
 				for my $rackId (@rackIdList)
 				{
 					my $rack = $backend->rack($rackId);
-					$$rack{'rack_layout'} = $backend->rackPhysical($rackId) if ($viewType =~ /^physical/);
+					$$rack{'rack_layout'} = $backend->rackPhysical($rackId, $cgi->id('device'));
 					push @racks, $rack;
 				}
-				
 				$template->param('rack_list' => \@racks);
 			}
 			else

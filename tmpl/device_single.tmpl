@@ -40,7 +40,7 @@
 	
 		<div>
 		<label>Location</label><br />
-		<TMPL_VAR ESCAPE=HTML NAME=rack_name><TMPL_UNLESS NAME=building_meta_default_data> [<TMPL_VAR ESCAPE=HTML NAME=rack_pos>] - <TMPL_VAR ESCAPE=HTML NAME=room_name> in <TMPL_VAR ESCAPE=HTML NAME=building_name> &nbsp; <a class="small" title="View device in rack" href="<TMPL_VAR NAME=base_url>?view=rack&amp;view_type=physical&amp;id=<TMPL_VAR ESCAPE=URL NAME=rack>">View in rack&hellip;</a><TMPL_ELSE>&nbsp; <a class="small" title="View unracked devices" href="<TMPL_VAR NAME=base_url>?view=device&amp;view_type=unracked">View all unracked devices&hellip;</a></TMPL_UNLESS>
+		<TMPL_VAR ESCAPE=HTML NAME=rack_name><TMPL_UNLESS NAME=building_meta_default_data> [<TMPL_VAR ESCAPE=HTML NAME=rack_pos>] - <TMPL_VAR ESCAPE=HTML NAME=room_name> in <TMPL_VAR ESCAPE=HTML NAME=building_name> &nbsp; <a class="small" title="View device in rack" href="<TMPL_VAR NAME=base_url>?view=rack&amp;view_type=physical&amp;id=<TMPL_VAR ESCAPE=URL NAME=rack>&amp;device_id=<TMPL_VAR ESCAPE=URL NAME=id>">View in rack&hellip;</a><TMPL_ELSE>&nbsp; <a class="small" title="View unracked devices" href="<TMPL_VAR NAME=base_url>?view=device&amp;view_type=unracked">View all unracked devices&hellip;</a></TMPL_UNLESS>
 		</div>
 		
 		<hr />
