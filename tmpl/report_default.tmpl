@@ -26,9 +26,9 @@
 
 <h3>Summary</h3>
 <ul>
-	<li>There are <TMPL_VAR NAME=rack_count> <a href="<TMPL_VAR NAME=base_url>?view=rack">racks</a> with a total size of <TMPL_VAR NAME=total_rack_space> U</li>
-	<li>There are <TMPL_VAR NAME=device_count> <a href="<TMPL_VAR NAME=base_url>?view=device">devices</a> using a total of <TMPL_VAR NAME=used_rack_space> U</li>
-	<li>There is <TMPL_VAR NAME=free_rack_space> U of free space in the racks</li>
+	<li>There are <TMPL_VAR ESCAPE=HTML NAME=rack_count> <a href="<TMPL_VAR NAME=base_url>?view=rack">racks</a> with a total size of <TMPL_VAR NAME=total_rack_space> U</li>
+	<li>There are <TMPL_VAR ESCAPE=HTML NAME=device_count> <a href="<TMPL_VAR NAME=base_url>?view=device">devices</a> using a total of <TMPL_VAR NAME=used_rack_space> U</li>
+	<li>There is <TMPL_VAR ESCAPE=HTML NAME=free_rack_space> U of free space in the racks</li>
 </ul>
 
 <h3>Customers</h3>
@@ -36,7 +36,7 @@
 <table>
 <tr><th>Count</th><th>Customer</th></tr>
 <TMPL_LOOP NAME=customer_device_count>
-<tr><td><TMPL_VAR NAME=num_devices></td><td><TMPL_VAR NAME=customer></td></tr>
+<tr><td><TMPL_VAR ESCAPE=HTML NAME=num_devices></td><td><TMPL_VAR ESCAPE=HTML NAME=customer></td></tr>
 </TMPL_LOOP>
 </table>
 
@@ -45,7 +45,7 @@
 <table>
 <tr><th>Count</th><th>Hardware</th></tr>
 <TMPL_LOOP NAME=hardware_device_count>
-<tr><td><TMPL_VAR NAME=num_devices></td><td><TMPL_UNLESS NAME=hardware_meta_default_data><TMPL_VAR ESCAPE=HTML NAME=manufacturer> </TMPL_UNLESS><TMPL_VAR NAME=hardware></td></tr>
+<tr><td><TMPL_VAR ESCAPE=HTML NAME=num_devices></td><td><TMPL_UNLESS NAME=hardware_meta_default_data><TMPL_VAR ESCAPE=HTML NAME=manufacturer> </TMPL_UNLESS><TMPL_VAR ESCAPE=HTML NAME=hardware></td></tr>
 </TMPL_LOOP>
 </table>
 	
