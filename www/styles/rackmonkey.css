@@ -189,6 +189,7 @@ p.footer
 	color: white;
 	border-color: black;
 	background-color: #444;
+	padding: 2px;
 }
 
 .rack_physical_dev
@@ -197,6 +198,8 @@ p.footer
 	font-size: 0.6em;
 	background-color: #DDD;
 	width: 220px;
+	padding: 2px;
+	
 }
 
 .rack_physical_selected
@@ -205,6 +208,7 @@ p.footer
 	font-size: 0.6em;
 	background-color: #F90;
 	width: 220px;
+	padding: 2px;	
 }
 
 .rack_physical_empty
@@ -213,6 +217,7 @@ p.footer
 	font-size: 0.6em;
 	background-color: white;
 	width: 220px;
+	padding: 2px;
 }
 
 .rack_physical
