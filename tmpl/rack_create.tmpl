@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0"?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
 
@@ -39,7 +39,7 @@
 	
 	<label>Room [<a href="<TMPL_VAR NAME=base_url>?view=room&amp;view_type=create&amp;return_view=rack&amp;return_view_type=create">add</a>]</label><br />
 	<select name="room"><TMPL_LOOP NAME=roomlist>
-		<option <TMPL_IF NAME=selected>selected="selected"</TMPL_IF> value="<TMPL_VAR NAME=id>"><TMPL_VAR ESCAPE=HTML NAME=name></option></TMPL_LOOP>
+		<option <TMPL_IF NAME=selected>selected="selected"</TMPL_IF> value="<TMPL_VAR ESCAPE=HTML NAME=id>"><TMPL_VAR ESCAPE=HTML NAME=name></option></TMPL_LOOP>
 	</select>
 	<br /><br />	
 	
@@ -56,7 +56,7 @@
 	<input type="hidden" name="view" value="<TMPL_VAR ESCAPE=HTML NAME=return_view>" />
 	<input type="hidden" name="view_type" value="<TMPL_VAR ESCAPE=HTML NAME=return_view_type>" />
 	<input type="hidden" name="id" value="<TMPL_VAR ESCAPE=HTML NAME=return_view_id>" />
-	<a href="<TMPL_VAR NAME=base_url>?view=<TMPL_VAR ESCAPE=HTML NAME=return_view>&amp;view_type=<TMPL_VAR ESCAPE=HTML NAME=return_view_type>&amp;id=<TMPL_VAR ESCAPE=HTML NAME=return_view_id>"><img style="float: left;" src="<TMPL_VAR NAME=web_root>/graphics/buttons/cancel.gif" width="48" height="21" alt="Cancel" /></a>
+	<a href="<TMPL_VAR NAME=base_url>?view=<TMPL_VAR ESCAPE=URL NAME=return_view>&amp;view_type=<TMPL_VAR ESCAPE=URL NAME=return_view_type>&amp;id=<TMPL_VAR ESCAPE=URL NAME=return_view_id>"><img style="float: left;" src="<TMPL_VAR NAME=web_root>/graphics/buttons/cancel.gif" width="48" height="21" alt="Cancel" /></a>
 	<TMPL_ELSE>
 	<input type="hidden" name="view" value="rack" />
 	<input type="hidden" name="view_type" value="single" />

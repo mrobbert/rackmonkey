@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0"?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
 
@@ -37,31 +37,31 @@
 	<span style="font-size: smaller">Editing not yet supported.</span>
 	<br /><br />
 	
-	<label>Room [<a href="<TMPL_VAR NAME=base_url>?view=room&amp;view_type=create&amp;return_view=rack&amp;return_view_id=<TMPL_VAR NAME=id>&amp;return_view_type=edit">add</a>]</label><br />
+	<label>Room [<a href="<TMPL_VAR NAME=base_url>?view=room&amp;view_type=create&amp;return_view=rack&amp;return_view_id=<TMPL_VAR ESCAPE=URL NAME=id>&amp;return_view_type=edit">add</a>]</label><br />
 	<select name="room"><TMPL_LOOP NAME=roomlist>
-		<option <TMPL_IF NAME=selected>selected="selected"</TMPL_IF> value="<TMPL_VAR NAME=id>"><TMPL_VAR ESCAPE=HTML NAME=name></option></TMPL_LOOP>
+		<option <TMPL_IF NAME=selected>selected="selected"</TMPL_IF> value="<TMPL_VAR ESCAPE=HTML NAME=id>"><TMPL_VAR ESCAPE=HTML NAME=name></option></TMPL_LOOP>
 	</select>
 	<br /><br />	
 	
 	<label>Size (U)</label><br />
-	<input type="text" size="4" name="size" value="<TMPL_VAR NAME=size>" />
+	<input type="text" size="4" name="size" value="<TMPL_VAR ESCAPE=HTML NAME=size>" />
 	<br /><br />	
 	
 	<!-- hidden fields to maintain row and row_pos values until they can be edited in the GUI -->
-	<input type="hidden" name="row" value="<TMPL_VAR NAME=row>" />
-	<input type="hidden" name="row_pos" value="<TMPL_VAR NAME=row_pos>" />
+	<input type="hidden" name="row" value="<TMPL_VAR ESCAPE=HTML NAME=row>" />
+	<input type="hidden" name="row_pos" value="<TMPL_VAR ESCAPE=HTML NAME=row_pos>" />
 	
 	<label>Notes</label><br />
 	<textarea name="notes" cols="55" rows="4"><TMPL_VAR ESCAPE=HTML NAME=notes></textarea>
 	<hr/>
-	<a href="<TMPL_VAR NAME=base_url>?view=rack&amp;view_type=single&amp;id=<TMPL_VAR NAME=id>"><img style="float: left;" src="<TMPL_VAR NAME=web_root>/graphics/buttons/cancel.gif" width="48" height="21" alt="Cancel" /></a>
+	<a href="<TMPL_VAR NAME=base_url>?view=rack&amp;view_type=single&amp;id=<TMPL_VAR ESCAPE=URL NAME=id>"><img style="float: left;" src="<TMPL_VAR NAME=web_root>/graphics/buttons/cancel.gif" width="48" height="21" alt="Cancel" /></a>
 	<button style="float: right;" type="submit">Save</button>
 	<input type="hidden" name="view" value="rack" />
 	<input type="hidden" name="view_type" value="single" />
-	<input type="hidden" name="id" value="<TMPL_VAR NAME=id>" />
+	<input type="hidden" name="id" value="<TMPL_VAR ESCAPE=HTML NAME=id>" />
 	<input type="hidden" name="act" value="update" />
 	<input type="hidden" name="act_on" value="rack" />
-	<input type="hidden" name="act_id" value="<TMPL_VAR NAME=id>" />	
+	<input type="hidden" name="act_id" value="<TMPL_VAR ESCAPE=HTML NAME=id>" />	
 	</td>
 </tr>
 </table>

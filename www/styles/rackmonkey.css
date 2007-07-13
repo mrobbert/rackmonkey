@@ -215,6 +215,11 @@ p.footer
 	border-collapse: collapse;
 }
 
+.rack_header
+{
+	color: white;
+}
+
 .showhide
 {
 	font-family: verdana, sans-serif;
