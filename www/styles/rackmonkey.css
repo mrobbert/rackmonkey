@@ -102,12 +102,12 @@ a.sort:visited
 	padding-top: 8px;
 	padding-bottom: 0px;
 	margin-bottom: 0px;
+	margin-top: 0px;
 	font-size: 0.6em;
 	clear: both;
 	text-align: left;
   	font-family: verdana, helvetica, sans-serif;
 }
-
 
 /* Room */
 td.room_row
@@ -226,10 +226,19 @@ p.footer
 	border-spacing: 0px;
 	border-width: 1px;
 	border-collapse: collapse;
+	margin-top: 6px;
 }
 
-.rack_header
+th.rack_header
 {
+	padding-left: 4px;
+	padding-top: 1px;
+	padding-bottom: 1px;
+}
+a.rack_header
+{
+	text-decoration: none;
+	font-size: small;
 	color: white;
 }
 

@@ -21,18 +21,11 @@
 
 <TMPL_INCLUDE NAME="nav.ssi">
 
-
-<!-- temporary navigation -->
-<p class="small">
-<a href="<TMPL_VAR NAME=base_url>?view=building&amp;view_type=default">View Building Summary</a> | <a href="<TMPL_VAR NAME=base_url>?view=room&amp;view_type=default">View Room Summary</a> | <a href="<TMPL_VAR NAME=base_url>?view=rack&amp;view_type=default">View Rack Summary</a>
-</p>
-<!--- end of temporary navigation -->
-
 <TMPL_LOOP NAME=rack_list>
 <table class="rack_physical">
 <tr>
-	<th colspan="2">
-		<a class="rack_header" href="<TMPL_VAR NAME=base_url>?view=rack&amp;view_type=single&amp;id=<TMPL_VAR ESCAPE=URL NAME=id>">Rack <TMPL_VAR ESCAPE=HTML NAME=name></a> 
+	<th class="rack_header" colspan="2">
+		<a class="rack_header" href="<TMPL_VAR NAME=base_url>?view=rack&amp;view_type=single&amp;id=<TMPL_VAR ESCAPE=URL NAME=id>">Rack <TMPL_VAR ESCAPE=HTML NAME=name> in <TMPL_VAR ESCAPE=HTML NAME=room_name></a> 
 	</th>
 </tr>
 <TMPL_LOOP NAME=rack_layout>
