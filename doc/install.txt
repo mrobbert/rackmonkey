@@ -39,7 +39,7 @@ versions are recommended for production use or anyone interested in RackMonkey
 as a user. Releases are packaged as bzipped tars (.tar.bz2) and can be 
 extracted with (your filename may be different):
 
-    bunzip2 -c rackmonkey_1.2.2.tar.bz2 | tar xvf -
+    bunzip2 -c rackmonkey_1.2.3.tar.bz2 | tar xvf -
 
 Subversion Repository
 ---------------------
@@ -67,7 +67,7 @@ tested on the following operating systems:
 
 Needed to install RackMonkey
 ----------------------------
-* Web server (e.g. Apache - but note it has not been tested under mod_perl)
+* Web server (e.g. Apache - but note it has only limited testing under mod_perl)
 
 * One of the following databases (see README for more):
   - SQLite v3.2.2 or higher
@@ -84,7 +84,7 @@ Needed to install RackMonkey
     - DBD::Pg - for Postgres
 
 NB. If you check a version out of the subversion repository it may use 
-Data::Dumper for debugging. Packaged versions don't include it.
+Data::Dumper for debugging. Packaged releases don't use it.
 
 The easiest way to install modules is with the CPAN shell. You generally need 
 to be root in order to do this. 
@@ -323,7 +323,7 @@ you delete):
 * Upgrade docs: overwrite the existing docs with the new versions.
 
 * Upgrade code: copy the contents of the perl/RackMonkey directory into your 
-  existing perl/RackMonkey directory (your existing conf will work find and 
+  existing perl/RackMonkey directory (your existing conf will work fine and 
   won't be over-written). Now copy the new rackmonkey.pl script over the 
   existing one.
 
@@ -343,7 +343,7 @@ you should consult the Troubleshooting section (below).
 ===============================================
 * Take a copy of RackMonkey/Conf.pm
 * Download v1.2.1 from http://www.rackmonkey.org/download
-* Do a fresh install of v1.2.1 following it's instructions, but skipping
+* Do a fresh install of v1.2.1 following its instructions, but skipping
   configuration
 * Copy your saved Conf.pm into the perl/RackMonkey directory.
 
