@@ -25,6 +25,7 @@
 		<a href="<TMPL_VAR NAME=base_url>?view=role&amp;view_type=create"><img src="<TMPL_VAR NAME=web_root>/graphics/buttons/new.gif" width="47" height="21" alt="New" /></a>
 </p>
 
+<TMPL_IF NAME=roles>
 <table>
 	<tr>
 		<th>
@@ -44,6 +45,11 @@
 	</tr>
 	</TMPL_LOOP>
 </table>
+<TMPL_ELSE>
+<p>
+	There are no role entries in RackMonkey, use the 'New' button to add some.
+</p>
+</TMPL_IF>
 
 <TMPL_INCLUDE NAME="footer.ssi">
 </body>
