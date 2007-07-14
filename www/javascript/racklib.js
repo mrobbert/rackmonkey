@@ -32,12 +32,8 @@ function showHide(element)
 	if(!ele)
 		return true;
 	if(ele.style.display=="none")
-	{
-		ele.style.display="block"
-	} 
+		ele.style.display="block";
 	else 
-	{
-    	ele.style.display="none"
-  	}
+    	ele.style.display="none";
   return true;
 }
