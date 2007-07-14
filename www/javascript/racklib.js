@@ -9,7 +9,12 @@
 function checkboxInvert(fieldName)
 {
 	for (i = 0; i < fieldName.length; i++)
-		fieldName[i].checked = !fieldName[i].checked;
+	if(fieldName.elements[i].checked == 1)
+	{
+		fieldName.elements[i].checked = 0;
+	}
+	else 
+		fieldName.elements[i].checked = 1;
 }
 
 // remove all the child nodes of the specified node

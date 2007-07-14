@@ -36,7 +36,7 @@
 <form id="racks"  method="get" action="<TMPL_VAR NAME=base_url>">
 <table id="disTable">
 	<tr>
-		<th><a class="sort" onclick="checkboxInvert(document.racks.rack_list);">&#10003;</a></th>
+		<th><a class="sort" onclick="checkboxInvert(document.getElementById('racks'));">&#10003;</a></th>
 		<th>
 			<a class="sort" title="Sort by name" href="<TMPL_VAR NAME=base_url>?view=rack&amp;order_by=rack.name">Rack</a> 
 		</th>
