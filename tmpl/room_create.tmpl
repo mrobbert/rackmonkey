@@ -33,8 +33,8 @@
 		<br /><br />
 		
 		<label>Building [<a href="<TMPL_VAR NAME=base_url>?view=building&amp;view_type=create&amp;return_view=room&amp;return_view_type=create">add</a>]</label><br />
-		<select name="building_id"><!-- <TMPL_VAR NAME=building> <TMPL_VAR ESCAPE=HTML NAME=building_name> --><TMPL_LOOP NAME=buildinglist>
-		<option <TMPL_IF NAME=selected>selected="selected"</TMPL_IF> value="<TMPL_VAR NAME=id>"><TMPL_VAR ESCAPE=HTML NAME=name></option></TMPL_LOOP>
+		<select name="building_id"><TMPL_LOOP NAME=buildinglist>
+		<option <TMPL_IF NAME=selected>selected="selected"</TMPL_IF> value="<TMPL_VAR ESCAPE=HTML NAME=id>"><TMPL_VAR ESCAPE=HTML NAME=name></option></TMPL_LOOP>
 		</select>
 		<br /><br />
 		
@@ -47,7 +47,7 @@
 		<input type="hidden" name="view" value="<TMPL_VAR ESCAPE=HTML NAME=return_view>" />
 		<input type="hidden" name="view_type" value="<TMPL_VAR ESCAPE=HTML NAME=return_view_type>" />
 		<input type="hidden" name="id" value="<TMPL_VAR ESCAPE=HTML NAME=return_view_id>" />
-		<a href="<TMPL_VAR NAME=base_url>?view=<TMPL_VAR ESCAPE=HTML NAME=return_view>&amp;view_type=<TMPL_VAR ESCAPE=HTML NAME=return_view_type>&amp;id=<TMPL_VAR ESCAPE=HTML NAME=return_view_id>"><img style="float: left;" src="<TMPL_VAR NAME=web_root>/graphics/buttons/cancel.gif" width="48" height="21" alt="Cancel" /></a>
+		<a href="<TMPL_VAR NAME=base_url>?view=<TMPL_VAR ESCAPE=URL NAME=return_view>&amp;view_type=<TMPL_VAR ESCAPE=URL NAME=return_view_type>&amp;id=<TMPL_VAR ESCAPE=URL NAME=return_view_id>"><img style="float: left;" src="<TMPL_VAR NAME=web_root>/graphics/buttons/cancel.gif" width="48" height="21" alt="Cancel" /></a>
 		<TMPL_ELSE>
 		<input type="hidden" name="view" value="room" />
 		<input type="hidden" name="view_type" value="single" />
