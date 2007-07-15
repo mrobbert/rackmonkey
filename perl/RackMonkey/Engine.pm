@@ -11,7 +11,7 @@ use warnings;
 
 use 5.006_001;
 
-use Data::Dumper;
+use Data::Dumper; # for debug only - comment out from release versions
 
 use RackMonkey::Conf;
 use RackMonkey::Helper;
@@ -937,7 +937,8 @@ sub hardwareDeviceCount
 			hardware.name AS hardware, 
 			org.name AS manufacturer,
 			COUNT(device.id) AS num_devices,
-			hardware.meta_default_data AS hardware_meta_default_data 
+			hardware.meta_default_data AS hardware_meta_default_data,
+			org.meta_default_data AS hardware_manufacturer_meta_default_data			
 		FROM device, hardware, org 
 		WHERE 
 			device.hardware = hardware.id AND
@@ -1326,6 +1327,7 @@ sub deviceList
 			hardware.size 				AS hardware_size,
 			hardware.meta_default_data	AS hardware_meta_default_data,
 			hardware_manufacturer.name	AS hardware_manufacturer_name,
+			hardware_manufacturer.meta_default_data	AS hardware_manufacturer_meta_default_data,
 			role.name 					AS role_name, 
 			os.name 					AS os_name, 
 			customer.name 				AS customer_name,
@@ -1367,6 +1369,7 @@ sub deviceListInRack
 			hardware.name 				AS hardware_name,
 			hardware.meta_default_data	AS hardware_meta_default_data,
 			hardware_manufacturer.name	AS hardware_manufacturer_name,
+			hardware_manufacturer.meta_default_data	AS hardware_manufacturer_meta_default_data,
 			hardware.size				AS hardware_size,
 			domain.name					AS domain_name,
 			domain.meta_default_data	AS domain_meta_default_data
@@ -1398,8 +1401,9 @@ sub deviceListUnracked # consider merging this with existing device method
 			rack.name 					AS rack_name,
 			building.meta_default_data	AS building_meta_default_data,
 			hardware.name 				AS hardware_name,
-			hardware_manufacturer.name	AS hardware_manufacturer_name,
 			hardware.meta_default_data	AS hardware_meta_default_data,
+			hardware_manufacturer.name	AS hardware_manufacturer_name,
+			hardware_manufacturer.meta_default_data	AS hardware_manufacturer_meta_default_data,
 			hardware.size				AS hardware_size,
 			domain.name					AS domain_name,
 			domain.meta_default_data	AS domain_meta_default_data,
