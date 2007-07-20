@@ -605,7 +605,7 @@ sub rackList
 			building.name		AS building_name,
 			building.name_short	AS building_name_short,
 			count(device.id)	AS device_count,
-			rack.size - sum(hardware.size)	AS free_space
+			rack.size - COALESCE(SUM(hardware.size), 0)	AS free_space
 		FROM rack, row, room, building
 		LEFT OUTER JOIN device ON
 			(rack.id = device.rack)
@@ -1495,7 +1495,7 @@ sub _validateDeviceInput # doesn't check much at present
 		
 	 	unless ($$record{'rack_pos'} > 0 and $$record{'rack_pos'} + $$hardware{'size'} - 1 <= $$rack{'size'})
 		{
-			die "RMERR: The device '".$$record{'name'}."' cannot fit at that location. This rack has ".$$rack{'size'}." units. This device is $hardwareSize U and you placed it at unit ".$$record{'rack_pos'}.".\nError occured";
+			die "RMERR: The device '".$$record{'name'}."' cannot fit at that location. This rack is ".$$rack{'size'}." U in height. This device is $hardwareSize U and you placed it at position ".$$record{'rack_pos'}.".\nError occured";
 		}
 		
 		# ensure the location doesn't overlap any other devices in this rack
