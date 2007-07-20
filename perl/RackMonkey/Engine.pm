@@ -593,7 +593,7 @@ sub rackList
 {
 	my $self = shift;
 	my $orderBy = shift || '';
-	$orderBy = 'building.name, room.name, row.name, rack.row_pos' unless $orderBy =~ /^[a-z_]+\.[a-z_]+$/ or $orderBy =~ /^device_count$/;	# by default, order by building name and room name first
+	$orderBy = 'building.name, room.name, row.name, rack.row_pos' unless $orderBy =~ /^[a-z_]+[\._][a-z_]+$/;	# by default, order by building name and room name first
 	$orderBy = $orderBy.', rack.row_pos, rack.name' unless ($orderBy eq 'rack.row_pos, rack.name' or $orderBy eq 'rack.name'); # default third ordering is rack name
 	my $sth = $self->dbh->prepare(qq!
 		SELECT 
@@ -604,10 +604,13 @@ sub rackList
 			room.name			AS room_name,
 			building.name		AS building_name,
 			building.name_short	AS building_name_short,
-			count(device.id)	AS device_count
+			count(device.id)	AS device_count,
+			rack.size - sum(hardware.size)	AS free_space
 		FROM rack, row, room, building
 		LEFT OUTER JOIN device ON
-			rack.id = device.rack
+			(rack.id = device.rack)
+		LEFT OUTER JOIN hardware ON
+			(hardware.id = device.hardware)
 		WHERE
 			rack.meta_default_data = 0 AND
 			rack.row = row.id AND

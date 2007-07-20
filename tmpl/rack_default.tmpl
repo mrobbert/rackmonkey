@@ -48,8 +48,11 @@
 			<a class="sort" title="Sort by room" href="<TMPL_VAR NAME=base_url>?view=rack&amp;order_by=room.name">Room</a> 
 		</th>
 		<th>
-			<a class="sort" title="Sort by size" href="<TMPL_VAR NAME=base_url>?view=rack&amp;order_by=rack.size">Size</a> 
+			<a class="sort" title="Sort by size" href="<TMPL_VAR NAME=base_url>?view=rack&amp;order_by=rack.size">Size (U)</a> 
 		</th>
+		<th>
+			<a class="sort" title="Sort by size" href="<TMPL_VAR NAME=base_url>?view=rack&amp;order_by=hardware_size">Free (U)</a> 
+		</th>		
 		<th>
 			<a class="sort" title="Sort by size" href="<TMPL_VAR NAME=base_url>?view=rack&amp;order_by=device_count">Devices</a> 
 		</th>					
@@ -68,6 +71,7 @@
 		<td><TMPL_UNLESS NAME=row_hidden><TMPL_VAR ESCAPE=HTML NAME=row_name> [<TMPL_VAR ESCAPE=HTML NAME=row_pos>]<TMPL_ELSE>N/A</TMPL_UNLESS></td>
 		<td><TMPL_VAR ESCAPE=HTML NAME=room_name> in <TMPL_IF NAME=building_name_short><TMPL_VAR ESCAPE=HTML NAME=building_name_short><TMPL_ELSE><TMPL_VAR ESCAPE=HTML NAME=building_name></TMPL_IF></td>
 		<td><TMPL_VAR ESCAPE=HTML NAME=size></td>
+		<td><TMPL_IF NAME=device_count><TMPL_VAR ESCAPE=HTML NAME=free_space><TMPL_ELSE><TMPL_VAR ESCAPE=HTML NAME=size></TMPL_IF></td>
 		<td><TMPL_VAR ESCAPE=HTML NAME=device_count></td>
 		<td><TMPL_IF NAME=notes_short><span title="<TMPL_VAR ESCAPE=HTML NAME=notes>"><TMPL_VAR ESCAPE=HTML NAME=notes_short></span><TMPL_ELSE><TMPL_IF NAME=notes><TMPL_VAR ESCAPE=HTML NAME=notes><TMPL_ELSE>-</TMPL_IF></TMPL_IF></td>
 	</tr></TMPL_LOOP>
