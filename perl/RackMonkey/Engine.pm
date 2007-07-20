@@ -711,7 +711,7 @@ sub rackPhysical # This method is all rather inelegant and doesn't deal with rac
 				{
 					$position--;
 					$size--;
-					$rackLayout[$position] = {'rack_pos' => $position, 'id' => 0, 'name' => '', 'hardware_size' => 0};
+					$rackLayout[$position] = {'rack_pos' => $position, 'id' => $$dev{'id'}, 'name' => $$dev{'name'}, 'hardware_size' => 0};
 				}
 			}
 		}
@@ -1503,7 +1503,7 @@ sub _validateDeviceInput # doesn't check much at present
 			my $pos = $_;
 			for my $r (@$rackLayout)
 			{
-				die "RMERR: Cannot put the device here (position ".$$record{'rack_pos'}." in rack ".$$rack{'name'}.") because it overlaps with the device '".$$r{'name'}."'.\nError occured" if ($$r{'rack_pos'} == $pos and $$r{'name'} and ($$r{'id'} ne $$record{'id'}));
+				die "RMERR: Cannot put the device '".$$record{'name'}."' here (position ".$$record{'rack_pos'}." in rack ".$$rack{'name'}.") because it overlaps with the device '".$$r{'name'}."'.\nError occured" if ($$r{'rack_pos'} == $pos and $$r{'name'} and ($$r{'id'} ne $$record{'id'}));
 			}
 		}
 	}
