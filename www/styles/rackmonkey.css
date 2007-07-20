@@ -194,7 +194,7 @@ p.footer
 	color: white;
 	border-color: black;
 	background-color: #444;
-	padding: 2px;
+	padding: 1px 2px;	
 }
 
 .rack_physical_dev
@@ -203,26 +203,25 @@ p.footer
 	font-size: 0.6em;
 	background-color: #DDD;
 	width: 220px;
-	padding: 2px;
-	
+	padding: 1px 3px;	
 }
 
 .rack_physical_selected
 {
-	font-family: verdana, sans-serif;
+	font-family: Verdana, sans-serif;
 	font-size: 0.6em;
 	background-color: #F90;
 	width: 220px;
-	padding: 2px;	
+	padding: 1px 3px;	
 }
 
 .rack_physical_empty
 {
-	font-family: verdana, sans-serif;
+	font-family: Verdana, sans-serif;
 	font-size: 0.6em;
 	background-color: white;
 	width: 220px;
-	padding: 2px;
+	padding: 1px 3px;	
 }
 
 .rack_physical
@@ -245,6 +244,11 @@ a.rack_header
 	text-decoration: none;
 	font-size: small;
 	color: white;
+}
+
+a.racklayout
+{
+	text-decoration: none;
 }
 
 .showhide
