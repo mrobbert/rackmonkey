@@ -1044,6 +1044,28 @@ sub _validateOsUpdate
 	return ($$record{'name'}, $$record{'manufacturer_id'}, $$record{'notes'});
 }
 
+sub osDeviceCount
+{
+	my $self = shift;
+	my $sth = $self->dbh->prepare(qq!
+		SELECT 
+			os.name AS os, 
+			device.os_version AS version,
+			org.name AS manufacturer,
+			COUNT(device.id) AS num_devices,
+			os.meta_default_data AS os_meta_default_data,
+			org.meta_default_data AS os_manufacturer_meta_default_data			
+		FROM device, os, org 
+		WHERE 
+			device.os = os.id AND
+			os.manufacturer = org.id 
+		GROUP BY os.name, device.os_version, org.name, os_meta_default_data
+		ORDER BY num_devices DESC
+		LIMIT 10;
+	!);
+	$sth->execute();
+	return $sth->fetchall_arrayref({});
+}
 
 ##############################################################################
 # Organisation Methods                                                       #  
@@ -1489,6 +1511,9 @@ sub _validateDeviceInput # doesn't check much at present
 	}
 	else # location is in a real rack
 	{
+		# check we have a position
+		die "RMERR: You need to specify a Rack Position.\nError occured" unless (length($$record{'rack_pos'}) > 0);
+		
 		# get the size of this hardware
 		my $hardware = $self->hardware($$record{'hardware'});
 		my $hardwareSize = $$hardware{'size'};

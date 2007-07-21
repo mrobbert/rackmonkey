@@ -420,6 +420,7 @@ eval
 			$template->param('free_rack_space' => $rackSize - $deviceSize);
 			$template->param('customer_device_count' => $backend->customerDeviceCount);
 			$template->param('hardware_device_count' => $backend->hardwareDeviceCount);
+			$template->param('os_device_count' => $backend->osDeviceCount);
 		}		
 		elsif (($view eq 'config') || ($view eq 'help'))
 		{

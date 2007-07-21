@@ -49,6 +49,15 @@
 </TMPL_LOOP>
 </table>
 
+<h3>Operating Systems</h3>
+<p>Top ten <a href="<TMPL_VAR NAME=base_url>?view=os">operating systems</a> hosted.</p>
+<table>
+<tr><th>Count</th><th>OS</th></tr>
+<TMPL_LOOP NAME=os_device_count>
+<tr><td><TMPL_VAR ESCAPE=HTML NAME=num_devices></td><td><TMPL_UNLESS NAME=os_meta_default_data><TMPL_UNLESS NAME=os_manufacturer_meta_default_data><TMPL_VAR ESCAPE=HTML NAME=manufacturer> </TMPL_UNLESS></TMPL_UNLESS><TMPL_VAR ESCAPE=HTML NAME=os> <TMPL_VAR ESCAPE=HTML NAME=version></td></tr>
+</TMPL_LOOP>
+</table>
+
 <TMPL_INCLUDE NAME="footer.ssi">
 
 </body>
