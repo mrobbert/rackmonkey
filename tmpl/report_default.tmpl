@@ -76,7 +76,7 @@
 <table>
 <tr><th>Count</th><th>OS</th></tr>
 <TMPL_LOOP NAME=os_device_count>
-<tr><td><TMPL_VAR ESCAPE=HTML NAME=num_devices></td><td><TMPL_UNLESS NAME=os_meta_default_data><TMPL_UNLESS NAME=os_manufacturer_meta_default_data><TMPL_VAR ESCAPE=HTML NAME=manufacturer> </TMPL_UNLESS></TMPL_UNLESS><TMPL_VAR ESCAPE=HTML NAME=os> <TMPL_VAR ESCAPE=HTML NAME=version></td></tr>
+<tr><td><TMPL_VAR ESCAPE=HTML NAME=num_devices></td><td><TMPL_VAR ESCAPE=HTML NAME=os><TMPL_UNLESS NAME=os_meta_default_data> <TMPL_VAR ESCAPE=HTML NAME=version></TMPL_UNLESS></td></tr>
 </TMPL_LOOP>
 </table>
 <TMPL_ELSE>

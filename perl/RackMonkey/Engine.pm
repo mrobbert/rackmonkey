@@ -1072,15 +1072,13 @@ sub osDeviceCount
 		SELECT 
 			os.name AS os, 
 			device.os_version AS version,
-			org.name AS manufacturer,
 			COUNT(device.id) AS num_devices,
-			os.meta_default_data AS os_meta_default_data,
-			org.meta_default_data AS os_manufacturer_meta_default_data			
+			os.meta_default_data AS os_meta_default_data
 		FROM device, os, org 
 		WHERE 
 			device.os = os.id AND
 			os.manufacturer = org.id 
-		GROUP BY os.name, device.os_version, org.name, os.meta_default_data, org.meta_default_data
+		GROUP BY os.name, device.os_version, os.meta_default_data
 		ORDER BY num_devices DESC
 		LIMIT 10;
 	!);
