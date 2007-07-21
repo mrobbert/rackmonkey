@@ -44,6 +44,19 @@
 <p>There are no devices listed in RackMonkey.</p>
 </TMPL_IF>
 
+<h3>Roles</h3>
+<TMPL_IF NAME=role_device_count>
+<p>Top ten <a href="<TMPL_VAR NAME=base_url>?view=role">roles</a> of devices hosted.</p>
+<table>
+<tr><th>Count</th><th>Role</th></tr>
+<TMPL_LOOP NAME=role_device_count>
+<tr><td><TMPL_VAR ESCAPE=HTML NAME=num_devices></td><td><TMPL_VAR ESCAPE=HTML NAME=role></td></tr>
+</TMPL_LOOP>
+</table>
+<TMPL_ELSE>
+<p>There are no devices listed in RackMonkey.</p>
+</TMPL_IF>
+
 <h3>Hardware</h3>
 <TMPL_IF NAME=hardware_device_count>
 <p>Top ten <a href="<TMPL_VAR NAME=base_url>?view=hardware">hardware</a> models hosted.</p>

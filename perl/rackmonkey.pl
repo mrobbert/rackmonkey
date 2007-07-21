@@ -419,6 +419,7 @@ eval
 			$template->param('used_rack_space' => $deviceSize);
 			$template->param('free_rack_space' => $rackSize - $deviceSize);
 			$template->param('customer_device_count' => $backend->customerDeviceCount);
+			$template->param('role_device_count' => $backend->roleDeviceCount);
 			$template->param('hardware_device_count' => $backend->hardwareDeviceCount);
 			$template->param('os_device_count' => $backend->osDeviceCount);
 		}		

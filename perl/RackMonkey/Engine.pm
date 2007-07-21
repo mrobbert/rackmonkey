@@ -1632,6 +1632,22 @@ sub _validateRoleUpdate
 	return ($$record{'name'}, $$record{'descript'}, $$record{'notes'});
 }
 
+sub roleDeviceCount
+{
+	my $self = shift;
+	my $sth = $self->dbh->prepare(qq!
+		SELECT 
+			role.name AS role, 
+			COUNT(device.id) AS num_devices 
+		FROM device, role 
+		WHERE device.role = role.id 
+		GROUP BY role.name 
+		ORDER BY num_devices DESC
+		LIMIT 10;
+	!);
+	$sth->execute();
+	return $sth->fetchall_arrayref({});
+}
 
 ##############################################################################
 # Service Level Methods                                                      #  
