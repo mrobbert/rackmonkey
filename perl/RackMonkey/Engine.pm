@@ -616,7 +616,7 @@ sub rackList
 			rack.row = row.id AND
 			row.room = room.id AND
 			room.building = building.id
-		GROUP BY rack.id
+		GROUP BY rack.id, rack.name, rack.row, rack.row_pos, rack.hidden_rack, rack.size, rack.notes, rack.meta_default_data, rack.meta_update_time, rack.meta_update_user, row.name, row.hidden_row, room.id, room.name, building.name, building.name_short
 		ORDER BY $orderBy
 	!);
 	$sth->execute();
