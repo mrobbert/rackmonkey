@@ -813,7 +813,7 @@ sub totalSizeRack
 {
 	my $self = shift;
 	my $sth = $self->dbh->prepare(qq!
-		SELECT SUM(size) 
+		SELECT COALESCE(SUM(size), 0) 
 		FROM rack; 
 	!);
 	$sth->execute();
@@ -1547,7 +1547,7 @@ sub totalSizeDevice
 {
 	my $self = shift;
 	my $sth = $self->dbh->prepare(qq!
-		SELECT SUM(size) 
+		SELECT COALESCE(SUM(size), 0) 
 		FROM hardware, device 
 		WHERE device.hardware = hardware.id;
 	!);
