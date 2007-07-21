@@ -33,6 +33,7 @@
 	<td class="form">
 		<label>Name</label><br />
 		<TMPL_VAR ESCAPE=HTML NAME=name>
+		&nbsp; <a class="small" title="View devices that are this hardware model" href="<TMPL_VAR NAME=base_url>?view=device&amp;filter_device_hardware=<TMPL_VAR ESCAPE=URL NAME=id>">Devices of this hardware model&hellip;</a>
 		<br /><br />
 		
 		<label>Manufacturer</label><br />
