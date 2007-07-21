@@ -971,7 +971,7 @@ sub hardwareDeviceCount
 		WHERE 
 			device.hardware = hardware.id AND
 			hardware.manufacturer = org.id 
-		GROUP BY hardware.name, org.name, hardware_meta_default_data
+		GROUP BY hardware.name, org.name, hardware.meta_default_data, org.meta_default_data
 		ORDER BY num_devices DESC
 		LIMIT 10;
 	!);
@@ -1080,7 +1080,7 @@ sub osDeviceCount
 		WHERE 
 			device.os = os.id AND
 			os.manufacturer = org.id 
-		GROUP BY os.name, device.os_version, org.name, os_meta_default_data
+		GROUP BY os.name, device.os_version, org.name, os.meta_default_data, org.meta_default_data
 		ORDER BY num_devices DESC
 		LIMIT 10;
 	!);
