@@ -606,11 +606,11 @@ sub rackList
 			building.name_short	AS building_name_short,
 			count(device.id)	AS device_count,
 			rack.size - COALESCE(SUM(hardware.size), 0)	AS free_space
-		FROM rack, row, room, building
+		FROM row, room, building, rack
 		LEFT OUTER JOIN device ON
 			(rack.id = device.rack)
 		LEFT OUTER JOIN hardware ON
-			(hardware.id = device.hardware)
+			(device.hardware = hardware.id)
 		WHERE
 			rack.meta_default_data = 0 AND
 			rack.row = row.id AND
