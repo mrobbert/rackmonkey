@@ -32,6 +32,7 @@
 </ul>
 
 <h3>Customers</h3>
+<TMPL_IF NAME=customer_device_count>
 <p>Top ten <a href="<TMPL_VAR NAME=base_url>?view=org">customers</a> by devices hosted.</p>
 <table>
 <tr><th>Count</th><th>Customer</th></tr>
@@ -39,8 +40,12 @@
 <tr><td><TMPL_VAR ESCAPE=HTML NAME=num_devices></td><td><TMPL_VAR ESCAPE=HTML NAME=customer></td></tr>
 </TMPL_LOOP>
 </table>
+<TMPL_ELSE>
+<p>There are no devices listed in RackMonkey.</p>
+</TMPL_IF>
 
 <h3>Hardware</h3>
+<TMPL_IF NAME=hardware_device_count>
 <p>Top ten <a href="<TMPL_VAR NAME=base_url>?view=hardware">hardware</a> models hosted.</p>
 <table>
 <tr><th>Count</th><th>Hardware</th></tr>
@@ -48,8 +53,12 @@
 <tr><td><TMPL_VAR ESCAPE=HTML NAME=num_devices></td><td><TMPL_UNLESS NAME=hardware_meta_default_data><TMPL_UNLESS NAME=hardware_manufacturer_meta_default_data><TMPL_VAR ESCAPE=HTML NAME=manufacturer> </TMPL_UNLESS></TMPL_UNLESS><TMPL_VAR ESCAPE=HTML NAME=hardware></td></tr>
 </TMPL_LOOP>
 </table>
+<TMPL_ELSE>
+<p>There are no devices listed in RackMonkey.</p>
+</TMPL_IF>
 
 <h3>Operating Systems</h3>
+<TMPL_IF NAME=os_device_count>
 <p>Top ten <a href="<TMPL_VAR NAME=base_url>?view=os">operating systems</a> hosted.</p>
 <table>
 <tr><th>Count</th><th>OS</th></tr>
@@ -57,6 +66,9 @@
 <tr><td><TMPL_VAR ESCAPE=HTML NAME=num_devices></td><td><TMPL_UNLESS NAME=os_meta_default_data><TMPL_UNLESS NAME=os_manufacturer_meta_default_data><TMPL_VAR ESCAPE=HTML NAME=manufacturer> </TMPL_UNLESS></TMPL_UNLESS><TMPL_VAR ESCAPE=HTML NAME=os> <TMPL_VAR ESCAPE=HTML NAME=version></td></tr>
 </TMPL_LOOP>
 </table>
+<TMPL_ELSE>
+<p>There are no devices listed in RackMonkey.</p>
+</TMPL_IF>
 
 <TMPL_INCLUDE NAME="footer.ssi">
 
