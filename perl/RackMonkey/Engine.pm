@@ -1352,7 +1352,7 @@ sub deviceList
 
 	# ensure meta_default entries appear last - need a better way to do this
 	$orderBy = 'room.meta_default_data, '.$orderBy if ($orderBy =~ /^room.name/);	
-	$orderBy = 'rack.meta_default_data, '.$orderBy if ($orderBy =~ /^rack.name/);	
+	$orderBy = 'rack.meta_default_data, '.$orderBy.', device.rack_pos' if ($orderBy =~ /^rack.name/);	
 	$orderBy = 'role.meta_default_data, '.$orderBy if ($orderBy =~ /^role.name/);	
 	$orderBy = 'hardware.meta_default_data, '.$orderBy if ($orderBy =~ /^hardware.name/);	
 	$orderBy = 'os.meta_default_data, '.$orderBy.', device.os_version' if ($orderBy =~ /^os.name/);	
