@@ -79,6 +79,7 @@ Needed to install RackMonkey
       SQLite3 can be obtained from http://www.sqlite.org
   - PostgreSQL v8 or higher
       Postgres can be obtained from http://www.postgresql.org
+  NB. SQLite is much simpler to set up if you're not familiar with databases.
     
 * Perl 5.61 or higher (5.84 or higher recommended) with the following modules:
   - DBI
@@ -217,40 +218,41 @@ use constant WWWPATH => '/rackmonkey';
 
 6. Database Set Up
 ==================
+Before you can run RackMonkey you need to set up the database. You must run
+the schema and default_data SQL files against the database or else it won't
+work. Once they have run you can optionally install the sample data.
 
 For SQLite
 ----------
-Make a note of the path you specified for DBDCONNECT, then simply run:
+Make a note of the path you specified for DBDCONNECT, then run both of the
+following to set up the database and install the default data (required):
 
     sqlite3 [PATH] < sql/schema.sqlite.sql
-    
-    and
-    
-    sqlite3 [PATH] < sql/default_data.sql
-    
+	sqlite3 [PATH] < sql/default_data.sql
+	
 You should then change the permissions of this file and its parent directory 
 to be readable by your web server. For example, you might change the owner to
 'www' if that is the user your web server runs under.
 
-    
 For Postgres
 ------------
-Run the following (you may need to specify a username/password):
+For Postgres, run both of the following to set up the database and install the
+default data (required).
 
-    psql [DBNAME] < sql/schema.postgres.sql
+    psql -U [USERNAME] [DBNAME] < sql/schema.postgres.sql
+    psql -U [USERNAME] [DBNAME] < sql/default_data.sql
     
-    and
-    
-    psql [DBNAME] < sql/default_data.sql
-    
-Where [DBNAME] is the name of the database you created.
-
+Where [USERNAME] is the name of the RackMonkey Postgres user and [DBNAME] is
+the name of the database you created (see section 5).
 
 Sample Data
 -----------
 If this is the first time you've installed RackMonkey you should install the
 sample data. This contains common companies, operating systems, roles etc. to
-help get you started quickly. To do this run:
+help get you started quickly. NB. Don't perform this step until you've run the
+schema and default_data files against the database (above). 
+
+To install the sample data run the appropriate command for your database:
 
     sqlite3 [PATH] < sql/sample_data.sql
 
