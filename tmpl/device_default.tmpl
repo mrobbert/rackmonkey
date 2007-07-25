@@ -57,7 +57,8 @@
 	<label>OS</label>
 	<select name="filter_device_os" onchange="submit()"><TMPL_LOOP NAME=oslist>
 	<option <TMPL_IF NAME=selected>selected="selected"</TMPL_IF> value="<TMPL_VAR ESCAPE=HTML NAME=id>"><TMPL_VAR ESCAPE=HTML NAME=name></option></TMPL_LOOP>
-	</select>	
+	</select>
+	<input type="hidden" name="order_by" value="<TMPL_VAR ESCAPE=HTML NAME=order_by>" />	
 </p>
 </form>
 
@@ -65,25 +66,25 @@
 <table style="clear:both">
 	<tr>
 		<th>
-			<a class="sort" title="Sort by name" href="<TMPL_VAR NAME=base_url>?view=device&amp;order_by=device.name">Device</a> 
+			<a class="sort" title="Sort by name" href="<TMPL_VAR NAME=base_url>?view=device&amp;order_by=device.name&amp;<TMPL_VAR NAME=filter_string>">Device</a> 
 		</th>
 		<th>
-			<a class="sort" title="Sort by rack" href="<TMPL_VAR NAME=base_url>?view=device&amp;order_by=rack.name">Rack</a>
+			<a class="sort" title="Sort by rack" href="<TMPL_VAR NAME=base_url>?view=device&amp;order_by=rack.name&amp;<TMPL_VAR NAME=filter_string>">Rack</a>
 		</th>
 		<th>
-			<a class="sort" title="Sort by room" href="<TMPL_VAR NAME=base_url>?view=device&amp;order_by=room.name">Room</a>
+			<a class="sort" title="Sort by room" href="<TMPL_VAR NAME=base_url>?view=device&amp;order_by=room.name&amp;<TMPL_VAR NAME=filter_string>">Room</a>
 		</th>			
 		<th>
-			<a class="sort" title="Sort by role" href="<TMPL_VAR NAME=base_url>?view=device&amp;order_by=role.name">Role</a>
+			<a class="sort" title="Sort by role" href="<TMPL_VAR NAME=base_url>?view=device&amp;order_by=role.name&amp;<TMPL_VAR NAME=filter_string>">Role</a>
 		</th>			
 		<th>
-			<a class="sort" title="Sort by hardware type" href="<TMPL_VAR NAME=base_url>?view=device&amp;order_by=hardware.name">Hardware</a>
+			<a class="sort" title="Sort by hardware type" href="<TMPL_VAR NAME=base_url>?view=device&amp;order_by=hardware.name&amp;<TMPL_VAR NAME=filter_string>">Hardware</a>
 		</th>	
 		<th>
-			<a class="sort" title="Sort by operating system" href="<TMPL_VAR NAME=base_url>?view=device&amp;order_by=os.name">OS</a>
+			<a class="sort" title="Sort by operating system" href="<TMPL_VAR NAME=base_url>?view=device&amp;order_by=os.name&amp;<TMPL_VAR NAME=filter_string>">OS</a>
 		</th>	
 		<th>
-			<a class="sort" title="Sort by customer" href="<TMPL_VAR NAME=base_url>?view=device&amp;order_by=customer.name">Customer</a>
+			<a class="sort" title="Sort by customer" href="<TMPL_VAR NAME=base_url>?view=device&amp;order_by=customer.name&amp;<TMPL_VAR NAME=filter_string>">Customer</a>
 		</th>	
 
 	</tr><TMPL_LOOP NAME=devices>

@@ -448,6 +448,8 @@ eval
 	
 	# support hiding and showing of filters 
 	$template->param('show_filters' => $cgi->showFilters);
+	$template->param('filter_string' => $cgi->filterString);
+
 	
 	$template->param('base_url' => $baseURL);
 	$template->param('web_root' => WWWPATH);

@@ -96,15 +96,22 @@ sub actOn
 sub orderBy
 {
 	my $self = shift;
-	my $orderDesc = $self->cgi->param('order_desc') || '';
-	if ($orderDesc eq '1')
-	{
-		return $self->cgi->param('order_by').' DESC';	
-	}
-	return $self->cgi->param('order_by');	
+	my $orderBy = $self->cgi->param('order_by') || '';
+	return $orderBy;	
 }
 
-sub filterBy # need to come up with more elegant way to do this
+sub filterString
+{
+	my $self = shift;
+	my $customer = $self->cgi->param('filter_device_customer') + 0;
+	my $role = $self->cgi->param('filter_device_role') + 0;
+	my $hardware = $self->cgi->param('filter_device_hardware') + 0;
+	my $os = $self->cgi->param('filter_device_os') + 0;
+	
+	return "filter_device_customer=$customer&amp;filter_device_role=$role&amp;filter_device_hardware=$hardware&amp;filter_device_os=$os";
+}
+
+sub filterBy
 {
 	my $self = shift;
 	my %filters;
@@ -115,6 +122,12 @@ sub filterBy # need to come up with more elegant way to do this
 	$filters{'device.os'} = $self->cgi->param('filter_device_os') if ($self->cgi->param('filter_device_os'));	
 
 	return \%filters;
+}
+
+sub showFilters
+{
+	my $self = shift;
+	return $self->cgi->param('show_filters');
 }
 
 sub redirect303
@@ -193,12 +206,6 @@ sub rackList
 {
 	my $self = shift;
 	return $self->cgi->param('rack_list');
-}
-
-sub showFilters
-{
-	my $self = shift;
-	return $self->cgi->param('show_filters');
 }
 
 sub selectProperty # should get all prefill vars going via this sub

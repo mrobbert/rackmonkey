@@ -58,6 +58,7 @@
 	<select name="filter_device_os" onchange="submit()"><TMPL_LOOP NAME=oslist>
 	<option <TMPL_IF NAME=selected>selected="selected"</TMPL_IF> value="<TMPL_VAR ESCAPE=HTML NAME=id>"><TMPL_VAR ESCAPE=HTML NAME=name></option></TMPL_LOOP>
 	</select>	
+	<input type="hidden" name="order_by" value="<TMPL_VAR ESCAPE=HTML NAME=order_by>" />	
 </p>
 </form>
 
@@ -65,28 +66,28 @@
 <table style="clear:both" id="disTable">
 	<tr>
 		<th>
-			<a class="sort" title="Sort by name" href="<TMPL_VAR NAME=base_url>?view=device&amp;view_type=default_asset&amp;order_by=device.name">Device</a> 
+			<a class="sort" title="Sort by name" href="<TMPL_VAR NAME=base_url>?view=device&amp;view_type=default_asset&amp;order_by=device.name&amp;<TMPL_VAR NAME=filter_string>">Device</a> 
 		</th>
 		<th>
-			<a class="sort" title="Sort by rack" href="<TMPL_VAR NAME=base_url>?view=device&amp;view_type=default_asset&amp;order_by=rack.name">Rack</a>
+			<a class="sort" title="Sort by rack" href="<TMPL_VAR NAME=base_url>?view=device&amp;view_type=default_asset&amp;order_by=rack.name&amp;<TMPL_VAR NAME=filter_string>">Rack</a>
 		</th>	
 		<th>
-			<a class="sort" title="Sort by room" href="<TMPL_VAR NAME=base_url>?view=device&amp;view_type=default_asset&amp;order_by=room.name">Room</a>
+			<a class="sort" title="Sort by room" href="<TMPL_VAR NAME=base_url>?view=device&amp;view_type=default_asset&amp;order_by=room.name&amp;<TMPL_VAR NAME=filter_string>">Room</a>
 		</th>		
 		<th>
-			<a class="sort" title="Sort by hardware type" href="<TMPL_VAR NAME=base_url>?view=device&amp;view_type=default_asset&amp;order_by=hardware.name">Hardware</a>
+			<a class="sort" title="Sort by hardware type" href="<TMPL_VAR NAME=base_url>?view=device&amp;view_type=default_asset&amp;order_by=hardware.name&amp;<TMPL_VAR NAME=filter_string>">Hardware</a>
 		</th>
 		<th>
-			<a class="sort" title="Sort by serial number" href="<TMPL_VAR NAME=base_url>?view=device&amp;view_type=default_asset&amp;order_by=device.serial_no">Serial</a>
+			<a class="sort" title="Sort by serial number" href="<TMPL_VAR NAME=base_url>?view=device&amp;view_type=default_asset&amp;order_by=device.serial_no&amp;<TMPL_VAR NAME=filter_string>">Serial</a>
 		</th>		
 		<th>
-			<a class="sort" title="Sort by asset tag" href="<TMPL_VAR NAME=base_url>?view=device&amp;view_type=default_asset&amp;order_by=device.asset_no">Asset</a>
+			<a class="sort" title="Sort by asset tag" href="<TMPL_VAR NAME=base_url>?view=device&amp;view_type=default_asset&amp;order_by=device.asset_no&amp;<TMPL_VAR NAME=filter_string>">Asset</a>
 		</th>			
 		<th style="text-align: right">
-			<a class="sort" title="Sort by purchase date" href="<TMPL_VAR NAME=base_url>?view=device&amp;view_type=default_asset&amp;order_by=device.purchased">Purchased</a>
+			<a class="sort" title="Sort by purchase date" href="<TMPL_VAR NAME=base_url>?view=device&amp;view_type=default_asset&amp;order_by=device.purchased&amp;<TMPL_VAR NAME=filter_string>">Purchased</a>
 		</th>
 		<th style="text-align: right">
-			<a class="sort" title="Sort by age" href="<TMPL_VAR NAME=base_url>?view=device&amp;view_type=default_asset&amp;order_by=device.purchased">Age</a>
+			<a class="sort" title="Sort by age" href="<TMPL_VAR NAME=base_url>?view=device&amp;view_type=default_asset&amp;order_by=device.purchased&amp;<TMPL_VAR NAME=filter_string>">Age</a>
 		</th>		
 	</tr><TMPL_LOOP NAME=devices>
 	<TMPL_IF NAME="__odd__">

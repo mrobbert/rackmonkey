@@ -1354,7 +1354,7 @@ sub deviceList
 	$orderBy = 'room.meta_default_data, '.$orderBy if ($orderBy =~ /^room.name/);	
 	$orderBy = 'rack.meta_default_data, '.$orderBy.', device.rack_pos' if ($orderBy =~ /^rack.name/);	
 	$orderBy = 'role.meta_default_data, '.$orderBy if ($orderBy =~ /^role.name/);	
-	$orderBy = 'hardware.meta_default_data, '.$orderBy if ($orderBy =~ /^hardware.name/);	
+	$orderBy = 'hardware.meta_default_data, hardware_manufacturer.name, '.$orderBy if ($orderBy =~ /^hardware.name/);	
 	$orderBy = 'os.meta_default_data, '.$orderBy.', device.os_version' if ($orderBy =~ /^os.name/);	
 	$orderBy = 'customer.meta_default_data, '.$orderBy if ($orderBy =~ /^customer.name/);	
 	$orderBy = 'service.meta_default_data, '.$orderBy if ($orderBy =~ /^service.name/);	
