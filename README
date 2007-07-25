@@ -10,39 +10,33 @@ Introduction
 Thank you for choosing to try RackMonkey v1.2, I hope you find it useful in
 bringing (and keeping) order in your data centres.
 
-Changes from v1.2.2 to v1.2.2-1
--------------------------------
-There were a couple of bugs affecting Postgres users of v1.2.2, these have
-been resolved in this updated release. See doc/install.txt for upgrade
-details. SQLite users were not affected, so don't need to upgrade.
-
 Release Highlights
 ------------------
-* Added support for operating system versions.
-* Added ability to perform basic filtering of devices in default views.
-* Added basic view of unracked devices.
-* Added basic reporting.
+* Added support for IE7
+* Sort and filters now work together in device view
+* Improved physical rack view (view full 47U rack at 1280x1024)
+* Querying of Dell server info based on asset tag (serial number)
+* Extended report view
+* Many small bug fixes and visual improvements
 
 For more information on what's new in this release see doc/changes.txt.
 
-Known Issues v1.2.2-1
----------------------
+Known Issues v1.2.3
+-------------------
 * Row management is disabled.
 * App/Device relationship management is disabled.
 * Numbering of racks from the top doesn't work. Please leave conf as:
     RACKNUMBERINGTOP => 0;
-* When you use 'add' from an edit/create view all your other changes are lost.
+* When you use 'add' from an edit/create view all your other changes in that
+  view are lost.
 * When you use 'add' from an edit/create view only one depth of history is
   remembered (so adding a building from a room from a rack doesn't remember
   the rack view you came from).
 * Tick entities don't appear in IE 6 on Windows.
 * JavaScript for selecting and deselecting racks in default rack view doesn't 
   work if there is only one item present.
-* Untested in IE7 (testing is due to begin shortly).
-* Allows rack to be resized even when the resize affects devices.
 * Show/hide for device filters is crude and doesn't remember settings.
-* Using or resetting filters removes sort order from device default views and
-  vice-versa.
+
 
 Security
 --------
