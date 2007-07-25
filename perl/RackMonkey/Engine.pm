@@ -901,6 +901,7 @@ sub hardwareListBasic
 		WHERE hardware.manufacturer = org.id
 		ORDER BY 
 			hardware.meta_default_data DESC,
+			manufacturer_name,
 			hardware.name
 	!);
 	$sth->execute();
