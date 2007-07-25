@@ -870,6 +870,9 @@ sub hardwareList
 	my $self = shift;
 	my $orderBy = shift || '';
 	$orderBy = 'hardware.name' unless $orderBy =~ /^[a-z_]+\.[a-z_]+$/;	
+
+	$orderBy = 'org.meta_default_data, '.$orderBy if ($orderBy =~ /^org.name/);	
+	
 	my $sth = $self->dbh->prepare(qq!
 		SELECT
 			hardware.*,
@@ -1008,10 +1011,12 @@ sub osList
 	my $self = shift;
 	my $orderBy = shift || '';
 	$orderBy = 'os.name' unless $orderBy =~ /^[a-z_]+\.[a-z_]+$/;
+	$orderBy = 'org.meta_default_data, '.$orderBy if ($orderBy =~ /^org.name/);	
+	
 	my $sth = $self->dbh->prepare(qq!
 		SELECT 
 			os.*,
-			org.name 			AS manufacturer_name 
+			org.name 				AS manufacturer_name
 		FROM os, org 
 		WHERE 
 			os.meta_default_data = 0 AND
