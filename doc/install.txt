@@ -302,8 +302,7 @@ you delete):
   existing one.
 
 * Update your Config.pm to support Dell serial queries.
-  - Copy the 'use constant DELLQUERY' lines from Config.pm-default and
-    ensure that just one of the lines is enabled.
+  - Copy the 'use constant DELLQUERY' line from Config.pm-default
   - Add DELLQUERY to the @EXPORT line, as in Config.pm-default.
 
 * Update your database build value to match the new code with the:
