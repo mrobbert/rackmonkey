@@ -299,7 +299,7 @@ you delete):
   existing one.
 
 * Update your Config.pm to support Dell serial queries.
-  - Copy the 'use constant DELLQUERY =' lines from Config.pm-default and
+  - Copy the 'use constant DELLQUERY' lines from Config.pm-default and
     ensure that just one of the lines is enabled.
   - Add DELLQUERY to the @EXPORT line, as in Config.pm-default.
 
