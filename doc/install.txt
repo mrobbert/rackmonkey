@@ -204,7 +204,8 @@ use constant DBPASS => '7jhH#98*';
 
 For All Systems
 ---------------
-TMPLPATH sets the filesystem path to your template files, something like:
+TMPLPATH sets the filesystem path to your template files, it should be an
+absolute path, something like:
 
 use constant TMPLPATH => '/home/rackmonkey/tmpl';
 
