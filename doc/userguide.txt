@@ -10,6 +10,8 @@ User Guide to RackMonkey v1.2
 This document is at a very early stage. Updates will be forthcoming shortly.
 You can also get help by selecting the 'Help' tab from within RackMonkey.
 
+Tip: Hovering your mouse over many items provides additional information.
+
 First Steps
 ===========
 Get basic information about your set up into the system:
@@ -32,6 +34,32 @@ You are now ready to add devices
    adding devices a rack at a time or want to find a free spot for a device.
 
 
+Finding and Viewing a Device
+============================
+If you select [Devices] from the top nav bar you will get a complete list of
+all the devices you have recorded in RackMonkey. You can sort any of the
+columns by clicking on its name and use the filter dropdowns to restrict which
+devices are displayed (e.g. to see those for one customer, or all those
+running Windows 2000). To view more details for a device just click on its
+name.
+
+You can customise the device list view by selecting alternative views from the
+'View Type' dropdown at the top left of the view. This allows you to see
+device asset information, extended information or just those devices currently
+not racked.
+
+To see a device in its rack, simple click on its location in the rack column.
+This will take you to the relevant rack view with the device highlighted.
+
+
+Querying Dell Warranty and Specification Information
+====================================================
+If you enter a serial number for a device whose hardware is manufactured by
+'Dell' you will get a 'Query Dell...' link next to the serial number after you
+save the device. This link takes you to a page on the Dell site which show
+warranty information and the original configuration of the server. This is an experimental feature: feedback is very welcome.
+
+
 Restricting Access and Recording Who Made Changes
 =================================================
 If you protect your rackmonkey.pl script with a .htaccess file RackMonkey will
@@ -40,6 +68,14 @@ just records the IP address. Giving each user a separate .htaccess account
 will allow you to keep track of who did what when. The last update is shown at
 the bottom of single views or a history can be obtained with the logdump 
 command (see below).
+
+Guest access
+------------
+RackMonkey v1.2.3 or higher supports a guest account. If you create a user in
+.htaccess whose name is 'guest' (any case) that user can view everything 
+within RackMonkey, but when the they try to save any changes or create a new
+entry they will get the error "You are logged in as 'guest'. Guest users can't
+update RackMonkey.".
 
 
 Reviewing Update Log

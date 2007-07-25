@@ -30,6 +30,8 @@ You may find it helpful to open the help section in a separate tab or window so 
 In the RackMonkey help parts of the interface are referred to like this: [Config > Organisations], this means select config (from the menu) then choose organisations.
 </p>
 
+<p><strong>Tip:</strong> Hovering your mouse over many items provides additional information.</p>
+
 <h3>Getting Started</h3>
 <p>
 Before you can start adding your devices (servers, routers etc.) to RackMonkey you should add some basic information. You can always edit or add to this information later.
@@ -55,12 +57,25 @@ Before you can start adding your devices (servers, routers etc.) to RackMonkey y
 	<li>You can add from rack layout view. This is more convenient if you're adding devices a rack at a time or want to find a free spot for a device. [Locations]</li>
 </ul>
 
+<h3>Finding and Viewing a Device</h3>
+<p>
+If you select [Devices] from the top nav bar you will get a complete list of all the devices you have recorded in RackMonkey. You can sort any of the columns by clicking on its name and use the filter dropdowns to restrict which devices are displayed.
+</p>
+
+<p>You can customise the device list view by selecting alternative views from the 'View Type' dropdown at the top left of the view. This allows you to see device asset information, extended information or just those devices currently not racked.</p>
+
+<p>
+To see a device in its rack, simple click on its location in the rack column. This will take you to the relevant rack view with the device highlighted.
+</p>
+
 <h3>Customising RackMonkey</h3>
 <ul>
 	<li><strong>Default View:</strong> Edit the value of DEFAULTVIEW in Conf.pm. The starting value is 'rack', but you can set it to any view (try 'device' or 'building').</li>
 	<li><strong>Limits:</strong> RackMonkey sets limits on the size/length of some values. You can amend these by altering the relevant constant in Conf.pm. For example, to set the maximum size of a rack to 50 U, set MAXRACKSIZE to 50.</li>
 </ul>
 
+<p><em>For more information see the userguide.txt file that came with RackMonkey.</em></p>
+	
 <TMPL_INCLUDE NAME="footer.ssi">
 
 </body>

@@ -48,9 +48,10 @@ If you're a developer you can check a release out of subversion.
 The RackMonkey svn server:  https://rackmonkey.svn.sourceforge.net
 Path to RackMonkey trunk:   /svnroot/rackmonkey/rackmonkey/trunk
 
-For more information on the RackMonkey subversion repository visit:
+For more information on the RackMonkey subversion repository see the
+'Source Code' section of:
 
-    http://www.rackmonkey.org/svn
+    http://www.rackmonkey.org/faq
 
 
 3. Requirements
@@ -113,8 +114,8 @@ If using Postgres:
 
 4. Installing RackMonkey
 ========================
-If you are upgrading from v1.2.1 don't follow this section, instead scroll
-down to section 8. Upgrading from v1.2.1.
+If you are upgrading from v1.2.1 or v1.2.2 don't follow this section, instead
+scroll down to section 8. Upgrading RackMonkey.
 
 Once you have obtained a copy of RackMonkey (see section 2) you should have a
 directory with the following layout:
@@ -260,55 +261,16 @@ read the next section.
 8. Upgrading RackMonkey
 =======================
 RackMonkey v1.2.x can be upgraded to the latest version following the
-appropriate instructions below. NB. Upgrading from v1.1 is not supported.
+instructions below. NB. Upgrading from v1.1 is not supported.
 
-
-8.1 Upgrading from v1.2.2 to v1.2.2-1
-=====================================
-v1.2.2-1 fixed some issues when using RackMonkey with Postgres. SQLite users
-can also upgrade but don't need to as they are not affected by the issues.
-
-* Take a backup of your database.
-
-* Uncompress the new release in a temporary location and overwrite the
-  existing RackMonkey/Engine.pm file with the new one.
-
-* If you're using Postgres, run the following SQL statement on your database:
-  NB. SQLite users should NOT run this SQL.
-
-  CREATE TABLE device_app
-  (
-        app INTEGER REFERENCES app,
-        device INTEGER REFERENCES device,
-        relation INTEGER REFERENCES app_relation
-  );
-
-  If you did this as the database user RackMonkey uses all should now work, if
-  you did this as another user you should run the following statement,
-  replacing role with the database user RackMonkey uses to connect (found in 
-  RackMonkey/Conf.pm):
-
-  GRANT ALL ON device_app,device_app_id_seq TO <role>;
-
-* Update your database build value to match the new code with the:
-
-  UPDATE rm_meta SET VALUE='1.2.2-1' WHERE name='system_build';
-
-* If running RackMonkey under mod_perl you must restart or HUP your
-  mod_perl instance. This ensures mod_perl reads the new modules.
-
-The upgrade is now complete. No reconfiguration is required, your updated
-RackMonkey is ready to use. If you experience any problems with the upgrade 
-you should consult the Troubleshooting section (below).
-
-
-8.2 Upgrading from v1.2.1 to v1.2.2-1
-=====================================
-Upgrading from v1.2.1 is straightforward: there are no database schema
-changes. Upgrading from v1.1 is not supported.
+8.1 Upgrading to v1.2.3 from v1.2.x
+===================================
+Upgrading from earlier releases of v1.2 is straightforward: there are no
+database schema changes.
 
 Despite the fact there are no schema changes in this release, you should take
-a backup of the RackMonkey database before proceeding.
+a backup of the RackMonkey database before proceeding. For SQLite this can
+be achieved by copying the database file, for Postgres use pg_dump.
 
 To perform the actual upgrade, uncompress the new release in a temporary
 location, then follow these steps (you may wish to take backups of any files
@@ -327,24 +289,29 @@ you delete):
   won't be over-written). Now copy the new rackmonkey.pl script over the 
   existing one.
 
+* Update your Config.pm to support Dell serial queries.
+  - Copy the 'use constant DELLQUERY =' lines from Config.pm-default and
+    ensure that just one of the lines is enabled.
+  - Add DELLQUERY to the @EXPORT line, as in Config.pm-default.
+
 * Update your database build value to match the new code with the:
 
-  UPDATE rm_meta SET VALUE='1.2.2-1' WHERE name='system_build';
+  UPDATE rm_meta SET VALUE='1.2.3' WHERE name='system_build';
 	
 * If running RackMonkey under mod_perl you must restart or HUP your
   mod_perl instance. This ensures mod_perl reads the new modules.
 
-The upgrade is now complete. No reconfiguration is required, your updated
-RackMonkey is ready to use. If you experience any problems with the upgrade 
-you should consult the Troubleshooting section (below).
+The upgrade is now complete. No further reconfiguration is required, your
+updated RackMonkey is ready to use. If you experience any problems with the
+upgrade you should consult the Troubleshooting section (below).
 
 
-8.3 Reverting to v1.2.1 from v1.2.2 or v1.2.2-1
-===============================================
+8.3 Reverting to v1.2.1 or v1.2.2 from v1.2.3
+=============================================
 * Take a copy of RackMonkey/Conf.pm
-* Download v1.2.1 from http://www.rackmonkey.org/download
-* Do a fresh install of v1.2.1 following its instructions, but skipping
-  configuration
+* Download v1.2.1 or v1.2.2-1 from http://www.rackmonkey.org/download
+* Do a fresh install of the older version following its instructions, but
+  skipping configuration
 * Copy your saved Conf.pm into the perl/RackMonkey directory.
 
 
