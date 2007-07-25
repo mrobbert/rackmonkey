@@ -11,7 +11,7 @@ use warnings;
 
 use 5.006_001;
 
-use Data::Dumper; # for debug only - comment out from release versions
+#use Data::Dumper; # for debug only - comment out from release versions
 
 use RackMonkey::Conf;
 use RackMonkey::Helper;
