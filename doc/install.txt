@@ -36,10 +36,14 @@ Release Version
 ---------------
 Visit http://www.rackmonkey.org to download a release version. Release
 versions are recommended for production use or anyone interested in RackMonkey
-as a user. Releases are packaged as bzipped tars (.tar.bz2) and can be 
-extracted with (your filename may be different):
+as a user. Releases are packaged as bzipped tars (.tar.bz2) or gzipped tars
+(.tar.gz) and can be extracted with (your filename may be different):
 
     bunzip2 -c rackmonkey_1.2.3.tar.bz2 | tar xvf -
+
+	or
+	
+	gunzip -c rackmonkey_1.2.3.tar.gz | tar xvf -
 
 Subversion Repository
 ---------------------
@@ -179,12 +183,17 @@ SQLite you can leave the DBUSER and DBPASS values blank.
 For Postgres
 ------------
 If using Postgres you need to create a database for rackmonkey and grant 
-suitable permissions to a user. For information on how to do this please see
-http://www.postgresql.org/docs/. If you've not done much database 
-administration before, you may find it easier to use SQLite.
-    
+suitable permissions to a user. If you're not familiar with Postgres, the
+following pages should help:
+
+http://www.postgresql.org/docs/8.0/interactive/sql-createuser.html
+http://www.postgresql.org/docs/8.0/static/sql-createdatabase.html
+
+For further information (and guides for later versions) see:
+http://www.postgresql.org/docs/. 
+
 Postgres databases are created in a location specified by the Postgres 
-configuration, so you only need to provide a database name, e.g.
+configuration, so you only need to provide a database name in Conf.pm, e.g.
 
 use constant DBDCONNECT => 'dbi:Pg:dbname=rackmonkey';
 
