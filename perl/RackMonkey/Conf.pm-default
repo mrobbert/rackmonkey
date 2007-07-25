@@ -37,6 +37,5 @@ use constant SHORTURLLEN  => 64; 	# Shorten long URLs for display
 use constant DATEFORMAT => '%Y-%m-%d';	# Format used to display dates (not currently used)
 
 # Remote site queries
-#use constant DELLQUERY => 'http://support.dell.com/support/topics/global.aspx/support/my_systems_info/en/details?c=us&cs=04&l=en&s=bsd&ServiceTag='; # US
-use constant DELLQUERY => 'http://support.dell.com/support/topics/global.aspx/support/my_systems_info/en/details?c=uk&cs=04&l=en&s=bsd&ServiceTag='; # UK
+use constant DELLQUERY => 'http://support.euro.dell.com/support/topics/topic.aspx/emea/shared/support/my_systems_info/en/details?c=uk&cs=ukbsdt1&l=en&s=bsd&~ck=ln&lnki=2&ServiceTag='; # UK
 1;
