@@ -8,8 +8,8 @@
 v1.2.3 - Released 2007-06-23
 ----------------------------
 * Made rack physical view more compact and usable (47U rack fits in 1280x1024)
-* If a user is logged in as guest they can no longer edit entries
-* Querying of Dell server spec and warranty based on service tag
+* If a user is logged in as guest they can't edit entries (see userdoc.txt)
+* Added querying of Dell server spec and warranty based on service tag
 * Added ability to view device in rack from device list view and highlighted
   it within the rack.
 * Added device count and free space to rack table view
@@ -22,6 +22,7 @@ v1.2.3 - Released 2007-06-23
 * Fixed a bug with sorting serial and asset numbers in device views
 * Fixed bug which allowed two >1U servers to overlap in some circumstances
 * Added check to ensure rack resize doesn't affect rack contents
+* Many other minor changes, see the svn log for further information
 
 v1.2.2-1 - Released 2007-06-22
 ------------------------------
