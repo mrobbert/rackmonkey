@@ -432,6 +432,12 @@ eval
 			die "RMERR: No such view. This error should not occur, did you manually type this URL?\nError at";
 		}
 	}
+	
+	# create rack dropdown
+	my $selectedRack = 0;
+	$selectedRack = $id if (($viewType =~ /^physical/) && ($view eq 'rack'));
+	
+	$template->param('racknavlist' => $cgi->selectRack($backend->rackListBasic(1), $selectedRack));
 		
 	$dbh->disconnect();
 	

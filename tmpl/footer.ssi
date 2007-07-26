@@ -1,5 +1,5 @@
-<!-- begin footer include: Version 1.2.%BUILD% -->
+<!-- footer include: Version 1.2.%BUILD% -->
 <p class="footer">
 <a href="http://www.rackmonkey.org">RackMonkey</a> v<TMPL_VAR NAME=version>. &copy;2007 Will Green. Page generated at <TMPL_VAR NAME=date>.
 </p>
-<!-- end footer include -->
+</div>

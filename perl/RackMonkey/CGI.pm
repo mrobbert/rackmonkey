@@ -252,7 +252,14 @@ sub selectRack
 	
 	for my $i (@$items)
 	{
-		$$i{'name'} = $$i{'name'}.' in '.$$i{'room_name'}.' in '.$$i{'building_name'} unless $$i{'meta_default_data'};
+		if (length($$i{'building_name_short'}) > 0)
+		{
+			$$i{'name'} = $$i{'name'}.' in '.$$i{'room_name'}.' in '.$$i{'building_name_short'} unless $$i{'meta_default_data'};
+		}
+		else
+		{
+			$$i{'name'} = $$i{'name'}.' in '.$$i{'room_name'}.' in '.$$i{'building_name'} unless $$i{'meta_default_data'};
+		}
 	}
 	return $items;
 }

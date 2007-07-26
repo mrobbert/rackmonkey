@@ -651,7 +651,10 @@ sub rackListInRoom
 
 sub rackListBasic
 {
-	my $self = shift;
+	my ($self, $noMeta) = @_;
+	
+	my $meta = '';
+	$meta = 'AND  rack.meta_default_data = 0' if ($noMeta);
 
 	my $sth = $self->dbh->prepare(qq!
 		SELECT
@@ -665,7 +668,8 @@ sub rackListBasic
 		WHERE
 			rack.row = row.id AND
 			row.room = room.id AND
-			room.building = building.id 
+			room.building = building.id
+			$meta
 		ORDER BY 
 			rack.meta_default_data DESC,
 			building.name,
