@@ -103,10 +103,10 @@ sub orderBy
 sub filterString
 {
 	my $self = shift;
-	my $customer = $self->cgi->param('filter_device_customer') + 0;
-	my $role = $self->cgi->param('filter_device_role') + 0;
-	my $hardware = $self->cgi->param('filter_device_hardware') + 0;
-	my $os = $self->cgi->param('filter_device_os') + 0;
+	my $customer = ($self->cgi->param('filter_device_customer') || 0) + 0;
+	my $role = ($self->cgi->param('filter_device_role') || 0) + 0;
+	my $hardware = ($self->cgi->param('filter_device_hardware') || 0) + 0;
+	my $os = ($self->cgi->param('filter_device_os') || 0) + 0;
 	
 	return "filter_device_customer=$customer&amp;filter_device_role=$role&amp;filter_device_hardware=$hardware&amp;filter_device_os=$os";
 }
