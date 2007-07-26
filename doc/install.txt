@@ -305,7 +305,8 @@ you delete):
   - Copy the 'use constant DELLQUERY' line from Config.pm-default
   - Add DELLQUERY to the @EXPORT line, as in Config.pm-default.
 
-* Update your database build value to match the new code with the:
+* Update your database build value to match the new code by running the
+  following SQL statement on the database:
 
   UPDATE rm_meta SET VALUE='1.2.3' WHERE name='system_build';
 	
