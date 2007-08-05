@@ -873,7 +873,7 @@ sub hardwareList
 {
 	my $self = shift;
 	my $orderBy = shift || '';
-	$orderBy = 'hardware.name' unless $orderBy =~ /^[a-z_]+\.[a-z_]+$/;	
+	$orderBy = 'org.name, hardware.name' unless $orderBy =~ /^[a-z_]+\.[a-z_]+$/;	
 
 	$orderBy = 'org.meta_default_data, '.$orderBy if ($orderBy =~ /^org.name/);	
 	
