@@ -5,7 +5,7 @@
 <a href="<TMPL_VAR NAME=base_url>"><img class="navimg" width="33" height="23" src="<TMPL_VAR NAME=web_root>/graphics/logos/newlogo.gif" alt="Home"/></a> &nbsp;
 </p>
 
-<form class="nav" method="get" action="<TMPL_VAR NAME=base_url>">
+<form style="float: left" class="nav" method="get" action="<TMPL_VAR NAME=base_url>">
 <p class="minimal">
 <select onchange="submit()" name="id">
 <option>Select Rack&hellip;</option><TMPL_LOOP NAME=racknavlist>
@@ -13,14 +13,17 @@
 </select>
 <input type="hidden" name="view" value="rack"/>
 <input type="hidden" name="view_type" value="physical"/>
-<input style="margin-left: 10px" type="button" onclick="window.location = '<TMPL_VAR NAME=base_url>?view=rack'" value="Racks"/>
-<input type="button" onclick="window.location = '<TMPL_VAR NAME=base_url>?view=device'" value="Devices"/>
-<input type="button" onclick="window.location = '<TMPL_VAR NAME=base_url>?view=app'" value="Apps"/>
-<input type="button" onclick="window.location = '<TMPL_VAR NAME=base_url>?view=config'" value="Config"/>
-<input type="button" onclick="window.location = '<TMPL_VAR NAME=base_url>?view=report'" value="Reports"/>
-<input type="button" onclick="window.location = '<TMPL_VAR NAME=base_url>?view=help'" value="?"/>
 </p>
 </form>
+<p class="minimal">
+<button style="margin-left: 10px" onclick="window.location = '<TMPL_VAR NAME=base_url>?view=rack'">Racks</button>
+<button onclick="window.location = '<TMPL_VAR NAME=base_url>?view=device'">Devices</button>
+<button onclick="window.location = '<TMPL_VAR NAME=base_url>?view=app'">Apps</button>
+<button onclick="window.location = '<TMPL_VAR NAME=base_url>?view=config'">Config</button>
+<button onclick="window.location = '<TMPL_VAR NAME=base_url>?view=report'">Reports</button>
+<button onclick="window.location = '<TMPL_VAR NAME=base_url>?view=help'">?</button>
+</p>
+
 
 </div>
 <div id="main">
