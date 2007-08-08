@@ -72,7 +72,7 @@ tested on the following operating systems:
 
 Needed to install RackMonkey
 ----------------------------
-* Web server (e.g. Apache - but note it has only limited testing under mod_perl)
+* Web server (e.g. Apache - only limited testing has been done under mod_perl)
 
 * One of the following databases (see README for more):
   - SQLite v3.2.2 or higher
@@ -98,7 +98,7 @@ to be root in order to do this.
     perl -eshell -MCPAN
     
 On Mac OS X you can use sudo to temporarily become root (enter your usual
-admin password when prompted):
+password when prompted):
 
     sudo perl -eshell -MCPAN
 
@@ -292,7 +292,7 @@ you delete):
   templates into the existing template directory.
 
 * Upgrade web content: delete all the existing web (www) content and copy the 
-  new content into the existing directory.
+  new content into the existing directory (maintaining the layout).
 
 * Upgrade docs: overwrite the existing docs with the new versions.
 
