@@ -18,6 +18,7 @@ Contents
      9. Troubleshooting
     10. Logging Support Requests
     11. Bugs and Feature Requests
+	12. Experimental Plugins
     
 
 1. Introduction
@@ -433,3 +434,65 @@ To review the current list of bugs and feature requests, or to submit
 new ones, please visit:
     
      http://www.rackmonkey.org
+
+
+12. Experimental Plugins
+========================
+RackMonkey v1.2.4 features two experimental plugins, one for exporting to
+Portable Document Format (PDF) and one for exporting to Excel (XLS)
+spreadsheet format. By default both these plugins are disabled. To install and
+enable these plugins please follow the instructions below.
+
+
+PDF Export
+----------
+NB. This plugin is not yet in the svn repository, so can't be used as yet.
+Keep an eye on the repository, it should appear shortly.
+
+The PDF plugin can generate a PDF document from a rack layout. The layout is
+currently simple and limited to one rack. PDF export requires the installation
+of the following additional modules:
+
+* PDF::API2
+* PDF::Table
+
+To install these modules with the CPAN shell run:
+
+	perl -eshell -MCPAN
+
+Then from within the shell run:
+	
+	install PDF::API2
+	install PDF::Table
+
+Once these modules are installed you can enable the plugin by updating the
+value of PLUGIN_PDF to 1 in the Conf.pm file:
+
+	use constant PLUGIN_PDF => 1;
+
+You should now have a PDF button at the top of each rack in rack layout view.
+
+
+XLS Export
+----------
+The XLS plugin can generate an Excel spreadsheet of both rack layouts and the
+main device table views. XLS export requires the installation of one
+additional module: 
+ 
+ * Spreadsheet::WriteExcel
+
+To install this module with the CPAN shell run:
+
+	perl -eshell -MCPAN
+
+Then from within the shell run:
+
+	install Spreadsheet::WriteExcel
+	
+Once this module is installed you can enable the plugin by updating the 
+value of PLUGIN_XLS to 1 in the Conf.pm file:
+
+	use constant PLUGIN_XLS => 1;
+	
+You should now have an XL button at the top of each rack in rack layout view
+and also at the top of the page in the various device list views.

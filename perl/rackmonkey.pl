@@ -456,7 +456,24 @@ eval
 	$template->param('show_filters' => $cgi->showFilters);
 	$template->param('filter_string' => $cgi->filterString);
 
-	
+	# PDF Plugin
+	my $rack2PDFURL = '';
+	if (PLUGIN_PDF)
+	{
+		my $rack2PDFURL = $baseURL;
+		$rack2PDFURL =~ s/\/(.*?)\.pl/rack2pdf.pl/;
+		$template->param('rack2pdf_url' => $rack2PDFURL);
+	}
+
+	# XLS Plugin
+	my $rack2XLSURL = '';
+	if (PLUGIN_XLS)
+	{
+		$rack2XLSURL = $baseURL;
+		$rack2XLSURL =~ s/\/(.*?)\.pl/rack2xls.pl/;
+		$template->param('rack2xls_url' => $rack2XLSURL);
+	}
+
 	$template->param('base_url' => $baseURL);
 	$template->param('web_root' => WWWPATH);
 	$template->param('order_by' => $orderBy);

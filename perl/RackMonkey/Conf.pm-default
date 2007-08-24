@@ -13,7 +13,7 @@ our $VERSION = '1.2.%BUILD%';
 our $AUTHOR = 'Will Green (wgreen at users.sourceforge.net)';
 
 use base 'Exporter';
-our @EXPORT = qw/DBDCONNECT DBUSER DBPASS TMPLPATH WWWPATH DEFAULTVIEW RACKNUMBERINGTOP MAXNOTE MAXSTRING MAXRACKSIZE SHORTTEXTLEN SHORTURLLEN DATEFORMAT DELLQUERY/;
+our @EXPORT = qw/DBDCONNECT DBUSER DBPASS TMPLPATH WWWPATH DEFAULTVIEW RACKNUMBERINGTOP MAXNOTE MAXSTRING MAXRACKSIZE SHORTTEXTLEN SHORTURLLEN DATEFORMAT DELLQUERY PLUGIN_PDF PLUGIN_XLS/;
 
 # Database Connection Settings
 use constant DBDCONNECT => 'dbi:SQLite:dbname=/home/rack/db/rackmonkey.db';
@@ -23,6 +23,11 @@ use constant DBPASS => '';
 # Path & URL Constants
 use constant TMPLPATH => '/home/rack/rackmonkey/tmpl';
 use constant WWWPATH => '/rackmonkey';
+
+# Plug-in Constants
+# Set to 1 to enable links to the relevant plugin, make sure you check install instructions before enabling
+use constant PLUGIN_PDF => 0;
+use constant PLUGIN_XLS => 0;
 
 # Preference Constants
 use constant DEFAULTVIEW => 'rack';	# View loaded when none is specified

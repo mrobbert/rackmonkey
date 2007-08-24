@@ -50,6 +50,13 @@ button
     cursor:pointer;
 }
 
+button.small
+{
+	font-size: 0.6em;
+  	font-family: verdana, helvetica, sans-serif;
+	padding: 1px 3px;
+}
+
 table.form
 {
 	border: solid 1px #000;
@@ -238,7 +245,6 @@ p.footer
 	border-spacing: 0px;
 	border-width: 1px;
 	border-collapse: collapse;
-	margin-top: -8px;
 }
 
 th.rack_header

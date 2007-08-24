@@ -10,6 +10,8 @@ Introduction
 Thank you for choosing to try RackMonkey v1.2, I hope you find it useful in
 bringing (and keeping) order in your data centres.
 
+NB. This README has yet to be updated for the v1.2.4 release.
+
 Release Highlights
 ------------------
 * Added support for IE7
@@ -79,6 +81,13 @@ Example Data
 RackMonkey includes example data to demonstrate the software and get you 
 started. The inclusion of a particular product does not imply an endorsement
 by the author.
+
+Code Contributors
+-----------------
+I would like to thank the following for their contribution of code to the
+RackMonkey project:
+
+	* Pierre Larsson - XLS Export Plugin (rack2xls.pl)
 
 Acknowledgements 
 ----------------
