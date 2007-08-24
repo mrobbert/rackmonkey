@@ -42,9 +42,9 @@ as a user. Releases are packaged as bzipped tars (.tar.bz2) or gzipped tars
 
     bunzip2 -c rackmonkey_1.2.3.tar.bz2 | tar xvf -
 
-	or
+    or
 	
-	gunzip -c rackmonkey_1.2.3.tar.gz | tar xvf -
+    gunzip -c rackmonkey_1.2.3.tar.gz | tar xvf -
 
 Subversion Repository
 ---------------------
