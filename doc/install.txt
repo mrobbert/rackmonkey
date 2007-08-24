@@ -259,7 +259,7 @@ To install the sample data run the appropriate command for your database:
 
     or
 
-    psql [DBNAME] < sql/sample_data.sql
+    psql -U [USERNAME] [DBNAME] < sql/sample_data.sql
 
     
 7. Running RackMonkey
