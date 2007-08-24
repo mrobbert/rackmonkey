@@ -18,7 +18,7 @@ Contents
      9. Troubleshooting
     10. Logging Support Requests
     11. Bugs and Feature Requests
-	12. Experimental Plugins
+    12. Experimental Plugins
     
 
 1. Introduction
@@ -270,6 +270,9 @@ table of racks. If everything works correctly you probably want to start
 reading userguide.txt. If you're having trouble getting RackMonkey to run,
 read the next section.
 
+You may want to install the optional plugins, for further information see
+section 12, towards the end of this document.
+
 
 8. Upgrading RackMonkey
 =======================
@@ -479,7 +482,7 @@ The XLS plugin can generate an Excel spreadsheet of both rack layouts and the
 main device table views. XLS export requires the installation of one
 additional module: 
  
- * Spreadsheet::WriteExcel
+* Spreadsheet::WriteExcel
 
 To install this module with the CPAN shell run:
 
