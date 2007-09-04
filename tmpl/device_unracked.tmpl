@@ -23,10 +23,12 @@
 
 <form method="get" action="<TMPL_VAR NAME=base_url>">
 <p>
-	<a href="<TMPL_VAR NAME=base_url>?view=device&amp;view_type=create"><img style="float: left; margin-right: 20px" src="<TMPL_VAR NAME=web_root>/graphics/buttons/new.gif" width="47" height="21" alt="New" /></a>
-	
+	<button title="Create a new device" style="float: left; margin-right: 8px;" onclick="window.location = '<TMPL_VAR NAME=base_url>?view=device&amp;view_type=create'">New Device</button>
+	<TMPL_IF NAME=rack2xls_url><button title="Export the device table to an Excel spreadsheet" style="float: left;" onclick="window.location = '<TMPL_VAR NAME=rack2xls_url>?view=device&amp;view_type=xls_export&amp;id=<TMPL_VAR ESCAPE=URL NAME=id>'">Export XL</button></TMPL_IF>
+	<TMPL_IF NAME=rack2pdf_url><button title="Export the device table to a PDF document" style="float: left" onclick="window.location = '<TMPL_VAR NAME=rack2pdf_url>?view=device&amp;view_type=pdf_export&amp;id=<TMPL_VAR ESCAPE=URL NAME=id>'">Export PDF</button></TMPL_IF>
+		
 	<input type="hidden" name="view" value="device"/>
-	<label>View Type</label>
+	<label style="margin-left: 20px;">View Type</label>
 		<select name="view_type" onchange="submit()">
 		<option value="default">Default</option>
 		<option value="default_asset">Asset</option>
