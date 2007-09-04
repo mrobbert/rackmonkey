@@ -188,7 +188,7 @@ If using Postgres you need to create a database for rackmonkey and grant
 suitable permissions to a user. If you're not familiar with Postgres, the
 following pages should help:
 
-http://www.postgresql.org/docs/8.0/interactive/sql-createuser.html
+http://www.postgresql.org/docs/8.0/static/sql-createuser.html
 http://www.postgresql.org/docs/8.0/static/sql-createdatabase.html
 
 For further information (and guides for later versions) see:
