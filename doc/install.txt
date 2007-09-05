@@ -268,7 +268,7 @@ You can now start the app by pointing your browser at the location of the
 rackmonkey.pl script. You should be presented with a screen showing an empty
 table of racks. If everything works correctly you probably want to start
 reading userguide.txt. If you're having trouble getting RackMonkey to run,
-read the next section.
+read section 9: Troubleshooting (below).
 
 You may want to install the optional plugins, for further information see
 section 12, towards the end of this document.
