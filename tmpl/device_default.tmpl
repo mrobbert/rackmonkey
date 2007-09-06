@@ -23,24 +23,27 @@
 
 <form method="get" action="<TMPL_VAR NAME=base_url>">
 <p>
-	<button title="Create a new device" style="float: left; margin-right: 8px;" onclick="window.location = '<TMPL_VAR NAME=base_url>?view=device&amp;view_type=create'">New Device</button>
-	<TMPL_IF NAME=rack2xls_url><button title="Export the device table to an Excel spreadsheet" style="float: left;" onclick="window.location = '<TMPL_VAR NAME=rack2xls_url>?view=device&amp;view_type=xls_export&amp;id=<TMPL_VAR ESCAPE=URL NAME=id>'">Export XL</button></TMPL_IF>
-	<TMPL_IF NAME=rack2pdf_url><button title="Export the device table to a PDF document" style="float: left" onclick="window.location = '<TMPL_VAR NAME=rack2pdf_url>?view=device&amp;view_type=pdf_export&amp;id=<TMPL_VAR ESCAPE=URL NAME=id>'">Export PDF</button></TMPL_IF>
-	
 	<input type="hidden" name="view" value="device"/>
-	<label style="margin-left: 20px;">View Type</label>
-		<select name="view_type" onchange="submit()">
+	<label>View Type</label>
+	<select style="margin-right: 20px" name="view_type" onchange="submit()">
 		<option selected="selected" value="default">Default</option>
 		<option value="default_asset">Asset</option>
 		<option value="default_extended">Extended</option>
 		<option value="unracked">Unracked</option>
 	</select>
-	&nbsp;&nbsp;
-	<a href="#" onclick="javascript:showHide('filters');">Show/Hide Filters</a> |
-	<a href="<TMPL_VAR NAME=base_url>?view=device&amp;view_type=default">Reset Filters</a>
-</p>
+	
+	<input type="hidden" name="order_by" value="<TMPL_VAR ESCAPE=HTML NAME=order_by>" />	
+	
+	<button style="margin-right: 20px" onclick="javascript:showHide('filters'); return false;">Show/Hide Filters</button>
 
+	<TMPL_IF NAME=rack2xls_url><button title="Export the device table to an Excel spreadsheet" onclick="window.location = '<TMPL_VAR NAME=rack2xls_url>?view=device&amp;view_type=xls_export&amp;id=<TMPL_VAR ESCAPE=URL NAME=id>'; return false;">Export XLS</button></TMPL_IF>
+
+	<TMPL_IF NAME=rack2pdf_url><button title="Export the device table to a PDF document" onclick="window.location = '<TMPL_VAR NAME=rack2pdf_url>?view=device&amp;view_type=pdf_export&amp;id=<TMPL_VAR ESCAPE=URL NAME=id>'; return false;">Export PDF</button></TMPL_IF>
+</p>
+	
 <p style="clear: both" id="filters">
+	<button style="margin-right: 10px" onclick="window.location = '<TMPL_VAR NAME=base_url>?view=device&amp;view_type=default'; return false;">Reset Filters</button>
+	
 	<label>Customer</label>
 	<select name="filter_device_customer" onchange="submit()"><TMPL_LOOP NAME=customerlist>
 	<option <TMPL_IF NAME=selected>selected="selected"</TMPL_IF> value="<TMPL_VAR ESCAPE=HTML NAME=id>"><TMPL_VAR ESCAPE=HTML NAME=name></option></TMPL_LOOP>
@@ -60,14 +63,13 @@
 	<select name="filter_device_os" onchange="submit()"><TMPL_LOOP NAME=oslist>
 	<option <TMPL_IF NAME=selected>selected="selected"</TMPL_IF> value="<TMPL_VAR ESCAPE=HTML NAME=id>"><TMPL_VAR ESCAPE=HTML NAME=name></option></TMPL_LOOP>
 	</select>
-	<input type="hidden" name="order_by" value="<TMPL_VAR ESCAPE=HTML NAME=order_by>" />	
 </p>
 </form>
 
-<TMPL_IF NAME=devices>
 <table style="clear:both">
 	<tr>
 		<th>
+			<button class="small" title="Create a new device" style="float: right" onclick="window.location = '<TMPL_VAR NAME=base_url>?view=device&amp;view_type=create'; return false;">New</button>
 			<a class="sort" title="Sort by name" href="<TMPL_VAR NAME=base_url>?view=device&amp;order_by=device.name&amp;<TMPL_VAR NAME=filter_string>">Device</a> 
 		</th>
 		<th>
@@ -89,7 +91,9 @@
 			<a class="sort" title="Sort by customer" href="<TMPL_VAR NAME=base_url>?view=device&amp;order_by=customer.name&amp;<TMPL_VAR NAME=filter_string>">Customer</a>
 		</th>	
 
-	</tr><TMPL_LOOP NAME=devices>
+	</tr>
+	<TMPL_IF NAME=devices>
+	<TMPL_LOOP NAME=devices>
 	<TMPL_IF NAME="__odd__">
 	<tr class="row_silver">
 	<TMPL_ELSE>
@@ -103,12 +107,12 @@
 		<td><TMPL_VAR ESCAPE=HTML NAME=os_name><TMPL_IF NAME=os_version> <TMPL_VAR ESCAPE=HTML NAME=os_version></TMPL_IF></td>
 		<td><TMPL_VAR ESCAPE=HTML NAME=customer_name></td>
 	</tr></TMPL_LOOP>
-</table>
 <TMPL_ELSE>
-<p>
-	There are no device entries in RackMonkey (matching these filter criteria), use the 'New' button to add some.
-</p>
+<tr>
+	<td colspan="7" style="padding: 6px"><em>There are no device entries in RackMonkey matching these filter criteria.</em></td>
+</tr>
 </TMPL_IF>
+</table>
 
 <TMPL_INCLUDE NAME="footer.ssi">
 
