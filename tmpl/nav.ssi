@@ -16,12 +16,12 @@
 </p>
 </form>
 <p class="minimal">
-<button style="margin-left: 10px" onclick="window.location = '<TMPL_VAR NAME=base_url>?view=rack'">Racks</button>
-<button onclick="window.location = '<TMPL_VAR NAME=base_url>?view=device'">Devices</button>
-<button onclick="window.location = '<TMPL_VAR NAME=base_url>?view=app'">Apps</button>
-<button onclick="window.location = '<TMPL_VAR NAME=base_url>?view=config'">Config</button>
-<button onclick="window.location = '<TMPL_VAR NAME=base_url>?view=report'">Reports</button>
-<button onclick="window.location = '<TMPL_VAR NAME=base_url>?view=help'">?</button>
+<button style="margin-left: 10px" onclick="window.location = '<TMPL_VAR NAME=base_url>?view=rack'"><strong>Racks</strong></button>
+<button onclick="window.location = '<TMPL_VAR NAME=base_url>?view=device'"><strong>Devices</strong></button>
+<button onclick="window.location = '<TMPL_VAR NAME=base_url>?view=app'"><strong>Apps</strong></button>
+<button onclick="window.location = '<TMPL_VAR NAME=base_url>?view=config'"><strong>Config</strong></button>
+<button onclick="window.location = '<TMPL_VAR NAME=base_url>?view=report'"><strong>Reports</strong></button>
+<button onclick="window.location = '<TMPL_VAR NAME=base_url>?view=help'"><strong>?</strong></button>
 </p>
 
 
