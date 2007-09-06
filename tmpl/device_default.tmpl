@@ -43,7 +43,6 @@
 	
 <p style="clear: both" id="filters">
 	<button style="margin-right: 10px" onclick="window.location = '<TMPL_VAR NAME=base_url>?view=device&amp;view_type=default'; return false;">Reset Filters</button>
-	
 	<label>Customer</label>
 	<select name="filter_device_customer" onchange="submit()"><TMPL_LOOP NAME=customerlist>
 	<option <TMPL_IF NAME=selected>selected="selected"</TMPL_IF> value="<TMPL_VAR ESCAPE=HTML NAME=id>"><TMPL_VAR ESCAPE=HTML NAME=name></option></TMPL_LOOP>
