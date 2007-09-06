@@ -25,7 +25,7 @@
 <table class="rack_physical">
 <tr>
 	<th class="rack_header" colspan="2">
-		<TMPL_IF NAME=rack2xls_url><button title="Export this rack to an Excel spreadsheet" class="small" style="float: right;" onclick="window.location = '<TMPL_VAR NAME=rack2xls_url>?view=rack&amp;view_type=xls_export&amp;id=<TMPL_VAR ESCAPE=URL NAME=id>'">XL</button></TMPL_IF>
+		<TMPL_IF NAME=rack2xls_url><button title="Export this rack to an Excel spreadsheet" class="small" style="float: right;" onclick="window.location = '<TMPL_VAR NAME=rack2xls_url>?view=rack&amp;view_type=xls_export&amp;id=<TMPL_VAR ESCAPE=URL NAME=id>'">XLS</button></TMPL_IF>
 		<TMPL_IF NAME=rack2pdf_url><button title="Export this rack to a PDF document" class="small" style="float: right; margin-right: 2px;" onclick="window.location = '<TMPL_VAR NAME=rack2pdf_url>?view=rack&amp;view_type=pdf_export&amp;id=<TMPL_VAR ESCAPE=URL NAME=id>'">PDF</button></TMPL_IF>
 		<a class="rack_header" href="<TMPL_VAR NAME=base_url>?view=rack&amp;view_type=single&amp;id=<TMPL_VAR ESCAPE=URL NAME=id>">Rack <TMPL_VAR ESCAPE=HTML NAME=name> in <TMPL_VAR ESCAPE=HTML NAME=room_name></a>
 	</th>
