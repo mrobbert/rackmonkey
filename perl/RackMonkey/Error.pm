@@ -67,6 +67,12 @@ sub enlighten
 		$newErrStr = "$1";
 	}
 	
+	# General RackMonkey errors
+	elsif ($errStr =~ /RM2XLS:(.*)/)
+	{
+		$newErrStr = "$1";
+	}
+	
 	return $newErrStr;	
 }
 
