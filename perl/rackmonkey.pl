@@ -56,8 +56,10 @@ eval
 	my $id = $cgi->viewId;
 	my $viewType = $cgi->viewType;
 	my $act =  $cgi->act;
-	my $orderBy = $cgi->orderBy;
 	my $filterBy = $cgi->filterBy;
+	
+	my $orderBy = $cgi->orderBy;
+	my $priorOrderBy = $cgi->priorOrderBy;
 
 	if ($act) # perform act, and return status: 303 (See Other) to redirect to a view
 	{
@@ -497,9 +499,9 @@ sub checkSupportedDriver
 	my $driverVersion = eval("\$${currentDriver}::VERSION");
 	
 	# Check we're using SQLite or Postgres
-	unless (($currentDriver eq 'DBD::SQLite') || ($currentDriver eq 'DBD::Pg'))
+	unless (($currentDriver eq 'DBD::SQLite') || ($currentDriver eq 'DBD::Pg') || ($currentDriver eq 'DBD::mysql'))
 	{
-		die "RMERR: You tried to use an unsupported database driver '$currentDriver'. RackMonkey supports SQLite (DBD::SQLite) or Postgres (DBD::Pg).\nError occured";
+		die "RMERR: You tried to use an unsupported database driver '$currentDriver'. RackMonkey supports SQLite (DBD::SQLite), Postgres (DBD::Pg) or MySQL (DBD::mysql).\nError occured";
 	}
 	
 	# If using SQLite, version v1.09 or higher is required in order to support ADD COLUMN
