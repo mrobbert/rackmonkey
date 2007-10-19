@@ -496,7 +496,7 @@ sub rowCountInRoom
 	$room += 0; # force room to be numeric
 	my $sth = $self->dbh->prepare(qq!
 		SELECT
-			count (*)
+			count(*)
 		FROM row
 		WHERE
 			row.meta_default_data = 0 AND
