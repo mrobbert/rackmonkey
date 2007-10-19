@@ -188,7 +188,7 @@ sub checkSupportedDriver
 	# Check we're using SQLite or Postgres
 	unless (($currentDriver eq 'DBD::SQLite') || ($currentDriver eq 'DBD::Pg'))
 	{
-		die "RMERR: You tried to use an unsupported database driver '$currentDriver'. RackMonkey supports SQLite (DBD::SQLite) or Postgres (DBD::Pg).\nError occured";
+		die "RMERR: You tried to use an unsupported database driver '$currentDriver'. RackMonkey supports SQLite (DBD::SQLite), Postgres (DBD::Pg) or MySQL (DBD::mysql).\nError occured";
 	}
 	
 	# If using SQLite, version v1.09 or higher is required in order to support ADD COLUMN
