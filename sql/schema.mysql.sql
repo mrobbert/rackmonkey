@@ -23,13 +23,14 @@ CREATE TABLE room
 (
 	id INT AUTO_INCREMENT PRIMARY KEY,
 	name VARCHAR(255) NOT NULL,
-	building INTEGER REFERENCES building,
+	building INTEGER,
 	has_rows INTEGER,
 	notes VARCHAR(255),
 	meta_default_data INTEGER NOT NULL DEFAULT 0,
 	meta_update_time VARCHAR(255),
-	meta_update_user VARCHAR(255)	
-);
+	meta_update_user VARCHAR(255),
+	FOREIGN KEY (building) REFERENCES building(id)
+) ENGINE = InnoDB;
 
 
 -- The row the rack resides in
@@ -37,14 +38,15 @@ CREATE TABLE row
 (
 	id INT AUTO_INCREMENT PRIMARY KEY,
 	name VARCHAR(255) NOT NULL,
-	room INTEGER REFERENCES room,
+	room INTEGER,
 	room_pos INTEGER NOT NULL,
 	hidden_row INTEGER NOT NULL DEFAULT 0,
 	notes VARCHAR(255),
 	meta_default_data INTEGER NOT NULL DEFAULT 0,
 	meta_update_time VARCHAR(255),
-	meta_update_user VARCHAR(255)	
-);
+	meta_update_user VARCHAR(255),
+	FOREIGN KEY (room) REFERENCES room(id)	
+) ENGINE = InnoDB;
 
 
 -- The rack the device resides in
@@ -52,15 +54,16 @@ CREATE TABLE rack
 (
 	id INT AUTO_INCREMENT PRIMARY KEY,
 	name VARCHAR(255) NOT NULL,
-	row INTEGER REFERENCES row,
+	row INTEGER,
 	row_pos INTEGER NOT NULL,
 	hidden_rack INTEGER NOT NULL DEFAULT 0,
 	size INTEGER,
 	notes VARCHAR(255),
 	meta_default_data INTEGER DEFAULT 0,
 	meta_update_time VARCHAR(255),
-	meta_update_user VARCHAR(255)	
-);
+	meta_update_user VARCHAR(255),
+	FOREIGN KEY (row) REFERENCES row(id)	
+) ENGINE = InnoDB;
 
 
 -- Organisation or department, e.g. Human Resources, IBM, MI5
@@ -78,7 +81,7 @@ CREATE TABLE org
 	meta_default_data INTEGER NOT NULL DEFAULT 0,
 	meta_update_time VARCHAR(255),
 	meta_update_user VARCHAR(255)
-);
+) ENGINE = InnoDB;
 
 -- Organisation related views
 CREATE VIEW customer AS SELECT * FROM org WHERE customer = 1;
@@ -96,7 +99,7 @@ CREATE TABLE service
 	meta_default_data INTEGER NOT NULL DEFAULT 0,
 	meta_update_time VARCHAR(255),
 	meta_update_user VARCHAR(255)	
-);
+) ENGINE = InnoDB;
 
 
 -- Device domain
@@ -109,7 +112,7 @@ CREATE TABLE domain
 	meta_default_data INTEGER NOT NULL DEFAULT 0,
 	meta_update_time VARCHAR(255),
 	meta_update_user VARCHAR(255)	
-);
+) ENGINE = InnoDB;
 
 
 -- Operating System
@@ -117,12 +120,13 @@ CREATE TABLE os
 (
 	id INT AUTO_INCREMENT PRIMARY KEY,
 	name VARCHAR(255) UNIQUE NOT NULL,
-	manufacturer INTEGER REFERENCES org,
+	manufacturer INTEGER,
 	notes VARCHAR(255),
 	meta_default_data INTEGER NOT NULL DEFAULT 0,
 	meta_update_time VARCHAR(255),
-	meta_update_user VARCHAR(255)	
-);
+	meta_update_user VARCHAR(255),
+	FOREIGN KEY (manufacturer) REFERENCES org(id)	
+) ENGINE = InnoDB;
 
 
 -- A specifc model of hardware, e.g. Sun v240, Apple Xserve 
@@ -130,7 +134,7 @@ CREATE TABLE hardware
 (
 	id INT AUTO_INCREMENT PRIMARY KEY,
 	name VARCHAR(255) UNIQUE NOT NULL,
-	manufacturer INTEGER REFERENCES org,
+	manufacturer INTEGER,
 	size INTEGER NOT NULL,
 	image VARCHAR(255),
 	support_url VARCHAR(255),
@@ -138,8 +142,9 @@ CREATE TABLE hardware
 	notes VARCHAR(255),
 	meta_default_data INTEGER NOT NULL DEFAULT 0,
 	meta_update_time VARCHAR(255),
-	meta_update_user VARCHAR(255)	
-);
+	meta_update_user VARCHAR(255),
+	FOREIGN KEY (manufacturer) REFERENCES org(id)	
+) ENGINE = InnoDB;
 
 
 -- Role played by the device, e.g. web server, Oracle server, router
@@ -152,7 +157,7 @@ CREATE TABLE role
 	meta_default_data INTEGER NOT NULL DEFAULT 0,
 	meta_update_time VARCHAR(255),
 	meta_update_user VARCHAR(255)	
-);
+) ENGINE = InnoDB;
 
 
 -- An individual piece of hardware
@@ -160,25 +165,32 @@ CREATE TABLE device
 (
 	id INT AUTO_INCREMENT PRIMARY KEY,
 	name VARCHAR(255) NOT NULL,
-	domain INTEGER REFERENCES domain,
-	rack INTEGER REFERENCES rack,
+	domain INTEGER,
+	rack INTEGER,
 	rack_pos INTEGER,
-	hardware INTEGER REFERENCES hardware,
+	hardware INTEGER,
 	serial_no VARCHAR(255),
 	asset_no VARCHAR(255),
 	purchased CHAR(10),
-	os INTEGER REFERENCES os,
+	os INTEGER,
 	os_version VARCHAR(255), 
-	customer INTEGER REFERENCES org,
-	service INTEGER REFERENCES service,
-	role INTEGER REFERENCES role,
+	customer INTEGER,
+	service INTEGER,
+	role INTEGER,
 	monitored INTEGER,
 	in_service INTEGER,
 	notes VARCHAR(255),
 	meta_default_data INTEGER NOT NULL DEFAULT 0,
 	meta_update_time VARCHAR(255),
-	meta_update_user VARCHAR(255)	
-);
+	meta_update_user VARCHAR(255),
+	FOREIGN KEY (domain) REFERENCES domain(id),
+	FOREIGN KEY (rack) REFERENCES rack(id),	
+	FOREIGN KEY (hardware) REFERENCES hardware(id),
+	FOREIGN KEY (os) REFERENCES os(id),
+	FOREIGN KEY (customer) REFERENCES org(id),
+	FOREIGN KEY (service) REFERENCES service(id),
+	FOREIGN KEY (role) REFERENCES role(id)	
+) ENGINE = InnoDB;
 
 
 -- Applications and services provided by the device
@@ -191,7 +203,7 @@ CREATE TABLE app
 	meta_default_data INTEGER NOT NULL DEFAULT 0,
 	meta_update_time VARCHAR(255),
 	meta_update_user VARCHAR(255)	
-);
+) ENGINE = InnoDB;
 
 
 -- Relationships applications can have with devices
@@ -199,16 +211,19 @@ CREATE TABLE app_relation
 (
 	id INT AUTO_INCREMENT PRIMARY KEY,
 	name VARCHAR(255) UNIQUE NOT NULL
-);
+) ENGINE = InnoDB;
 
 
 -- Relates devices to apps
 CREATE TABLE device_app
 (
-	app INTEGER REFERENCES app,
-	device INTEGER REFERENCES device,
-	relation INTEGER REFERENCES app_relation
-);
+	app INTEGER,
+	device INTEGER,
+	relation INTEGER,
+	FOREIGN KEY (app) REFERENCES app(id),
+	FOREIGN KEY (device) REFERENCES device(id),
+	FOREIGN KEY (relation) REFERENCES app_relation(id)			
+) ENGINE = InnoDB;
 
 
 -- To log changes in RackMonkey entries
@@ -222,7 +237,7 @@ CREATE TABLE logging
 	descript VARCHAR(255),
 	update_time VARCHAR(255),
 	update_user VARCHAR(255)
-);
+) ENGINE = InnoDB;
 
 
 -- To store meta information about Rackmonkey database, e.g. revision.
@@ -231,7 +246,7 @@ CREATE TABLE rm_meta
 	id INT AUTO_INCREMENT PRIMARY KEY,
 	name VARCHAR(255) NOT NULL,
 	value VARCHAR(255) NOT NULL
-);
+) ENGINE = InnoDB;
 
 
 -- Indexes
