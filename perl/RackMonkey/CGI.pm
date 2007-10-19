@@ -36,6 +36,12 @@ sub cgi
 	$self->{'cgi'};
 }
 
+sub referer 
+{
+	my $self = shift;
+	return $self->cgi->referer;
+}
+
 sub view
 {
 	my $self = shift;
@@ -98,6 +104,13 @@ sub orderBy
 	my $self = shift;
 	my $orderBy = $self->cgi->param('order_by') || '';
 	return $orderBy;	
+}
+
+sub priorOrderBy
+{
+	my $self = shift;
+	my $priorCGI = new CGI($self->referer);
+	return $priorCGI->param('order_by');
 }
 
 sub filterString
