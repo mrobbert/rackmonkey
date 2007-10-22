@@ -1,9 +1,9 @@
-// #####################################################################
-// # RackMonkey - Know Your Racks - http://www.rackmonkey.org
-// # Version 1.2.%BUILD%
-// # (C)2007 Will Green (wgreen at users.sourceforge.net)
-// # RackMonkey JavaScript library
-// #####################################################################
+//////////////////////////////////////////////////////////////////////////////
+// RackMonkey - Know Your Racks - http://www.rackmonkey.org                 //  
+// Version 1.2.%BUILD%                                                      //
+// (C)2004-2007 Will Green (wgreen at users.sourceforge.net)                //
+// RackMonkey JavaScript library                                            //
+//////////////////////////////////////////////////////////////////////////////
 
 // reverses the current check state of any checkbox with the specified fieldName
 function checkboxInvert(fieldName)
