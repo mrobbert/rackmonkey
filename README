@@ -39,7 +39,6 @@ Known Issues v1.2.3
   work if there is only one item present.
 * Show/hide for device filters is crude and doesn't remember settings.
 
-
 Security
 --------
 You should be aware that RackMonkey has not been fully security-hardened, so
@@ -105,7 +104,6 @@ Code or ideas from the following projects helped or inspired RackMonkey developm
 	* labs.silverorange.com - tabbed CSS
 	* SQLite project (www.sqlite.org) - original RackMonkey database
 	
-
 Further Information
 -------------------
 Visit the RackMonkey web site:
@@ -113,4 +111,3 @@ Visit the RackMonkey web site:
 
 Join the announce list:
 	http://lists.sourceforge.net/lists/listinfo/rackmonkey-announce
-
