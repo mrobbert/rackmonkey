@@ -1,10 +1,10 @@
 package RackMonkey::Error;
-########################################################################
-# RackMonkey - Know Your Racks - http://www.rackmonkey.org
-# Version 1.2.%BUILD%
-# (C)2007 Will Green (wgreen at users.sourceforge.net)
-# Error handling functions for RackMonkey
-########################################################################
+##############################################################################
+# RackMonkey - Know Your Racks - http://www.rackmonkey.org                   #
+# Version 1.2.%BUILD%                                                        #
+# (C)2004-2007 Will Green (wgreen at users.sourceforge.net)                  #
+# Error handling functions for RackMonkey                                    #
+##############################################################################
 
 use strict;
 use warnings;
