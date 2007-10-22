@@ -1,12 +1,18 @@
 ##############################################################################
 # RackMonkey - Know Your Racks - http://www.rackmonkey.org                   #
 # Version 1.2.%BUILD%                                                        #
-# (C)2007 Will Green (wgreen at users.sourceforge.net)                       #
+# (C)2004-2007 Will Green (wgreen at users.sourceforge.net)                  #
 # RackMonkey Changes                                                         #
 ##############################################################################
 
+v1.2.4 - Released 2007-11-22
+----------------------------
+* Improved interface
+* Early MySQL 5 support
+
 v1.2.3 - Released 2007-06-23
 ----------------------------
+* First beta release of v1.2
 * Made rack physical view more compact and usable (47U rack fits in 1280x1024)
 * If a user is logged in as guest they can't edit entries (see userdoc.txt)
 * Added querying of Dell server spec and warranty based on service tag
@@ -26,7 +32,7 @@ v1.2.3 - Released 2007-06-23
 
 v1.2.2-1 - Released 2007-06-22
 ------------------------------
-* Fixed issues with using v1.2.2 with Postgres. SQLite users are not affected.
+* Fixed issue when using v1.2.2 with Postgres. SQLite users are not affected.
 
 v1.2.2 - Released 2007-06-21
 ----------------------------
