@@ -1,7 +1,7 @@
 ------------------------------------------------------------------------------
 -- RackMonkey - Know Your Racks - http://www.rackmonkey.org                 --
 -- Version 1.2.%BUILD%                                                      --
--- (C)2007 Will Green (wgreen at users.sourceforge.net)                     --
+-- (C)2004-2007 Will Green (wgreen at users.sourceforge.net)                --
 -- Default data for RackMonkey database                                     --
 ------------------------------------------------------------------------------
 
