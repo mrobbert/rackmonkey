@@ -6,24 +6,29 @@
 ##############################################################################
 # RackMonkey - Know Your Racks - http://www.rackmonkey.org                   #
 # Version 1.2.%BUILD%                                                        #
-# (C)2007 Will Green (wgreen at users.sourceforge.net)                       #
+# (C)2004-2007 Will Green (wgreen at users.sourceforge.net)                  #
 # Device single view template                                                #
 ##############################################################################
 -->
 
 <head>
 	<title><TMPL_VAR ESCAPE=HTML NAME=name><TMPL_UNLESS NAME=domain_meta_default_data>.<TMPL_VAR ESCAPE=HTML NAME=domain_name></TMPL_UNLESS> | RackMonkey</title>
-	<link rel="stylesheet" type="text/css" title="Monkey Style" href="<TMPL_VAR NAME=web_root>/styles/rackmonkey.css" />
+	<style type="text/css" media="screen">
+		@import "<TMPL_VAR NAME=web_root>/styles/main.css";
+		@import "<TMPL_VAR NAME=web_root>/styles/tabs.css";
+		@import "<TMPL_VAR NAME=web_root>/styles/form.css";
+	</style>
 	<script type="text/javascript" src="<TMPL_VAR NAME=web_root>/javascript/racklib.js"></script>
 </head>
 
 <body>
 
-<TMPL_INCLUDE NAME="nav.ssi">
+<TMPL_INCLUDE NAME="nav-device.ssi">
 
-<table class="form_wide">
+<div id="main">
+<table class="form">
 <tr>
-	<th class="form">
+	<th>
 		<a href="<TMPL_VAR NAME=base_url>?view=device&amp;view_type=create"><img style="float:right; margin-left: 4px;" src="<TMPL_VAR NAME=web_root>/graphics/buttons/new.gif" width="47" height="21" alt="New" /></a>
 		<a href="<TMPL_VAR NAME=base_url>?view=device"><img style="float:right; margin-left: 4px;" src="<TMPL_VAR NAME=web_root>/graphics/buttons/view_all.gif" width="55" height="21" alt="View All" /></a>
 		devices
@@ -40,7 +45,7 @@
 	
 		<div>
 		<label>Location</label><br />
-		<TMPL_VAR ESCAPE=HTML NAME=rack_name><TMPL_UNLESS NAME=building_meta_default_data> [<TMPL_VAR ESCAPE=HTML NAME=rack_pos>] - <TMPL_VAR ESCAPE=HTML NAME=room_name> in <TMPL_VAR ESCAPE=HTML NAME=building_name> &nbsp; <a class="small" title="View device in rack" href="<TMPL_VAR NAME=base_url>?view=rack&amp;view_type=physical&amp;id=<TMPL_VAR ESCAPE=URL NAME=rack>&amp;device_id=<TMPL_VAR ESCAPE=URL NAME=id>">View in rack&hellip;</a><TMPL_ELSE>&nbsp; <a class="small" title="View unracked devices" href="<TMPL_VAR NAME=base_url>?view=device&amp;view_type=unracked">View all unracked devices&hellip;</a></TMPL_UNLESS>
+		<TMPL_VAR ESCAPE=HTML NAME=rack_name><TMPL_UNLESS NAME=building_meta_default_data> [<TMPL_VAR ESCAPE=HTML NAME=rack_pos>] - <TMPL_VAR ESCAPE=HTML NAME=room_name> in <TMPL_VAR ESCAPE=HTML NAME=building_name> &nbsp; <a class="small" title="View device in rack" href="<TMPL_VAR NAME=base_url>?view=rack&amp;view_type=physical&amp;id=<TMPL_VAR ESCAPE=URL NAME=rack>&amp;device_id=<TMPL_VAR ESCAPE=URL NAME=id>">View in rack&hellip;</a><TMPL_ELSE>&nbsp; <a class="small" title="View unracked devices" href="<TMPL_VAR NAME=base_url>?view=device&amp;view_type=default_unracked">View all unracked devices&hellip;</a></TMPL_UNLESS>
 		</div>
 		
 		<hr />
@@ -110,6 +115,7 @@
 	</td>
 </tr>
 </table>
+</div>
 
 <TMPL_INCLUDE NAME="footer.ssi">
 </body>
