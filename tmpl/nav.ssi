@@ -15,6 +15,7 @@
 <input type="hidden" name="view_type" value="physical"/>
 </p>
 </form>
+
 <p class="minimal">
 <button style="margin-left: 10px" onclick="window.location = '<TMPL_VAR NAME=base_url>?view=rack'"><strong>Racks</strong></button>
 <button onclick="window.location = '<TMPL_VAR NAME=base_url>?view=device'"><strong>Devices</strong></button>
@@ -24,6 +25,8 @@
 <button onclick="window.location = '<TMPL_VAR NAME=base_url>?view=help'"><strong>?</strong></button>
 </p>
 
-
 </div>
+
+
+
 <div id="main">
