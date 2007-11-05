@@ -16,7 +16,7 @@ table.itemtable td
 {
 	border: solid black;
 	border-width: 1px;
-	padding: 4px 4px;
+	padding: 4px;
 }
 
 table.itemtable tr.odd
