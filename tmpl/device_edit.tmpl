@@ -25,13 +25,14 @@
 
 <TMPL_INCLUDE NAME="nav-device.ssi">
 
+<div id="main">
 <form method="post" action="<TMPL_VAR NAME=base_url>">
-<table class="form_wide">
+<table class="form">
 <tr>
-	<th class="form">edit device</th>
+	<th>edit device</th>
 </tr>
 <tr>
-	<td class="form">
+	<td>
 		<div style="float: left; width: 280px;">
 		<label>Name</label><br />
 		<input type="text" size="32" name="name" value="<TMPL_VAR ESCAPE=HTML NAME=name>" />
@@ -127,6 +128,7 @@
 	</tr>
 </table>
 </form>
+</div>
 
 <TMPL_INCLUDE NAME="footer.ssi">
 

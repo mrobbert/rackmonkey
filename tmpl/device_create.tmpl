@@ -25,8 +25,9 @@
 
 <TMPL_INCLUDE NAME="nav-device.ssi">
 
-<form  method="post" action="<TMPL_VAR NAME=base_url>">
-<table class="form_wide">
+<div id="main">
+<form method="post" action="<TMPL_VAR NAME=base_url>">
+<table class="form">
 <tr>
 	<th class="form">create device</th>
 </tr>
@@ -124,7 +125,8 @@
 		</td>
 	</tr>
 </table>
-</form>	
+</form>
+</div>	
 
 <TMPL_INCLUDE NAME="footer.ssi">
 
