@@ -69,6 +69,9 @@ will allow you to keep track of who did what when. The last update is shown at
 the bottom of single views or a history can be obtained with the logdump 
 command (see below).
 
+For information on setting up authentication using Apache see:
+http://httpd.apache.org/docs/2.2/howto/auth.html
+
 Guest access
 ------------
 RackMonkey v1.2.3 or higher supports a guest account. If you create a user in
