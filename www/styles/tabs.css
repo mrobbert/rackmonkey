@@ -40,7 +40,7 @@
 #navbar ul span,
 #navbar ul a.current 
 {
-	width: 7em;
+	width: 6em;
 	display: block;
 	float: left;
 	padding: 5px 0;

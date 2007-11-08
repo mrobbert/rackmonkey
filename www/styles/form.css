@@ -18,13 +18,24 @@ table.form
 
 table.form th
 {
+	padding: 5px;
 	background: #444;
 	color: white;
 	text-align: left;
-	padding: 5px;
+	font-variant: small-caps;
+	font-size: 1.2em;
 }
 
 table.form td
 {
-	padding: 4px;
+	padding: 6px;
+}
+
+table.form hr
+{
+    height: 1px;
+	border: 0;
+	color: #888;
+	background: #888;
+	width: 100%;
 }

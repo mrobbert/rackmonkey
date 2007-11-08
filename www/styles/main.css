@@ -57,3 +57,9 @@ label
 	font-family: verdana, helvetica, sans-serif;
 	font-weight: bold;
 }
+
+a.small
+{
+	font-size: x-small;
+	font-family: verdana, helvetica, sans-serif;
+}
