@@ -1532,11 +1532,11 @@ sub _validateDeviceInput # doesn't check much at present
 	# normalise in service value so it can be stored as an integer
 	$$record{'in_service'} = $$record{'in_service'} ? 1 : 0;
 	
-	# check if we have a meta default location if so set rack position to blank, otherwise check we have a valid rack position
+	# check if we have a meta default location if so set rack position to zero, otherwise check we have a valid rack position
 	my $rack = $self->rack($$record{'rack'});
 	if ($$rack{'meta_default_data'})
 	{
-		$$record{'rack_pos'} = '';
+		$$record{'rack_pos'} = '0';
 	}
 	else # location is in a real rack
 	{
