@@ -40,27 +40,23 @@ Release Version
 ---------------
 Visit http://www.rackmonkey.org to download a release version. Release
 versions are recommended for production use or anyone interested in RackMonkey
-as a user. RackMonkey releases from v1.2.4 are packaged gzipped tars
-(.tar.gz) and can be extracted with (your filename may be different):
+as a user. RackMonkey releases from v1.2.4 are supplied as gzipped tars and
+can be extracted with:
 
-    $ gunzip -c rackmonkey_1.2.3.tar.gz | tar xvf -
+    $ gunzip -c rackmonkey_1.2.4.tar.gz | tar xvf -
+
 
 Subversion Repository
 ---------------------
 If you're a developer you can check a release out of subversion. 
 
-The RackMonkey svn server:  https://rackmonkey.svn.sourceforge.net
-Path to RackMonkey trunk:   /svnroot/rackmonkey/rackmonkey/trunk
-
 For more information on the RackMonkey subversion repository see the
-'Source Code' section of:
-
-    http://www.rackmonkey.org/faq
+'Source Code' section of: http://www.rackmonkey.org/faq
 
 
 3. Requirements
 ===============
-RackMonkey has minimal system requirements, and most unix-based operating 
+RackMonkey has minimal system requirements, and most Unix-based operating 
 system already have most of the required software.
 
 Needed to install RackMonkey
