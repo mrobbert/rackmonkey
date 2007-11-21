@@ -26,7 +26,7 @@ Contents
 This document explains how to install RackMonkey. Please consult the README
 before performing an install as it contains important information on this
 release (including known issues). See the doc/changes.txt document for what's
-new in this release. For information on using RackMonkey see
+new in this release. For information on using RackMonkey see 
 doc/userguide.txt.
 
 Please note that the $ shown at the start of commands represents the shell
@@ -38,9 +38,9 @@ prompt, you should not type it.
 
 Release Version
 ---------------
-Visit http://www.rackmonkey.org to download a release version. Release
-versions are recommended for production use or anyone interested in RackMonkey
-as a user. RackMonkey releases from v1.2.4 are supplied as gzipped tars and
+Visit http://www.rackmonkey.org to download a release version. Release 
+versions are recommended for production use or anyone interested in RackMonkey 
+as a user. RackMonkey releases from v1.2.4 are supplied as gzipped tars and 
 can be extracted with:
 
     $ gunzip -c rackmonkey_1.2.4.tar.gz | tar xvf -
@@ -111,7 +111,7 @@ Then install the database driver for the database you're using:
 
 4. Installing RackMonkey
 ========================
-If you are upgrading from an earlier release of v1.2, don't follow this
+If you are upgrading from an earlier release of v1.2, don't follow this 
 section, skip down to section 8. Upgrading RackMonkey.
 
 Once you have obtained a copy of RackMonkey (see section 2) you should have a
@@ -177,9 +177,9 @@ SQLite you can leave the DBUSER and DBPASS values blank.
 
 For Postgres
 ------------
-You will create a Postgres database in section 6. For now choose a
-database name, username and password. For simplicity we recommend you
-make the database and username both 'rackmonkey':
+You will create a Postgres database in section 6. For now choose a database 
+name, username and password. For simplicity we recommend you make the database
+and username both 'rackmonkey':
 
 use constant DBDCONNECT => 'dbi:Pg:dbname=rackmonkey';
 use constant DBUSER => 'rackmonkey';
@@ -261,7 +261,7 @@ To install the sample data run the appropriate command for your database:
 
     $ sqlite3 [PATH] < sql/sample_data.sql
     $ psql -U rackmonkey rackmonkey < sql/sample_data.sql
-	$ mysql (needs to be written)
+    $ mysql (needs to be written)
 
 
 7. Running RackMonkey
