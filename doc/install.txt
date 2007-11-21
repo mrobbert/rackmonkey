@@ -182,20 +182,30 @@ NB. This path must be writable by the web server and should not be within
 web space, or users will be able to download your database. As we're using
 SQLite you can leave the DBUSER and DBPASS values blank.
 
+
 For Postgres
 ------------
-If using Postgres you need to create a database for rackmonkey and grant 
-suitable permissions to a user. If you're not familiar with Postgres, the
-following pages should help:
+Create a user 'rackmonkey':
 
-http://www.postgresql.org/docs/8.0/static/sql-createuser.html
-http://www.postgresql.org/docs/8.0/static/sql-createdatabase.html
+	$ createuser --pwprompt
+	Enter name of role to add: rackmonkey
+	Enter password for new role: 
+	Enter it again: 
+	Shall the new role be a superuser? (y/n) n
+	Shall the new role be allowed to create databases? (y/n) n
+	Shall the new role be allowed to create more new roles? (y/n) n
+	CREATE ROLE
 
-For further information (and guides for later versions) see:
+Then create a database called rackmonkey owned by the rackmonkey user:
+
+	createdb -O rackmonkey rackmonkey
+	CREATE DATABASE
+
+For further information on administering Postgres see:
 http://www.postgresql.org/docs/. 
 
 Postgres databases are created in a location specified by the Postgres 
-configuration, so you only need to provide a database name in Conf.pm, e.g.
+configuration, so you only need to provide a database name in Conf.pm:
 
 use constant DBDCONNECT => 'dbi:Pg:dbname=rackmonkey';
 
