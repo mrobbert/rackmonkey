@@ -72,7 +72,7 @@ Needed to install RackMonkey
       SQLite3 can be obtained from http://www.sqlite.org
   - PostgreSQL v8 or higher
       Postgres can be obtained from http://www.postgresql.org
-  - MySQL v5.0.45 (NB. support is still experimental)
+  - MySQL v5.0.45 or higher (NB. support is still experimental)
       MySQL can be obtained from http://dev.mysql.com/downloads/mysql/
 
   NB. SQLite is the simplest database to administer. If you aren't an experienced
@@ -108,7 +108,7 @@ Once the shell has started (you may be prompted to configure it):
 
 Then install the database driver for the database you're using:
 
-    SQlite:   install DBD::SQLite
+    SQLite:   install DBD::SQLite
     Postgres: install DBD::Pg
     MySQL:    install DBD::mysql
 
@@ -116,18 +116,18 @@ Then install the database driver for the database you're using:
 4. Installing RackMonkey
 ========================
 If you are upgrading from an earlier release of v1.2, don't follow this
-section, instead scroll down to section 8. Upgrading RackMonkey.
+section, skip down to section 8. Upgrading RackMonkey.
 
 Once you have obtained a copy of RackMonkey (see section 2) you should have a
 directory with the following layout:
 
-doc         Documentation for RackMonkey
-README      Read this before you start
-perl        Contains the perl scripts and modules
-sql         SQL to create the RackMonkey database
-t           Directory containing test scripts
-tmpl        HTML::Template files for the web interface
-www         Web space files, e.g. images, css files
+  doc         Documentation for RackMonkey
+  README      Read this before you start
+  perl        Contains the perl scripts and modules
+  sql         SQL to create the RackMonkey database
+  t           Directory containing test scripts
+  tmpl        HTML::Template files for the web interface
+  www         Web space files, e.g. images, css files
 
 Copy the rackmonkey.pl file and the whole RackMonkey directory from the perl
 directory to a suitable location on your web server (e.g. /cgi-bin) and ensure
@@ -163,8 +163,9 @@ Take a copy of the default RackMonkey configuration:
 
     $ cp RackMonkey/Conf.pm-default RackMonkey/Conf.pm 
 
-Open RackMonkey/Conf.pm in your favourite editor. The following values must be
-set for RackMonkey to work (other options can be ignored during installation).
+Open RackMonkey/Conf.pm in your favourite editor and follow the appropriate
+instructions below.
+
 
 For SQLite
 ----------
@@ -284,8 +285,10 @@ section 12, towards the end of this document.
 RackMonkey v1.2.x can be upgraded to the latest version following the
 instructions below. NB. Upgrading from v1.1 is not supported.
 
-8.1 Upgrading to v1.2.3 from v1.2.x
+8.1 Upgrading to v1.2.4 from v1.2.x
 ===================================
+THIS SECTION NEEDS TO BE REWRITTEN FOR v1.2.4
+
 Upgrading from earlier releases of v1.2 is straightforward: there are no
 database schema changes.
 
@@ -327,10 +330,10 @@ updated RackMonkey is ready to use. If you experience any problems with the
 upgrade you should consult the Troubleshooting section (below).
 
 
-8.3 Reverting to v1.2.1 or v1.2.2 from v1.2.3
-=============================================
+8.3 Reverting to an earlier version of v1.2
+===========================================
 * Take a copy of RackMonkey/Conf.pm
-* Download v1.2.1 or v1.2.2-1 from http://www.rackmonkey.org/download
+* Download the older version from http://www.rackmonkey.org/download
 * Do a fresh install of the older version following its instructions, but
   skipping configuration
 * Copy your saved Conf.pm into the perl/RackMonkey directory.
