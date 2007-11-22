@@ -31,9 +31,28 @@ function showHide(element)
 	var ele = document.getElementById(element);
 	if(!ele)
 		return true;
-	if(ele.style.display=="none")
-		ele.style.display="block";
+	if(ele.style.display == "none")
+		ele.style.display = "block";
 	else 
-    	ele.style.display="none";
-  return true;
+		ele.style.display = "none";
+	return true;
 }
+
+function showHideFilters()
+{
+	var filters = document.getElementById('filters');
+	var filtersButton = document.getElementById('filterbutton');
+	if((!filters) || (!filtersButton))
+		return true;
+	if(filters.style.display == "none")
+	{
+		filters.style.display = "block";
+		filtersButton.childNodes[0].nodeValue = "Hide Filters";
+	}
+	else 
+    {
+		filters.style.display="none";
+		filtersButton.childNodes[0].nodeValue = "Show Filters";
+	}
+	return true;
+} 
