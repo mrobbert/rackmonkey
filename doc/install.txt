@@ -465,7 +465,7 @@ of the following additional modules:
 
 To install these modules with the CPAN shell run:
 
-	perl -eshell -MCPAN
+	$ perl -eshell -MCPAN
 
 Then from within the shell run:
 	
@@ -490,7 +490,7 @@ additional module:
 
 To install this module with the CPAN shell run:
 
-	perl -eshell -MCPAN
+	$ perl -eshell -MCPAN
 
 Then from within the shell run:
 
