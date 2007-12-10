@@ -10,7 +10,7 @@
 table.form
 {
 	border: solid 1px #000;
-	width: 550px;
+	width: 600px;
 	margin-top: 10px;
 	background: #DDD;
 	border-collapse: collapse;
@@ -26,8 +26,7 @@ table.form th
 
 table.form th span.title
 {
-	font-variant: small-caps;
-	font-size: 1.2em;
+	font-family: helvetica, sans-serif;
 }
 
 table.form td

@@ -29,7 +29,7 @@
 <form method="post" action="<TMPL_VAR NAME=base_url>">
 <table class="form">
 <tr>
-	<th>edit device</th>
+	<th><span class="title">Edit Device</title></th>
 </tr>
 <tr>
 	<td>
@@ -45,7 +45,7 @@
 		</select>
 		</div>
 
-		<hr />
+		<hr style="clear: both; margin-top: 12px" />
 		
 		<div>
 		<label>Location</label><br />
@@ -114,20 +114,23 @@
 		<div style="clear: both;">
 		<label>Notes</label><br />
 		<textarea name="notes" cols="55" rows="4"><TMPL_VAR ESCAPE=HTML NAME=notes></textarea>
-		<hr/>
-		<a href="<TMPL_VAR NAME=base_url>?view=device&amp;view_type=single&amp;id=<TMPL_VAR ESCAPE=URL NAME=id>"><img style="float: left;" src="<TMPL_VAR NAME=web_root>/graphics/buttons/cancel.gif" width="48" height="21" alt="Cancel" /></a>
-		<button style="float: right;" type="submit">Save</button>
+
+	</td>
+	</tr>
+	<tr>
+	<td class="footer">		
+		<button class="itemtable" style="float: left" title="Cancel editing this device" onclick="window.location = '<TMPL_VAR NAME=base_url>?view=device&amp;view_type=single&amp;id=<TMPL_VAR ESCAPE=URL NAME=id>'; return false;">Cancel</button>
+		<button class="itemtable" style="float: right" title="Edit this device" type="submit">Save</button>	
 		<input type="hidden" name="view" value="device" />
 		<input type="hidden" name="view_type" value="single" />
 		<input type="hidden" name="id" value="<TMPL_VAR ESCAPE=HTML NAME=id>" />
 		<input type="hidden" name="act" value="update" />
 		<input type="hidden" name="act_on" value="device" />
 		<input type="hidden" name="act_id" value="<TMPL_VAR ESCAPE=HTML NAME=id>" />
-		</div>
-		</td>
-	</tr>
+		<span class="footer">&nbsp;</span>	
+	</td>
+</tr>
 </table>
-</form>
 </div>
 
 <TMPL_INCLUDE NAME="footer.ssi">

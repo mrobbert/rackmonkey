@@ -45,12 +45,6 @@ button
     cursor: pointer;
 }
 
-select
-{
-	font-family: verdana, helvetica, sans-serif;
-  	font-size: 0.8em;
-}
-
 label
 {
 	font-size: 0.8em;

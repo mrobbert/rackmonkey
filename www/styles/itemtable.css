@@ -65,3 +65,9 @@ table.itemtable td.footer a
 	color: white;
 	text-decoration: underline;	
 }
+
+#device_options select
+{
+	font-family: verdana, helvetica, sans-serif;
+  	font-size: 0.8em;
+}
