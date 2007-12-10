@@ -21,7 +21,7 @@
 	<script type="text/javascript" src="<TMPL_VAR NAME=web_root>/javascript/racklib.js"></script>
 </head>
 
-<body>
+<body onload="if (getCookie('filter') == 'on') { showHideFilters(); }">
 
 <TMPL_INCLUDE NAME="nav-device.ssi">
 
@@ -37,7 +37,7 @@
 		</select>
 
 		<button style="margin-right: 20px" title="Create a new device" onclick="window.location = '<TMPL_VAR NAME=base_url>?view=device&amp;view_type=create'; return false;">New Device</button>
-		<button style="width: 8em; margin-right: 20px" id="filterbutton" onclick="javascript:showHideFilters(); return false;">Show Filters</button>
+		<button style="width: 8em; margin-right: 20px" id="filterbutton" onclick="showHideFilters(); return false;">Show Filters</button>
 	
 		<TMPL_IF NAME=rack2xls_url><button title="Export the device table to an Excel spreadsheet" onclick="window.location = '<TMPL_VAR NAME=rack2xls_url>?view=device&amp;view_type=xls_export&amp;id=<TMPL_VAR ESCAPE=URL NAME=id>'; return false;">Export XLS</button></TMPL_IF>
 		<TMPL_IF NAME=rack2pdf_url><button title="Export the device table to a PDF document" onclick="window.location = '<TMPL_VAR NAME=rack2pdf_url>?view=device&amp;view_type=pdf_export&amp;id=<TMPL_VAR ESCAPE=URL NAME=id>'; return false;">Export PDF</button></TMPL_IF>

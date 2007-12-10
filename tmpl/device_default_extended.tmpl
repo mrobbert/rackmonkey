@@ -21,7 +21,7 @@
 	<script type="text/javascript" src="<TMPL_VAR NAME=web_root>/javascript/racklib.js"></script>
 </head>
 
-<body>
+<body onload="if (getCookie('filter') == 'on') { showHideFilters(); }">
 
 <TMPL_INCLUDE NAME="nav-device.ssi">
 
@@ -37,14 +37,13 @@
 		</select>
 
 		<button style="margin-right: 20px" title="Create a new device" onclick="window.location = '<TMPL_VAR NAME=base_url>?view=device&amp;view_type=create'; return false;">New Device</button>
-		<button style="width: 8em;" id="filterbutton" onclick="javascript:showHideFilters(); return false;">Show Filters</button>
-		<button style="margin-right: 20px" onclick="window.location = '<TMPL_VAR NAME=base_url>?view=device&amp;view_type=default'; return false;">Reset Filters</button>
+		<button style="width: 8em; margin-right: 20px" id="filterbutton" onclick="showHideFilters(); return false;">Show Filters</button>
 		
 		<TMPL_IF NAME=rack2xls_url><button title="Export the device table to an Excel spreadsheet" onclick="window.location = '<TMPL_VAR NAME=rack2xls_url>?view=device&amp;view_type=xls_export&amp;id=<TMPL_VAR ESCAPE=URL NAME=id>'; return false;">Export XLS</button></TMPL_IF>
 		<TMPL_IF NAME=rack2pdf_url><button title="Export the device table to a PDF document" onclick="window.location = '<TMPL_VAR NAME=rack2pdf_url>?view=device&amp;view_type=pdf_export&amp;id=<TMPL_VAR ESCAPE=URL NAME=id>'; return false;">Export PDF</button></TMPL_IF>
 	</p>
 
-	<p style="clear: both" id="filters">
+	<p style="clear: both; display: none" id="filters">
 		<label>Customer</label>
 		<select style="margin-right: 10px" name="filter_device_customer" onchange="submit()"><TMPL_LOOP NAME=customerlist>
 			<option <TMPL_IF NAME=selected>selected="selected"</TMPL_IF> value="<TMPL_VAR ESCAPE=HTML NAME=id>"><TMPL_VAR ESCAPE=HTML NAME=name></option></TMPL_LOOP>
@@ -61,7 +60,7 @@
 		<select name="filter_device_os" onchange="submit()"><TMPL_LOOP NAME=oslist>
 			<option <TMPL_IF NAME=selected>selected="selected"</TMPL_IF> value="<TMPL_VAR ESCAPE=HTML NAME=id>"><TMPL_VAR ESCAPE=HTML NAME=name></option></TMPL_LOOP>
 		</select>
-
+		<button style="margin-left: 8px" onclick="window.location = '<TMPL_VAR NAME=base_url>?view=device&amp;view_type=default_extended'; return false;">Reset</button>
 		<input type="hidden" name="view" value="device"/>
 		<input type="hidden" name="order_by" value="<TMPL_VAR ESCAPE=HTML NAME=order_by>" />		
 	</p>
@@ -104,7 +103,7 @@
 	<TMPL_LOOP NAME=devices>
 	<TMPL_IF NAME="__odd__"><tr class="odd"><TMPL_ELSE><tr class="even"></TMPL_IF>
 		<td><a title="View details for this device" href="<TMPL_VAR NAME=base_url>?view=device&amp;view_type=single&amp;id=<TMPL_VAR ESCAPE=URL NAME=id>"><TMPL_VAR ESCAPE=HTML NAME=name><TMPL_UNLESS NAME=domain_meta_default_data>.<TMPL_VAR ESCAPE=HTML NAME=domain_name></TMPL_UNLESS></a></td>
-		<td><TMPL_UNLESS NAME=building_meta_default_data><a title="View device in rack" href="<TMPL_VAR NAME=base_url>?view=rack&amp;view_type=physical&amp;id=<TMPL_VAR ESCAPE=URL NAME=rack>&amp;device_id=<TMPL_VAR ESCAPE=URL NAME=id>"><TMPL_ELSE><a title="View unracked devices" href="<TMPL_VAR NAME=base_url>?view=device&amp;view_type=unracked"></TMPL_UNLESS><TMPL_VAR ESCAPE=HTML NAME=rack_name><TMPL_UNLESS NAME=building_meta_default_data> [<TMPL_VAR ESCAPE=HTML NAME=rack_pos>]</a></TMPL_UNLESS></td>
+		<td><TMPL_UNLESS NAME=building_meta_default_data><a title="View device in rack" href="<TMPL_VAR NAME=base_url>?view=rack&amp;view_type=physical&amp;id=<TMPL_VAR ESCAPE=URL NAME=rack>&amp;device_id=<TMPL_VAR ESCAPE=URL NAME=id>"><TMPL_ELSE><a title="View unracked devices" href="<TMPL_VAR NAME=base_url>?view=device&amp;view_type=default_unracked"></TMPL_UNLESS><TMPL_VAR ESCAPE=HTML NAME=rack_name><TMPL_UNLESS NAME=building_meta_default_data> [<TMPL_VAR ESCAPE=HTML NAME=rack_pos>]</a></TMPL_UNLESS></td>
 		<td><TMPL_UNLESS NAME=building_meta_default_data><TMPL_VAR ESCAPE=HTML NAME=room_name> in <TMPL_IF NAME=building_name_short><TMPL_VAR ESCAPE=HTML NAME=building_name_short><TMPL_ELSE><TMPL_VAR ESCAPE=HTML NAME=building_name></TMPL_IF><TMPL_ELSE>N/A</TMPL_UNLESS></td>
 		<td><TMPL_VAR ESCAPE=HTML NAME=role_name></td>
 		<td><TMPL_UNLESS NAME=hardware_meta_default_data><TMPL_UNLESS NAME=hardware_manufacturer_meta_default_data><TMPL_VAR ESCAPE=HTML NAME=hardware_manufacturer_name> </TMPL_UNLESS></TMPL_UNLESS><TMPL_VAR ESCAPE=HTML NAME=hardware_name></td>

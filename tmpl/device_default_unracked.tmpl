@@ -21,7 +21,7 @@
 	<script type="text/javascript" src="<TMPL_VAR NAME=web_root>/javascript/racklib.js"></script>
 </head>
 
-<body>
+<body onload="if (getCookie('filter') == 'on') { showHideFilters(); }">
 
 <TMPL_INCLUDE NAME="nav-device.ssi">
 
@@ -37,12 +37,35 @@
 			</select>
 
 			<button style="margin-right: 20px" title="Create a new device" onclick="window.location = '<TMPL_VAR NAME=base_url>?view=device&amp;view_type=create'; return false;">New Device</button>
+			<button style="width: 8em; margin-right: 20px" id="filterbutton" onclick="showHideFilters(); return false;">Show Filters</button>
 
 			<TMPL_IF NAME=rack2xls_url><button title="Export the device table to an Excel spreadsheet" onclick="window.location = '<TMPL_VAR NAME=rack2xls_url>?view=device&amp;view_type=xls_export&amp;id=<TMPL_VAR ESCAPE=URL NAME=id>'; return false;">Export XLS</button></TMPL_IF>
 			<TMPL_IF NAME=rack2pdf_url><button title="Export the device table to a PDF document" onclick="window.location = '<TMPL_VAR NAME=rack2pdf_url>?view=device&amp;view_type=pdf_export&amp;id=<TMPL_VAR ESCAPE=URL NAME=id>'; return false;">Export PDF</button></TMPL_IF>
 			<input type="hidden" name="view" value="device"/>
 			<input type="hidden" name="order_by" value="<TMPL_VAR ESCAPE=HTML NAME=order_by>" />
 		</p>
+
+		<p style="clear: both; display: none" id="filters">
+			<label>Customer</label>
+			<select style="margin-right: 10px" name="filter_device_customer" onchange="submit()"><TMPL_LOOP NAME=customerlist>
+				<option <TMPL_IF NAME=selected>selected="selected"</TMPL_IF> value="<TMPL_VAR ESCAPE=HTML NAME=id>"><TMPL_VAR ESCAPE=HTML NAME=name></option></TMPL_LOOP>
+			</select>
+			<label>Role</label>
+			<select style="margin-right: 10px" name="filter_device_role" onchange="submit()"><TMPL_LOOP NAME=rolelist>
+				<option <TMPL_IF NAME=selected>selected="selected"</TMPL_IF> value="<TMPL_VAR ESCAPE=HTML NAME=id>"><TMPL_VAR ESCAPE=HTML NAME=name></option></TMPL_LOOP>
+			</select>
+			<label>Hardware</label>
+			<select style="margin-right: 10px" name="filter_device_hardware" onchange="submit()"><TMPL_LOOP NAME=hardwarelist>
+				<option <TMPL_IF NAME=selected>selected="selected"</TMPL_IF> value="<TMPL_VAR ESCAPE=HTML NAME=id>"><TMPL_VAR ESCAPE=HTML NAME=name></option></TMPL_LOOP>
+			</select>
+			<label>OS</label>
+			<select name="filter_device_os" onchange="submit()"><TMPL_LOOP NAME=oslist>
+				<option <TMPL_IF NAME=selected>selected="selected"</TMPL_IF> value="<TMPL_VAR ESCAPE=HTML NAME=id>"><TMPL_VAR ESCAPE=HTML NAME=name></option></TMPL_LOOP>
+			</select>
+			<button style="margin-left: 8px" onclick="window.location = '<TMPL_VAR NAME=base_url>?view=device&amp;view_type=default_asset'; return false;">Reset</button>
+			<input type="hidden" name="view" value="device"/>
+			<input type="hidden" name="order_by" value="<TMPL_VAR ESCAPE=HTML NAME=order_by>" />		
+		</p>		
 </form>
 
 <table class="itemtable">
