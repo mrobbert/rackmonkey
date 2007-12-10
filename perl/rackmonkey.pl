@@ -216,6 +216,11 @@ eval
 				}
 
 				$template->param('devices' => $devices);
+				my $totalDeviceCount = $backend->deviceCount;
+				my $listedDeviceCount = @$devices;
+				$template->param('total_device_count' => $totalDeviceCount);
+				$template->param('listed_device_count' => $listedDeviceCount);
+				$template->param('all_devices_listed' => ($totalDeviceCount == $listedDeviceCount));
 			}
 			else
 			{
