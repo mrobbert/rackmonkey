@@ -441,7 +441,7 @@ eval
 	
 	$template->param('racknavlist' => $cgi->selectRack($backend->rackListBasic(1), $selectedRack));
 		
-	$dbh->disconnect();
+	$dbh->disconnect;
 	
 	# Get version and date for page footer
 	$template->param('version' => "$VERSION");
