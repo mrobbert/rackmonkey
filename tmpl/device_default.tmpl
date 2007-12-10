@@ -99,9 +99,14 @@
 		<td><TMPL_UNLESS NAME=hardware_meta_default_data><TMPL_UNLESS NAME=hardware_manufacturer_meta_default_data><TMPL_VAR ESCAPE=HTML NAME=hardware_manufacturer_name> </TMPL_UNLESS></TMPL_UNLESS><TMPL_VAR ESCAPE=HTML NAME=hardware_name></td>
 		<td><TMPL_VAR ESCAPE=HTML NAME=os_name><TMPL_IF NAME=os_version> <TMPL_VAR ESCAPE=HTML NAME=os_version></TMPL_IF></td>
 		<td><TMPL_VAR ESCAPE=HTML NAME=customer_name></td>
-	</tr></TMPL_LOOP><TMPL_ELSE><tr>
-		<td colspan="7" style="padding: 6px"><em>There are no device entries in RackMonkey matching these filter criteria.</em></td>
-	</tr></TMPL_IF>
+	</tr>
+	</TMPL_LOOP></TMPL_IF>
+	<tr>
+		<td colspan="7" class="footer">
+			Showing <TMPL_VAR ESCAPE=HTML NAME=listed_device_count> of <TMPL_VAR ESCAPE=HTML NAME=total_device_count> devices
+			<TMPL_UNLESS NAME=all_devices_listed><div style="float: right"><a href="<TMPL_VAR NAME=base_url>?view=device&amp;view_type=default">Show all</a></div></TMPL_UNLESS>
+		</td>
+	</tr>
 </table>
 
 </div>

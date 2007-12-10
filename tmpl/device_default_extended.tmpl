@@ -112,14 +112,15 @@
 		<td><TMPL_IF NAME=asset_no><TMPL_VAR ESCAPE=HTML NAME=asset_no><TMPL_ELSE>-</TMPL_IF></td>		
 		<td><TMPL_VAR ESCAPE=HTML NAME=customer_name></td>
 		<td><TMPL_VAR ESCAPE=HTML NAME=service_name></td>
-	</tr></TMPL_LOOP>
-	<TMPL_ELSE>
-	<tr>
-		<td colspan="10" style="padding: 6px"><em>There are no device entries in RackMonkey matching these filter criteria.</em></td>
 	</tr>
-	</TMPL_IF>
-	</table>
-</div>
+	</TMPL_LOOP></TMPL_IF>
+	<tr>
+		<td colspan="10" class="footer">
+			Showing <TMPL_VAR ESCAPE=HTML NAME=listed_device_count> of <TMPL_VAR ESCAPE=HTML NAME=total_device_count> devices
+			<TMPL_UNLESS NAME=all_devices_listed><div style="float: right"><a href="<TMPL_VAR NAME=base_url>?view=device&amp;view_type=default">Show all</a></div></TMPL_UNLESS>
+		</td>
+	</tr>
+</table>
 
 <TMPL_INCLUDE NAME="footer.ssi">
 

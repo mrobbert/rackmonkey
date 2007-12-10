@@ -104,12 +104,14 @@
 		<td><TMPL_IF NAME=asset_no><TMPL_VAR ESCAPE=HTML NAME=asset_no><TMPL_ELSE>-</TMPL_IF></td>
 		<td style="text-align: right"><TMPL_IF NAME=purchased><TMPL_VAR ESCAPE=HTML NAME=purchased><TMPL_ELSE>-</TMPL_IF></td>
 		<td style="text-align: right"><TMPL_IF NAME=age><TMPL_VAR ESCAPE=HTML NAME=age><TMPL_ELSE>-</TMPL_IF></td>
-	</tr></TMPL_LOOP>
-<TMPL_ELSE>
-<tr>
-	<td colspan="8" style="padding: 6px"><em>There are no device entries in RackMonkey matching these filter criteria.</em></td>
-</tr>
-</TMPL_IF>
+	</tr>
+	</TMPL_LOOP></TMPL_IF>
+	<tr>
+		<td colspan="8" class="footer">
+			Showing <TMPL_VAR ESCAPE=HTML NAME=listed_device_count> of <TMPL_VAR ESCAPE=HTML NAME=total_device_count> devices
+			<TMPL_UNLESS NAME=all_devices_listed><div style="float: right"><a href="<TMPL_VAR NAME=base_url>?view=device&amp;view_type=default">Show all</a></div></TMPL_UNLESS>
+		</td>
+	</tr>
 </table>
 
 </div>

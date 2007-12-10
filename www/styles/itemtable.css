@@ -21,7 +21,7 @@ table.itemtable td
 
 table.itemtable tr.odd
 {
-	background: #DDD; 
+	background: #CCC; 
 }
 
 table.itemtable tr.even
@@ -47,4 +47,21 @@ table.itemtable th a
 {
 	font-size: small;
 	color: white;
+}
+
+table.itemtable td.footer
+{
+	text-align: left;
+	background: #777;
+	color: #FFF;
+	border: solid 1px #000;
+	padding: 3px;
+	font-size: x-small;
+	font-family: verdana, helvetica, sans-serif;
+}
+
+table.itemtable td.footer a
+{
+	color: white;
+	text-decoration: underline;	
 }
