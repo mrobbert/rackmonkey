@@ -383,7 +383,13 @@ eval
 		{
 			if ($viewType =~ /^default/)
 			{
-				$template->param('racks' => $backend->rackList($orderBy));
+				my $racks = $backend->rackList($orderBy);
+				my $totalRackCount = $backend->rackCount;
+				my $listedRackCount = @$racks;
+				$template->param('total_rack_count' => $totalRackCount);
+				$template->param('listed_rack_count' => $listedRackCount);
+				$template->param('all_racks_listed' => ($totalRackCount == $listedRackCount));
+				$template->param('racks' => $racks);
 			}
 			elsif ($viewType =~ /^physical/)
 			{

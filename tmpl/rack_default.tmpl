@@ -13,51 +13,57 @@
 
 <head>
 	<title>Racks | RackMonkey</title>
-	<link rel="stylesheet" type="text/css" title="Monkey Style" href="<TMPL_VAR NAME=web_root>/styles/rackmonkey.css" />
+	<style type="text/css" media="screen">
+		@import "<TMPL_VAR NAME=web_root>/styles/main.css";
+		@import "<TMPL_VAR NAME=web_root>/styles/tabs.css";
+		@import "<TMPL_VAR NAME=web_root>/styles/itemtable.css";
+	</style>
 	<script type="text/javascript" src="<TMPL_VAR NAME=web_root>/javascript/racklib.js"></script>
 </head>
 
 <body>
 
-<TMPL_INCLUDE NAME="nav.ssi">
+<TMPL_INCLUDE NAME="nav-rack.ssi">
 
-<p>
-	<a href="<TMPL_VAR NAME=base_url>?view=rack&amp;view_type=create"><img src="<TMPL_VAR NAME=web_root>/graphics/buttons/new.gif" width="47" height="21" alt="New" /></a>
-</p>
+<div id="main">
+<form id="device_options" method="get" action="<TMPL_VAR NAME=base_url>">
+	<p>
+		<button style="margin-right: 20px" title="Create a new device" onclick="window.location = '<TMPL_VAR NAME=base_url>?view=rack&amp;view_type=create'; return false;">New Rack</button>
 
-<TMPL_IF NAME=racks>
+		<TMPL_IF NAME=rack2xls_url><button title="Export the device table to an Excel spreadsheet" onclick="window.location = '<TMPL_VAR NAME=rack2xls_url>?view=rack&amp;view_type=xls_export&amp;id=<TMPL_VAR ESCAPE=URL NAME=id>'; return false;">Export XLS</button></TMPL_IF>
+		<TMPL_IF NAME=rack2pdf_url><button title="Export the device table to a PDF document" onclick="window.location = '<TMPL_VAR NAME=rack2pdf_url>?view=rack&amp;view_type=pdf_export&amp;id=<TMPL_VAR ESCAPE=URL NAME=id>'; return false;">Export PDF</button></TMPL_IF>
+	</p>
+</form>	
+
 <form id="racks"  method="get" action="<TMPL_VAR NAME=base_url>">
-<table id="disTable">
+<table class="itemtable">
 	<tr>
-		<th><a class="sort" onclick="checkboxInvert(document.getElementById('racks'));">&#10003;</a></th>
+		<th><a onclick="checkboxInvert(document.getElementById('racks'));">&#10003;</a></th>
 		<th>
-			<a class="sort" title="Sort by name" href="<TMPL_VAR NAME=base_url>?view=rack&amp;order_by=rack.name">Rack</a> 
+			<a title="Sort by name" href="<TMPL_VAR NAME=base_url>?view=rack&amp;order_by=rack.name">Rack</a> 
 		</th>
-		<th><span class="sort">Layout</span></th>
+		<th><span>Layout</span></th>
 		<th>
-			<a class="sort" title="Sort by row" href="<TMPL_VAR NAME=base_url>?view=rack&amp;order_by=row.name">Row</a> 
+			<a title="Sort by row" href="<TMPL_VAR NAME=base_url>?view=rack&amp;order_by=row.name">Row</a> 
 		</th>			
 		<th>
-			<a class="sort" title="Sort by room" href="<TMPL_VAR NAME=base_url>?view=rack&amp;order_by=room.name">Room</a> 
+			<a title="Sort by room" href="<TMPL_VAR NAME=base_url>?view=rack&amp;order_by=room.name">Room</a> 
 		</th>
 		<th>
-			<a class="sort" title="Sort by size" href="<TMPL_VAR NAME=base_url>?view=rack&amp;order_by=rack.size">Size (U)</a> 
+			<a title="Sort by size" href="<TMPL_VAR NAME=base_url>?view=rack&amp;order_by=rack.size">Size (U)</a> 
 		</th>
 		<th>
-			<a class="sort" title="Sort by size" href="<TMPL_VAR NAME=base_url>?view=rack&amp;order_by=free_space">Free (U)</a> 
+			<a title="Sort by size" href="<TMPL_VAR NAME=base_url>?view=rack&amp;order_by=free_space">Free (U)</a> 
 		</th>		
 		<th>
-			<a class="sort" title="Sort by size" href="<TMPL_VAR NAME=base_url>?view=rack&amp;order_by=device_count">Devices</a> 
+			<a title="Sort by size" href="<TMPL_VAR NAME=base_url>?view=rack&amp;order_by=device_count">Devices</a> 
 		</th>					
 		<th>
-			<a class="sort" title="Sort by notes" href="<TMPL_VAR NAME=base_url>?view=rack&amp;order_by=rack.notes">Notes</a> 
+			<a title="Sort by notes" href="<TMPL_VAR NAME=base_url>?view=rack&amp;order_by=rack.notes">Notes</a> 
 		</th>
-	</tr><TMPL_LOOP NAME=racks>
-	<TMPL_IF NAME="__odd__">
-	<tr class="row_silver">
-	<TMPL_ELSE>
-	<tr class="row_white">
-	</TMPL_IF>
+	</tr>
+	<TMPL_IF NAME=racks><TMPL_LOOP NAME=racks>
+	<TMPL_IF NAME="__odd__"><tr class="odd"><TMPL_ELSE><tr class="even"></TMPL_IF>
 		<td><input type="checkbox" name="rack_list" value="<TMPL_VAR ESCAPE=HTML NAME=id>" /></td>
 		<td><a title="View details for this rack" href="<TMPL_VAR NAME=base_url>?view=rack&amp;view_type=single&amp;id=<TMPL_VAR ESCAPE=URL NAME=id>"><TMPL_VAR ESCAPE=HTML NAME=name></a></td>
 		<td><a title="View device layout within this rack" href="<TMPL_VAR NAME=base_url>?view=rack&amp;view_type=physical&amp;id=<TMPL_VAR ESCAPE=URL NAME=id>">&gt;&gt;</a></td>
@@ -67,19 +73,20 @@
 		<td><TMPL_VAR ESCAPE=HTML NAME=free_space></td>
 		<td><TMPL_VAR ESCAPE=HTML NAME=device_count></td>
 		<td><TMPL_IF NAME=notes_short><span title="<TMPL_VAR ESCAPE=HTML NAME=notes>"><TMPL_VAR ESCAPE=HTML NAME=notes_short></span><TMPL_ELSE><TMPL_IF NAME=notes><TMPL_VAR ESCAPE=HTML NAME=notes><TMPL_ELSE>-</TMPL_IF></TMPL_IF></td>
-	</tr></TMPL_LOOP>
+	</tr></TMPL_LOOP></TMPL_IF>
+		<tr>
+		<td colspan="9" class="footer">
+			Showing <TMPL_VAR ESCAPE=HTML NAME=listed_rack_count> of <TMPL_VAR ESCAPE=HTML NAME=total_rack_count> rack
+		</td>
+	</tr>
 </table>
 <p>
-	<input type="hidden" name="view" value="rack" />
-	<input type="hidden" name="view_type" value="physical" />
-	<input type="submit" value="Device Layout of Selected Racks" />
+<input type="hidden" name="view" value="rack" />
+<input type="hidden" name="view_type" value="physical" />
+<button title="View the device layout of the selected racks" type="submit">Device Layout</button>
 </p>
 </form>
-<TMPL_ELSE>
-<p>
-	There are no rack entries in RackMonkey, use the 'New' button to add some.
-</p>
-</TMPL_IF>
+</div>
 
 <TMPL_INCLUDE NAME="footer.ssi">
 
