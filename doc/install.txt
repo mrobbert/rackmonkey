@@ -48,7 +48,7 @@ can be extracted with:
 
 Subversion Repository
 ---------------------
-If you're a developer you can check a release out of subversion. 
+If you're a developer you can also check a release out of subversion. 
 
 For more information on the RackMonkey subversion repository see the
 'Source Code' section of: http://www.rackmonkey.org/faq
