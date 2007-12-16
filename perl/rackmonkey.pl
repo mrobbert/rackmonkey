@@ -232,7 +232,7 @@ eval
 				my $selectedRack = $cgi->selectProperty('rack') || $cgi->lastCreatedId; 
 				my $selectedDomain = $cgi->lastCreatedId; 
 				
-				if (($viewType =~ /^edit/) || ($viewType =~ /^single/))
+				if (($viewType =~ /^edit/) || ($viewType =~ /^single/) || ($viewType =~ /^create/))
 				{
 					my $device = $backend->device($id);
 					$$device{'age'} = calculateAge($$device{'purchased'});
@@ -241,11 +241,10 @@ eval
 					if (($viewType =~ /^single/) && (lc($$device{'hardware_manufacturer_name'}) =~ /dell/)) # kludgey!
 					{
 						$template->param('dell_query' => DELLQUERY);
-					}
-					
-					$template->param($device);
 
-					if ($viewType =~ /^edit/) 
+					}
+
+					if ($viewType !~ /^single/)
 					{
 						# Use database value for selected if none in CGI
 						$selectedHardware = $$device{'hardware'} if (!$selectedHardware); 
@@ -256,6 +255,15 @@ eval
 						$selectedRack = $$device{'rack'} if (!$selectedRack);
 						$selectedDomain = $$device{'domain'} if (!$selectedDomain);
 					}
+					
+					# clear rack position and name if we're creating a new device (so copy works)
+					if ($viewType =~ /^create/)
+					{
+						$$device{'name'} = '';
+						$$device{'rack_pos'} = '';
+					}
+					
+					$template->param($device);
 				}
 				if (($viewType =~ /^edit/) || ($viewType =~ /^create/))
 				{
@@ -409,16 +417,23 @@ eval
 			{
 				my $selectedRoom = $cgi->lastCreatedId || $cgi->id('room');
 				
-				if (($viewType =~ /^edit/) || ($viewType =~ /^single/))
+				if (($viewType =~ /^edit/) || ($viewType =~ /^single/) || ($viewType =~ /^create/))
 				{
 					my $rack = $backend->rack($id);
-					$template->param($rack);
 					$selectedRoom = $$rack{'room'} if (!$selectedRoom); # Use database value for selected if none in CGI - not actually needed in single view
-				}
+		
+					if ($viewType !~ /^single/)
+					{	
+						$template->param('roomlist' => $cgi->selectRoom($backend->roomListBasic, $selectedRoom));
+					}
+					
+					# clear rack position and name if we're creating a new device (so copy works)
+					if ($viewType =~ /^create/)
+					{
+						$$rack{'name'} = '';
+					}
 				
-				if (($viewType =~ /^edit/) || ($viewType =~ /^create/))
-				{	
-					$template->param('roomlist' => $cgi->selectRoom($backend->roomListBasic, $selectedRoom));
+					$template->param($rack);
 				}
 			}
 		}
