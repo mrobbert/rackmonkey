@@ -1,29 +1,29 @@
 			<!-- rack edit include: Version 1.2.%BUILD% -->
-			<div style="margin-top: 8px;">
-				<label>Name</label><br />
-				<input type="text" size="60" name="name" value="<TMPL_VAR ESCAPE=HTML NAME=name>" />
+			<div>
+				<label for="name">Name</label><br />
+				<input id="name" name="name" type="text" size="60" value="<TMPL_VAR ESCAPE=HTML NAME=name>" />
 			</div>
 		
-			<div style="margin-top: 8px;">
+			<div>
 				<label>Row</label><br />
 				<span style="font-size: smaller">Not yet supported.</span>
 			</div>
 	
-			<div style="margin-top: 8px;">
-				<label>Room [<a href="<TMPL_VAR NAME=base_url>?view=room&amp;view_type=create&amp;return_view=rack&amp;return_view_type=create">add</a>]</label><br />
-				<select name="room"><TMPL_LOOP NAME=roomlist>
+			<div>
+				<label for="room">Room [<a href="<TMPL_VAR NAME=base_url>?view=room&amp;view_type=create&amp;return_view=rack&amp;return_view_type=create">add</a>]</label><br />
+				<select id="room" name="room"><TMPL_LOOP NAME=roomlist>
 					<option <TMPL_IF NAME=selected>selected="selected"</TMPL_IF> value="<TMPL_VAR ESCAPE=HTML NAME=id>"><TMPL_VAR ESCAPE=HTML NAME=name></option></TMPL_LOOP>
 				</select>
 			</div>
 	
-			<div style="margin-top: 8px;">
-				<label>Size (U)</label><br />
-				<input type="text" size="4" name="size" value="<TMPL_VAR ESCAPE=HTML NAME=size>" />
+			<div>
+				<label for="size">Size (U)</label><br />
+				<input id="size" name="size" type="text" size="4" value="<TMPL_VAR ESCAPE=HTML NAME=size>" />
 			</div>
 	
-			<div style="margin-top: 8px;">
-				<label>Notes</label><br />
-				<textarea name="notes" cols="55" rows="4"><TMPL_VAR ESCAPE=HTML NAME=notes></textarea>
+			<div>
+				<label for="notes">Notes</label><br />
+				<textarea id="notes" name="notes" cols="55" rows="4"><TMPL_VAR ESCAPE=HTML NAME=notes></textarea>
 			</div>
 			<!-- end of rack edit include -->
 			
