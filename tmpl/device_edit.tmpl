@@ -28,99 +28,18 @@
 <div id="main">
 <form method="post" action="<TMPL_VAR NAME=base_url>">
 <table class="form">
-<tr>
-	<th><span class="title">Edit Device</title></th>
-</tr>
-<tr>
-	<td>
-		<div style="float: left; width: 280px;">
-		<label>Name</label><br />
-		<input type="text" size="32" name="name" value="<TMPL_VAR ESCAPE=HTML NAME=name>" />
-		</div>
-		
-		<div>
-		<label>Domain</label><br />
-		<select name="domain"><TMPL_LOOP NAME=domainlist>
-		<option <TMPL_IF NAME=selected>selected="selected"</TMPL_IF> value="<TMPL_VAR ESCAPE=HTML NAME=id>"><TMPL_VAR ESCAPE=HTML NAME=name></option></TMPL_LOOP>
-		</select>
-		</div>
-
-		<hr style="clear: both; margin-top: 12px" />
-		
-		<div>
-		<label>Location</label><br />
-		Rack Position &nbsp; <input type="text" size="4" name="rack_pos" value="<TMPL_VAR ESCAPE=HTML NAME=rack_pos>" /> &nbsp; in &nbsp; 
-		<select name="rack"><TMPL_LOOP NAME=racklist>
-		<option <TMPL_IF NAME=selected>selected="selected"</TMPL_IF> value="<TMPL_VAR ESCAPE=HTML NAME=id>"><TMPL_VAR ESCAPE=HTML NAME=name></option></TMPL_LOOP>
-		</select>
-		</div>
-		
-		<hr />
-		
-		<div style="clear: both; float: left; width: 280px;">
-		<label>Hardware</label><br />
-		<select name="hardware"><TMPL_LOOP NAME=hardwarelist>
-		<option <TMPL_IF NAME=selected>selected="selected"</TMPL_IF> value="<TMPL_VAR ESCAPE=HTML NAME=id>"><TMPL_VAR ESCAPE=HTML NAME=name></option></TMPL_LOOP>
-		</select>
-		</div>
-		
-		<div>
-		<label>OS / Version</label><br />
-		<select name="os"><TMPL_LOOP NAME=oslist>
-		<option <TMPL_IF NAME=selected>selected="selected"</TMPL_IF> value="<TMPL_VAR ESCAPE=HTML NAME=id>"><TMPL_VAR ESCAPE=HTML NAME=name></option></TMPL_LOOP>
-		</select>
-		<input type="text" size="8" name="os_version" value="<TMPL_VAR ESCAPE=HTML NAME=os_version>" />
-		</div>
-		
-		<div style="clear: both; float: left; width: 280px; margin-top: 8px;">
-		<label>Role</label><br />
-		<select name="role"><TMPL_LOOP NAME=rolelist>
-		<option <TMPL_IF NAME=selected>selected="selected"</TMPL_IF> value="<TMPL_VAR ESCAPE=HTML NAME=id>"><TMPL_VAR ESCAPE=HTML NAME=name></option></TMPL_LOOP>
-		</select>
-		<input type="checkbox" <TMPL_IF NAME=in_service>checked="checked"</TMPL_IF> name="in_service" /> In Service
-		</div>
-
-		<div style="margin-top: 8px;">
-		<label>Purchased (YYYY-MM-DD)</label><br />
-		<input type="text" size="11" name="purchased" value="<TMPL_VAR ESCAPE=HTML NAME=purchased>" />
-		</div>
-		
-		<div style="clear: both; float: left; width: 280px; margin-top: 8px;">
-		<label>Serial Number</label><br />
-		<input type="text" size="32" name="serial_no" value="<TMPL_VAR ESCAPE=HTML NAME=serial_no>" />
-		</div>
-
-		<div style="margin-top: 8px;">
-		<label>Asset Number</label><br />
-		<input type="text" size="32" name="asset_no" value="<TMPL_VAR ESCAPE=HTML NAME=asset_no>" />
-		</div>
-
-		<div style="clear: both; float: left; width: 280px; margin-top: 8px;">
-		<label>Customer</label><br />
-		<select name="customer"><TMPL_LOOP NAME=customerlist>
-		<option <TMPL_IF NAME=selected>selected="selected"</TMPL_IF> value="<TMPL_VAR ESCAPE=HTML NAME=id>"><TMPL_VAR ESCAPE=HTML NAME=name></option></TMPL_LOOP>
-		</select>
-		</div>
-		
-		<div style="margin-top: 8px;">
-		<label>Service Level</label><br />
-		<select name="service"><TMPL_LOOP NAME=servicelist>
-		<option <TMPL_IF NAME=selected>selected="selected"</TMPL_IF> value="<TMPL_VAR ESCAPE=HTML NAME=id>"><TMPL_VAR ESCAPE=HTML NAME=name></option></TMPL_LOOP>
-		</select>
-		</div>
-		
-		<hr />
-
-		<div style="clear: both;">
-		<label>Notes</label><br />
-		<textarea name="notes" cols="55" rows="4"><TMPL_VAR ESCAPE=HTML NAME=notes></textarea>
-
-	</td>
+	<tr>
+		<th><span class="title">Edit Device</span></th>
+	</tr>
+	<tr>
+		<td>
+			<TMPL_INCLUDE NAME="device-edit.ssi">
+		</td>
 	</tr>
 	<tr>
 	<td class="footer">		
-		<button class="itemtable" style="float: left" title="Cancel editing this device" onclick="window.location = '<TMPL_VAR NAME=base_url>?view=device&amp;view_type=single&amp;id=<TMPL_VAR ESCAPE=URL NAME=id>'; return false;">Cancel</button>
-		<button class="itemtable" style="float: right" title="Edit this device" type="submit">Save</button>	
+		<button style="float: left" title="Cancel editing this device" onclick="window.location = '<TMPL_VAR NAME=base_url>?view=device&amp;view_type=single&amp;id=<TMPL_VAR ESCAPE=URL NAME=id>'; return false;">Cancel</button>
+		<button style="float: right" title="Save this device" type="submit">Save</button>	
 		<input type="hidden" name="view" value="device" />
 		<input type="hidden" name="view_type" value="single" />
 		<input type="hidden" name="id" value="<TMPL_VAR ESCAPE=HTML NAME=id>" />
