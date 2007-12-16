@@ -52,8 +52,22 @@ table.form hr
 	width: 100%;
 }
 
-span.updated
+table.form div
+{
+	margin-bottom: 8px;
+}
+
+table.form span.updated
 {
 	font-size: x-small;
   	font-family: verdana, helvetica, sans-serif;
+}
+
+table.form div.key
+{
+	font-weight: bold;
+	color: #444;
+	font-size: smaller;
+	font-family: verdana, helvetica, sans-serif;
+	margin-bottom: 0.25em;
 }
