@@ -562,14 +562,22 @@ sub rack
 			row.hidden_row		AS row_hidden,
 			room.id				AS room,
 			room.name			AS room_name,
-			building.name		AS building_name, 
-			building.name_short	AS building_name_short
-			FROM rack, row, room, building 
+			building.name		AS building_name,
+			building.name_short	AS building_name_short,
+			count(device.id)	AS device_count,
+			rack.size - COALESCE(SUM(hardware.size), 0)	AS free_space
+		FROM row, room, building, rack
+		LEFT OUTER JOIN device ON
+			(rack.id = device.rack)
+		LEFT OUTER JOIN hardware ON
+			(device.hardware = hardware.id)
 		WHERE
+			rack.meta_default_data = 0 AND
 			rack.row = row.id AND
 			row.room = room.id AND
 			room.building = building.id AND
 			rack.id = ?
+		GROUP BY rack.id, rack.name, rack.row, rack.row_pos, rack.hidden_rack, rack.size, rack.notes, rack.meta_default_data, rack.meta_update_time, rack.meta_update_user, row.name, row.hidden_row, room.id, room.name, building.name, building.name_short
 	!);
 	$sth->execute($id);	
 	my $rack = $sth->fetchrow_hashref('NAME_lc');
