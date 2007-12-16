@@ -11,7 +11,7 @@ use warnings;
 
 use 5.006_001;
 
-#use Data::Dumper; # for debug only - comment out from release versions
+use Data::Dumper; # for debug only - comment out from release versions
 
 use RackMonkey::Conf;
 use RackMonkey::Helper;
@@ -572,7 +572,6 @@ sub rack
 		LEFT OUTER JOIN hardware ON
 			(device.hardware = hardware.id)
 		WHERE
-			rack.meta_default_data = 0 AND
 			rack.row = row.id AND
 			row.room = room.id AND
 			room.building = building.id AND
