@@ -42,37 +42,45 @@
 						<div class="value"><TMPL_VAR ESCAPE=HTML NAME=rack_name><TMPL_UNLESS NAME=building_meta_default_data> [<TMPL_VAR ESCAPE=HTML NAME=rack_pos>] - <TMPL_VAR ESCAPE=HTML NAME=room_name> in <TMPL_VAR ESCAPE=HTML NAME=building_name> &nbsp; <a class="small" title="View device in rack" href="<TMPL_VAR NAME=base_url>?view=rack&amp;view_type=physical&amp;id=<TMPL_VAR ESCAPE=URL NAME=rack>&amp;device_id=<TMPL_VAR ESCAPE=URL NAME=id>">View in rack&hellip;</a><TMPL_ELSE>&nbsp; <a class="small" title="View unracked devices" href="<TMPL_VAR NAME=base_url>?view=device&amp;view_type=default_unracked">View all unracked devices&hellip;</a></TMPL_UNLESS></div>
 					</div>
 					<hr />
-					<div style="clear: both; float: left; width: 280px;">
-						<div class="key">Hardware (Size)</div>
-						<div class="value"><TMPL_UNLESS NAME=hardware_meta_default_data><TMPL_UNLESS NAME=hardware_manufacturer_meta_default_data><TMPL_VAR ESCAPE=HTML NAME=hardware_manufacturer_name> </TMPL_UNLESS></TMPL_UNLESS><TMPL_VAR ESCAPE=HTML NAME=hardware_name> (<TMPL_VAR ESCAPE=HTML NAME=hardware_size>U)<TMPL_UNLESS NAME=hardware_meta_default_data> &nbsp; <a class="small" title="View details for this hardware" href="<TMPL_VAR NAME=base_url>?view=hardware&amp;view_type=single&amp;id=<TMPL_VAR ESCAPE=URL NAME=hardware>">Details&hellip;</a></TMPL_UNLESS></div>
-					</div>
 					<div>
-						<div class="key">Operating System</div>
-						<div class="value"><TMPL_VAR ESCAPE=HTML NAME=os_name><TMPL_IF NAME=os_version> <TMPL_VAR ESCAPE=HTML NAME=os_version></TMPL_IF><TMPL_UNLESS NAME=os_meta_default_data> &nbsp; <a class="small" title="View details for this operating system" href="<TMPL_VAR NAME=base_url>?view=os&amp;view_type=single&amp;id=<TMPL_VAR ESCAPE=URL NAME=os>">Details&hellip;</a></TMPL_UNLESS></div>
+						<div style="width: 50%; float:left">
+							<div class="key">Hardware (Size)</div>
+							<div class="value"><TMPL_UNLESS NAME=hardware_meta_default_data><TMPL_UNLESS NAME=hardware_manufacturer_meta_default_data><TMPL_VAR ESCAPE=HTML NAME=hardware_manufacturer_name> </TMPL_UNLESS></TMPL_UNLESS><TMPL_VAR ESCAPE=HTML NAME=hardware_name> (<TMPL_VAR ESCAPE=HTML NAME=hardware_size>U)<TMPL_UNLESS NAME=hardware_meta_default_data> &nbsp; <a class="small" title="View details for this hardware" href="<TMPL_VAR NAME=base_url>?view=hardware&amp;view_type=single&amp;id=<TMPL_VAR ESCAPE=URL NAME=hardware>">Details&hellip;</a></TMPL_UNLESS></div>
+						</div>
+						<div>
+							<div class="key">Operating System</div>
+							<div class="value"><TMPL_VAR ESCAPE=HTML NAME=os_name><TMPL_IF NAME=os_version> <TMPL_VAR ESCAPE=HTML NAME=os_version></TMPL_IF><TMPL_UNLESS NAME=os_meta_default_data> &nbsp; <a class="small" title="View details for this operating system" href="<TMPL_VAR NAME=base_url>?view=os&amp;view_type=single&amp;id=<TMPL_VAR ESCAPE=URL NAME=os>">Details&hellip;</a></TMPL_UNLESS></div>
+						</div>
 					</div>
-					<div style="clear: both; float: left; width: 280px">
-						<div class="key">Role (In Service)</div>
-						<div class="value"><TMPL_VAR ESCAPE=HTML NAME=role_name>  (<input disabled="disabled" type="checkbox" <TMPL_IF NAME=in_service>checked="checked"</TMPL_IF> />)<TMPL_UNLESS NAME=role_meta_default_data> &nbsp; <a class="small" title="View details for this role" href="<TMPL_VAR NAME=base_url>?view=role&amp;view_type=single&amp;id=<TMPL_VAR ESCAPE=URL NAME=role>">Details&hellip;</a></TMPL_UNLESS></div>
+					<div style="clear:both">
+						<div style="width: 50%; float:left">
+							<div class="key">Role (In Service)</div>
+							<div class="value"><TMPL_VAR ESCAPE=HTML NAME=role_name>  (<input disabled="disabled" type="checkbox" <TMPL_IF NAME=in_service>checked="checked"</TMPL_IF> />)<TMPL_UNLESS NAME=role_meta_default_data> &nbsp; <a class="small" title="View details for this role" href="<TMPL_VAR NAME=base_url>?view=role&amp;view_type=single&amp;id=<TMPL_VAR ESCAPE=URL NAME=role>">Details&hellip;</a></TMPL_UNLESS></div>
+						</div>
+						<div>
+							<div class="key">Purchased (Age)</div>
+							<div class="value"><TMPL_IF NAME=purchased><TMPL_VAR ESCAPE=HTML NAME=purchased><TMPL_IF NAME=age>&nbsp;&nbsp;(<TMPL_VAR ESCAPE=HTML NAME=age> years)</TMPL_IF><TMPL_ELSE>&nbsp;-</TMPL_IF></div>
+						</div>
 					</div>
-					<div>
-						<div class="key">Purchased (Age)</div>
-						<div class="value"><TMPL_IF NAME=purchased><TMPL_VAR ESCAPE=HTML NAME=purchased><TMPL_IF NAME=age>&nbsp;&nbsp;(<TMPL_VAR ESCAPE=HTML NAME=age> years)</TMPL_IF><TMPL_ELSE>&nbsp;-</TMPL_IF></div>
+					<div style="clear:both">
+						<div style="width: 50%; float:left">
+							<div class="key">Serial Number</div>
+							<div class="value"><TMPL_IF NAME=serial_no><TMPL_VAR ESCAPE=HTML NAME=serial_no><TMPL_IF NAME=dell_query> <a class="small" href="<TMPL_VAR ESCAPE=HTML NAME=dell_query><TMPL_VAR ESCAPE=URL NAME=serial_no>">Query Dell&hellip;</a></TMPL_IF><TMPL_ELSE>&nbsp;-</TMPL_IF></div>
+						</div>
+						<div>
+							<div class="key">Asset Number</div>
+							<div class="value"><TMPL_IF NAME=asset_no><TMPL_VAR ESCAPE=HTML NAME=asset_no><TMPL_ELSE>&nbsp;-</TMPL_IF></div>
+						</div>
 					</div>
-					<div style="clear: both; float: left; width: 280px;">
-						<div class="key">Serial Number</div>
-						<div class="value"><TMPL_IF NAME=serial_no><TMPL_VAR ESCAPE=HTML NAME=serial_no><TMPL_IF NAME=dell_query> <a class="small" href="<TMPL_VAR ESCAPE=HTML NAME=dell_query><TMPL_VAR ESCAPE=URL NAME=serial_no>">Query Dell&hellip;</a></TMPL_IF><TMPL_ELSE>&nbsp;-</TMPL_IF></div>
-					</div>
-					<div>
-						<div class="key">Asset Number</div>
-						<div class="value"><TMPL_IF NAME=asset_no><TMPL_VAR ESCAPE=HTML NAME=asset_no><TMPL_ELSE>&nbsp;-</TMPL_IF></div>
-					</div>
-					<div style="clear: both; float: left; width: 280px;">
-						<div class="key">Customer</div>
-						<div class="value"><TMPL_VAR ESCAPE=HTML NAME=customer_name><TMPL_UNLESS NAME=customer_meta_default_data> &nbsp; <a class="small" title="View details for this customer" href="<TMPL_VAR NAME=base_url>?view=org&amp;view_type=single&amp;id=<TMPL_VAR ESCAPE=URL NAME=customer>">Details&hellip;</a></TMPL_UNLESS></div>
-					</div>	
-					<div>
-						<div class="key">Service Level</div>
-						<div class="value"><TMPL_VAR ESCAPE=HTML NAME=service_name><TMPL_UNLESS NAME=service_meta_default_data> &nbsp; <a class="small" title="View details for this service level" href="<TMPL_VAR NAME=base_url>?view=service&amp;view_type=single&amp;id=<TMPL_VAR ESCAPE=URL NAME=service>">Details&hellip;</a></TMPL_UNLESS></div>
+					<div style="clear:both">
+						<div style="width: 50%; float:left">
+							<div class="key">Customer</div>
+							<div class="value"><TMPL_VAR ESCAPE=HTML NAME=customer_name><TMPL_UNLESS NAME=customer_meta_default_data> &nbsp; <a class="small" title="View details for this customer" href="<TMPL_VAR NAME=base_url>?view=org&amp;view_type=single&amp;id=<TMPL_VAR ESCAPE=URL NAME=customer>">Details&hellip;</a></TMPL_UNLESS></div>
+						</div>	
+						<div>
+							<div class="key">Service Level</div>
+							<div class="value"><TMPL_VAR ESCAPE=HTML NAME=service_name><TMPL_UNLESS NAME=service_meta_default_data> &nbsp; <a class="small" title="View details for this service level" href="<TMPL_VAR NAME=base_url>?view=service&amp;view_type=single&amp;id=<TMPL_VAR ESCAPE=URL NAME=service>">Details&hellip;</a></TMPL_UNLESS></div>
+						</div>
 					</div>
 					<hr style="clear: both;" />
 					<div>
