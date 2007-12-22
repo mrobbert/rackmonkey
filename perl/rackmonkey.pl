@@ -194,34 +194,34 @@ eval
 				}
 				else
 				{
-					my $filterBy = $cgi->filterBy;
-				
-					my $customers = $backend->listBasicMeta('customer');
-					unshift @$customers, {'id' => '', name => 'All'};
-					$template->param('customerlist' => $cgi->selectItem($customers, $$filterBy{'device.customer'}));
-				
-					my $roles = $backend->listBasicMeta('role');
-					unshift @$roles, {'id' => '', name => 'All'};
-					$template->param('rolelist' => $cgi->selectItem($roles, $$filterBy{'device.role'}));
-
-					my $hardware = $backend->listBasicMeta('hardware');
-					unshift @$hardware, {'id' => '', name => 'All'};
-					$template->param('hardwarelist' => $cgi->selectItem($hardware, $$filterBy{'device.hardware'}));
-
-					my $os = $backend->listBasicMeta('os');
-					unshift @$os, {'id' => '', name => 'All'};
-					$template->param('oslist' => $cgi->selectItem($os, $$filterBy{'device.os'}));
-								
 					$devices = $backend->deviceList($orderBy, $filterBy);
-							
-					for my $d (@$devices) # calculate age of devices
-					{
-						$$d{'age'} = calculateAge($$d{'purchased'});
-					}
-
-					$template->param('devices' => $devices);
 				}
 				
+				my $filterBy = $cgi->filterBy;
+			
+				my $customers = $backend->listBasicMeta('customer');
+				unshift @$customers, {'id' => '', name => 'All'};
+				$template->param('customerlist' => $cgi->selectItem($customers, $$filterBy{'device.customer'}));
+			
+				my $roles = $backend->listBasicMeta('role');
+				unshift @$roles, {'id' => '', name => 'All'};
+				$template->param('rolelist' => $cgi->selectItem($roles, $$filterBy{'device.role'}));
+
+				my $hardware = $backend->listBasicMeta('hardware');
+				unshift @$hardware, {'id' => '', name => 'All'};
+				$template->param('hardwarelist' => $cgi->selectItem($hardware, $$filterBy{'device.hardware'}));
+
+				my $os = $backend->listBasicMeta('os');
+				unshift @$os, {'id' => '', name => 'All'};
+				$template->param('oslist' => $cgi->selectItem($os, $$filterBy{'device.os'}));
+							
+				for my $d (@$devices) # calculate age of devices
+				{
+					$$d{'age'} = calculateAge($$d{'purchased'});
+				}
+
+				$template->param('devices' => $devices);
+
 				my $totalDeviceCount = $backend->deviceCount;
 				my $listedDeviceCount = @$devices;
 				$template->param('total_device_count' => $totalDeviceCount);
