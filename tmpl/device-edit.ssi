@@ -1,84 +1,70 @@
-			<!-- device edit include: Version 1.2.%BUILD% -->
-			<div style="float: left; width: 280px;">
-			<label for="name">Name</label><br />
-			<input type="text" size="32" id="name" name="name" value="<TMPL_VAR ESCAPE=HTML NAME=name>" />
-			</div>
-		
-			<div>
-			<label for="domain">Domain</label><br />
-			<select id="domain" name="domain"><TMPL_LOOP NAME=domainlist>
-			<option <TMPL_IF NAME=selected>selected="selected"</TMPL_IF> value="<TMPL_VAR ESCAPE=HTML NAME=id>"><TMPL_VAR ESCAPE=HTML NAME=name></option></TMPL_LOOP>
-			</select>
-			</div>
-
-			<hr style="clear: both; margin-top: 12px" />
-		
-			<div>
-			<label for="rack">Location</label><br />
-			Rack Position &nbsp; <input type="text" size="4" name="rack_pos" value="<TMPL_VAR ESCAPE=HTML NAME=rack_pos>" /> &nbsp; in &nbsp; 
-			<select id="rack" name="rack"><TMPL_LOOP NAME=racklist>
-			<option <TMPL_IF NAME=selected>selected="selected"</TMPL_IF> value="<TMPL_VAR ESCAPE=HTML NAME=id>"><TMPL_VAR ESCAPE=HTML NAME=name></option></TMPL_LOOP>
-			</select>
-			</div>
-		
-			<hr />
-		
-			<div style="clear: both; float: left; width: 280px;">
-			<label for="hardware">Hardware</label><br />
-			<select id="hardware" name="hardware"><TMPL_LOOP NAME=hardwarelist>
-			<option <TMPL_IF NAME=selected>selected="selected"</TMPL_IF> value="<TMPL_VAR ESCAPE=HTML NAME=id>"><TMPL_VAR ESCAPE=HTML NAME=name></option></TMPL_LOOP>
-			</select>
-			</div>
-		
-			<div>
-			<label for="os">OS / Version</label><br />
-			<select id="os" name="os"><TMPL_LOOP NAME=oslist>
-			<option <TMPL_IF NAME=selected>selected="selected"</TMPL_IF> value="<TMPL_VAR ESCAPE=HTML NAME=id>"><TMPL_VAR ESCAPE=HTML NAME=name></option></TMPL_LOOP>
-			</select>
-			<input type="text" size="8" name="os_version" value="<TMPL_VAR ESCAPE=HTML NAME=os_version>" />
-			</div>
-		
-			<div style="clear: both; float: left; width: 280px;">
-			<label for="role">Role</label><br />
-			<select id="role" name="role"><TMPL_LOOP NAME=rolelist>
-			<option <TMPL_IF NAME=selected>selected="selected"</TMPL_IF> value="<TMPL_VAR ESCAPE=HTML NAME=id>"><TMPL_VAR ESCAPE=HTML NAME=name></option></TMPL_LOOP>
-			</select>
-			<input type="checkbox" <TMPL_IF NAME=in_service>checked="checked"</TMPL_IF> name="in_service" /> In Service
-			</div>
-
-			<div style="margin-top: 8px;">
-			<label for="purchased">Purchased (YYYY-MM-DD)</label><br />
-			<input id="purchased" type="text" size="11" name="purchased" value="<TMPL_VAR ESCAPE=HTML NAME=purchased>" />
-			</div>
-		
-			<div style="clear: both; float: left; width: 280px;">
-			<label for="serial_no">Serial Number</label><br />
-			<input id="serial_no" name="serial_no" type="text" size="32" value="<TMPL_VAR ESCAPE=HTML NAME=serial_no>" />
-			</div>
-
-			<div style="margin-top: 8px;">
-			<label for="asset_no">Asset Number</label><br />
-			<input id="asset_no" name="asset_no" type="text" size="32" value="<TMPL_VAR ESCAPE=HTML NAME=asset_no>" />
-			</div>
-
-			<div style="clear: both; float: left; width: 280px;">
-			<label for="customer">Customer</label><br />
-			<select id="customer" name="customer"><TMPL_LOOP NAME=customerlist>
-			<option <TMPL_IF NAME=selected>selected="selected"</TMPL_IF> value="<TMPL_VAR ESCAPE=HTML NAME=id>"><TMPL_VAR ESCAPE=HTML NAME=name></option></TMPL_LOOP>
-			</select>
-			</div>
-		
-			<div style="margin-top: 8px;">
-			<label for="service">Service Level</label><br />
-			<select id="service" name="service"><TMPL_LOOP NAME=servicelist>
-			<option <TMPL_IF NAME=selected>selected="selected"</TMPL_IF> value="<TMPL_VAR ESCAPE=HTML NAME=id>"><TMPL_VAR ESCAPE=HTML NAME=name></option></TMPL_LOOP>
-			</select>
-			</div>
-		
-			<hr />
-
-			<div style="clear: both;">
-			<label for="notes">Notes</label><br />
-			<textarea id="notes" name="notes" cols="55" rows="4"><TMPL_VAR ESCAPE=HTML NAME=notes></textarea>
-			</div>
-			<!-- end of device edit include -->
+						<!-- device edit include: Version 1.2.%BUILD% -->
+						<div style="float: left; width: 280px;">
+							<label for="name">Name</label><br />
+							<input type="text" size="32" id="name" name="name" value="<TMPL_VAR ESCAPE=HTML NAME=name>" />
+						</div>
+						<div>
+							<label for="domain">Domain</label><br />
+							<select id="domain" name="domain"><TMPL_LOOP NAME=domainlist>
+								<option <TMPL_IF NAME=selected>selected="selected"</TMPL_IF> value="<TMPL_VAR ESCAPE=HTML NAME=id>"><TMPL_VAR ESCAPE=HTML NAME=name></option></TMPL_LOOP>
+							</select>
+						</div>
+						<hr style="clear: both;" />
+						<div>
+							<label for="rack">Location</label><br />
+							Rack Position &nbsp; <input type="text" size="4" name="rack_pos" value="<TMPL_VAR ESCAPE=HTML NAME=rack_pos>" /> &nbsp; in &nbsp; 
+							<select id="rack" name="rack"><TMPL_LOOP NAME=racklist>
+								<option <TMPL_IF NAME=selected>selected="selected"</TMPL_IF> value="<TMPL_VAR ESCAPE=HTML NAME=id>"><TMPL_VAR ESCAPE=HTML NAME=name></option></TMPL_LOOP>
+							</select>
+						</div>
+						<hr />
+						<div style="clear: both; float: left; width: 280px;">
+							<label for="hardware">Hardware</label><br />
+							<select id="hardware" name="hardware"><TMPL_LOOP NAME=hardwarelist>
+								<option <TMPL_IF NAME=selected>selected="selected"</TMPL_IF> value="<TMPL_VAR ESCAPE=HTML NAME=id>"><TMPL_VAR ESCAPE=HTML NAME=name></option></TMPL_LOOP>
+							</select>
+						</div>
+						<div>
+							<label for="os">OS / Version</label><br />
+							<select id="os" name="os"><TMPL_LOOP NAME=oslist>
+								<option <TMPL_IF NAME=selected>selected="selected"</TMPL_IF> value="<TMPL_VAR ESCAPE=HTML NAME=id>"><TMPL_VAR ESCAPE=HTML NAME=name></option></TMPL_LOOP>
+							</select>
+							<input type="text" size="8" name="os_version" value="<TMPL_VAR ESCAPE=HTML NAME=os_version>" />
+						</div>
+						<div style="clear: both; float: left; width: 280px;">
+							<label for="role">Role</label><br />
+							<select id="role" name="role"><TMPL_LOOP NAME=rolelist>
+								<option <TMPL_IF NAME=selected>selected="selected"</TMPL_IF> value="<TMPL_VAR ESCAPE=HTML NAME=id>"><TMPL_VAR ESCAPE=HTML NAME=name></option></TMPL_LOOP>
+							</select>
+							<input type="checkbox" <TMPL_IF NAME=in_service>checked="checked"</TMPL_IF> name="in_service" /> In Service
+						</div>
+						<div>
+							<label for="purchased">Purchased (YYYY-MM-DD)</label><br />
+							<input id="purchased" type="text" size="11" name="purchased" value="<TMPL_VAR ESCAPE=HTML NAME=purchased>" />
+						</div>
+						<div style="clear: both; float: left; width: 280px;">
+							<label for="serial_no">Serial Number</label><br />
+							<input id="serial_no" name="serial_no" type="text" size="32" value="<TMPL_VAR ESCAPE=HTML NAME=serial_no>" />
+						</div>
+						<div>
+							<label for="asset_no">Asset Number</label><br />
+							<input id="asset_no" name="asset_no" type="text" size="32" value="<TMPL_VAR ESCAPE=HTML NAME=asset_no>" />
+						</div>
+						<div style="clear: both; float: left; width: 280px;">
+							<label for="customer">Customer</label><br />
+							<select id="customer" name="customer"><TMPL_LOOP NAME=customerlist>
+								<option <TMPL_IF NAME=selected>selected="selected"</TMPL_IF> value="<TMPL_VAR ESCAPE=HTML NAME=id>"><TMPL_VAR ESCAPE=HTML NAME=name></option></TMPL_LOOP>
+							</select>
+						</div>
+						<div>
+							<label for="service">Service Level</label><br />
+							<select id="service" name="service"><TMPL_LOOP NAME=servicelist>
+								<option <TMPL_IF NAME=selected>selected="selected"</TMPL_IF> value="<TMPL_VAR ESCAPE=HTML NAME=id>"><TMPL_VAR ESCAPE=HTML NAME=name></option></TMPL_LOOP>
+							</select>
+						</div>
+						<hr />
+						<div style="clear: both;">
+							<label for="notes">Notes</label><br />
+							<textarea id="notes" name="notes" cols="55" rows="4"><TMPL_VAR ESCAPE=HTML NAME=notes></textarea>
+						</div>
+						<!-- end of device edit include -->
