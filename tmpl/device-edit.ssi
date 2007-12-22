@@ -1,4 +1,4 @@
-						<!-- device edit include: Version 1.2.%BUILD% -->
+<!-- device edit include: Version 1.2.%BUILD% -->
 						<div style="float: left; width: 280px;">
 							<label for="name">Name</label><br />
 							<input type="text" size="32" id="name" name="name" value="<TMPL_VAR ESCAPE=HTML NAME=name>" />
