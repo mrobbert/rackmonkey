@@ -240,9 +240,13 @@ eval
 				
 				if (($viewType =~ /^edit/) || ($viewType =~ /^single/) || ($viewType =~ /^create/))
 				{
-					my $device = $backend->device($id);
-					$$device{'age'} = calculateAge($$device{'purchased'});
-					$$device{'apps'} = $backend->appOnDeviceList($id);
+					my $device = {};
+					if ($id)
+					{
+						$device = $backend->device($id);
+						$$device{'age'} = calculateAge($$device{'purchased'});
+						$$device{'apps'} = $backend->appOnDeviceList($id);	
+					}
 
 					if (($viewType =~ /^single/) && (lc($$device{'hardware_manufacturer_name'}) =~ /dell/)) # kludgey!
 					{
@@ -262,11 +266,13 @@ eval
 						$selectedDomain = $$device{'domain'} if (!$selectedDomain);
 					}
 					
-					# clear rack position and name if we're creating a new device (so copy works)
+					# clear values unique to a device if we're copying an existing device
 					if ($viewType =~ /^create/)
 					{
 						$$device{'name'} = '';
 						$$device{'rack_pos'} = '';
+						$$device{'asset_no'} = '';
+						$$device{'serial_no'} = '';
 					}
 					
 					$template->param($device);
@@ -425,7 +431,9 @@ eval
 				
 				if (($viewType =~ /^edit/) || ($viewType =~ /^single/) || ($viewType =~ /^create/))
 				{
-					my $rack = $backend->rack($id);
+					my $rack = {};
+					$rack = $backend->rack($id) if ($id); # used if copying, editing or displaying single view, but not for a plain create
+	
 					$selectedRoom = $$rack{'room'} if (!$selectedRoom); # Use database value for selected if none in CGI - not actually needed in single view
 		
 					if ($viewType !~ /^single/)
