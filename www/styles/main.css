@@ -27,6 +27,7 @@ body
 	margin-top: 1em;
 	font-size: x-small;
 	font-family: verdana, helvetica, sans-serif;
+	clear: both;
 }
 
 button
