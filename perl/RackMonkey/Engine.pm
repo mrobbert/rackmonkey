@@ -2,7 +2,7 @@
 ##############################################################################
 # RackMonkey - Know Your Racks - http://www.rackmonkey.org                   #
 # Version 1.2.%BUILD%                                                        #
-# (C)2004-2007 Will Green (wgreen at users.sourceforge.net)                  #
+# (C)2004-2008 Will Green (wgreen at users.sourceforge.net)                  #
 # DBI Engine for Rackmonkey                                                  #
 ##############################################################################
 
@@ -976,7 +976,8 @@ sub hardwareDeviceCount
 {
 	my $self = shift;
 	my $sth = $self->dbh->prepare(qq!
-		SELECT 
+		SELECT
+			hardware.id AS id, 
 			hardware.name AS hardware, 
 			org.name AS manufacturer,
 			COUNT(device.id) AS num_devices,
@@ -986,7 +987,7 @@ sub hardwareDeviceCount
 		WHERE 
 			device.hardware = hardware.id AND
 			hardware.manufacturer = org.id 
-		GROUP BY hardware.name, org.name, hardware.meta_default_data, org.meta_default_data
+		GROUP BY hardware.id, hardware.name, org.name, hardware.meta_default_data, org.meta_default_data
 		ORDER BY num_devices DESC
 		LIMIT 10;
 	!);
@@ -1087,6 +1088,7 @@ sub osDeviceCount
 	my $self = shift;
 	my $sth = $self->dbh->prepare(qq!
 		SELECT 
+			os.id AS id,
 			os.name AS os, 
 			device.os_version AS version,
 			COUNT(device.id) AS num_devices,
@@ -1095,7 +1097,7 @@ sub osDeviceCount
 		WHERE 
 			device.os = os.id AND
 			os.manufacturer = org.id 
-		GROUP BY os.name, device.os_version, os.meta_default_data
+		GROUP BY os.id, os.name, device.os_version, os.meta_default_data
 		ORDER BY num_devices DESC
 		LIMIT 10;
 	!);
@@ -1195,12 +1197,13 @@ sub customerDeviceCount
 {
 	my $self = shift;
 	my $sth = $self->dbh->prepare(qq!
-		SELECT 
-			org.name AS customer, 
+		SELECT
+			org.id AS id, 
+			org.name AS customer,
 			COUNT(device.id) AS num_devices 
 		FROM device, org 
 		WHERE device.customer = org.id 
-		GROUP BY org.name 
+		GROUP BY org.id, org.name 
 		ORDER BY num_devices DESC
 		LIMIT 10;
 	!);
@@ -1672,12 +1675,13 @@ sub roleDeviceCount
 {
 	my $self = shift;
 	my $sth = $self->dbh->prepare(qq!
-		SELECT 
-			role.name AS role, 
+		SELECT
+			role.id AS id, 
+		 	role.name AS role, 
 			COUNT(device.id) AS num_devices 
 		FROM device, role 
 		WHERE device.role = role.id 
-		GROUP BY role.name 
+		GROUP BY role.id, role.name 
 		ORDER BY num_devices DESC
 		LIMIT 10;
 	!);

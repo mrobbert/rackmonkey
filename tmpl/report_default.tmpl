@@ -40,7 +40,7 @@
 <table class="report">
 <tr><th>Count</th><th>Customer</th></tr>
 <TMPL_LOOP NAME=customer_device_count>
-<tr><td class="numerical"><TMPL_VAR ESCAPE=HTML NAME=num_devices></td><td><TMPL_VAR ESCAPE=HTML NAME=customer></td></tr>
+<tr><td class="numerical"><TMPL_VAR ESCAPE=HTML NAME=num_devices></td><td><a href="<TMPL_VAR NAME=base_url>?view=org&amp;view_type=single&amp;id=<TMPL_VAR ESCAPE=HTML NAME=id>"><TMPL_VAR ESCAPE=HTML NAME=customer></a></td></tr>
 </TMPL_LOOP>
 </table>
 <TMPL_ELSE>
@@ -53,7 +53,7 @@
 <table class="report">
 <tr><th>Count</th><th>Role</th></tr>
 <TMPL_LOOP NAME=role_device_count>
-<tr><td class="numerical"><TMPL_VAR ESCAPE=HTML NAME=num_devices></td><td><TMPL_VAR ESCAPE=HTML NAME=role></td></tr>
+<tr><td class="numerical"><TMPL_VAR ESCAPE=HTML NAME=num_devices></td><td><a href="<TMPL_VAR NAME=base_url>?view=role&amp;view_type=single&amp;id=<TMPL_VAR ESCAPE=HTML NAME=id>"><TMPL_VAR ESCAPE=HTML NAME=role></a></td></tr>
 </TMPL_LOOP>
 </table>
 <TMPL_ELSE>
@@ -66,7 +66,7 @@
 <table class="report">
 <tr><th>Count</th><th>Hardware</th></tr>
 <TMPL_LOOP NAME=hardware_device_count>
-<tr><td class="numerical"><TMPL_VAR ESCAPE=HTML NAME=num_devices></td><td><TMPL_UNLESS NAME=hardware_meta_default_data><TMPL_UNLESS NAME=hardware_manufacturer_meta_default_data><TMPL_VAR ESCAPE=HTML NAME=manufacturer> </TMPL_UNLESS></TMPL_UNLESS><TMPL_VAR ESCAPE=HTML NAME=hardware></td></tr>
+<tr><td class="numerical"><TMPL_VAR ESCAPE=HTML NAME=num_devices></td><td><a href="<TMPL_VAR NAME=base_url>?view=hardware&amp;view_type=single&amp;id=<TMPL_VAR ESCAPE=HTML NAME=id>"><TMPL_UNLESS NAME=hardware_meta_default_data><TMPL_UNLESS NAME=hardware_manufacturer_meta_default_data><TMPL_VAR ESCAPE=HTML NAME=manufacturer> </TMPL_UNLESS></TMPL_UNLESS><TMPL_VAR ESCAPE=HTML NAME=hardware></a></td></tr>
 </TMPL_LOOP>
 </table>
 <TMPL_ELSE>
@@ -79,7 +79,7 @@
 <table class="report">
 <tr><th>Count</th><th>OS</th></tr>
 <TMPL_LOOP NAME=os_device_count>
-<tr><td class="numerical"><TMPL_VAR ESCAPE=HTML NAME=num_devices></td><td><TMPL_VAR ESCAPE=HTML NAME=os><TMPL_UNLESS NAME=os_meta_default_data> <TMPL_VAR ESCAPE=HTML NAME=version></TMPL_UNLESS></td></tr>
+<tr><td class="numerical"><TMPL_VAR ESCAPE=HTML NAME=num_devices></td><td><a href="<TMPL_VAR NAME=base_url>?view=os&amp;view_type=single&amp;id=<TMPL_VAR ESCAPE=HTML NAME=id>"><TMPL_VAR ESCAPE=HTML NAME=os><TMPL_UNLESS NAME=os_meta_default_data> <TMPL_VAR ESCAPE=HTML NAME=version></TMPL_UNLESS></td></tr>
 </TMPL_LOOP>
 </table>
 <TMPL_ELSE>
