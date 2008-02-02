@@ -1,0 +1,13 @@
+<!-- nav bar include: Version 1.2.%BUILD% -->
+	<div id="navbar">
+		<a href="<TMPL_VAR NAME=base_url>"><img id="navlogo" width="33" height="23" src="<TMPL_VAR NAME=web_root>/graphics/logos/newlogo.gif" alt="Home"/></a>
+		<ul>
+			<li><a href="<TMPL_VAR NAME=base_url>?view=rack">Racks</a></li>
+			<li><a href="<TMPL_VAR NAME=base_url>?view=device">Devices</a></li>
+			<li><span>Apps</span></li>
+			<li><a href="<TMPL_VAR NAME=base_url>?view=config">Config</a></li>
+			<li><a href="<TMPL_VAR NAME=base_url>?view=report">Reports</a></li>
+			<li><a href="<TMPL_VAR NAME=base_url>?view=help">Help</a></li>
+		</ul>
+	</div>
+	<!-- end of nav bar include -->
