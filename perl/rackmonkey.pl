@@ -2,7 +2,7 @@
 ##############################################################################
 # RackMonkey - Know Your Racks - http://www.rackmonkey.org                   #
 # Version 1.2.%BUILD%                                                        #
-# (C)2004-2007 Will Green (wgreen at users.sourceforge.net)                  #
+# (C)2004-2008 Will Green (wgreen at users.sourceforge.net)                  #
 # Main RackMonkey CGI script                                                 #
 ##############################################################################
 
@@ -348,8 +348,12 @@ eval
 					{
 						$$a{'descript_short'} = shortStr($$a{'descript'});
 						$$a{'notes_short'} = shortStr($$a{'notes'});
-						
 					}
+					my $totalAppCount = $backend->appCount;
+					my $listedAppCount = @$apps;
+					$template->param('total_app_count' => $totalAppCount);
+					$template->param('listed_app_count' => $listedAppCount);
+					$template->param('all_apps_listed' => ($totalAppCount == $listedAppCount));
 					$template->param('apps' => $apps);
 			}
 			elsif (($viewType =~ /^edit/) || ($viewType =~ /^single/))
