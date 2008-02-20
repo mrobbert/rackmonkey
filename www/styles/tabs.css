@@ -2,7 +2,7 @@
 ##############################################################################
 # RackMonkey - Know Your Racks - http://www.rackmonkey.org                   #
 # Version 1.2.%BUILD%                                                        #
-# (C)2004-2007 Will Green (wgreen at users.sourceforge.net)                  #
+# (C)2004-2008 Will Green (wgreen at users.sourceforge.net)                  #
 # CSS styling for navigation tabs - with thanks to labs.silverorange.com     #
 ##############################################################################
 */
@@ -37,8 +37,7 @@
 }
 
 #navbar ul a,
-#navbar ul span,
-#navbar ul a.current 
+#navbar ul a.selected 
 {
 	width: 6em;
 	display: block;
@@ -53,9 +52,7 @@
 	color: #333;
 }
 
-#navbar ul span,
-#navbar ul a.current,
-#navbar ul a.current:hover 
+#navbar ul a.selected
 {
 	border: 1px solid #666;
 	border-bottom: none;
@@ -64,14 +61,14 @@
 	margin-top: 0;
 }
 
-#navbar ul a 
+#navbar ul a.unselected 
 {
 	background: #FFFAE1;
 	border: 1px solid #AAA;
 	border-bottom: none;
 }
 
-#navbar ul a:hover 
+#navbar ul a.unselected:hover 
 {
 	margin-top: 0;
 	border-color: #666;

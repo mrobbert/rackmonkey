@@ -10,6 +10,7 @@
 table.report 
 {
 	border-collapse: collapse;
+	margin-top: -0.5em;
 }
 
 table.report th
@@ -31,4 +32,10 @@ table.report td
 table.report td.numerical
 {
 	text-align: right;
+}
+
+h3
+{
+	margin-top: 1.25em;
+	margin-bottom: -0.6em;
 }
