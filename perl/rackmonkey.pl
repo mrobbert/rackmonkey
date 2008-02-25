@@ -328,7 +328,13 @@ eval
 		{
 			if ($viewType =~ /^default/)
 			{
-					$template->param('buildings' => $backend->buildingList($orderBy));
+					my $buildings = $backend->buildingList($orderBy);
+					my $totalBuildingCount = $backend->appCount;
+					my $listedBuildingCount = @$buildings;
+					$template->param('total_building_count' => $totalBuildingCount);
+					$template->param('listed_building_count' => $listedBuildingCount);
+					$template->param('all_buildings_listed' => ($totalBuildingCount == $listedBuildingCount));
+					$template->param('buildings' => $buildings);
 			}
 			elsif (($viewType =~ /^edit/) || ($viewType =~ /^single/))
 			{
@@ -366,9 +372,10 @@ eval
 			}
 			elsif ($viewType =~ /^manage/)
 			{
+				my $app = $backend->app($id);
+				$template->param($app);
 				my $devices = $backend->appDevicesUsedList($id);
 				$template->param('devices' => $devices);
-				$template->param('id' => $id);
 			}
 		}		
 		elsif ($view eq 'room')
