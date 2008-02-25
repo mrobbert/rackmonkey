@@ -1,25 +1,25 @@
-<?xml version="1.0"?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
-
 <!-- 
 ##############################################################################
 # RackMonkey - Know Your Racks - http://www.rackmonkey.org                   #
 # Version 1.2.%BUILD%                                                        #
-# (C)2004-2007 Will Green (wgreen at users.sourceforge.net)                  #
+# (C)2004-2008 Will Green (wgreen at users.sourceforge.net)                  #
 # Building single view template                                              #
 ##############################################################################
 -->
-
 <head>
 	<title><TMPL_VAR ESCAPE=HTML NAME=name> | RackMonkey</title>
-	<link rel="stylesheet" type="text/css" title="Monkey Style" href="<TMPL_VAR NAME=web_root>/styles/rackmonkey.css" />
+	<style type="text/css" media="screen">
+	@import "<TMPL_VAR NAME=web_root>/styles/main.css";
+	@import "<TMPL_VAR NAME=web_root>/styles/tabs.css";
+	@import "<TMPL_VAR NAME=web_root>/styles/form.css";
+	</style>
 	<script type="text/javascript" src="<TMPL_VAR NAME=web_root>/javascript/racklib.js"></script>
 </head>
-
 <body>
-
-<TMPL_INCLUDE NAME="nav.ssi">
+	<TMPL_INCLUDE NAME="nav-config.ssi">
+	<div id="main">
 
 <table class="form">
 <tr>
@@ -60,8 +60,7 @@
 	</td>
 </tr>
 </table>
-
-<TMPL_INCLUDE NAME="footer.ssi">
-
+	</div>
+	<TMPL_INCLUDE NAME="footer.ssi">
 </body>
 </html>

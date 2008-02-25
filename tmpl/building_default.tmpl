@@ -1,61 +1,51 @@
-<?xml version="1.0"?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
-
 <!-- 
 ##############################################################################
 # RackMonkey - Know Your Racks - http://www.rackmonkey.org                   #
 # Version 1.2.%BUILD%                                                        #
-# (C)2004-2007 Will Green (wgreen at users.sourceforge.net)                  #
+# (C)2004-2008 Will Green (wgreen at users.sourceforge.net)                  #
 # Building default (table) template                                          #
 ##############################################################################
 -->
-
 <head>
 	<title>Buildings | RackMonkey</title>
-	<link rel="stylesheet" type="text/css" title="Monkey Style" href="<TMPL_VAR NAME=web_root>/styles/rackmonkey.css" />
+	<style type="text/css" media="screen">
+	@import "<TMPL_VAR NAME=web_root>/styles/main.css";
+	@import "<TMPL_VAR NAME=web_root>/styles/tabs.css";
+	@import "<TMPL_VAR NAME=web_root>/styles/itemtable.css";
+	</style>
 	<script type="text/javascript" src="<TMPL_VAR NAME=web_root>/javascript/racklib.js"></script>
 </head>
-
 <body>
-
-<TMPL_INCLUDE NAME="nav.ssi">
-
-<p>
-	<a href="<TMPL_VAR NAME=base_url>?view=building&amp;view_type=create"><img src="<TMPL_VAR NAME=web_root>/graphics/buttons/new.gif" width="47" height="21" alt="New" /></a>
-</p>
-
-<TMPL_IF NAME=buildings>
-<table>
-	<tr>
-		<th>
-			<a class="sort" title="Sort by name" href="<TMPL_VAR NAME=base_url>?view=building&amp;order_by=building.name">Building</a>
-		</th>
-		<th>
-			<a class="sort" title="Sort by short name" href="<TMPL_VAR NAME=base_url>?view=building&amp;order_by=building.name_short">Short Name</a>
-		</th>		
-		<th>
-			<a class="sort" title="Sort by notes" href="<TMPL_VAR NAME=base_url>?view=building&amp;order_by=building.notes">Notes</a>
-		</th>		
-	</tr>
-	<TMPL_LOOP NAME=buildings>
-	<TMPL_IF NAME="__odd__">
-	<tr class="row_silver">
-	<TMPL_ELSE>
-	<tr class="row_white">
-	</TMPL_IF>
-		<td><a title="View details for this building" href="<TMPL_VAR NAME=base_url>?view=building&amp;view_type=single&amp;id=<TMPL_VAR NAME=id>"><TMPL_VAR ESCAPE=HTML NAME=name></a></td>
-		<td><TMPL_IF NAME=name_short><TMPL_VAR ESCAPE=HTML NAME=name_short><TMPL_ELSE>-</TMPL_IF></td>
-		<td><TMPL_IF NAME=notes_short><span title="<TMPL_VAR ESCAPE=HTML NAME=notes>"><TMPL_VAR ESCAPE=HTML NAME=notes_short></span><TMPL_ELSE><TMPL_IF NAME=notes><TMPL_VAR ESCAPE=HTML NAME=notes><TMPL_ELSE>-</TMPL_IF></TMPL_IF></td>
-	</tr></TMPL_LOOP>
-</table>
-<TMPL_ELSE>
-<p>
-	There are no building entries in RackMonkey, use the 'New' button to add some.
-</p>
-</TMPL_IF>
-
-<TMPL_INCLUDE NAME="footer.ssi">
-
+	<TMPL_INCLUDE NAME="nav-config.ssi">
+	<div id="main">
+		<form method="get" action="<TMPL_VAR NAME=base_url>">
+			<p>
+				<button style="margin-right: 20px" title="Create a new building" onclick="window.location = '<TMPL_VAR NAME=base_url>?view=building&amp;view_type=create'; return false;">New Building</button>
+			</p>
+		</form>
+		<table class="itemtable">
+			<tr>
+				<th><a title="Sort by name" href="<TMPL_VAR NAME=base_url>?view=building&amp;order_by=building.name">Building</a></th>
+				<th><a title="Sort by short name" href="<TMPL_VAR NAME=base_url>?view=building&amp;order_by=building.name_short">Short Name</a></th>		
+				<th><a title="Sort by notes" href="<TMPL_VAR NAME=base_url>?view=building&amp;order_by=building.notes">Notes</a></th>		
+			</tr>
+			<TMPL_IF NAME=buildings>
+			<TMPL_LOOP NAME=buildings>
+			<TMPL_IF NAME="__odd__"><tr class="odd"><TMPL_ELSE><tr class="even"></TMPL_IF>
+				<td><a title="View details for this building" href="<TMPL_VAR NAME=base_url>?view=building&amp;view_type=single&amp;id=<TMPL_VAR NAME=id>"><TMPL_VAR ESCAPE=HTML NAME=name></a></td>
+				<td><TMPL_IF NAME=name_short><TMPL_VAR ESCAPE=HTML NAME=name_short><TMPL_ELSE>-</TMPL_IF></td>
+				<td><TMPL_IF NAME=notes_short><span title="<TMPL_VAR ESCAPE=HTML NAME=notes>"><TMPL_VAR ESCAPE=HTML NAME=notes_short></span><TMPL_ELSE><TMPL_IF NAME=notes><TMPL_VAR ESCAPE=HTML NAME=notes><TMPL_ELSE>-</TMPL_IF></TMPL_IF></td>
+			</tr>
+			</TMPL_LOOP></TMPL_IF>
+			<tr>
+				<td colspan="3" class="footer">
+					Showing <TMPL_VAR ESCAPE=HTML NAME=listed_building_count> of <TMPL_VAR ESCAPE=HTML NAME=total_building_count> buildings
+				</td>
+			</tr>
+		</table>
+	</div>
+	<TMPL_INCLUDE NAME="footer.ssi">
 </body>
 </html>
