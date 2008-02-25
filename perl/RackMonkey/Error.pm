@@ -2,7 +2,7 @@ package RackMonkey::Error;
 ##############################################################################
 # RackMonkey - Know Your Racks - http://www.rackmonkey.org                   #
 # Version 1.2.%BUILD%                                                        #
-# (C)2004-2007 Will Green (wgreen at users.sourceforge.net)                  #
+# (C)2004-2008 Will Green (wgreen at users.sourceforge.net)                  #
 # Error handling functions for RackMonkey                                    #
 ##############################################################################
 
@@ -85,7 +85,6 @@ sub display # nasty embedded HTML, need to fix
 	$friendlyErrMsg =~ s/\n/\n\t\t<br\/>/gm; # replace newlines with <br> for HTML
 
 	print <<END;
-	<?xml version="1.0"?>
 	<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
 	<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
 		<head>
