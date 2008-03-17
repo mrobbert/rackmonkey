@@ -1,0 +1,16 @@
+<!-- room edit include: Version 1.2.%BUILD% -->
+						<div>
+							<label for="name">Name</label><br />
+							<input id="name" name="name" type="text" size="60" value="<TMPL_VAR ESCAPE=HTML NAME=name>" />
+						</div>
+						<div>
+							<label for="name_short">Building [<a href="<TMPL_VAR NAME=base_url>?view=building&amp;view_type=create&amp;return_view=room&amp;return_view_type=create">add</a>]</label><br />
+							<select name="building_id"><TMPL_LOOP NAME=buildinglist>
+							<option <TMPL_IF NAME=selected>selected="selected"</TMPL_IF> value="<TMPL_VAR ESCAPE=HTML NAME=id>"><TMPL_VAR ESCAPE=HTML NAME=name></option></TMPL_LOOP>
+							</select>
+						</div>
+						<div>
+							<label for="notes">Notes</label><br />
+							<textarea id="notes" name="notes" cols="55" rows="4"><TMPL_VAR ESCAPE=HTML NAME=notes></textarea>
+						</div>
+						<!-- end of room edit include -->
