@@ -9,6 +9,7 @@ v1.2.4 - Not Yet Released
 -------------------------
 * Improved interface
 * Early MySQL 5 support
+* Supports Postgres 7.4
 
 v1.2.3 - Released 2007-06-23
 ----------------------------
