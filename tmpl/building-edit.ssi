@@ -1,0 +1,14 @@
+<!-- building edit include: Version 1.2.%BUILD% -->
+						<div>
+							<label for="name">Name</label><br />
+							<input id="name" name="name" type="text" size="60" value="<TMPL_VAR ESCAPE=HTML NAME=name>" />
+						</div>
+						<div>
+							<label for="name_short">Short Name</label><br />
+							<input id="name_short" name="name_short" type="text" size="60" value="<TMPL_VAR ESCAPE=HTML NAME=name_short>" />
+						</div>
+						<div>
+							<label for="notes">Notes</label><br />
+							<textarea id="notes" name="notes" cols="55" rows="4"><TMPL_VAR ESCAPE=HTML NAME=notes></textarea>
+						</div>
+						<!-- end of building edit include -->
