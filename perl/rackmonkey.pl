@@ -329,7 +329,7 @@ eval
 			if ($viewType =~ /^default/)
 			{
 					my $buildings = $backend->buildingList($orderBy);
-					my $totalBuildingCount = $backend->appCount;
+					my $totalBuildingCount = $backend->buildingCount;
 					my $listedBuildingCount = @$buildings;
 					$template->param('total_building_count' => $totalBuildingCount);
 					$template->param('listed_building_count' => $listedBuildingCount);
