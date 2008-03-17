@@ -1,0 +1,14 @@
+<!-- domain edit include: Version 1.2.%BUILD% -->
+						<div>
+							<label for="name">Name</label><br />
+							<input id="name" name="name" type="text" size="60" value="<TMPL_VAR ESCAPE=HTML NAME=name>" />
+						</div>
+						<div>
+							<label for="descript">Description</label><br />
+							<textarea name="descript" cols="55" rows="4"><TMPL_VAR ESCAPE=HTML NAME=descript></textarea>
+						</div>
+						<div>
+							<label for="notes">Notes</label><br />
+							<textarea id="notes" name="notes" cols="55" rows="4"><TMPL_VAR ESCAPE=HTML NAME=notes></textarea>
+						</div>
+						<!-- end of domain edit include -->
