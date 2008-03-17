@@ -1229,6 +1229,18 @@ sub domain
 	return $domain;
 }
 
+sub domainCount
+{
+	my $self = shift;
+	my $sth = $self->dbh->prepare(qq!
+		SELECT count(*) 
+		FROM domain
+		WHERE meta_default_data = 0
+	!);
+	$sth->execute();
+	return ($sth->fetchrow_array)[0];
+}
+
 sub domainList
 {
 	my $self = shift;

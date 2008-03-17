@@ -175,6 +175,11 @@ eval
 				{
 					$$d{'descript_short'} = shortStr($$d{'descript'});
 				}
+				my $totalDomainCount = $backend->domainCount;
+				my $listedDomainCount = @$domains;
+				$template->param('total_domain_count' => $totalDomainCount);
+				$template->param('listed_domain_count' => $listedDomainCount);
+				$template->param('all_domains_listed' => ($totalDomainCount == $listedDomainCount));
 				$template->param('domains' => $domains);
 			}
 			elsif (($viewType =~ /^edit/) || ($viewType =~ /^single/))
@@ -382,7 +387,13 @@ eval
 		{
 			if ($viewType =~ /^default/)
 			{
-					$template->param('rooms' => $backend->roomList($orderBy));
+					my $rooms = $backend->roomList($orderBy);
+					my $totalRoomCount = $backend->roomCount;
+					my $listedRoomCount = @$rooms;
+					$template->param('total_room_count' => $totalRoomCount);
+					$template->param('listed_room_count' => $listedRoomCount);
+					$template->param('all_rooms_listed' => ($totalRoomCount == $listedRoomCount));
+					$template->param('rooms' => $rooms);
 			}
 			else
 			{
