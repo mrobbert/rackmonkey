@@ -2,7 +2,7 @@ package RackMonkey::Conf;
 ##############################################################################
 # RackMonkey - Know Your Racks - http://www.rackmonkey.org                   #
 # Version 1.2.%BUILD%                                                        #
-# (C)2004-2007 Will Green (wgreen at users.sourceforge.net)                  #
+# (C)2004-2008 Will Green (wgreen at users.sourceforge.net)                  #
 # Configuration settings for RackMonkey                                      #
 ##############################################################################
 
@@ -13,7 +13,7 @@ our $VERSION = '1.2.%BUILD%';
 our $AUTHOR = 'Will Green (wgreen at users.sourceforge.net)';
 
 use base 'Exporter';
-our @EXPORT = qw/DBDCONNECT DBUSER DBPASS TMPLPATH WWWPATH DEFAULTVIEW RACKNUMBERINGTOP MAXNOTE MAXSTRING MAXRACKSIZE SHORTTEXTLEN SHORTURLLEN DATEFORMAT DELLQUERY PLUGIN_PDF PLUGIN_XLS/;
+our @EXPORT = qw/DBDCONNECT DBUSER DBPASS TMPLPATH WWWPATH DEFAULTVIEW MAXNOTE MAXSTRING MAXRACKSIZE SHORTTEXTLEN SHORTURLLEN DATEFORMAT DELLQUERY PLUGIN_PDF PLUGIN_XLS/;
 
 # Database Connection Settings
 use constant DBDCONNECT => 'dbi:SQLite:dbname=/home/rack/db/rackmonkey.db';
@@ -31,7 +31,6 @@ use constant PLUGIN_XLS => 0;
 
 # Preference Constants
 use constant DEFAULTVIEW => 'rack';	# View loaded when none is specified
-use constant RACKNUMBERINGTOP => 0; # If true racks are numbered from the top, if false (default) they are numbered from the bottom 
 
 # Validation Constants
 use constant MAXNOTE =>	4095; 		# Max length of note fields
