@@ -757,7 +757,7 @@ sub rackPhysical # This method is all rather inelegant and doesn't deal with rac
 		$$r{'rack_id'} = $rackid; # include rack identifier in each entry - should review this when considering namespacing (see todo)
 	}	
 	
-	@rackLayout = reverse @rackLayout unless RACKNUMBERINGTOP;  # racks are numbered from the bottom unless configured otherwise
+	@rackLayout = reverse @rackLayout;  # racks are numbered from the bottom at present - will be configurable in later release
 	
 	return \@rackLayout;
 }
