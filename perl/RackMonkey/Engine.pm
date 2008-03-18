@@ -1373,12 +1373,15 @@ sub deviceList
 	my $self = shift;
 	my $orderBy = shift || '';
 	my $filters = shift || {};
+	my $nameSearch = shift || '';
 	my $filterBy ='';
 	
 	for my $f (keys %$filters)
 	{
 		$filterBy .= " AND $f=".$$filters{"$f"};
 	}
+	
+	$nameSearch = "AND device.name LIKE '%$nameSearch%'" if ($nameSearch);
 	
 	$orderBy = 'device.name' unless $orderBy =~ /^[a-z_]+\.[a-z_]+$/;
 
@@ -1429,6 +1432,7 @@ sub deviceList
 			device.domain = domain.id AND
 			device.service = service.id
 			$filterBy
+			$nameSearch
 		ORDER BY $orderBy
 	!);
 	$sth->execute();

@@ -58,6 +58,7 @@ eval
 	my $viewType = $cgi->viewType;
 	my $act =  $cgi->act;
 	my $filterBy = $cgi->filterBy;
+	my $nameSearch = $cgi->nameSearch;
 	
 	my $orderBy = $cgi->orderBy;
 	my $priorOrderBy = $cgi->priorOrderBy;
@@ -200,7 +201,7 @@ eval
 				}
 				else
 				{
-					$devices = $backend->deviceList($orderBy, $filterBy);
+					$devices = $backend->deviceList($orderBy, $filterBy, $nameSearch);
 				}
 				
 				my $filterBy = $cgi->filterBy;
@@ -226,6 +227,7 @@ eval
 					$$d{'age'} = calculateAge($$d{'purchased'});
 				}
 
+				$template->param('name_search' => $nameSearch);
 				$template->param('devices' => $devices);
 
 				my $totalDeviceCount = $backend->deviceCount;

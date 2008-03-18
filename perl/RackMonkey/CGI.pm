@@ -137,6 +137,12 @@ sub filterBy
 	return \%filters;
 }
 
+sub nameSearch
+{
+	my $self = shift;
+	return $self->cgi->param('name_search') if ($self->cgi->param('name_search'));
+}
+
 sub showFilters
 {
 	my $self = shift;
