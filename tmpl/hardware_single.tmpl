@@ -1,6 +1,5 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
-
 <!-- 
 ##############################################################################
 # RackMonkey - Know Your Racks - http://www.rackmonkey.org                   #
@@ -9,67 +8,69 @@
 # Hardware single view template                                              #
 ##############################################################################
 -->
-
 <head>
 	<title><TMPL_UNLESS NAME=meta_default_data><TMPL_VAR ESCAPE=HTML NAME=manufacturer_name></TMPL_UNLESS> <TMPL_VAR ESCAPE=HTML NAME=name> | RackMonkey</title>
-	<link rel="stylesheet" type="text/css" title="Monkey Style" href="<TMPL_VAR NAME=web_root>/styles/rackmonkey.css" />
+	<style type="text/css" media="screen">
+	@import "<TMPL_VAR NAME=web_root>/styles/main.css";
+	@import "<TMPL_VAR NAME=web_root>/styles/tabs.css";
+	@import "<TMPL_VAR NAME=web_root>/styles/form.css";
+	</style>
 	<script type="text/javascript" src="<TMPL_VAR NAME=web_root>/javascript/racklib.js"></script>
+	<link rel="icon" href="<TMPL_VAR NAME=web_root>/graphics/favicon.ico" />
 </head>
-
 <body>
-
-<TMPL_INCLUDE NAME="nav-config.ssi">
-
-<table class="form">
-<tr>
-	<th class="form">
-		<a href="<TMPL_VAR NAME=base_url>?view=hardware&amp;view_type=create"><img style="float:right; margin-left: 4px;" src="<TMPL_VAR NAME=web_root>/graphics/buttons/new.gif" width="47" height="21" alt="New" /></a>
-		<a href="<TMPL_VAR NAME=base_url>?view=hardware"><img style="float:right; margin-left: 4px;" src="<TMPL_VAR NAME=web_root>/graphics/buttons/view_all.gif" width="55" height="21" alt="View All" /></a>
-		hardware
-	</th>
-</tr>
-<tr>
-	<td class="form">
-		<label>Name</label><br />
-		<TMPL_VAR ESCAPE=HTML NAME=name>
-		&nbsp; <a class="small" title="View devices that are this hardware model" href="<TMPL_VAR NAME=base_url>?view=device&amp;filter_device_hardware=<TMPL_VAR ESCAPE=URL NAME=id>">Devices of this hardware model&hellip;</a>
-		<br /><br />
-		
-		<label>Manufacturer</label><br />
-		<TMPL_VAR ESCAPE=HTML NAME=manufacturer_name><TMPL_UNLESS NAME=manufacturer_meta_default_data> &nbsp; <a class="small" title="View details for this organisation" href="<TMPL_VAR NAME=base_url>?view=org&amp;view_type=single&amp;id=<TMPL_VAR NAME=manufacturer>">Details&hellip;</a></TMPL_UNLESS>
-		<br /><br />
-		
-		<label>Size (U)</label><br />
-		<TMPL_VAR ESCAPE=HTML NAME=size>
-		<br /><br />
-		
-		<label>Image File</label><br />
-		<TMPL_IF NAME=image><TMPL_VAR ESCAPE=HTML NAME=image><TMPL_ELSE>&nbsp;-</TMPL_IF>
-		<br /><br />
-		
-		<label>Support URL</label><br />
-		<TMPL_IF NAME=support_url><a href="<TMPL_VAR ESCAPE=HTML NAME=support_url>"><TMPL_IF NAME=support_url_short><TMPL_VAR ESCAPE=HTML NAME=support_url_short><TMPL_ELSE><TMPL_VAR ESCAPE=HTML NAME=support_url></TMPL_IF></a><TMPL_ELSE>&nbsp;-</TMPL_IF>
-		<br /><br />	
-			
-		<label>Spec URL</label><br />
-		<TMPL_IF NAME=spec_url><a href="<TMPL_VAR ESCAPE=HTML NAME=spec_url>"><TMPL_IF NAME=spec_url_short><TMPL_VAR ESCAPE=HTML NAME=spec_url_short><TMPL_ELSE><TMPL_VAR ESCAPE=HTML NAME=spec_url></TMPL_IF></a><TMPL_ELSE>&nbsp;-</TMPL_IF>
-		
-		<TMPL_IF NAME=notes>
-		<br /><br />
-		<label>Notes</label><br />
-		<TMPL_VAR ESCAPE=HTML NAME=notes>
-		</TMPL_IF>
-		
-		<hr/>
-		<TMPL_UNLESS NAME=meta_default_data><a href="<TMPL_VAR NAME=base_url>?view=hardware&amp;view_type=default&amp;act=delete&amp;act_on=hardware&amp;act_id=<TMPL_VAR ESCAPE=URL NAME=id>"><img style="float:left;" src="<TMPL_VAR NAME=web_root>/graphics/buttons/delete.gif" width="48" height="21" alt="Delete" /></a></TMPL_UNLESS>
-		<a href="<TMPL_VAR NAME=base_url>?view=hardware&amp;view_type=edit&amp;id=<TMPL_VAR ESCAPE=URL NAME=id>"><img style="float:right;" src="<TMPL_VAR NAME=web_root>/graphics/buttons/edit.gif" width="48" height="21" alt="Edit" /></a>
-
-		<p class="updated">Entry last updated by <TMPL_VAR ESCAPE=HTML NAME=meta_update_user> at <TMPL_VAR ESCAPE=HTML NAME=meta_update_time> GMT</p>
-	</td>
-</tr>
-</table>
-
-<TMPL_INCLUDE NAME="footer.ssi">
-
+	<TMPL_INCLUDE NAME="nav-config.ssi">
+	<div id="main">
+		<table class="form">
+			<tr>
+				<th>
+					<button style="float: right; margin-top: -2px" title="View all hardware models" onclick="window.location = '<TMPL_VAR NAME=base_url>?view=hardware&amp;view_type=default'; return false;">View All</button>
+					<button style="float: right; margin-right: 4px; margin-top: -2px" title="Create a new hardware model" onclick="window.location = '<TMPL_VAR NAME=base_url>?view=hardware&amp;view_type=create'; return false;">New Hardware</button>
+					<span class="title">Hardware</span>
+				</th>
+			</tr>
+			<tr>
+				<td>
+					<div>
+						<div class="key">Name</div>
+						<div class="value"><TMPL_VAR ESCAPE=HTML NAME=name></div>
+					</div>
+					<div>
+						<div class="key">Manufacturer</div>
+						<div class="value"><TMPL_VAR ESCAPE=HTML NAME=manufacturer_name><TMPL_UNLESS NAME=manufacturer_meta_default_data> &nbsp; <a class="small" title="View details for this organisation" href="<TMPL_VAR NAME=base_url>?view=org&amp;view_type=single&amp;id=<TMPL_VAR NAME=manufacturer>">Details&hellip;</a></TMPL_UNLESS></div>
+					</div>				
+					<div>
+						<div class="key">Size (U)</div>
+						<div class="value"><TMPL_VAR ESCAPE=HTML NAME=size></div>
+					</div>
+					<div>
+						<div class="key">Image File</div>
+						<div class="value"><TMPL_IF NAME=image><a href="<TMPL_VAR ESCAPE=HTML NAME=image>">View</a><TMPL_ELSE>&nbsp;-</TMPL_IF></div>
+					</div>
+					<div>
+						<div class="key">Support URL</div>
+						<div class="value"><TMPL_IF NAME=support_url><a href="<TMPL_VAR ESCAPE=HTML NAME=support_url>"><TMPL_IF NAME=support_url_short><TMPL_VAR ESCAPE=HTML NAME=support_url_short><TMPL_ELSE><TMPL_VAR ESCAPE=HTML NAME=support_url></TMPL_IF></a><TMPL_ELSE>&nbsp;-</TMPL_IF></div>
+					</div>
+					<div>
+						<div class="key">Specification URL</div>
+						<div class="value"><TMPL_IF NAME=spec_url><a href="<TMPL_VAR ESCAPE=HTML NAME=spec_url>"><TMPL_IF NAME=spec_url_short><TMPL_VAR ESCAPE=HTML NAME=spec_url_short><TMPL_ELSE><TMPL_VAR ESCAPE=HTML NAME=spec_url></TMPL_IF></a><TMPL_ELSE>&nbsp;-</TMPL_IF></div>
+					</div><TMPL_IF NAME=notes>
+					<hr />
+					<div>
+						<div class="key">Notes</div>
+						<div class="value"><TMPL_VAR ESCAPE=HTML NAME=notes></div>
+					</div></TMPL_IF>				
+				</td>
+			</tr>
+			<tr>
+				<td class="footer">		
+					<TMPL_UNLESS NAME=meta_default_data><button style="float: left" title="Delete this hardware model" onclick="window.location = '<TMPL_VAR NAME=base_url>?view=hardware&amp;view_type=default&amp;act=delete&amp;act_on=hardware&amp;act_id=<TMPL_VAR ESCAPE=URL NAME=id>'; return false;">Delete</button></TMPL_UNLESS>
+					<button style="float: right" title="Edit this hardware" onclick="window.location = '<TMPL_VAR NAME=base_url>?view=hardware&amp;view_type=edit&amp;id=<TMPL_VAR ESCAPE=URL NAME=id>'; return false;">Edit</button>	
+					<span class="updated">Entry last updated by <TMPL_VAR ESCAPE=HTML NAME=meta_update_user> at <TMPL_VAR ESCAPE=HTML NAME=meta_update_time> GMT</span>
+				</td>
+			</tr>
+		</table>
+	</div>
+	<TMPL_INCLUDE NAME="footer.ssi">
 </body>
 </html>
