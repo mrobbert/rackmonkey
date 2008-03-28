@@ -102,7 +102,13 @@ eval
 		{
 			if ($viewType =~ /^default/)
 			{
-				$template->param('hardware' => $backend->hardwareList($orderBy));
+				my $hardware = $backend->hardwareList($orderBy);
+				my $totalHardwareCount = $backend->hardwareCount;
+				my $listedHardwareCount = @$hardware;
+				$template->param('total_hardware_count' => $totalHardwareCount);
+				$template->param('listed_hardware_count' => $listedHardwareCount);
+				$template->param('all_hardware_listed' => ($totalHardwareCount == $listedHardwareCount));
+				$template->param('hardware' => $hardware);
 			}
 			else
 			{

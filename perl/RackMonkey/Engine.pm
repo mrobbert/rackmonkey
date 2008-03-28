@@ -876,6 +876,18 @@ sub hardware
 	return $hardware;
 }
 
+sub hardwareCount
+{
+	my $self = shift;
+	my $sth = $self->dbh->prepare(qq!
+		SELECT count(*) 
+		FROM hardware
+		WHERE meta_default_data = 0
+	!);
+	$sth->execute();
+	return ($sth->fetchrow_array)[0];
+}
+
 sub hardwareList
 {
 	my $self = shift;
