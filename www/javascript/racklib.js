@@ -83,3 +83,23 @@ function showHideFilters()
 	}
 	return true;
 } 
+
+// Search for a device by name
+function nameSearch()
+{
+	var search = document.getElementById('name_search').value; 
+	if (search.length > 0) 
+	{ 
+		window.location = '?view=device&amp;view_type=default&amp;name_search='+search; 
+		return false;
+	} 
+}
+
+function pressedEnter(e)
+{
+	var e = e || window.event;
+	var kCode = e.which || e.keyCode;
+	if (kCode == 13)
+		return true;
+	return false;
+}
