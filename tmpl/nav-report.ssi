@@ -11,6 +11,7 @@
 				<li><a class="unselected" href="<TMPL_VAR NAME=base_url>?view=config">Config</a></li>
 				<li><a class="selected" href="<TMPL_VAR NAME=base_url>?view=report">Reports</a></li>
 				<li><a class="unselected" href="<TMPL_VAR NAME=base_url>?view=help">Help</a></li>
+				<li><input onkeypress="if (pressedEnter(event)) nameSearch();" style="margin-left: 12px; margin-right: 0px; font-size: 0.8em;" type="text" name="name_search" id="name_search" size="12" value="<TMPL_VAR ESCAPE=HTML NAME=name_search>"/> <button onclick="nameSearch();">Find</button></li>
 			</ul>
 		</div>
 	</div>

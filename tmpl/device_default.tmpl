@@ -9,7 +9,7 @@
 ##############################################################################
 -->
 <head>
-	<title>Devices | RackMonkey</title>
+	<title><TMPL_UNLESS NAME=name_search>Devices<TMPL_ELSE>Device Search</TMPL_UNLESS> | RackMonkey</title>
 	<style type="text/css" media="screen">
 	@import "<TMPL_VAR NAME=web_root>/styles/main.css";
 	@import "<TMPL_VAR NAME=web_root>/styles/tabs.css";
@@ -23,18 +23,20 @@
 	<div id="main">
 		<form id="device_options" method="get" action="<TMPL_VAR NAME=base_url>">
 			<p>
-				<label style="float: left">View Type</label>
+				<TMPL_UNLESS NAME=name_search><label style="float: left">View Type</label>
 				<select style="margin-right: 20px; margin-left: 4px" name="view_type" onchange="submit()">
 					<option selected="selected" value="default">Default</option>
 					<option value="default_asset">Asset</option>
 					<option value="default_extended">Extended</option>
 					<option value="default_unracked">Unracked</option>
-				</select>
+				</select></TMPL_UNLESS>
 				<button style="margin-right: 20px" title="Create a new device" onclick="window.location = '<TMPL_VAR NAME=base_url>?view=device&amp;view_type=create'; return false;">New Device</button>
-				<button style="width: 8em; margin-right: 20px" id="filterbutton" onclick="showHideFilters(); return false;">Show Filters</button>
+				<TMPL_IF NAME=name_search><button style="margin-left: -20px" title="View all devices" onclick="window.location = '<TMPL_VAR NAME=base_url>?view=device&amp;view_type=default'; return false;">View All</button></TMPL_IF>
+				<TMPL_UNLESS NAME=name_search><button style="width: 8em; margin-right: 20px" id="filterbutton" onclick="showHideFilters(); return false;">Show Filters</button></TMPL_UNLESS>
 				<TMPL_IF NAME=rack2xls_url><button title="Export the device table to an Excel spreadsheet" onclick="window.location = '<TMPL_VAR NAME=rack2xls_url>?view=device&amp;view_type=xls_export&amp;id=<TMPL_VAR ESCAPE=URL NAME=id>'; return false;">Export XLS</button></TMPL_IF>
 				<TMPL_IF NAME=rack2pdf_url><button title="Export the device table to a PDF document" onclick="window.location = '<TMPL_VAR NAME=rack2pdf_url>?view=device&amp;view_type=pdf_export&amp;id=<TMPL_VAR ESCAPE=URL NAME=id>'; return false;">Export PDF</button></TMPL_IF>
 			</p>
+			<TMPL_UNLESS NAME=name_search>
 			<p style="clear: both; display: none" id="filters">
 				<label>Customer</label>
 				<select style="margin-right: 10px" name="filter_device_customer" onchange="submit()"><TMPL_LOOP NAME=customerlist>
@@ -52,10 +54,15 @@
 				<select name="filter_device_os" onchange="submit()"><TMPL_LOOP NAME=oslist>
 					<option <TMPL_IF NAME=selected>selected="selected"</TMPL_IF> value="<TMPL_VAR ESCAPE=HTML NAME=id>"><TMPL_VAR ESCAPE=HTML NAME=name></option></TMPL_LOOP>
 				</select>
-				<button style="margin-left: 8px" onclick="window.location = '<TMPL_VAR NAME=base_url>?view=device&amp;view_type=default'; return false;">Reset</button>
-				<input type="hidden" name="view" value="device"/>
-				<input type="hidden" name="order_by" value="<TMPL_VAR ESCAPE=HTML NAME=order_by>" />		
+				<button style="margin-left: 8px" onclick="window.location = '<TMPL_VAR NAME=base_url>?view=device&amp;view_type=default'; return false;">Reset</button>	
 			</p>
+			<TMPL_ELSE>
+			<p>
+				<strong>Device Search</strong><br/>Found <TMPL_VAR ESCAPE=HTML NAME=listed_device_count> devices whose name contains <em><TMPL_VAR ESCAPE=HTML NAME=name_search></em>.
+			</p>
+			</TMPL_UNLESS>
+			<input type="hidden" name="view" value="device"/>
+			<input type="hidden" name="order_by" value="<TMPL_VAR ESCAPE=HTML NAME=order_by>" />
 		</form>
 		<table class="itemtable">
 			<tr>
