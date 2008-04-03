@@ -137,10 +137,10 @@ sub filterBy
 	return \%filters;
 }
 
-sub nameSearch
+sub deviceSearch
 {
 	my $self = shift;
-	return $self->cgi->param('name_search') if ($self->cgi->param('name_search'));
+	return $self->cgi->param('device_search') if ($self->cgi->param('device_search'));
 }
 
 sub showFilters

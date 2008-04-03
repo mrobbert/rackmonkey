@@ -90,7 +90,7 @@ function nameSearch()
 	var search = document.getElementById('name_search').value; 
 	if (search.length > 0) 
 	{ 
-		window.location = '?view=device&view_type=default&name_search='+search; 
+		window.location = '?view=device&view_type=default_search&device_search='+search; 
 		return false;
 	} 
 }

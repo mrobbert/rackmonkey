@@ -1385,7 +1385,7 @@ sub deviceList
 	my $self = shift;
 	my $orderBy = shift || '';
 	my $filters = shift || {};
-	my $nameSearch = shift || '';
+	my $deviceSearch = shift || '';
 	my $filterBy ='';
 	
 	for my $f (keys %$filters)
@@ -1393,8 +1393,7 @@ sub deviceList
 		$filterBy .= " AND $f=".$$filters{"$f"};
 	}
 	
-	$nameSearch = "AND device.name LIKE '%$nameSearch%'" if ($nameSearch);
-	
+	$deviceSearch = "AND ( device.name LIKE '%$deviceSearch%' OR device.serial_no LIKE '%$deviceSearch%' OR device.asset_no LIKE '%$deviceSearch%' )" if ($deviceSearch);
 	$orderBy = 'device.name' unless $orderBy =~ /^[a-z_]+\.[a-z_]+$/;
 
 	# ensure meta_default entries appear last - need a better way to do this
@@ -1444,7 +1443,7 @@ sub deviceList
 			device.domain = domain.id AND
 			device.service = service.id
 			$filterBy
-			$nameSearch
+			$deviceSearch
 		ORDER BY $orderBy
 	!);
 	$sth->execute();
