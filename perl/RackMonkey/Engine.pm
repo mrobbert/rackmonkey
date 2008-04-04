@@ -1569,6 +1569,9 @@ sub _validateDeviceInput # doesn't check much at present
 	# normalise in service value so it can be stored as an integer
 	$$record{'in_service'} = $$record{'in_service'} ? 1 : 0;
 	
+	# If role is 'none' (id=2) then always set in service to false - this is a magic number, should find way to remove this
+	$$record{'in_service'} = 0 if ($$record{'role'} == 2);
+	
 	# check if we have a meta default location if so set rack position to zero, otherwise check we have a valid rack position
 	my $rack = $self->rack($$record{'rack'});
 	if ($$rack{'meta_default_data'})
