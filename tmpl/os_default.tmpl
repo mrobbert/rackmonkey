@@ -1,6 +1,5 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
-
 <!-- 
 ##############################################################################
 # RackMonkey - Know Your Racks - http://www.rackmonkey.org                   #
@@ -9,47 +8,43 @@
 # OS default (table) template                                                #
 ##############################################################################
 -->
-
 <head>
 	<title>Operating Systems | RackMonkey</title>
-	<link rel="stylesheet" type="text/css" title="Monkey Style" href="<TMPL_VAR NAME=web_root>/styles/rackmonkey.css" />
+	<style type="text/css" media="screen">
+	@import "<TMPL_VAR NAME=web_root>/styles/main.css";
+	@import "<TMPL_VAR NAME=web_root>/styles/tabs.css";
+	@import "<TMPL_VAR NAME=web_root>/styles/itemtable.css";
+	</style>
 	<script type="text/javascript" src="<TMPL_VAR NAME=web_root>/javascript/racklib.js"></script>
+	<link rel="icon" href="<TMPL_VAR NAME=web_root>/graphics/favicon.ico" />
 </head>
-
 <body>
-
-<TMPL_INCLUDE NAME="nav.ssi">
-
-<p>
-		<a href="<TMPL_VAR NAME=base_url>?view=os&amp;view_type=create"><img src="<TMPL_VAR NAME=web_root>/graphics/buttons/new.gif" width="47" height="21" alt="New" /></a>
-</p>
-
-<TMPL_IF NAME=operatingsystems>
-<table>
-	<tr>
-		<th>
-			<a class="sort" title="Sort by name" href="<TMPL_VAR NAME=base_url>?view=os&amp;order_by=os.name">OS</a>
-		</th>
-		<th>
-			<a class="sort" title="Sort by manufacturer" href="<TMPL_VAR NAME=base_url>?view=os&amp;order_by=org.name">Manufacturer</a>
-		</th>		
-	</tr>
-	<TMPL_LOOP NAME=operatingsystems>
-	<TMPL_IF NAME="__odd__">
-	<tr class="row_silver">
-	<TMPL_ELSE>
-	<tr class="row_white">
-	</TMPL_IF>
-		<td><a title="View details for this operating system" href="<TMPL_VAR NAME=base_url>?view=os&amp;view_type=single&amp;id=<TMPL_VAR ESCAPE=URL NAME=id>"><TMPL_VAR ESCAPE=HTML NAME=name></a></td>
-		<td><TMPL_VAR ESCAPE=HTML NAME=manufacturer_name></td>
-	</tr></TMPL_LOOP>
-</table>
-<TMPL_ELSE>
-<p>
-	There are no operating system entries in RackMonkey, use the 'New' button to add some.
-</p>
-</TMPL_IF>
-
-<TMPL_INCLUDE NAME="footer.ssi">
+	<TMPL_INCLUDE NAME="nav-config.ssi">
+	<div id="main">
+		<form method="get" action="<TMPL_VAR NAME=base_url>">
+			<p>
+				<button style="margin-right: 20px" title="Create a new operating system" onclick="window.location = '<TMPL_VAR NAME=base_url>?view=os&amp;view_type=create'; return false;">New OS</button>
+			</p>
+		</form>
+		<table class="itemtable">
+			<tr>
+				<th><a title="Sort by name" href="<TMPL_VAR NAME=base_url>?view=os&amp;order_by=os.name">OS</a></th>
+				<th><a class="sort" title="Sort by manufacturer" href="<TMPL_VAR NAME=base_url>?view=os&amp;order_by=org.name">Manufacturer</a></th>		
+			</tr>
+			<TMPL_IF NAME=operatingsystems>
+			<TMPL_LOOP NAME=operatingsystems>
+			<TMPL_IF NAME="__odd__"><tr class="odd"><TMPL_ELSE><tr class="even"></TMPL_IF>
+				<td><a title="View details for this operating system" href="<TMPL_VAR NAME=base_url>?view=os&amp;view_type=single&amp;id=<TMPL_VAR ESCAPE=URL NAME=id>"><TMPL_VAR ESCAPE=HTML NAME=name></a></td>
+				<td><TMPL_VAR ESCAPE=HTML NAME=manufacturer_name></td>
+			</tr>
+			</TMPL_LOOP></TMPL_IF>
+			<tr>
+				<td colspan="3" class="footer">
+					Showing <TMPL_VAR ESCAPE=HTML NAME=listed_os_count> of <TMPL_VAR ESCAPE=HTML NAME=total_os_count> operating systems
+				</td>
+			</tr>
+		</table>
+	</div>
+	<TMPL_INCLUDE NAME="footer.ssi">
 </body>
 </html>
