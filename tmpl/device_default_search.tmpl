@@ -62,10 +62,11 @@
 			<tr>
 				<td colspan="10" class="footer">
 					<TMPL_UNLESS NAME=all_devices_listed><div style="float: right"><a href="<TMPL_VAR NAME=base_url>?view=device&amp;view_type=default">Show all</a></div></TMPL_UNLESS>
-					Showing <TMPL_VAR ESCAPE=HTML NAME=listed_device_count> of <TMPL_VAR ESCAPE=HTML NAME=total_device_count> devices
+					Showing <TMPL_VAR ESCAPE=HTML NAME=listed_device_count> of <TMPL_VAR ESCAPE=HTML NAME=total_device_count> all devices
 				</td>
 			</tr>
 		</table>
+		<p><em>Device name, serial number and asset number are searched.</em></p>
 	</div>
 	<TMPL_INCLUDE NAME="footer.ssi">
 </body>
