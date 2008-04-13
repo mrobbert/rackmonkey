@@ -25,7 +25,7 @@ use warnings;
 
 use 5.006_001;
 
-#use Data::Dumper; # for debug only - comment out from release versions
+use Data::Dumper; # for debug only - comment out from release versions
 
 use DBI;
 use HTML::Template;
@@ -103,7 +103,7 @@ eval
 			if ($viewType =~ /^default/)
 			{
 				my $hardware = $backend->hardwareList($orderBy);
-				my $totalHardwareCount = $backend->hardwareCount;
+				my $totalHardwareCount = $backend->itemCount('hardware');
 				my $listedHardwareCount = @$hardware;
 				$template->param('total_hardware_count' => $totalHardwareCount);
 				$template->param('listed_hardware_count' => $listedHardwareCount);
@@ -133,7 +133,13 @@ eval
 		{
 			if ($viewType =~ /^default/)
 			{
-				$template->param('operatingsystems' => $backend->osList($orderBy));
+				my $os = $backend->osList($orderBy);
+				my $totalOSCount = $backend->itemCount('os');
+				my $listedOSCount = @$os;
+				$template->param('total_os_count' => $totalOSCount);
+				$template->param('listed_os_count' => $listedOSCount);
+				$template->param('all_os_listed' => ($totalOSCount == $listedOSCount));
+				$template->param('operatingsystems' => $os);
 			}
 			else
 			{
@@ -157,6 +163,12 @@ eval
 			if ($viewType =~ /^default/)
 			{
 				my $orgs = $backend->orgList($orderBy);
+				
+				my $totalOrgCount = $backend->itemCount('org');
+				my $listedOrgCount = @$orgs;
+				$template->param('total_org_count' => $totalOrgCount);
+				$template->param('listed_org_count' => $listedOrgCount);
+				$template->param('all_org_listed' => ($totalOrgCount == $listedOrgCount));
 				
 				for my $o (@$orgs)
 				{
@@ -182,7 +194,7 @@ eval
 				{
 					$$d{'descript_short'} = shortStr($$d{'descript'});
 				}
-				my $totalDomainCount = $backend->domainCount;
+				my $totalDomainCount = $backend->itemCount('domain');
 				my $listedDomainCount = @$domains;
 				$template->param('total_domain_count' => $totalDomainCount);
 				$template->param('listed_domain_count' => $listedDomainCount);
@@ -236,7 +248,7 @@ eval
 				$template->param('device_search' => $deviceSearch);
 				$template->param('devices' => $devices);
 
-				my $totalDeviceCount = $backend->deviceCount;
+				my $totalDeviceCount = $backend->itemCount('device');
 				my $listedDeviceCount = @$devices;
 				$template->param('total_device_count' => $totalDeviceCount);
 				$template->param('listed_device_count' => $listedDeviceCount);
@@ -310,6 +322,12 @@ eval
 			{
 				my $roles = $backend->roleList($orderBy);
 				
+				my $totalRoleCount = $backend->itemCount('role');
+				my $listedRoleCount = @$roles;
+				$template->param('total_role_count' => $totalRoleCount);
+				$template->param('listed_role_count' => $listedRoleCount);
+				$template->param('all_role_listed' => ($totalRoleCount == $listedRoleCount));
+				
 				for my $r (@$roles)
 				{
 					$$r{'descript_short'} = shortStr($$r{'descript'});
@@ -326,6 +344,13 @@ eval
 			if ($viewType =~ /^default/)
 			{
 				my $serviceLevels = $backend->serviceList($orderBy);
+				
+				my $totalServiceCount = $backend->itemCount('service');
+				my $listedServiceCount = @$serviceLevels;
+				$template->param('total_service_count' => $totalServiceCount);
+				$template->param('listed_service_count' => $listedServiceCount);
+				$template->param('all_service_listed' => ($totalServiceCount == $listedServiceCount));
+				
 				for my $s (@$serviceLevels)
 				{
 					$$s{'descript_short'} = shortStr($$s{'descript'});
@@ -342,7 +367,7 @@ eval
 			if ($viewType =~ /^default/)
 			{
 					my $buildings = $backend->buildingList($orderBy);
-					my $totalBuildingCount = $backend->buildingCount;
+					my $totalBuildingCount = $backend->itemCount('building');
 					my $listedBuildingCount = @$buildings;
 					$template->param('total_building_count' => $totalBuildingCount);
 					$template->param('listed_building_count' => $listedBuildingCount);
@@ -369,7 +394,7 @@ eval
 						$$a{'descript_short'} = shortStr($$a{'descript'});
 						$$a{'notes_short'} = shortStr($$a{'notes'});
 					}
-					my $totalAppCount = $backend->appCount;
+					my $totalAppCount = $backend->itemCount('app');
 					my $listedAppCount = @$apps;
 					$template->param('total_app_count' => $totalAppCount);
 					$template->param('listed_app_count' => $listedAppCount);
@@ -396,7 +421,7 @@ eval
 			if ($viewType =~ /^default/)
 			{
 					my $rooms = $backend->roomList($orderBy);
-					my $totalRoomCount = $backend->roomCount;
+					my $totalRoomCount = $backend->itemCount('room');
 					my $listedRoomCount = @$rooms;
 					$template->param('total_room_count' => $totalRoomCount);
 					$template->param('listed_room_count' => $listedRoomCount);
@@ -435,7 +460,7 @@ eval
 			if ($viewType =~ /^default/)
 			{
 				my $racks = $backend->rackList($orderBy);
-				my $totalRackCount = $backend->rackCount;
+				my $totalRackCount = $backend->itemCount('rack');
 				my $listedRackCount = @$racks;
 				$template->param('total_rack_count' => $totalRackCount);
 				$template->param('listed_rack_count' => $listedRackCount);

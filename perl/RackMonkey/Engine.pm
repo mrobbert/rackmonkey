@@ -66,14 +66,14 @@ sub listBasic
 		ORDER BY 
 			name
 	!);
-	$sth->execute();
+	$sth->execute;
 	return $sth->fetchall_arrayref({});
 }
 
 sub listBasicMeta
 {
 	my ($self, $table) = @_;
-	die "RMERR: Not a valid table." unless $table =~ /^[a-z_]+$/;
+	die "RMERR: Not a valid table" unless $table =~ /^[a-z_]+$/;
 	my $sth = $self->dbh->prepare_cached(qq!
 		SELECT 
 			id, 
@@ -84,8 +84,21 @@ sub listBasicMeta
 			meta_default_data DESC,
 			name
 	!);
-	$sth->execute();
+	$sth->execute;
 	return $sth->fetchall_arrayref({});
+}
+
+sub itemCount
+{
+	my ($self, $table) = @_;
+	die "RMERR: Not a valid table" unless $table =~ /^[a-z_]+$/;	
+	my $sth = $self->dbh->prepare(qq!
+		SELECT count(*) 
+		FROM $table  
+		WHERE meta_default_data = 0
+	!);
+	$sth->execute;
+	return ($sth->fetchrow_array)[0];
 }
 
 sub performAct
@@ -119,8 +132,7 @@ sub performAct
 }
 
 # _lastInsertId is a private method
-# works with Postgres and SQLite, but will need altering for other DB,
-# need to check how it deals with multiple requests from different processes
+# works with Postgres, SQLite and MySQL but may need altering for other DB,
 sub _lastInsertId 
 {
     my ($self, $table) = @_;
@@ -147,18 +159,6 @@ sub building
 	return $building;
 }
 
-sub buildingCount
-{
-	my $self = shift;
-	my $sth = $self->dbh->prepare(qq!
-		SELECT count(*) 
-		FROM building 
-		WHERE meta_default_data = 0
-	!);
-	$sth->execute();
-	return ($sth->fetchrow_array)[0];
-}
-
 sub buildingList
 {
 	my $self = shift;
@@ -171,7 +171,7 @@ sub buildingList
 		WHERE meta_default_data = 0
 		ORDER BY $orderBy
 	!);
-	$sth->execute();
+	$sth->execute;
 	return $sth->fetchall_arrayref({});
 }
 
@@ -243,18 +243,6 @@ sub room
 	return $room;
 }
 
-sub roomCount
-{
-	my $self = shift;
-	my $sth = $self->dbh->prepare(qq!
-		SELECT count(*) 
-		FROM room
-		WHERE meta_default_data = 0
-	!);
-	$sth->execute();
-	return ($sth->fetchrow_array)[0];
-}
-
 sub roomList
 {
 	my $self = shift;
@@ -272,7 +260,7 @@ sub roomList
 			room.building = building.id
 		ORDER BY $orderBy
 	!);
-	$sth->execute();
+	$sth->execute;
 	return $sth->fetchall_arrayref({});
 }
 
@@ -317,7 +305,7 @@ sub roomListBasic
 			building.name,
 			room.name
 	!);
-	$sth->execute();
+	$sth->execute;
 	return $sth->fetchall_arrayref({});
 }
 
@@ -446,7 +434,7 @@ sub rowList
 			room.building = building.id
 		ORDER BY $orderBy
 	!);
-	$sth->execute();
+	$sth->execute;
 	return $sth->fetchall_arrayref({});
 }
 
@@ -584,18 +572,6 @@ sub rack
 	return $rack;
 }
 
-sub rackCount
-{
-	my $self = shift;
-	my $sth = $self->dbh->prepare(qq!
-		SELECT count(*) 
-		FROM rack
-		WHERE meta_default_data = 0
-	!);
-	$sth->execute();
-	return ($sth->fetchrow_array)[0];
-}
-
 sub rackList
 {
 	my $self = shift;
@@ -626,7 +602,7 @@ sub rackList
 		GROUP BY rack.id, rack.name, rack.row, rack.row_pos, rack.hidden_rack, rack.size, rack.notes, rack.meta_default_data, rack.meta_update_time, rack.meta_update_user, row.name, row.hidden_row, room.id, room.name, building.name, building.name_short
 		ORDER BY $orderBy
 	!);
-	$sth->execute();
+	$sth->execute;
 	return $sth->fetchall_arrayref({});
 }
 
@@ -684,7 +660,7 @@ sub rackListBasic
 			row.room_pos,
 			rack.row_pos
 	!);
-	$sth->execute();
+	$sth->execute;
 	return $sth->fetchall_arrayref({});
 }
 
@@ -848,7 +824,7 @@ sub totalSizeRack
 		SELECT COALESCE(SUM(size), 0) 
 		FROM rack; 
 	!);
-	$sth->execute();
+	$sth->execute;
 	return ($sth->fetchrow_array)[0];	
 }
 
@@ -876,18 +852,6 @@ sub hardware
 	return $hardware;
 }
 
-sub hardwareCount
-{
-	my $self = shift;
-	my $sth = $self->dbh->prepare(qq!
-		SELECT count(*) 
-		FROM hardware
-		WHERE meta_default_data = 0
-	!);
-	$sth->execute();
-	return ($sth->fetchrow_array)[0];
-}
-
 sub hardwareList
 {
 	my $self = shift;
@@ -906,7 +870,7 @@ sub hardwareList
 			hardware.manufacturer = org.id
 		ORDER BY $orderBy
 	!);
-	$sth->execute();
+	$sth->execute;
 	return $sth->fetchall_arrayref({});
 }
 
@@ -927,7 +891,7 @@ sub hardwareListBasic
 			manufacturer_name,
 			hardware.name
 	!);
-	$sth->execute();
+	$sth->execute;
 	return $sth->fetchall_arrayref({});
 }
 
@@ -1003,7 +967,7 @@ sub hardwareDeviceCount
 		ORDER BY num_devices DESC
 		LIMIT 10;
 	!);
-	$sth->execute();
+	$sth->execute;
 	return $sth->fetchall_arrayref({});
 }
 
@@ -1048,7 +1012,7 @@ sub osList
 			os.manufacturer = org.id
 		ORDER BY $orderBy
 	!);
-	$sth->execute();
+	$sth->execute;
 	return $sth->fetchall_arrayref({});
 }
 
@@ -1113,7 +1077,7 @@ sub osDeviceCount
 		ORDER BY num_devices DESC
 		LIMIT 10;
 	!);
-	$sth->execute();
+	$sth->execute;
 	return $sth->fetchall_arrayref({});
 }
 
@@ -1147,7 +1111,7 @@ sub orgList
 		WHERE org.meta_default_data = 0
 		ORDER BY $orderBy
 	!);
-	$sth->execute();
+	$sth->execute;
 	return $sth->fetchall_arrayref({});
 }
 
@@ -1219,7 +1183,7 @@ sub customerDeviceCount
 		ORDER BY num_devices DESC
 		LIMIT 10;
 	!);
-	$sth->execute();
+	$sth->execute;
 	return $sth->fetchall_arrayref({});
 }
 
@@ -1241,18 +1205,6 @@ sub domain
 	return $domain;
 }
 
-sub domainCount
-{
-	my $self = shift;
-	my $sth = $self->dbh->prepare(qq!
-		SELECT count(*) 
-		FROM domain
-		WHERE meta_default_data = 0
-	!);
-	$sth->execute();
-	return ($sth->fetchrow_array)[0];
-}
-
 sub domainList
 {
 	my $self = shift;
@@ -1265,7 +1217,7 @@ sub domainList
 		WHERE domain.meta_default_data = 0
 		ORDER BY $orderBy
 	!);
-	$sth->execute();
+	$sth->execute;
 	return $sth->fetchall_arrayref({});
 }
 
@@ -1368,18 +1320,6 @@ sub device
 	return $device;
 }
 
-sub deviceCount
-{
-	my $self = shift;
-	my $sth = $self->dbh->prepare(qq!
-		SELECT count(*) 
-		FROM device
-		WHERE meta_default_data = 0
-	!);
-	$sth->execute();
-	return ($sth->fetchrow_array)[0];
-}
-
 sub deviceList
 {
 	my $self = shift;
@@ -1446,7 +1386,7 @@ sub deviceList
 			$deviceSearch
 		ORDER BY $orderBy
 	!);
-	$sth->execute();
+	$sth->execute;
 	return $sth->fetchall_arrayref({});
 }
 
@@ -1521,7 +1461,7 @@ sub deviceListUnracked # consider merging this with existing device method
 		ORDER BY device.meta_default_data, device.name
 	!);
 	
-	$sth->execute();
+	$sth->execute;
 	return $sth->fetchall_arrayref({});
 }
 
@@ -1620,7 +1560,7 @@ sub totalSizeDevice
 		FROM hardware, device 
 		WHERE device.hardware = hardware.id;
 	!);
-	$sth->execute();
+	$sth->execute;
 	return ($sth->fetchrow_array)[0];	
 }
 
@@ -1654,7 +1594,7 @@ sub roleList
 		WHERE role.meta_default_data = 0
 		ORDER BY $orderBy
 	!);
-	$sth->execute();
+	$sth->execute;
 	return $sth->fetchall_arrayref({});
 }
 
@@ -1715,7 +1655,7 @@ sub roleDeviceCount
 		ORDER BY num_devices DESC
 		LIMIT 10;
 	!);
-	$sth->execute();
+	$sth->execute;
 	return $sth->fetchall_arrayref({});
 }
 
@@ -1748,7 +1688,7 @@ sub serviceList
 		WHERE service.meta_default_data = 0
 		ORDER BY $orderBy
 	!);
-	$sth->execute();
+	$sth->execute;
 	return $sth->fetchall_arrayref({});
 }
 
@@ -1815,18 +1755,6 @@ sub app
 	return $app;
 }
 
-sub appCount
-{
-	my $self = shift;
-	my $sth = $self->dbh->prepare(qq!
-		SELECT count(*) 
-		FROM app 
-		WHERE meta_default_data = 0
-	!);
-	$sth->execute();
-	return ($sth->fetchrow_array)[0];
-}
-
 sub appList
 {
 	my $self = shift;
@@ -1839,7 +1767,7 @@ sub appList
 		WHERE meta_default_data = 0
 		ORDER BY $orderBy
 	!);
-	$sth->execute();
+	$sth->execute;
 	return $sth->fetchall_arrayref({});
 }
 
@@ -1937,6 +1865,9 @@ sub _validateAppUpdate
 RackMonkey::Engine - A DBI-based backend for Rackmonkey
 
 =head1 SYNOPSIS
+
+This documentation is very out-of-date. It will be updated before the
+release of v1.2.4.
 
  use RackMonkey::Engine;
 
