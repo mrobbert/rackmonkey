@@ -1,5 +1,6 @@
 <!-- footer include: Version 1.2.%BUILD% -->
 	<div id="footer">
-		Created by <a href="http://www.rackmonkey.org">RackMonkey</a> v<TMPL_VAR NAME=version> at <TMPL_VAR NAME=date>.
+		Created by <a href="http://www.rackmonkey.org">RackMonkey</a> v<TMPL_VAR NAME=version> at <TMPL_VAR NAME=date>. 
+		You are logged in as <TMPL_VAR ESCAPE=HTML NAME=logged_in_user>. 
 	</div>
 	<!-- end of footer include -->

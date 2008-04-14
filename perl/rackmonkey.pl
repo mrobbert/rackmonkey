@@ -62,11 +62,13 @@ eval
 	
 	my $orderBy = $cgi->orderBy;
 	my $priorOrderBy = $cgi->priorOrderBy;
+	
+	my $loggedInUser = $ENV{'REMOTE_USER'} || $ENV{'REMOTE_ADDR'};
+	
 
 	if ($act) # perform act, and return status: 303 (See Other) to redirect to a view
 	{
-		my $updateUser = $ENV{'REMOTE_USER'} || $ENV{'REMOTE_ADDR'};
-		die "RMERR: You are logged in as 'guest'. Guest users can't update RackMonkey. Error occured " if (lc($updateUser) eq 'guest');
+		die "RMERR: You are logged in as 'guest'. Guest users can't update RackMonkey. Error occured " if (lc($loggedInUser) eq 'guest');
 		
 		my $actData = $cgi->vars;
 		
@@ -87,7 +89,7 @@ eval
 			delete $$actData{'act_id'};
 		}
 		
-		my $lastCreatedId = $backend->performAct($cgi->actOn, $act, $updateUser, scalar($cgi->vars));
+		my $lastCreatedId = $backend->performAct($cgi->actOn, $act, $loggedInUser, scalar($cgi->vars));
 		$id = $lastCreatedId if (!$id); # use lastCreatedId if there isn't an id
 		
 		my $redirectUrl = "$fullURL?view=$view&view_type=$viewType";
@@ -543,12 +545,13 @@ eval
 		
 	$dbh->disconnect;
 	
-	# Get version and date for page footer
+	# Get version, date and user for page footer
 	$template->param('version' => "$VERSION");
 	my ($minute, $hour, $day, $month, $year) = (gmtime)[1, 2, 3, 4, 5];
 	my $currentDate = sprintf("%04d-%02d-%02d %02d:%02d GMT", $year+1900, $month+1, $day, $hour, $minute);
-	$template->param('date' => "$currentDate");
-
+	$template->param('date' => $currentDate);
+	$template->param('logged_in_user' => $loggedInUser);
+	
 	# Support overriding the next view of the template
 	$template->param('return_view' => $cgi->returnView);
 	$template->param('return_view_type' => $cgi->returnViewType);
