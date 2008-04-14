@@ -95,6 +95,22 @@ function nameSearch()
 	} 
 }
 
+// Jumpt to a given rack
+function rackSelect()
+{
+	var rackSelect = document.getElementById('rack');
+	var rackId = rackSelect.options[rackSelect.selectedIndex].value;
+	if (rackId != 0)
+	{ 
+		window.location = '?view=rack&view_type=physical&id='+rackId; 
+		return false;
+	}
+	else
+	{
+		window.location = '?view=rack&view_type=default'; 
+	}
+}
+
 function pressedEnter(e)
 {
 	var e = e || window.event;
