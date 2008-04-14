@@ -1566,6 +1566,13 @@ sub _validateDeviceInput # doesn't check much at present
 		}
 	}
 	
+	# Check if OS is meta_default, if so, set version to empty string
+	my $os = $self->os($$record{'os'});
+	if ($$os{'meta_default_data'})
+	{
+		$$record{'os_version'} = '';
+	}
+	
 	return ($$record{'name'}, $$record{'domain'}, $$record{'rack'}, $$record{'rack_pos'}, $$record{'hardware'}, $$record{'serial_no'}, $$record{'asset_no'}, $$record{'purchased'}, $$record{'os'}, $$record{'os_version'}, $$record{'customer'}, $$record{'service'}, $$record{'role'}, $$record{'in_service'}, $$record{'notes'});
 }
 
