@@ -81,15 +81,14 @@
 							<div class="key">Service Level</div>
 							<div class="value"><TMPL_VAR ESCAPE=HTML NAME=service_name><TMPL_UNLESS NAME=service_meta_default_data> &nbsp; <a class="small" title="View details for this service level" href="<TMPL_VAR NAME=base_url>?view=service&amp;view_type=single&amp;id=<TMPL_VAR ESCAPE=URL NAME=service>">Details&hellip;</a></TMPL_UNLESS></div>
 						</div>
-					</div>
+					</div><TMPL_IF NAME=apps>
 					<hr style="clear: both;" />
 					<div>
 						<div class="key">Apps</div>
-						<div class="value"><TMPL_IF NAME=apps><TMPL_LOOP NAME=apps>
+						<div class="value"><TMPL_LOOP NAME=apps>
 							<a title="View details for this app" href="<TMPL_VAR NAME=base_url>?view=app&amp;view_type=single&amp;id=<TMPL_VAR ESCAPE=URL NAME=app_id>"><TMPL_VAR ESCAPE=HTML NAME=app_name></a><TMPL_UNLESS __last__>,</TMPL_UNLESS></TMPL_LOOP>
-							<TMPL_ELSE>No apps are hosted on this device.</TMPL_IF>
 						</div>
-					</div><TMPL_IF NAME=notes>
+					</div></TMPL_IF><TMPL_IF NAME=notes>
 					<hr />
 					<div>
 						<div class="key">Notes</div>
