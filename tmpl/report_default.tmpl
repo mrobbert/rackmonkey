@@ -25,7 +25,7 @@
 		<ul>
 			<li>There are <TMPL_VAR ESCAPE=HTML NAME=rack_count> <a href="<TMPL_VAR NAME=base_url>?view=rack">racks</a> with a total size of <TMPL_VAR NAME=total_rack_space> U</li>
 			<li>There are a total of <TMPL_VAR ESCAPE=HTML NAME=device_count> <a href="<TMPL_VAR NAME=base_url>?view=device">devices</a></li>
-			<li>There are <TMPL_VAR ESCAPE=HTML NAME=unracked_device_count> <a href="<TMPL_VAR NAME=base_url>?view=device&amp;view_type=unracked">unracked</a> devices</li>
+			<li>There are <TMPL_VAR ESCAPE=HTML NAME=unracked_device_count> <a href="<TMPL_VAR NAME=base_url>?view=device&amp;view_type=default_unracked">unracked</a> devices</li>
 			<li>There are <TMPL_VAR ESCAPE=HTML NAME=racked_device_count> racked devices using a total of <TMPL_VAR NAME=used_rack_space> U</li>
 			<li>There is <TMPL_VAR ESCAPE=HTML NAME=free_rack_space> U of free space in the racks</li>
 		</ul>
