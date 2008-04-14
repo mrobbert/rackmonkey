@@ -10,7 +10,7 @@
 .rack_physical_num
 {
 	font-family: verdana, sans-serif;
-	font-size: 0.6em;
+	font-size: 9px;
 	text-align: right;
 	color: white;
 	border-color: black;
@@ -20,8 +20,8 @@
 
 .rack_physical_dev
 {
-	font-family: verdana, sans-serif;
-	font-size: 0.6em;
+	font-family: verdana, sans-serif;	
+	font-size: 9px;
 	background-color: #DDD;
 	width: 220px;
 	padding: 1px 3px;	
@@ -30,7 +30,7 @@
 .rack_physical_selected
 {
 	font-family: Verdana, sans-serif;
-	font-size: 0.6em;
+	font-size: 9px;
 	background-color: #F90;
 	width: 220px;
 	padding: 1px 3px;	
@@ -39,7 +39,7 @@
 .rack_physical_empty
 {
 	font-family: Verdana, sans-serif;
-	font-size: 0.6em;
+	font-size: 9px;
 	background-color: white;
 	width: 220px;
 	padding: 1px 3px;	
