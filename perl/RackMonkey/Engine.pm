@@ -1325,15 +1325,16 @@ sub deviceList
 	my $self = shift;
 	my $orderBy = shift || '';
 	my $filters = shift || {};
-	my $deviceSearch = shift || '';
 	my $filterBy ='';
+	my $deviceSearch = shift || '';
+	$deviceSearch = lc($deviceSearch); # searching is case insensitive
 	
 	for my $f (keys %$filters)
 	{
 		$filterBy .= " AND $f=".$$filters{"$f"};
 	}
 	
-	$deviceSearch = "AND ( device.name LIKE '%$deviceSearch%' OR device.serial_no LIKE '%$deviceSearch%' OR device.asset_no LIKE '%$deviceSearch%' )" if ($deviceSearch);
+	$deviceSearch = "AND ( lower(device.name) LIKE '%$deviceSearch%' OR lower(device.serial_no) LIKE '%$deviceSearch%' OR lower(device.asset_no) LIKE '%$deviceSearch%' )" if ($deviceSearch);
 	$orderBy = 'device.name' unless $orderBy =~ /^[a-z_]+\.[a-z_]+$/;
 
 	# ensure meta_default entries appear last - need a better way to do this
