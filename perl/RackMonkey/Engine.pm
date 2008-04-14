@@ -1465,6 +1465,23 @@ sub deviceListUnracked # consider merging this with existing device method
 	return $sth->fetchall_arrayref({});
 }
 
+sub deviceCountUnracked
+{
+	my $self = shift;
+	my $sth = $self->dbh->prepare(qq!
+		SELECT count(*) 
+		FROM device, rack, row, room, building  
+		WHERE building.meta_default_data <> 0 AND
+		device.rack = rack.id AND 
+		rack.row = row.id AND
+		row.room = room.id AND
+		room.building = building.id AND
+		device.meta_default_data = 0
+	!);
+	$sth->execute;
+	return ($sth->fetchrow_array)[0];
+}
+
 sub updateDevice
 {
 	my ($self, $updateTime, $updateUser, $record) = @_;
@@ -1556,9 +1573,15 @@ sub totalSizeDevice
 {
 	my $self = shift;
 	my $sth = $self->dbh->prepare(qq!
-		SELECT COALESCE(SUM(size), 0) 
-		FROM hardware, device 
-		WHERE device.hardware = hardware.id;
+		SELECT COALESCE(SUM(hardware.size), 0) 
+		FROM hardware, device, rack, row, room, building
+		WHERE device.hardware = hardware.id AND
+		building.meta_default_data = 0 AND
+		device.rack = rack.id AND 
+		rack.row = row.id AND
+		row.room = room.id AND
+		room.building = building.id AND
+		device.meta_default_data = 0
 	!);
 	$sth->execute;
 	return ($sth->fetchrow_array)[0];	

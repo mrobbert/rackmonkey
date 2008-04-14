@@ -509,7 +509,11 @@ eval
 		}
 		elsif ($view eq 'report')
 		{
-			$template->param('device_count' => $backend->itemCount('device'));
+			my $totalDevices = $backend->itemCount('device');
+			my $unrackedDevices = $backend->deviceCountUnracked;
+			$template->param('device_count' => $totalDevices);
+			$template->param('unracked_device_count' => $unrackedDevices);
+			$template->param('racked_device_count' => $totalDevices - $unrackedDevices);
 			$template->param('rack_count' => $backend->itemCount('rack'));
 			my $rackSize = $backend->totalSizeRack;
 			my $deviceSize = $backend->totalSizeDevice;
