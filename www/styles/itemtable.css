@@ -10,6 +10,7 @@
 table.itemtable
 {
 	border-collapse: collapse;
+	margin-right: 12px;
 }
 
 table.itemtable td
