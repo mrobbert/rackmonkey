@@ -21,38 +21,34 @@
 <body>
 	<TMPL_INCLUDE NAME="nav-help.ssi">
 	<div id="main">
-		<p><strong>This whole page is outdated and needs updating for v1.2.4.</strong></p>
-		<h3>General Help</h3>
 		<p>
-			Welcome to RackMonkey help. RackMonkey's documentation is still a work in progress, check <a href="http://www.rackmonkey.org">rackmonkey.org</a> for updates.
+			<strong>Help Overview</strong> |
+			<a href="<TMPL_VAR NAME=base_url>?view=help&amp;view_type=getting_started">Getting Started</a> |
+			<a href="<TMPL_VAR NAME=base_url>?view=help&amp;view_type=getting_support">Getting Support</a> |
+			<a href="http://www.rackmonkey.org/faq">Online FAQ</a> |
+			<a href="http://www.rackmonkey.org/docs/1.2.4">Online Docs</a>
+		</p>
+		<h3>Introduction</h3>
+		<p>
+			Welcome to RackMonkey help. RackMonkey's documentation is still a work in progress, check the <a href="http://www.rackmonkey.org/docs/1.2.4">online docs</a> for updates.
 			You may find it helpful to open the help section in a separate tab or window so you can read it while working on RackMonkey.
+			In the RackMonkey help parts of the interface are referred to like this: [Config > Organisations], this means select the Config tab at the top of the screen then choose organisations.
 		</p>
-		<p>
-			In the RackMonkey help parts of the interface are referred to like this: [Config > Organisations], this means select config (from the menu) then choose organisations.
-		</p>
-		<p><strong>Tip:</strong> Hovering your mouse over many items provides additional information.</p>
+		<p><strong>Tip:</strong> Hovering your mouse over many items (such as buttons) provides additional information.</p>
+		
+		<h3>RackMonkey Organisation</h3>
+		<ul>
+			<li>Servers, routers, switches etc. are <strong>devices</strong> and are contained within <strong>racks</strong>.</li>
+			<li>A <strong>device</strong> has a <strong>hardware</strong> model and an <strong>operating system</strong>.</li>
+			<li>A <strong>device</strong> has a <strong>domain</strong>, a <strong>role</strong>, a <strong>customer</strong> and a <strong>service level</strong>.</li>
+			<li><strong>Racks</strong> are organised in <strong>rows</strong> which reside in <strong>rooms</strong> within <strong>buildings</strong>.</li>
+		</ul>
+		
 		<h3>Getting Started</h3>
 		<p>
-			Before you can start adding your devices (servers, routers etc.) to RackMonkey you should add some basic information. You can always edit or add to this information later.
+			If you have just installed RackMonkey you should read the <a href="<TMPL_VAR NAME=base_url>?view=help&amp;view_type=getting_started">Getting Started Guide</a>. Otherwise, read on to get an introduction to using RackMonkey.
 		</p>
-		<ul>
-			<li>Add at least one rack. To do this, add a building, a room, then a rack. [Locations]</li>
-			<li>Add your own organisation and mark it as a customer so you can assign it to devices used internally. [Config > Organisations]</li>
-		</ul>
-		<p>You may also like to do some of the following to save time later:</p>
-		<ul>
-			<li>If you have a few key customers, add them as organisations (being sure to mark them as customers). [Config > Organisations]</li>
-			<li>Add some domains (e.g. flux.org.uk) [Config > Domains]</li>
-			<li>Add some hardware models (e.g. Dell 2950) [Config > Hardware]</li>
-			<li>If you have differing support levels for different devices, add them [Config > Service Levels]</li>
-			<li>Add extra roles if the included roles aren't suitable [Config > Roles]</li>
-			<li>Add extra operating systems if OS you use aren't already on the list [Config > Operating Systems]</li>
-		</ul>
-		<p>You are now ready to add devices:</p>
-		<ul>
-			<li>You can add them from the devices view [Devices]</li>
-			<li>You can add from rack layout view. This is more convenient if you're adding devices a rack at a time or want to find a free spot for a device. [Locations]</li>
-		</ul>
+				
 		<h3>Finding and Viewing a Device</h3>
 		<p>
 			If you select [Devices] from the top nav bar you will get a complete list of all the devices you have recorded in RackMonkey. You can sort any of the columns by clicking on its name and use the filter dropdowns to restrict which devices are displayed.
@@ -61,12 +57,6 @@
 		<p>
 			To see a device in its rack, simple click on its location in the rack column. This will take you to the relevant rack view with the device highlighted.
 		</p>
-		<h3>Customising RackMonkey</h3>
-		<ul>
-			<li><strong>Default View:</strong> Edit the value of DEFAULTVIEW in Conf.pm. The starting value is 'rack', but you can set it to any view (try 'device' or 'building').</li>
-			<li><strong>Limits:</strong> RackMonkey sets limits on the size/length of some values. You can amend these by altering the relevant constant in Conf.pm. For example, to set the maximum size of a rack to 50 U, set MAXRACKSIZE to 50.</li>
-		</ul>
-		<p><em>For more information see the userguide.txt file that came with RackMonkey.</em></p>
 	</div>
 	<TMPL_INCLUDE NAME="footer.ssi">
 </body>
