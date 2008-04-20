@@ -1,15 +1,23 @@
 ##############################################################################
 # RackMonkey - Know Your Racks - http://www.rackmonkey.org                   #
 # Version 1.2.%BUILD%                                                        #
-# (C)2004-2007 Will Green (wgreen at users.sourceforge.net)                  #
-# RackMonkey Changes                                                         #
+# (C)2004-2008 Will Green (wgreen at users.sourceforge.net)                  #
+# RackMonkey Change Log                                                      #
 ##############################################################################
 
-v1.2.4 - Not Yet Released
+v1.2.4 - Not yet released
 -------------------------
 * Improved interface
-* Early MySQL 5 support
-* Supports Postgres 7.4
+* Device search
+* Device and Rack copying
+* Filtering of Device view
+* Experimental MySQL 5 support
+* Officially supports Postgres 7.4
+* Support for Safari 3
+* Beginning of much improved Help section
+* Fixed a bug in the calculation of rack space used
+* Now checks for supported DBI version when using Postgres
+* Many other minor changes, see the svn log for further information
 
 v1.2.3 - Released 2007-06-23
 ----------------------------
