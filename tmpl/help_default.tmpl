@@ -23,39 +23,51 @@
 	<div id="main">
 		<p>
 			<strong>Help Overview</strong> |
-			<a href="<TMPL_VAR NAME=base_url>?view=help&amp;view_type=getting_started">Getting Started</a> |
+			<a href="<TMPL_VAR NAME=base_url>?view=help&amp;view_type=first_steps">First Steps</a> |
 			<a href="<TMPL_VAR NAME=base_url>?view=help&amp;view_type=getting_support">Getting Support</a> |
 			<a href="http://www.rackmonkey.org/faq">Online FAQ</a> |
 			<a href="http://www.rackmonkey.org/docs/1.2.4">Online Docs</a>
 		</p>
-		<h3>Introduction</h3>
+		<h2>Introduction</h2>
 		<p>
-			Welcome to RackMonkey help. RackMonkey's documentation is still a work in progress, check the <a href="http://www.rackmonkey.org/docs/1.2.4">online docs</a> for updates.
+			Welcome to RackMonkey help.
 			You may find it helpful to open the help section in a separate tab or window so you can read it while working on RackMonkey.
-			In the RackMonkey help parts of the interface are referred to like this: [Config > Organisations], this means select the Config tab at the top of the screen then choose organisations.
+			RackMonkey's documentation is still a work in progress, check the <a href="http://www.rackmonkey.org/docs/1.2.4">online docs</a> for updates.
+		</p>
+		<p>
+		In the RackMonkey help parts of the interface are referred to like this: <strong>[Config > Organisations]</strong>, this means select the Config tab at the top of the screen then choose organisations. The help includes screenshots, letters in brackets, such as (E), refer to a label on a screenshot.
 		</p>
 		<p><strong>Tip:</strong> Hovering your mouse over many items (such as buttons) provides additional information.</p>
-		
 		<h3>RackMonkey Organisation</h3>
 		<ul>
 			<li>Servers, routers, switches etc. are <strong>devices</strong> and are contained within <strong>racks</strong>.</li>
 			<li>A <strong>device</strong> has a <strong>hardware</strong> model and an <strong>operating system</strong>.</li>
 			<li>A <strong>device</strong> has a <strong>domain</strong>, a <strong>role</strong>, a <strong>customer</strong> and a <strong>service level</strong>.</li>
+			<li><strong>Apps</strong> run on <strong>devices</strong>.</li>
 			<li><strong>Racks</strong> are organised in <strong>rows</strong> which reside in <strong>rooms</strong> within <strong>buildings</strong>.</li>
 		</ul>
 		
-		<h3>Getting Started</h3>
+		<h2>Getting Started</h2>
 		<p>
-			If you have just installed RackMonkey you should read the <a href="<TMPL_VAR NAME=base_url>?view=help&amp;view_type=getting_started">Getting Started Guide</a>. Otherwise, read on to get an introduction to using RackMonkey.
+			If you have just installed RackMonkey you should read <a href="<TMPL_VAR NAME=base_url>?view=help&amp;view_type=first_steps">First Steps</a>. Otherwise, read on to get an introduction to using RackMonkey.
 		</p>
-				
-		<h3>Finding and Viewing a Device</h3>
+
+		<h3>Working with Racks</h3>
 		<p>
-			If you select [Devices] from the top nav bar you will get a complete list of all the devices you have recorded in RackMonkey. You can sort any of the columns by clicking on its name and use the filter dropdowns to restrict which devices are displayed.
+		You can get to the Racks view by clicking on the <strong>[Racks]</strong> tab in the navigation bar at the top of the screen. This view gives you an overview of your racks, which room they reside in and the number of devices they contain. If you click on the link in the <strong>Layout</strong> column (A in screenshot) you will see the <strong>physical</strong> layout of the rack (see below for details of this view). If you want to see multiple racks side-by-side, select the check boxes in the Racks view (B) and click the <strong>Device Layout</strong> button the bottom of the Racks view (C). You can also view the physical view of a rack at by using the dropdown (D) and create a new rack with the <strong>New Rack</strong> button (E).
 		</p>
-		<p>You can customise the device list view by selecting alternative views from the 'View Type' dropdown at the top left of the view. This allows you to see device asset information, extended information or just those devices currently not racked.</p>
+		<img src="<TMPL_VAR NAME=web_root>/graphics/help/racks_view.png" width="730" height="241" alt="" class="screenshot" />
 		<p>
-			To see a device in its rack, simple click on its location in the rack column. This will take you to the relevant rack view with the device highlighted.
+		In the <strong>physical</strong> rack view you can see the contents of your racks. You can jump to physical view at any time using the dropdown (D in the above screenshot). This view shows the name (F in the screenshot, below) and hardware type of the device (in the screenshot example, Sun Fire T2000: you can hover over the hardware name to see the manufacturer).
+		If you want to view more details on a device, simple click on its name (F). To edit a device, click on the <strong>Ed</strong> link (G).
+		You can add a new device to a rack at a given position by clicking on the <strong>+</strong> symbol (H). This is a fast way to populate a new rack with devices. To move a device to a different position, select the <strong>Ed</strong> link and update the <strong>Location</strong>.
+		</p>
+		<img src="<TMPL_VAR NAME=web_root>/graphics/help/racks_physical_view.png" width="255" height="317" alt="" class="screenshot" />
+		
+						
+		<h3>Working with Devices</h3>
+		<p>
+		
 		</p>
 	</div>
 	<TMPL_INCLUDE NAME="footer.ssi">
