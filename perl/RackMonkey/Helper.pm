@@ -108,7 +108,7 @@ sub checkSupportedDBI
 	my $DBIVersion = eval("\$DBI::VERSION");
 	unless ($DBIVersion > 1.43)
 	{
-		die "RMERR: You need to use DBI version v1.43 or higher. You are using DBI v$DBIVersion. Please consult the installation instructions.\nError occured";
+		die "RMERR: You need to use DBI version v1.43 or higher with Postgres. You are using DBI v$DBIVersion. Please consult the installation instructions.\nError occured";
 	}
 }
 
@@ -129,6 +129,12 @@ sub checkSupportedDriver
 	if (($currentDriver eq 'DBD::SQLite') && ($driverVersion < 1.09))
 	{
 		die "RMERR: RackMonkey requires DBD::SQLite v1.09 or higher. You are using DBD::SQLite v$driverVersion. Please consult the installation instructions.\nError occured";
+	}
+	
+	# Postgres only works properly with DBI v1.43 or higher (due to last insert ID issues)
+	if ($currentDriver eq 'DBD::Postgres')
+	{
+		checkSupportedDBI;
 	}
 }
 

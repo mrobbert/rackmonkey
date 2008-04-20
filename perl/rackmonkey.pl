@@ -48,7 +48,6 @@ eval
 {
 	my $dbh = DBI->connect(DBDCONNECT, DBUSER, DBPASS, {AutoCommit => 1, RaiseError => 1, PrintError => 0, ShowErrorStatement => 1}); 
 	checkSupportedDBI;
-	checkSupportedDriver;
 	my $backend = new RackMonkey::Engine($dbh);
 
 	my $fullURL = $cgi->url;
