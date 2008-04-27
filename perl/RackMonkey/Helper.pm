@@ -10,6 +10,7 @@ use strict;
 use warnings;
 
 use Time::Local;
+use Data::Dumper;
 
 use RackMonkey::Conf;
 
@@ -19,13 +20,16 @@ our $AUTHOR = 'Will Green (wgreen at users.sourceforge.net)';
 use base 'Exporter';
 our @EXPORT = qw/shortStr shortURL httpFixer calculateAge checkName checkNotes checkDate checkSupportedDBI checkSupportedDriver/;
 
+our $conf;
+$conf = $RackMonkey::Conf::conf;
+
 sub shortStr
 {
 	my $str = shift;
 	return unless defined $str;
-	if (length($str) > SHORTTEXTLEN)
+	if (length($str) > $$conf{'shorttextlen'})
 	{
-		return substr($str, 0, SHORTTEXTLEN).'...';
+		return substr($str, 0, $$conf{'shorttextlen'}).'...';
 	}
 	return '';
 }
@@ -34,9 +38,9 @@ sub shortURL
 {
 	my $url = shift;
 	return unless defined $url;
-	if (length($url) > SHORTURLLEN)
+	if (length($url) > $$conf{'shorturllen'})
 	{
-		return substr($url, 0, SHORTURLLEN).'...';
+		return substr($url, 0, $$conf{'shorturllen'}).'...';
 	}
 	return '';
 }
@@ -76,9 +80,9 @@ sub checkName
 	{
 		die "RMERR: You must specify a valid name. Names may not begin with white space.\nError occured";
 	}
-	unless (length($name) <= MAXSTRING)
+	unless (length($name) <= $$conf{'maxstring'})
 	{
-		die "RMERR: Names cannot exceed ".MAXSTRING." characters.\nError occured";
+		die "RMERR: Names cannot exceed ".$$conf{'maxstring'}." characters.\nError occured";
 	}
 }
 
@@ -86,9 +90,9 @@ sub checkNotes
 {
 	my $notes = shift;
 	return unless defined $notes;
-	unless (length($notes) <= MAXNOTE)
+	unless (length($notes) <= $$conf{'maxnote'})
 	{
-		die "RMERR: Notes cannot exceed ".MAXNOTE." characters.\nError occured";
+		die "RMERR: Notes cannot exceed ".$$conf{'maxnote'}." characters.\nError occured";
 	}
 }
 
@@ -115,7 +119,7 @@ sub checkSupportedDBI
 sub checkSupportedDriver
 {
 	# Get driver version number
-	my ($currentDriver) = DBDCONNECT =~ /dbi:(.*?):/;
+	my ($currentDriver) = $$conf{'dbconnect'} =~ /dbi:(.*?):/;
 	$currentDriver = "DBD::$currentDriver";
 	my $driverVersion = eval("\$${currentDriver}::VERSION");
 	

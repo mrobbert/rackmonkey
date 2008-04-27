@@ -19,6 +19,8 @@ use RackMonkey::Helper;
 our $VERSION = '1.2.%BUILD%';
 our $AUTHOR = 'Will Green (wgreen at users.sourceforge.net)';
 
+our $conf;
+$conf = $RackMonkey::Conf::conf;
 
 ##############################################################################
 # Common Methods                                                             #
@@ -111,7 +113,8 @@ sub performAct
 	die "RMERR: '$act is not a recognised act. This error should not occur, did you manually type this URL?\nError occured" unless $act =~ /^(?:update|delete)$/;
 	
 	# check username for update is valid
-	die "RMERR: User update names must be less than ".MAXSTRING." characters.\nError occured" unless (length($updateUser) <= MAXSTRING);
+
+	die "RMERR: User update names must be less than ".$$conf{'maxstring'}." characters.\nError occured" unless (length($updateUser) <= $$conf{'maxstring'});
 	die "RMERR: You cannot use the username 'install', it's reserved for use by Rackmonkey.\nError occured" if (lc($updateUser) eq 'install');
 	die "RMERR: You cannot use the username 'rackmonkey', it's reserved for use by Rackmonkey.\nError occured" if (lc($updateUser) eq 'rackmonkey');
 	
@@ -797,7 +800,7 @@ sub _validateRackUpdate
 	{
 		die "RMERR: You cannot reduce the rack size to $$record{'size'} U as there is a device at position $highestPos.\nError occured";
 	}
-	die "RMERR_INTERNAL: Rack sizes must be between 1 and ".MAXRACKSIZE." units.\nError occured" unless (($$record{'size'} > 0) && ($$record{'size'} < MAXRACKSIZE));
+	die "RMERR_INTERNAL: Rack sizes must be between 1 and ".$$conf{'maxracksize'}." units.\nError occured" unless (($$record{'size'} > 0) && ($$record{'size'} < $$conf{'maxracksize'}));
 	return ($$record{'name'}, $$record{'row'}, $$record{'row_pos'}, $$record{'hidden_rack'}, $$record{'size'}, $$record{'notes'});
 }
 
@@ -937,13 +940,13 @@ sub _validateHardwareUpdate
 	$$record{'spec_url'} = httpFixer($$record{'spec_url'});
 
 	die "RMERR: You must specify a name for the hardware.\nError occured" unless (length($$record{'name'}) > 1);
-	die "RMERR: Names must be less than ".MAXSTRING." characters.\nError occured" unless (length($$record{'name'}) <= MAXSTRING);
+	die "RMERR: Names must be less than ".$$conf{'maxstring'}." characters.\nError occured" unless (length($$record{'name'}) <= $$conf{'maxstring'});
 	# no validation for $$record{'manufacturer_id'} - foreign key constraints will catch
-	die "RMERR: Size must be between 1 and ".MAXRACKSIZE." units." unless (($$record{'size'} > 0) && ($$record{'size'} <= MAXRACKSIZE));
-	die "RMERR: Image filenames must be between 0 and ".MAXSTRING." characters." unless ((length($$record{'image'}) >= 0) && (length($$record{'image'}) <= MAXSTRING));
-	die "RMERR: Support URLs must be between 0 and ".MAXSTRING." characters." unless ((length($$record{'support_url'}) >= 0) && (length($$record{'support_url'}) <= MAXSTRING));
-	die "RMERR: Specification URLs must be between 0 and ".MAXSTRING." characters." unless ((length($$record{'spec_url'}) >= 0) && (length($$record{'spec_url'}) <= MAXSTRING));
-	die "RMERR: Notes cannot exceed ".MAXNOTE." characters." unless (length($$record{'notes'}) <= MAXNOTE);
+	die "RMERR: Size must be between 1 and ".$$conf{'maxracksixe'}." units." unless (($$record{'size'} > 0) && ($$record{'size'} <= $$conf{'maxracksixe'}));
+	die "RMERR: Image filenames must be between 0 and ".$$conf{'maxstring'}." characters." unless ((length($$record{'image'}) >= 0) && (length($$record{'image'}) <= $$conf{'maxstring'}));
+	die "RMERR: Support URLs must be between 0 and ".$$conf{'maxstring'}." characters." unless ((length($$record{'support_url'}) >= 0) && (length($$record{'support_url'}) <= $$conf{'maxstring'}));
+	die "RMERR: Specification URLs must be between 0 and ".$$conf{'maxstring'}." characters." unless ((length($$record{'spec_url'}) >= 0) && (length($$record{'spec_url'}) <= $$conf{'maxstring'}));
+	die "RMERR: Notes cannot exceed ".$$conf{'maxnote'}." characters." unless (length($$record{'notes'}) <= $$conf{'maxnote'});
 	
 	return ($$record{'name'}, $$record{'manufacturer_id'}, $$record{'size'}, $$record{'image'}, $$record{'support_url'}, $$record{'spec_url'}, $$record{'notes'});
 }
@@ -1053,9 +1056,9 @@ sub _validateOsUpdate
 {
 	my ($self, $record) = @_;
 	die "RMERR: You must specify a name for the operating system.\nError occured" unless (length($$record{'name'}) > 1);
-	die "RMERR: Names must be less than ".MAXSTRING." characters.\nError occured" unless (length($$record{'name'}) <= MAXSTRING);
+	die "RMERR: Names must be less than ".$$conf{'maxstring'}." characters.\nError occured" unless (length($$record{'name'}) <= $$conf{'maxstring'});
 	# no validation for $$record{'manufacturer_id'} - foreign key constraints will catch
-	die "RMERR: Notes cannot exceed '.MAXNOTE.' characters.\nError occured" unless (length($$record{'notes'}) <= MAXNOTE);
+	die "RMERR: Notes cannot exceed '.$$conf{'maxnote'}.' characters.\nError occured" unless (length($$record{'notes'}) <= $$conf{'maxnote'});
 	return ($$record{'name'}, $$record{'manufacturer_id'}, $$record{'notes'});
 }
 
@@ -1155,11 +1158,11 @@ sub _validateOrgUpdate
 	$$record{'home_page'} = httpFixer($$record{'home_page'});
 
 	die "RMERR: You must specify a name for the organisation.\nError occured" unless (length($$record{'name'}) > 1);
-	die "RMERR: Names must be less than ".MAXSTRING." characters.\nError occured" unless (length($$record{'name'}) <= MAXSTRING);
-	die "RMERR: Account numbers must be less than ".MAXSTRING." characters.\nError occured" unless (length($$record{'account_no'}) <= MAXSTRING);
-	die "RMERR: Descriptions cannot exceed ".MAXNOTE." characters.\nError occured" unless (length($$record{'descript'}) <= MAXNOTE);
-	die "RMERR: Home page URLs cannot exceed ".MAXSTRING." characters.\nError occured" unless (length($$record{'home_page'}) <= MAXSTRING);
-	die "RMERR: Notes cannot exceed ".MAXNOTE." characters.\nError occured" unless (length($$record{'notes'}) <= MAXNOTE);
+	die "RMERR: Names must be less than ".$$conf{'maxstring'}." characters.\nError occured" unless (length($$record{'name'}) <= $$conf{'maxstring'});
+	die "RMERR: Account numbers must be less than ".$$conf{'maxstring'}." characters.\nError occured" unless (length($$record{'account_no'}) <= $$conf{'maxstring'});
+	die "RMERR: Descriptions cannot exceed ".$$conf{'maxnote'}." characters.\nError occured" unless (length($$record{'descript'}) <= $$conf{'maxnote'});
+	die "RMERR: Home page URLs cannot exceed ".$$conf{'maxstring'}." characters.\nError occured" unless (length($$record{'home_page'}) <= $$conf{'maxstring'});
+	die "RMERR: Notes cannot exceed ".$$conf{'maxnote'}." characters.\nError occured" unless (length($$record{'notes'}) <= $$conf{'maxnote'});
 	
 	# normalise input for boolean values
 	$$record{'customer'} = $$record{'customer'} ? 1 : 0;
@@ -1258,9 +1261,9 @@ sub _validateDomainUpdate # Should we remove or warn on domains beginning with .
 {
 	my ($self, $record) = @_;
 	die "RMERR: You must specify a name for the domain.\nError occured" unless (length($$record{'name'}) > 1);
-	die "RMERR: Names must be less than ".MAXSTRING." characters.\nError occured" unless (length($$record{'name'}) <= MAXSTRING);
-	die "RMERR: Descriptions cannot exceed ".MAXSTRING." characters.\nError occured" unless (length($$record{'descript'}) <= MAXSTRING);
-	die "RMERR: Notes cannot exceed ".MAXNOTE." characters.\nError occured" unless (length($$record{'notes'}) <= MAXNOTE);
+	die "RMERR: Names must be less than ".$$conf{'maxstring'}." characters.\nError occured" unless (length($$record{'name'}) <= $$conf{'maxstring'});
+	die "RMERR: Descriptions cannot exceed ".$$conf{'maxstring'}." characters.\nError occured" unless (length($$record{'descript'}) <= $$conf{'maxstring'});
+	die "RMERR: Notes cannot exceed ".$$conf{'maxnote'}." characters.\nError occured" unless (length($$record{'notes'}) <= $$conf{'maxnote'});
 	return ($$record{'name'}, $$record{'descript'}, $$record{'notes'});
 }
 
@@ -1666,9 +1669,9 @@ sub _validateRoleUpdate
 {
 	my ($self, $record) = @_;
 	die "RMERR: You must specify a name for the role.\nError occured" unless (length($$record{'name'}) > 1);
-	die "RMERR: Names must be less than ".MAXSTRING." characters.\nError occured" unless (length($$record{'name'}) <= MAXSTRING);
-	die "RMERR: Descriptions cannot exceed ".MAXSTRING." characters.\nError occured" unless (length($$record{'desc'}) <= MAXSTRING);
-	die "RMERR: Notes cannot exceed ".MAXNOTE." characters.\nError occured" unless (length($$record{'notes'}) <= MAXNOTE);
+	die "RMERR: Names must be less than ".$$conf{'maxstring'}." characters.\nError occured" unless (length($$record{'name'}) <= $$conf{'maxstring'});
+	die "RMERR: Descriptions cannot exceed ".$$conf{'maxstring'}." characters.\nError occured" unless (length($$record{'desc'}) <= $$conf{'maxstring'});
+	die "RMERR: Notes cannot exceed ".$$conf{'maxnote'}." characters.\nError occured" unless (length($$record{'notes'}) <= $$conf{'maxnote'});
 	return ($$record{'name'}, $$record{'descript'}, $$record{'notes'});
 }
 
@@ -1760,9 +1763,9 @@ sub _validateServiceUpdate
 {
 	my ($self, $record) = @_;
 	die "RMERR: You must specify a name for the service level.\nError occured" unless (length($$record{'name'}) > 1);
-	die "RMERR: Names must be less than ".MAXSTRING." characters.\nError occured" unless (length($$record{'name'}) <= MAXSTRING);
-	die "RMERR: Descriptions cannot exceed ".MAXSTRING." characters.\nError occured" unless (length($$record{'desc'}) <= MAXSTRING);
-	die "RMERR: Notes cannot exceed ".MAXNOTE." characters.\nError occured" unless (length($$record{'notes'}) <= MAXNOTE);
+	die "RMERR: Names must be less than ".$$conf{'maxstring'}." characters.\nError occured" unless (length($$record{'name'}) <= $$conf{'maxstring'});
+	die "RMERR: Descriptions cannot exceed ".$$conf{'maxstring'}." characters.\nError occured" unless (length($$record{'desc'}) <= $$conf{'maxstring'});
+	die "RMERR: Notes cannot exceed ".$$conf{'maxnote'}." characters.\nError occured" unless (length($$record{'notes'}) <= $$conf{'maxnote'});
 	return ($$record{'name'}, $$record{'descript'}, $$record{'notes'});
 }
 

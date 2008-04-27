@@ -40,13 +40,14 @@ use RackMonkey::Conf;
 our $VERSION = '1.2.%BUILD%';
 our $AUTHOR = 'Will Green (wgreen at users.sourceforge.net)';
 
-our ($template, $cgi);
+our ($template, $cgi, $conf);
 
+$conf = $RackMonkey::Conf::conf;
 $cgi = new RackMonkey::CGI;
 	
 eval 
 {
-	my $dbh = DBI->connect(DBDCONNECT, DBUSER, DBPASS, {AutoCommit => 1, RaiseError => 1, PrintError => 0, ShowErrorStatement => 1}); 
+	my $dbh = DBI->connect($$conf{'dbconnect'}, $$conf{'dbuser'}, $$conf{'dbpass'}, {AutoCommit => 1, RaiseError => 1, PrintError => 0, ShowErrorStatement => 1}); 
 	checkSupportedDBI;
 	my $backend = new RackMonkey::Engine($dbh);
 
@@ -97,7 +98,7 @@ eval
 	}
 	else # display a view
 	{
-		$template = HTML::Template->new(filename => TMPLPATH."/${view}_${viewType}.tmpl", 'die_on_bad_params' => 0, 'global_vars' => 1, 'case_sensitive' => 1, 'loop_context_vars' => 1);
+		$template = HTML::Template->new(filename => $$conf{'tmplpath'}."/${view}_${viewType}.tmpl", 'die_on_bad_params' => 0, 'global_vars' => 1, 'case_sensitive' => 1, 'loop_context_vars' => 1);
 
 		if ($view eq 'hardware')
 		{
@@ -277,7 +278,7 @@ eval
 
 					if (($viewType =~ /^single/) && (lc($$device{'hardware_manufacturer_name'}) =~ /dell/)) # kludgey!
 					{
-						$template->param('dell_query' => DELLQUERY);
+						$template->param('dell_query' => $$conf{'dellquery'});
 
 					}
 
@@ -562,7 +563,7 @@ eval
 
 	# PDF Plugin
 	my $rack2PDFURL = '';
-	if (PLUGIN_PDF)
+	if ($$conf{'plugin_pdf'})
 	{
 		my $rack2PDFURL = $baseURL;
 		$rack2PDFURL =~ s/\/(.*?)\.pl/rack2pdf.pl/;
@@ -571,7 +572,7 @@ eval
 
 	# XLS Plugin
 	my $rack2XLSURL = '';
-	if (PLUGIN_XLS)
+	if ($$conf{'plugin_xls'})
 	{
 		$rack2XLSURL = $baseURL;
 		$rack2XLSURL =~ s/\/(.*?)\.pl/rack2xls.pl/;
@@ -579,7 +580,7 @@ eval
 	}
 
 	$template->param('base_url' => $baseURL);
-	$template->param('web_root' => WWWPATH);
+	$template->param('web_root' => $$conf{'wwwpath'});
 	$template->param('order_by' => $orderBy);
 	
 	print $cgi->header;

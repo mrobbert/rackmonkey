@@ -19,6 +19,9 @@ use RackMonkey::Helper;
 our $VERSION = '1.2.%BUILD%';
 our $AUTHOR = 'Will Green (wgreen at users.sourceforge.net)';
 
+our $conf;
+$conf = $RackMonkey::Conf::conf;
+
 ##############################################################################
 # Common Methods                                                             #
 ##############################################################################
@@ -46,7 +49,7 @@ sub view
 {
 	my $self = shift;
 	my $view = $self->cgi->param('view') || '';
-	$view = DEFAULTVIEW unless $view =~/^[a-z_]+$/;
+	$view = $$conf{'defaultview'} unless $view =~/^[a-z_]+$/;
 	return $view;
 }
 
