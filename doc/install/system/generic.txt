@@ -190,7 +190,7 @@ absolute path and match where you put the files during installtion (see section 
 wwwpath sets the path within web space that your web content resides (that is
 relative to the DOCUMENT_ROOT in Apache), for example:
 
-	wwwpath = /rackmonkey
+	wwwpath = /rackmonkey/www
 
 You now need to configure RackMonkey to connect to your database.
 
