@@ -1,0 +1,35 @@
+##############################################################################
+# RackMonkey - Know Your Racks - http://www.rackmonkey.org                   #
+# Version 1.2.%BUILD%                                                        #
+# (C)2004-2008 Will Green (wgreen at users.sourceforge.net)                  #
+# RackMonkey Configuration                                                   #
+##############################################################################
+
+# Database Connection Settings
+dbconnect = dbi:SQLite:dbname=/home/rackmonkey/rackmonkey.db
+dbuser =
+dbpass =
+
+# Path & URL Constants
+tmplpath = /home/rackmonkey/tmpl
+wwwpath = /rackmonkey
+
+# Plugins
+# Set to 1 to enable links to the relevant experimental plugin.
+#   Make sure you check install instructions before enabling plugins.
+plugin_pdf = 0
+plugin_xls = 0
+
+# Preference Constants
+defaultview = rack		# View loaded when none is specified
+dateformat = %Y-%m-%d	# Format used to display dates (not currently used)
+shorttextlen = 32 		# Shorten long text for table views
+shorturllen = 64			# Shorten long URLs for display
+
+# Validation Constants
+maxnote = 4095			# Max length of note fields
+maxstring = 255			# Max length of simple strings
+maxracksite = 255 		# Max rack size in rack units (U)
+
+# Remote site queries
+dellquery = http://support.euro.dell.com/support/topics/topic.aspx/emea/shared/support/my_systems_info/en/details?c=uk&cs=ukbsdt1&l=en&s=bsd&~ck=ln&lnki=2&ServiceTag=
