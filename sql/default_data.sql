@@ -1,13 +1,14 @@
 ------------------------------------------------------------------------------
 -- RackMonkey - Know Your Racks - http://www.rackmonkey.org                 --
 -- Version 1.2.%BUILD%                                                      --
--- (C)2004-2007 Will Green (wgreen at users.sourceforge.net)                --
+-- (C)2004-2008 Will Green (wgreen at users.sourceforge.net)                --
 -- Default data for RackMonkey database                                     --
 ------------------------------------------------------------------------------
 
 -- install system information
 INSERT INTO rm_meta(id, name, value) VALUES (1, 'system_version', '1.2');
 INSERT INTO rm_meta(id, name, value) VALUES (2, 'system_build', '%BUILD%');
+INSERT INTO rm_meta(id, name, value) VALUES (3, 'schema_version', '2');
 
 -- default buildings
 INSERT INTO building (name, name_short, notes, meta_default_data, meta_update_time, meta_update_user) VALUES ('unknown', 'unknown', 'Default data included with RackMonkey.', 5, '2007-01-01 00:00:00', 'install');

@@ -1,8 +1,8 @@
 ------------------------------------------------------------------------------
 -- RackMonkey - Know Your Racks - http://www.rackmonkey.org                 --
 -- Version 1.2.%BUILD%                                                      --
--- (C)2004-2007 Will Green (wgreen at users.sourceforge.net)                --
--- Database schema for MySQL database                                       --
+-- (C)2004-2008 Will Green (wgreen at users.sourceforge.net)                --
+-- Database schema v2 for MySQL                                             --
 ------------------------------------------------------------------------------
 
 -- Building the device resides in

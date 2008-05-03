@@ -1,7 +1,7 @@
 ------------------------------------------------------------------------------
 -- RackMonkey - Know Your Racks - http://www.rackmonkey.org                 --
 -- Version 1.2.%BUILD%                                                      --
--- (C)2004-2007 Will Green (wgreen at users.sourceforge.net)                --
+-- (C)2004-2008 Will Green (wgreen at users.sourceforge.net)                --
 -- Sample content for RackMonkey database                                   --
 ------------------------------------------------------------------------------
 
@@ -60,6 +60,7 @@ INSERT INTO role (name, descript, notes, meta_update_time, meta_update_user) VAL
 INSERT INTO role (name, descript, notes, meta_update_time, meta_update_user) VALUES('Human Interface', 		'Monitor/Keyboard etc.', 'Sample data included with RackMonkey.', '2007-01-01 00:00:00', 'install');
 INSERT INTO role (name, descript, notes, meta_update_time, meta_update_user) VALUES('KVM', 					'KVM Server', 	'Sample data included with RackMonkey.', '2007-01-01 00:00:00', 'install');
 INSERT INTO role (name, descript, notes, meta_update_time, meta_update_user) VALUES('Monitoring', 			'Systems Monitoring', 'Sample data included with RackMonkey.', '2007-01-01 00:00:00', 'install');
+INSERT INTO role (name, descript, notes, meta_update_time, meta_update_user) VALUES('Patch Panel', 			'Patch Panel', 'Sample data included with RackMonkey.', '2007-01-01 00:00:00', 'install');
 INSERT INTO role (name, descript, notes, meta_update_time, meta_update_user) VALUES('Physical Storage', 	'Storage for Physical Items', 'Sample data included with RackMonkey.', '2007-01-01 00:00:00', 'install');
 INSERT INTO role (name, descript, notes, meta_update_time, meta_update_user) VALUES('Power', 				'Electrical power infrastructure', 'Sample data included with RackMonkey.', '2007-01-01 00:00:00', 'install');
 INSERT INTO role (name, descript, notes, meta_update_time, meta_update_user) VALUES('Router', 				'Network Router', 'Sample data included with RackMonkey.', '2007-01-01 00:00:00', 'install');
