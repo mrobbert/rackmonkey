@@ -188,7 +188,7 @@ absolute path and match where you put the files during installtion (see section 
 	tmplpath = /home/rackmonkey/tmpl
 
 wwwpath sets the path within web space that your web content resides (that is
-relative to the DOCUMENT_ROOT in Apache), for example:
+relative to the DocumentRoot in Apache), for example:
 
 	wwwpath = /rackmonkey/www
 
