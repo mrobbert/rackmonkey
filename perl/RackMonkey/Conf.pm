@@ -33,6 +33,6 @@ my %confHash = map
   s/^\s+//;		# whitespace
   s/\s+$//;		# 	"	"
   m/\s*(.*?)\s*=\s*(.*)\s*/; 
-}
-<CONFIG>;
+} <CONFIG>;
+
 $conf = \%confHash;
