@@ -1,0 +1,86 @@
+You can read the latest version of this document in HTML format at:
+http://www.rackmonkey.org/doc/1.2.4
+
+8. Troubleshooting
+==================
+This section deals with system issues which prevent RackMonkey running or
+using its database. For help with using RackMonkey see userguide.txt.
+
+RackMonkey Won't Run
+--------------------
+If you get an 'Internal Server Error' or the web server displays the text of
+rackmonkey.pl (rather than executing it), check your web server error log.
+
+Common reasons for RackMonkey failing to run are:
+
+* The #! line at the top of rackmonkey.pl can't find env in /usr/bin
+  This is the usual cause of errors of the form: 
+      [error] (2)No such file or directory: exec of rackmonkey.pl failed
+  You can fix this by editing the #! line to point at env or directly at perl.
+
+* Permissions incorrect set for rackmonkey.pl. Usually solved by running:
+      $ chmod 755 rackmonkey.pl
+
+* ExecCGI isn't turned on for the directory in which rackmonkey.pl resides or
+  for files of type .pl (this problem applies to Apache web servers).
+  Edit your Apache configuration to allow CGIs to be run. For more help on
+  using Apache see: http://httpd.apache.org/docs/
+        
+* Missing modules
+  This is usually indicated by an error of the form:
+      Can't locate MODULE.pm in @INC ....
+  Make sure you installed all the required modules (see section 3, above).
+  If the error is for RackMonkey/Conf.pm ensure you've completed 
+  configuration (see section 5, above).
+
+* DOS line endings on files
+  If you have DOS line endings on files it can break the #! line. Try
+  downloading RackMonkey again, or use the dos2unix command.
+
+* Perl version isn't at least 5.61
+  If your perl version isn't new enough you will get an error of the form:
+      Perl v5.6.1 required--this is only v5.004
+  You can download a newer perl from: http://www.perl.com/download.csp 
+
+
+Missing Graphics and Stylesheet
+-------------------------------
+If the RackMonkey script runs, but the graphics and stylesheet are missing,
+you should check the WWWPATH setting in Conf.pm.
+
+Missing Database
+----------------
+If you get an error of the form:
+
+  DBI connect('dbname=/data/rack.db','',...) failed: unable to open
+  database file(1) at dbdimp.c line 94 at /content/rackmonkey.pl line 45 
+
+Check your config to ensure you have the right database path in DBDCONNECT.
+    
+Unable to Edit/Create Entries
+-----------------------------
+If RackMonkey is able to display entries without issue, but when you try to
+create or edit an entry you get a message similar to the following:
+
+    "...unable to open database file(1)..."
+    "...attempt to write a readonly database(1)..." 
+
+You should check the permission on the SQLite database file and the directory
+in which it resides. The web servers needs to be able to write to the file and
+the directory. This error can only occur when using SQLite, as other databases
+engines don't make direct use of files in the same way.
+
+Permission Denied for Relation <table>
+--------------------------------------
+If you're using Postgres and get an error of the form:
+
+    "...permission denied for relation <table>..."
+
+You haven't granted appropriate permissions to the role (a user in Postgres 
+speak) you're using to connect to the database. Try running a command of the
+form in psql:
+
+    GRANT ALL ON <table>,<table>_id_seq to <role>;
+
+Where <role> is the role you're using to connect from RackMonkey, and <table>
+is the relation mentioned in the error message.

@@ -1,0 +1,60 @@
+You can read the latest version of this document in HTML format at:
+http://www.rackmonkey.org/doc/1.2.4
+
+8. Upgrading RackMonkey
+=======================
+RackMonkey v1.2.x can be upgraded to the latest version following the
+instructions below. NB. Upgrading from v1.1 is not supported.
+
+8.1 Upgrading to v1.2.4 from v1.2.x
+===================================
+THIS SECTION NEEDS TO BE REWRITTEN FOR v1.2.4
+
+Upgrading from earlier releases of v1.2 is straightforward: there are no
+database schema changes.
+
+Despite the fact there are no schema changes in this release, you should take
+a backup of the RackMonkey database before proceeding. For SQLite this can
+be achieved by copying the database file, for Postgres use pg_dump.
+
+To perform the actual upgrade, uncompress the new release in a temporary
+location, then follow these steps (you may wish to take backups of any files
+you delete):
+
+* Upgrade Templates: delete all the existing templates and copy the new
+  templates into the existing template directory.
+
+* Upgrade web content: delete all the existing web (www) content and copy the 
+  new content into the existing directory (maintaining the layout).
+
+* Upgrade docs: overwrite the existing docs with the new versions.
+
+* Upgrade code: copy the contents of the perl/RackMonkey directory into your 
+  existing perl/RackMonkey directory (your existing conf will work fine and 
+  won't be over-written). Now copy the new rackmonkey.pl script over the 
+  existing one.
+
+* Update your Config.pm to support Dell serial queries.
+  - Copy the 'use constant DELLQUERY' line from Config.pm-default
+  - Add DELLQUERY to the @EXPORT line, as in Config.pm-default.
+
+* Update your database build value to match the new code by running the
+  following SQL statement on the database:
+
+  UPDATE rm_meta SET VALUE='1.2.3' WHERE name='system_build';
+	
+* If running RackMonkey under mod_perl you must restart or HUP your
+  mod_perl instance. This ensures mod_perl reads the new modules.
+
+The upgrade is now complete. No further reconfiguration is required, your
+updated RackMonkey is ready to use. If you experience any problems with the
+upgrade you should consult the Troubleshooting section (below).
+
+
+8.3 Reverting to an earlier version of v1.2
+===========================================
+* Take a copy of RackMonkey/Conf.pm
+* Download the older version from http://www.rackmonkey.org/download
+* Do a fresh install of the older version following its instructions, but
+  skipping configuration
+* Copy your saved Conf.pm into the perl/RackMonkey directory.
