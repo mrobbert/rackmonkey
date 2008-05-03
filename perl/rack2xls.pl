@@ -6,6 +6,9 @@
 # RackMonkey XLS Spreadsheet Export Script                                   #
 ##############################################################################
 
+# NB. This code hasn't been updated to use new conf format, so doesn't
+#     currently run.
+
 # Portions of this code contributed by Pierre Larsson, (C)2007 Pierre Larsson
 
 # This program is free software; you can redistribute it and/or modify it
