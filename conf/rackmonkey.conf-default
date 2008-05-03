@@ -12,7 +12,7 @@ dbpass =
 
 # Path & URL Constants
 tmplpath = /home/rackmonkey/tmpl
-wwwpath = /rackmonkey
+wwwpath = /rackmonkey/www
 
 # Plugins
 # Set to 1 to enable links to the relevant experimental plugin.
