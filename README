@@ -1,43 +1,27 @@
 ##############################################################################
 # RackMonkey - Know Your Racks - http://www.rackmonkey.org                   #
 # Version 1.2.%BUILD%                                                        #
-# (C)2004-2007 Will Green (wgreen at users.sourceforge.net)                  #
-# README for RackMonkey                                                      #
+# (C)2004-2008 Will Green (wgreen at users.sourceforge.net)                  #
+# README for RackMonkey v1.2.4-preview                                       #
 ##############################################################################
 
 Introduction
 ------------
-Thank you for choosing to try RackMonkey v1.2, I hope you find it useful in
-bringing (and keeping) order in your data centres.
-
-NB. This README has yet to be updated for the v1.2.4 release.
+Thank you for choosing to try RackMonkey v1.2.4 preview, I hope you find it 
+useful in bringing (and keeping) order in your data centres. This is a preview 
+release, and as such has undergone limited testing and is subject to change 
+before final release. Please don't use this release on production systems and 
+make sure you back up your RackMonkey database before using it with this 
+release.
 
 Release Highlights
 ------------------
-* Added support for IE7
-* Sort and filters now work together in device view
-* Improved physical rack view (view full 47U rack at 1280x1024)
-* Querying of Dell server info based on asset tag (serial number)
-* Extended report view
-* Many small bug fixes and visual improvements
-
-For more information on what's new in this release see doc/changes.txt.
-
-Known Issues v1.2.3
--------------------
-* Row management is disabled.
-* App/Device relationship management is disabled.
-* Numbering of racks from the top doesn't work. Please leave conf as:
-    RACKNUMBERINGTOP => 0;
-* When you use 'add' from an edit/create view all your other changes in that
-  view are lost.
-* When you use 'add' from an edit/create view only one depth of history is
-  remembered (so adding a building from a room from a rack doesn't remember
-  the rack view you came from).
-* Tick entities don't appear in IE 6 on Windows.
-* JavaScript for selecting and deselecting racks in default rack view doesn't 
-  work if there is only one item present.
-* Show/hide for device filters is crude and doesn't remember settings.
+* Improved interface
+* Device search
+* Device and Rack copying
+* Filtering of Device view
+* Experimental MySQL 5 support
+* Many other changes, see doc/changes.txt
 
 Security
 --------
@@ -50,7 +34,8 @@ RackMonkey supports SQLite or PostgreSQL (Postgres). SQLite is trivial to
 configure, but lacks some of the features of Postgres. Your choice of database
 will not affect the features available in RackMonkey, so it really comes down 
 to personal preference. If you're not sure I'd recommend choosing SQLite as
-there isn't any configuration to do.
+there isn't any configuration to do. Experimental support for MySQL is 
+included in this preview release, but has yet to be documented.
 
 mod_perl
 --------
@@ -59,7 +44,7 @@ be issues. Use with caution.
 
 Installation or Upgrading
 -------------------------
-Please read the doc/install.txt file.
+Please read the doc/install/install.txt file.
 
 User Documentation
 ------------------
