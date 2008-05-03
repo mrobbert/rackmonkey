@@ -5,8 +5,11 @@
 # RackMonkey Change Log                                                      #
 ##############################################################################
 
-v1.2.4 - Not yet released
--------------------------
+You can read the latest version of this document in HTML format at:
+http://www.rackmonkey.org/doc/1.2.4
+
+v1.2.4 Preview
+--------------
 * Improved interface
 * Device search
 * Device and Rack copying

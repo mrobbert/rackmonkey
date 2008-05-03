@@ -5,8 +5,11 @@
 # RackMonkey Developer Guide                                                 #
 ##############################################################################
 
+You can read the latest version of this document in HTML format at:
+http://www.rackmonkey.org/doc/1.2.4
+
 This document is out-of-date. Please await an updated version which will be
-included in RackMonkey v1.2.4.
+included in the final release of RackMonkey v1.2.4.
 
 Developer Guide to RackMonkey v1.2
 ==================================

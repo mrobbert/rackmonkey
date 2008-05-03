@@ -1,10 +1,17 @@
+##############################################################################
+# RackMonkey - Know Your Racks - http://www.rackmonkey.org                   #
+# Version 1.2.%BUILD%                                                        #
+# (C)2004-2008 Will Green (wgreen at users.sourceforge.net)                  #
+# RackMonkey v1.2.4 Troubleshooting Guide                                    #
+##############################################################################
+
 You can read the latest version of this document in HTML format at:
 http://www.rackmonkey.org/doc/1.2.4
 
-8. Troubleshooting
-==================
-This section deals with system issues which prevent RackMonkey running or
-using its database. For help with using RackMonkey see userguide.txt.
+Troubleshooting
+===============
+This document deals with system issues which prevent RackMonkey running or
+using its database.
 
 RackMonkey Won't Run
 --------------------
@@ -30,8 +37,6 @@ Common reasons for RackMonkey failing to run are:
   This is usually indicated by an error of the form:
       Can't locate MODULE.pm in @INC ....
   Make sure you installed all the required modules (see section 3, above).
-  If the error is for RackMonkey/Conf.pm ensure you've completed 
-  configuration (see section 5, above).
 
 * DOS line endings on files
   If you have DOS line endings on files it can break the #! line. Try
@@ -46,7 +51,7 @@ Common reasons for RackMonkey failing to run are:
 Missing Graphics and Stylesheet
 -------------------------------
 If the RackMonkey script runs, but the graphics and stylesheet are missing,
-you should check the WWWPATH setting in Conf.pm.
+you should check the wwwpath setting in rackmonkey.conf.
 
 Missing Database
 ----------------
