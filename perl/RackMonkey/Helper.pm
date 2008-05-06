@@ -10,7 +10,7 @@ use strict;
 use warnings;
 
 use Time::Local;
-use Data::Dumper;
+#use Data::Dumper;
 
 use RackMonkey::Conf;
 
