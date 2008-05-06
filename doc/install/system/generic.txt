@@ -5,6 +5,13 @@
 # RackMonkey v1.2.4 Generic System Install Guide                             #
 ##############################################################################
 
+WARNING
+=======
+This is a preview release, and as such has undergone limited testing and is
+subject to change before final release. Please don't use this release on
+production systems and make sure you back up any existing RackMonkey databases
+before using them with this release.
+
 Generic System Install Guide  
 ============================
 In future RackMonkey will be available in package form for common operating
@@ -14,9 +21,9 @@ preview release all installations should follow this document.
 NB. If you are upgrading an existing RackMonkey installation, refer back to 
 the install.txt file. This file is intended for new installations only.
 
-Warning: Installation instructions are not yet complete for MySQL. You can 
-find a MySQL schema in the sql directory, but you may wish to wait for the 
-final release of v1.2.4, which will include MySQL instructions.
+NB. Installation instructions are not yet complete for MySQL. You can find a 
+MySQL schema in the sql directory, but you may wish to wait for the final 
+release of v1.2.4, which will include MySQL instructions.
 
 
 1. System Set Up: Generic
