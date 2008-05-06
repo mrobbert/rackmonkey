@@ -41,7 +41,7 @@
 								<select id="role" name="role"><TMPL_LOOP NAME=rolelist>
 									<option <TMPL_IF NAME=selected>selected="selected"</TMPL_IF> value="<TMPL_VAR ESCAPE=HTML NAME=id>"><TMPL_VAR ESCAPE=HTML NAME=name></option></TMPL_LOOP>
 								</select>
-								<input type="checkbox" name="in_service" id="in_service" å<TMPL_IF NAME=in_service>checked="checked"</TMPL_IF> /> <label for="in_service">In Service</label>
+								<input type="checkbox" name="in_service" id="in_service" <TMPL_IF NAME=in_service>checked="checked"</TMPL_IF> /> <label for="in_service">In Service</label>
 							</div>
 							<div>
 								<label for="purchased">Purchased (YYYY-MM-DD)</label><br />
@@ -73,7 +73,7 @@
 							</div>
 						</div>
 						<hr style="clear: both"/>
-						<div style="clear: both;">
+						<div>
 							<label for="notes">Notes</label><br />
 							<textarea id="notes" name="notes" cols="55" rows="4"><TMPL_VAR ESCAPE=HTML NAME=notes></textarea>
 						</div>
