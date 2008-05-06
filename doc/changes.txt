@@ -8,8 +8,8 @@
 You can read the latest version of this document in HTML format at:
 http://www.rackmonkey.org/doc/1.2.4
 
-v1.2.4 Preview
---------------
+v1.2.4 Preview - Released 2008-05-06
+------------------------------------
 * Improved interface
 * Device search
 * Device and Rack copying
@@ -22,7 +22,7 @@ v1.2.4 Preview
 * Now checks for supported DBI version when using Postgres
 * Many other minor changes, see the svn log for further information
 
-v1.2.3 - Released 2007-06-23
+v1.2.3 - Released 2007-07-25
 ----------------------------
 * First beta release of v1.2
 * Made rack physical view more compact and usable (47U rack fits in 1280x1024)
