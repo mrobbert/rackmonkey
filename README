@@ -5,16 +5,22 @@
 # README for RackMonkey v1.2.4-preview                                       #
 ##############################################################################
 
+You can read the latest version of this document in HTML format at:
+http://www.rackmonkey.org/doc/1.2.4
+
+WARNING
+=======
+This is a preview release, and as such has undergone limited testing and is
+subject to change before final release. Please don't use this release on
+production systems and make sure you back up any existing RackMonkey databases
+before using them with this release.
+
 Introduction
 ------------
 Thank you for choosing to try RackMonkey v1.2.4 preview, I hope you find it 
-useful in bringing (and keeping) order in your data centres. This is a preview 
-release, and as such has undergone limited testing and is subject to change 
-before final release. Please don't use this release on production systems and 
-make sure you back up your RackMonkey database before using it with this 
-release.
+useful in bringing (and keeping) order in your data centres.
 
-The final release of v1.2.4 is expected before 2008-05-26.
+The final release of v1.2.4 is expected before the end of May 2008.
 
 Release Highlights
 ------------------
