@@ -42,7 +42,8 @@ Tarball Version
 ---------------
 Visit http://www.rackmonkey.org to download a tarball of RackMonkey. 
 
-RackMonkey releases from v1.2.4 are supplied as gzipped tars. The v1.2.4 preview release can be extracted with: 
+RackMonkey releases from v1.2.4 are supplied as gzipped tars.
+The v1.2.4 preview release can be extracted with: 
 
  $ gunzip -c rackmonkey_1.2.4-preview.tar.gz | tar xvf -
 

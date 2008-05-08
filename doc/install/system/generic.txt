@@ -120,11 +120,18 @@ to reflect this in section 3 (below).
 
 3. Configuring the Web Server
 =============================
-RackMonkey includes an Apache configuration snippet that allows you to enable the right settings for http://<yourserver>/rackmonkey. If you are happy to serve RackMonkey from this location then you can simply include conf/httpd-rackmonkey.conf in your Apache configuration. For other http servers you may need to consult your server documentation on running CGI applications. 
+RackMonkey includes an Apache configuration snippet that allows you to enable
+the right settings for http://<yourserver>/rackmonkey. If you are happy to
+serve RackMonkey from this location then you can simply include 
+conf/httpd-rackmonkey.conf in your Apache configuration. For other web 
+servers you may need to consult your server documentation on running CGI 
+applications. 
 
 Linux
 -----
-On most Linux distros you can configure Apache by copying conf/httpd-rackmonkey.conf into /etc/apache2/conf.d and getting Apache to reread its configuration. 
+On most Linux distros you can configure Apache by copying
+conf/httpd-rackmonkey.conf into /etc/apache2/conf.d and getting Apache to 
+reread its configuration. 
 
 On Debian and Ubuntu:
 
@@ -141,7 +148,8 @@ Open a terminal and become root with:
 
 	$ sudo bash
 
-Copy conf/httpd-rackmonkey.conf into /private/etc/apache2/other/ and reload apache configuration with:
+Copy conf/httpd-rackmonkey.conf into /private/etc/apache2/other/ and reload
+apache configuration with:
 
 	# apachectl graceful
 
@@ -179,18 +187,27 @@ If you're having difficulty locating Apache configuration information you may fi
 
 Configuration Overview
 ----------------------
-This release of RackMonkey (v1.2.4) uses a different configuration format from past releases. Configuration is now stored in a text file, which is read from /etc/rackmonkey.conf by default. If you're happy with this location, simply copy conf/rackmonkey.conf-default to /etc/rackmonkey.conf and proceed to the configuration editing section (below).
+This release of RackMonkey (v1.2.4) uses a different configuration format from
+past releases. Configuration is now stored in a text file, which is read from 
+/etc/rackmonkey.conf by default. If you're happy with this location, simply 
+copy conf/rackmonkey.conf-default to /etc/rackmonkey.conf and proceed to the 
+configuration editing section (below).
 
 Changing Configuration Path
 ---------------------------
-If you want to place the configuration in another location you need to tell RackMonkey where to find it using an environment variable. To do this for Apache, edit the SetEnv RACKMONKEY_CONF line in httpd-rackmonkey.conf to point at your chosen path.
+If you want to place the configuration in another location you need to tell 
+RackMonkey where to find it using an environment variable. To do this for 
+Apache, edit the SetEnv RACKMONKEY_CONF line in httpd-rackmonkey.conf (which 
+you installed above) to point at your chosen path.
 
 Editing Configuration
 ---------------------
-Before you can run RackMonkey you need to edit the configuration file to match your directory and database locations.
+Before you can run RackMonkey you need to edit the configuration file to match 
+your directory and database locations.
 
 tmplpath sets the filesystem path to your template files, it should be an
-absolute path and match where you put the files during installtion (see section 2, above), something like:
+absolute path and match where you put the files during installation (see 
+section 2, above), something like:
 
 	tmplpath = /home/rackmonkey/tmpl
 
@@ -299,8 +316,9 @@ To install the sample data run the appropriate command for your database:
 You can now start the app by pointing your browser at the location of the
 rackmonkey.pl script. You should be presented with a screen showing an empty
 table of racks. If everything works correctly you probably want to start
-reading userguide.txt. If you're having trouble getting RackMonkey to run,
-read doc/install/troubleshooting.txt.
+reading the first steps instructions. Click on the [Help] tab, then choose 
+"First Steps". If you're having trouble getting RackMonkey to run (for example 
+you get an Internal Server Error), read doc/install/troubleshooting.txt.
 
 You may want to install the optional plugins, for further information see
 doc/install/plugins.txt.
