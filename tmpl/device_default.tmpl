@@ -59,7 +59,7 @@
 		</form>
 		<table class="itemtable">
 			<tr>
-				<th><a title="Sort by name" href="<TMPL_VAR NAME=base_url>?view=device&amp;order_by=device.name&amp;<TMPL_VAR NAME=filter_string>">Device</a></th>
+				<th><a title="Sort by name" href="<TMPL_VAR NAME=base_url>?view=device&amp;order_by=device.name&amp;<TMPL_VAR NAME=filter_string>">Device</a> <TMPL_UNLESS NAME=hide_domain><a class="small" title="Hide domain" href="<TMPL_VAR NAME=base_url>?view=device&amp;order_by=device.name&amp;<TMPL_VAR NAME=filter_string>&amp;hide_domain=1">[Dom]</a><TMPL_ELSE><a class="small" title="Hide domain" href="<TMPL_VAR NAME=base_url>?view=device&amp;order_by=device.name&amp;<TMPL_VAR NAME=filter_string>">[Dom]</a></TMPL_UNLESS></th>
 				<th><a title="Sort by rack" href="<TMPL_VAR NAME=base_url>?view=device&amp;order_by=rack.name&amp;<TMPL_VAR NAME=filter_string>">Rack</a></th>
 				<th><a title="Sort by room" href="<TMPL_VAR NAME=base_url>?view=device&amp;order_by=room.name&amp;<TMPL_VAR NAME=filter_string>">Room</a></th>
 				<th><a title="Sort by role" href="<TMPL_VAR NAME=base_url>?view=device&amp;order_by=role.name&amp;<TMPL_VAR NAME=filter_string>">Role</a></th>
@@ -69,7 +69,7 @@
 			</tr>
 			<TMPL_IF NAME=devices><TMPL_LOOP NAME=devices>
 			<TMPL_IF NAME="__odd__"><tr class="odd"><TMPL_ELSE><tr class="even"></TMPL_IF>
-				<td><a title="View details for this device" href="<TMPL_VAR NAME=base_url>?view=device&amp;view_type=single&amp;id=<TMPL_VAR ESCAPE=URL NAME=id>"><TMPL_VAR ESCAPE=HTML NAME=name><TMPL_UNLESS NAME=domain_meta_default_data>.<TMPL_VAR ESCAPE=HTML NAME=domain_name></TMPL_UNLESS></a></td>
+				<td><a title="View details for this device" href="<TMPL_VAR NAME=base_url>?view=device&amp;view_type=single&amp;id=<TMPL_VAR ESCAPE=URL NAME=id>"><TMPL_VAR ESCAPE=HTML NAME=name><TMPL_UNLESS NAME=hide_domain><TMPL_UNLESS NAME=domain_meta_default_data>.<TMPL_VAR ESCAPE=HTML NAME=domain_name></TMPL_UNLESS></TMPL_UNLESS></a></td>
 				<td><TMPL_UNLESS NAME=building_meta_default_data><a title="View device in rack" href="<TMPL_VAR NAME=base_url>?view=rack&amp;view_type=physical&amp;id=<TMPL_VAR ESCAPE=URL NAME=rack>&amp;device_id=<TMPL_VAR ESCAPE=URL NAME=id>"><TMPL_ELSE><a title="View unracked devices" href="<TMPL_VAR NAME=base_url>?view=device&amp;view_type=default_unracked"></TMPL_UNLESS><TMPL_VAR ESCAPE=HTML NAME=rack_name><TMPL_UNLESS NAME=building_meta_default_data> [<TMPL_VAR ESCAPE=HTML NAME=rack_pos>]</TMPL_UNLESS></a></td>
 				<td><TMPL_UNLESS NAME=building_meta_default_data><TMPL_VAR ESCAPE=HTML NAME=room_name> in <TMPL_IF NAME=building_name_short><TMPL_VAR ESCAPE=HTML NAME=building_name_short><TMPL_ELSE><TMPL_VAR ESCAPE=HTML NAME=building_name></TMPL_IF><TMPL_ELSE>N/A</TMPL_UNLESS></td>
 				<td><TMPL_VAR ESCAPE=HTML NAME=role_name></td>

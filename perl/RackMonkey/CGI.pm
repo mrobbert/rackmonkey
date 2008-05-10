@@ -66,6 +66,12 @@ sub url
 	return $self->cgi->url;	
 }
 
+sub hideDomain
+{
+	my $self = shift;
+	return $self->cgi->param('hide_domain');	
+}
+
 sub baseUrl
 {
 	my $self = shift;

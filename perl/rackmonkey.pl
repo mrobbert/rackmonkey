@@ -556,6 +556,7 @@ eval
 	$template->param('return_view' => $cgi->returnView);
 	$template->param('return_view_type' => $cgi->returnViewType);
 	$template->param('return_view_id' => $cgi->returnViewId);
+	$template->param('hide_domain' => $cgi->hideDomain);
 	
 	# support hiding and showing of filters 
 	$template->param('show_filters' => $cgi->showFilters);

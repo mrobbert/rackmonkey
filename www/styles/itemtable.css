@@ -50,6 +50,13 @@ table.itemtable th a
 	color: white;
 }
 
+table.itemtable th a.small
+{
+	font-size: x-small;
+	color: white;
+	font-weight: normal;
+}
+
 table.itemtable td.footer
 {
 	text-align: left;
