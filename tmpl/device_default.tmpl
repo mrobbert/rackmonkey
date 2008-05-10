@@ -59,7 +59,10 @@
 		</form>
 		<table class="itemtable">
 			<tr>
-				<th><a title="Sort by name" href="<TMPL_VAR NAME=base_url>?view=device&amp;order_by=device.name&amp;<TMPL_VAR NAME=filter_string>">Device</a> <TMPL_UNLESS NAME=hide_domain><a class="small" title="Hide domain" href="<TMPL_VAR NAME=base_url>?view=device&amp;order_by=device.name&amp;<TMPL_VAR NAME=filter_string>&amp;hide_domain=1">[Dom]</a><TMPL_ELSE><a class="small" title="Hide domain" href="<TMPL_VAR NAME=base_url>?view=device&amp;order_by=device.name&amp;<TMPL_VAR NAME=filter_string>">[Dom]</a></TMPL_UNLESS></th>
+				<th><a title="Sort by name" href="<TMPL_VAR NAME=base_url>?view=device&amp;order_by=device.name&amp;<TMPL_VAR NAME=filter_string>">Device</a>
+					<TMPL_UNLESS NAME=hide_domain><a class="small" title="Hide domain" href="<TMPL_VAR NAME=base_url>?view=device&amp;order_by=device.name&amp;<TMPL_VAR NAME=filter_string>&amp;hide_domain=1">[Dom]</a>
+					<TMPL_ELSE><a class="small" title="Show domain" href="<TMPL_VAR NAME=base_url>?view=device&amp;order_by=device.name&amp;<TMPL_VAR NAME=filter_string>">[Dom]</a></TMPL_UNLESS>
+				</th>
 				<th><a title="Sort by rack" href="<TMPL_VAR NAME=base_url>?view=device&amp;order_by=rack.name&amp;<TMPL_VAR NAME=filter_string>">Rack</a></th>
 				<th><a title="Sort by room" href="<TMPL_VAR NAME=base_url>?view=device&amp;order_by=room.name&amp;<TMPL_VAR NAME=filter_string>">Room</a></th>
 				<th><a title="Sort by role" href="<TMPL_VAR NAME=base_url>?view=device&amp;order_by=role.name&amp;<TMPL_VAR NAME=filter_string>">Role</a></th>
