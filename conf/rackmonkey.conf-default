@@ -29,7 +29,7 @@ shorturllen = 64			# Shorten long URLs for display
 # Validation Constants
 maxnote = 4095			# Max length of note fields
 maxstring = 255			# Max length of simple strings
-maxracksite = 255 		# Max rack size in rack units (U)
+maxracksize = 255 		# Max rack size in rack units (U)
 
 # Remote site queries
 dellquery = http://support.euro.dell.com/support/topics/topic.aspx/emea/shared/support/my_systems_info/en/details?c=uk&cs=ukbsdt1&l=en&s=bsd&~ck=ln&lnki=2&ServiceTag=
