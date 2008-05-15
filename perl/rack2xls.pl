@@ -30,8 +30,6 @@ use warnings;
 
 use 5.006_001;
 
-#use Data::Dumper; # for debug only - comment out from release versions
-
 use DBI;
 use Time::Local;
 use Spreadsheet::WriteExcel;
@@ -70,7 +68,7 @@ eval
 	{
 		my @rackIdList = $cgi->rackList;
 		push (@rackIdList, $id) if (scalar(@rackIdList) == 0); # add current rack id if no list
-		die "RMERR: You need to select at least one rack to display.\nError occured" unless $rackIdList[0];
+		die "RMERR: You need to select at least one rack to display." unless $rackIdList[0];
 		my @racks;
 		for my $rackId (@rackIdList)
 		{

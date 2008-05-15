@@ -25,31 +25,24 @@ use warnings;
 
 use 5.006_001;
 
-#use Data::Dumper; # for debug only - comment out from release versions
-
-use DBI;
 use HTML::Template;
 use Time::Local;
 
 use RackMonkey::CGI;
 use RackMonkey::Engine;
 use RackMonkey::Error;
-use RackMonkey::Helper;
-use RackMonkey::Conf;
 
 our $VERSION = '1.2.%BUILD%';
 our $AUTHOR = 'Will Green (wgreen at users.sourceforge.net)';
 
 our ($template, $cgi, $conf);
 
-$conf = $RackMonkey::Conf::conf;
 $cgi = new RackMonkey::CGI;
-	
+
 eval 
-{
-	my $dbh = DBI->connect($$conf{'dbconnect'}, $$conf{'dbuser'}, $$conf{'dbpass'}, {AutoCommit => 1, RaiseError => 1, PrintError => 0, ShowErrorStatement => 1}); 
-	checkSupportedDBI;
-	my $backend = new RackMonkey::Engine($dbh);
+{		
+	my $backend = RackMonkey::Engine->new;
+	$conf = $$backend{'conf'};
 
 	my $fullURL = $cgi->url;
 	my $baseURL = $cgi->baseUrl;
@@ -68,7 +61,7 @@ eval
 
 	if ($act) # perform act, and return status: 303 (See Other) to redirect to a view
 	{
-		die "RMERR: You are logged in as 'guest'. Guest users can't update RackMonkey. Error occured " if (lc($loggedInUser) eq 'guest');
+		die "RMERR: You are logged in as 'guest'. Guest users can't update RackMonkey." if (lc($loggedInUser) eq 'guest');
 		
 		my $actData = $cgi->vars;
 		
@@ -98,116 +91,73 @@ eval
 	}
 	else # display a view
 	{
-		$template = HTML::Template->new(filename => $$conf{'tmplpath'}."/${view}_${viewType}.tmpl", 'die_on_bad_params' => 0, 'global_vars' => 1, 'case_sensitive' => 1, 'loop_context_vars' => 1);
-
-		if ($view eq 'hardware')
+		# check the view is valid
+		unless ($view =~ /^(?:config|help|app|building|device|domain|hardware|org|os|rack|report|role|room|row|service|system)$/)
 		{
-			if ($viewType =~ /^default/)
-			{
-				my $hardware = $backend->hardwareList($orderBy);
-				my $totalHardwareCount = $backend->itemCount('hardware');
-				my $listedHardwareCount = @$hardware;
-				$template->param('total_hardware_count' => $totalHardwareCount);
-				$template->param('listed_hardware_count' => $listedHardwareCount);
-				$template->param('all_hardware_listed' => ($totalHardwareCount == $listedHardwareCount));
-				$template->param('hardware' => $hardware);
-			}
-			else
-			{
-				my $selectedManufacturer = $cgi->lastCreatedId; # need to sort out this mess of CGI vars and make clearer!
-	
-				if (($viewType =~ /^edit/) || ($viewType =~ /^single/))
-				{
-					my $hardware = $backend->hardware($id);
-					$selectedManufacturer = $$hardware{'manufacturer'} if (!$selectedManufacturer); # Use database value for selected if none in CGI
-					$$hardware{'support_url_short'} = shortURL($$hardware{'support_url'}); # not actually needed by edit view
-					$$hardware{'spec_url_short'} = shortURL($$hardware{'spec_url'}); # not actually needed by edit view			
-					$template->param($hardware);
-				}
-	
-				if (($viewType =~ /^edit/) || ($viewType =~ /^create/))
-				{
-					$template->param('manufacturerlist' => $cgi->selectItem($backend->listBasicMeta('hardware_manufacturer'), $selectedManufacturer));
-				}
-			}
-		}	
-		elsif ($view eq 'os')
-		{
-			if ($viewType =~ /^default/)
-			{
-				my $os = $backend->osList($orderBy);
-				my $totalOSCount = $backend->itemCount('os');
-				my $listedOSCount = @$os;
-				$template->param('total_os_count' => $totalOSCount);
-				$template->param('listed_os_count' => $listedOSCount);
-				$template->param('all_os_listed' => ($totalOSCount == $listedOSCount));
-				$template->param('operatingsystems' => $os);
-			}
-			else
-			{
-				my $selectedManufacturer = $cgi->lastCreatedId; 
-	
-				if (($viewType =~ /^edit/) || ($viewType =~ /^single/))
-				{
-					my $operatingSystem = $backend->os($id);
-					$template->param($operatingSystem);
-					$selectedManufacturer = $$operatingSystem{'manufacturer'} if (!$selectedManufacturer); # Use database value for selected if none in CGI
-				}
-	
-				if (($viewType =~ /^edit/) || ($viewType =~ /^create/))
-				{
-					$template->param('manufacturerlist' => $cgi->selectItem($backend->listBasicMeta('software_manufacturer'), $selectedManufacturer));
-				}
-			}		
+			die "RMERR: '$view' is not a valid view. Did you type the URL manually? Note that view names are singular, for example device NOT devices.";
 		}
-		elsif ($view eq 'org')
+		
+		my $templatePath = $$conf{'tmplpath'}."/${view}_${viewType}.tmpl";
+		$template = HTML::Template->new('filename' => $templatePath, 'die_on_bad_params' => 0, 'global_vars' => 1, 'case_sensitive' => 1, 'loop_context_vars' => 1);
+		
+		if (($view eq 'config') || ($view eq 'help'))
+		{
+			# do nothing - pages are static content
+		}
+		elsif ($view eq 'app')
 		{
 			if ($viewType =~ /^default/)
 			{
-				my $orgs = $backend->orgList($orderBy);
-				
-				my $totalOrgCount = $backend->itemCount('org');
-				my $listedOrgCount = @$orgs;
-				$template->param('total_org_count' => $totalOrgCount);
-				$template->param('listed_org_count' => $listedOrgCount);
-				$template->param('all_org_listed' => ($totalOrgCount == $listedOrgCount));
-				
-				for my $o (@$orgs)
-				{
-					$$o{'descript_short'} = shortStr($$o{'descript'});
-				}
-				$template->param('orgs' => $orgs);
+					my $apps = $backend->appList($orderBy);
+					for my $a (@$apps)
+					{
+						$$a{'descript_short'} = shortStr($$a{'descript'});
+						$$a{'notes_short'} = shortStr($$a{'notes'});
+					}
+					my $totalAppCount = $backend->itemCount('app');
+					my $listedAppCount = @$apps;
+					$template->param('total_app_count' => $totalAppCount);
+					$template->param('listed_app_count' => $listedAppCount);
+					$template->param('all_apps_listed' => ($totalAppCount == $listedAppCount));
+					$template->param('apps' => $apps);
 			}
 			elsif (($viewType =~ /^edit/) || ($viewType =~ /^single/))
 			{
-				$template->param($backend->org($id));
+				my $app = $backend->app($id);
+				my $devices = $backend->appDevicesUsedList($id);
+				$$app{'app_devices'} = $devices;
+				$template->param($app);
 			}
-			elsif ($viewType =~ /^create/)
+			elsif ($viewType =~ /^manage/)
 			{
-				$template->param({'customer' => $cgi->customer, 'software' => $cgi->software, 'hardware' => $cgi->hardware});
+				my $app = $backend->app($id);
+				$template->param($app);
+				my $devices = $backend->appDevicesUsedList($id);
+				$template->param('devices' => $devices);
 			}
-		}	
-		elsif ($view eq 'domain')
+		}
+		elsif ($view eq 'building')
 		{
 			if ($viewType =~ /^default/)
 			{
-				my $domains = $backend->domainList($orderBy);
-				for my $d (@$domains)
-				{
-					$$d{'descript_short'} = shortStr($$d{'descript'});
-				}
-				my $totalDomainCount = $backend->itemCount('domain');
-				my $listedDomainCount = @$domains;
-				$template->param('total_domain_count' => $totalDomainCount);
-				$template->param('listed_domain_count' => $listedDomainCount);
-				$template->param('all_domains_listed' => ($totalDomainCount == $listedDomainCount));
-				$template->param('domains' => $domains);
+					my $buildings = $backend->buildingList($orderBy);
+					my $totalBuildingCount = $backend->itemCount('building');
+					my $listedBuildingCount = @$buildings;
+					$template->param('total_building_count' => $totalBuildingCount);
+					$template->param('listed_building_count' => $listedBuildingCount);
+					$template->param('all_buildings_listed' => ($totalBuildingCount == $listedBuildingCount));
+					$template->param('buildings' => $buildings);
 			}
 			elsif (($viewType =~ /^edit/) || ($viewType =~ /^single/))
 			{
-				$template->param($backend->domain($id));
+				my $building = $backend->building($id);
+				if ($viewType =~ /^single/)
+				{
+					$$building{'rooms'} = $backend->roomListInBuilding($id);
+				}
+				$template->param($building);
 			}
-		}		
+		}
 		elsif ($view eq 'device')
 		{
 			if ($viewType =~ /^default/) 
@@ -317,7 +267,185 @@ eval
 					$template->param('rack_pos' => $cgi->selectProperty('position'));
 				}
 			}
+		}
+		elsif ($view eq 'domain')
+		{
+			if ($viewType =~ /^default/)
+			{
+				my $domains = $backend->domainList($orderBy);
+				for my $d (@$domains)
+				{
+					$$d{'descript_short'} = shortStr($$d{'descript'});
+				}
+				my $totalDomainCount = $backend->itemCount('domain');
+				my $listedDomainCount = @$domains;
+				$template->param('total_domain_count' => $totalDomainCount);
+				$template->param('listed_domain_count' => $listedDomainCount);
+				$template->param('all_domains_listed' => ($totalDomainCount == $listedDomainCount));
+				$template->param('domains' => $domains);
+			}
+			elsif (($viewType =~ /^edit/) || ($viewType =~ /^single/))
+			{
+				$template->param($backend->domain($id));
+			}
+		}
+		elsif ($view eq 'hardware')
+		{
+			if ($viewType =~ /^default/)
+			{
+				my $hardware = $backend->hardwareList($orderBy);
+				my $totalHardwareCount = $backend->itemCount('hardware');
+				my $listedHardwareCount = @$hardware;
+				$template->param('total_hardware_count' => $totalHardwareCount);
+				$template->param('listed_hardware_count' => $listedHardwareCount);
+				$template->param('all_hardware_listed' => ($totalHardwareCount == $listedHardwareCount));
+				$template->param('hardware' => $hardware);
+			}
+			else
+			{
+				my $selectedManufacturer = $cgi->lastCreatedId; # need to sort out this mess of CGI vars and make clearer!
+	
+				if (($viewType =~ /^edit/) || ($viewType =~ /^single/))
+				{
+					my $hardware = $backend->hardware($id);
+					$selectedManufacturer = $$hardware{'manufacturer'} if (!$selectedManufacturer); # Use database value for selected if none in CGI
+					$$hardware{'support_url_short'} = shortURL($$hardware{'support_url'}); # not actually needed by edit view
+					$$hardware{'spec_url_short'} = shortURL($$hardware{'spec_url'}); # not actually needed by edit view			
+					$template->param($hardware);
+				}
+	
+				if (($viewType =~ /^edit/) || ($viewType =~ /^create/))
+				{
+					$template->param('manufacturerlist' => $cgi->selectItem($backend->listBasicMeta('hardware_manufacturer'), $selectedManufacturer));
+				}
+			}
+		}
+		elsif ($view eq 'org')
+		{
+			if ($viewType =~ /^default/)
+			{
+				my $orgs = $backend->orgList($orderBy);
+				
+				my $totalOrgCount = $backend->itemCount('org');
+				my $listedOrgCount = @$orgs;
+				$template->param('total_org_count' => $totalOrgCount);
+				$template->param('listed_org_count' => $listedOrgCount);
+				$template->param('all_org_listed' => ($totalOrgCount == $listedOrgCount));
+				
+				for my $o (@$orgs)
+				{
+					$$o{'descript_short'} = shortStr($$o{'descript'});
+				}
+				$template->param('orgs' => $orgs);
+			}
+			elsif (($viewType =~ /^edit/) || ($viewType =~ /^single/))
+			{
+				$template->param($backend->org($id));
+			}
+			elsif ($viewType =~ /^create/)
+			{
+				$template->param({'customer' => $cgi->customer, 'software' => $cgi->software, 'hardware' => $cgi->hardware});
+			}
 		}	
+		elsif ($view eq 'os')
+		{
+			if ($viewType =~ /^default/)
+			{
+				my $os = $backend->osList($orderBy);
+				my $totalOSCount = $backend->itemCount('os');
+				my $listedOSCount = @$os;
+				$template->param('total_os_count' => $totalOSCount);
+				$template->param('listed_os_count' => $listedOSCount);
+				$template->param('all_os_listed' => ($totalOSCount == $listedOSCount));
+				$template->param('operatingsystems' => $os);
+			}
+			else
+			{
+				my $selectedManufacturer = $cgi->lastCreatedId; 
+	
+				if (($viewType =~ /^edit/) || ($viewType =~ /^single/))
+				{
+					my $operatingSystem = $backend->os($id);
+					$template->param($operatingSystem);
+					$selectedManufacturer = $$operatingSystem{'manufacturer'} if (!$selectedManufacturer); # Use database value for selected if none in CGI
+				}
+	
+				if (($viewType =~ /^edit/) || ($viewType =~ /^create/))
+				{
+					$template->param('manufacturerlist' => $cgi->selectItem($backend->listBasicMeta('software_manufacturer'), $selectedManufacturer));
+				}
+			}		
+		}
+		elsif ($view eq 'rack')
+		{
+			if ($viewType =~ /^default/)
+			{
+				my $racks = $backend->rackList($orderBy);
+				my $totalRackCount = $backend->itemCount('rack');
+				my $listedRackCount = @$racks;
+				$template->param('total_rack_count' => $totalRackCount);
+				$template->param('listed_rack_count' => $listedRackCount);
+				$template->param('all_racks_listed' => ($totalRackCount == $listedRackCount));
+				$template->param('racks' => $racks);
+			}
+			elsif ($viewType =~ /^physical/)
+			{
+				my @rackIdList = $cgi->rackList;
+				push (@rackIdList, $id) if (scalar(@rackIdList) == 0); # add current rack id if no list
+				die "RMERR: You need to select at least one rack to display." unless $rackIdList[0];
+				my @racks;
+				for my $rackId (@rackIdList)
+				{
+					my $rack = $backend->rack($rackId);
+					$$rack{'rack_layout'} = $backend->rackPhysical($rackId, $cgi->id('device'));
+					push @racks, $rack;
+				}
+				$template->param('rack_list' => \@racks);
+			}
+			else
+			{
+				my $selectedRoom = $cgi->lastCreatedId || $cgi->id('room');
+				
+				if (($viewType =~ /^edit/) || ($viewType =~ /^single/) || ($viewType =~ /^create/))
+				{
+					my $rack = {};
+					$rack = $backend->rack($id) if (($id) && ($viewType !~ /^create/)); # used if copying, editing or displaying single view, but not for a plain create
+	
+					$selectedRoom = $$rack{'room'} if (!$selectedRoom); # Use database value for selected if none in CGI - not actually needed in single view
+		
+					if ($viewType !~ /^single/)
+					{	
+						$template->param('roomlist' => $cgi->selectRoom($backend->roomListBasic, $selectedRoom));
+					}
+					
+					# clear rack position and name if we're creating a new device (so copy works)
+					if ($viewType =~ /^create/)
+					{
+						$$rack{'name'} = '';
+					}
+				
+					$template->param($rack);
+				}
+			}
+		}
+		elsif ($view eq 'report')
+		{
+			my $totalDevices = $backend->itemCount('device');
+			my $unrackedDevices = $backend->deviceCountUnracked;
+			$template->param('device_count' => $totalDevices);
+			$template->param('unracked_device_count' => $unrackedDevices);
+			$template->param('racked_device_count' => $totalDevices - $unrackedDevices);
+			$template->param('rack_count' => $backend->itemCount('rack'));
+			my $rackSize = $backend->totalSizeRack;
+			my $deviceSize = $backend->totalSizeDevice;
+			$template->param('total_rack_space' => $rackSize);
+			$template->param('used_rack_space' => $deviceSize);
+			$template->param('free_rack_space' => $rackSize - $deviceSize);
+			$template->param('customer_device_count' => $backend->customerDeviceCount);
+			$template->param('role_device_count' => $backend->roleDeviceCount);
+			$template->param('hardware_device_count' => $backend->hardwareDeviceCount);
+			$template->param('os_device_count' => $backend->osDeviceCount);
+		}			
 		elsif ($view eq 'role')
 		{
 			if ($viewType =~ /^default/)
@@ -340,84 +468,7 @@ eval
 			{
 				$template->param($backend->role($id));
 			}
-		}	
-		elsif ($view eq 'service')
-		{
-			if ($viewType =~ /^default/)
-			{
-				my $serviceLevels = $backend->serviceList($orderBy);
-				
-				my $totalServiceCount = $backend->itemCount('service');
-				my $listedServiceCount = @$serviceLevels;
-				$template->param('total_service_count' => $totalServiceCount);
-				$template->param('listed_service_count' => $listedServiceCount);
-				$template->param('all_service_listed' => ($totalServiceCount == $listedServiceCount));
-				
-				for my $s (@$serviceLevels)
-				{
-					$$s{'descript_short'} = shortStr($$s{'descript'});
-				}
-				$template->param('services' => $serviceLevels);
-			}
-			elsif (($viewType =~ /^edit/) || ($viewType =~ /^single/))
-			{
-				$template->param($backend->service($id));
-			}
-		}		
-		elsif ($view eq 'building')
-		{
-			if ($viewType =~ /^default/)
-			{
-					my $buildings = $backend->buildingList($orderBy);
-					my $totalBuildingCount = $backend->itemCount('building');
-					my $listedBuildingCount = @$buildings;
-					$template->param('total_building_count' => $totalBuildingCount);
-					$template->param('listed_building_count' => $listedBuildingCount);
-					$template->param('all_buildings_listed' => ($totalBuildingCount == $listedBuildingCount));
-					$template->param('buildings' => $buildings);
-			}
-			elsif (($viewType =~ /^edit/) || ($viewType =~ /^single/))
-			{
-				my $building = $backend->building($id);
-				if ($viewType =~ /^single/)
-				{
-					$$building{'rooms'} = $backend->roomListInBuilding($id);
-				}
-				$template->param($building);
-			}
 		}
-		elsif ($view eq 'app')
-		{
-			if ($viewType =~ /^default/)
-			{
-					my $apps = $backend->appList($orderBy);
-					for my $a (@$apps)
-					{
-						$$a{'descript_short'} = shortStr($$a{'descript'});
-						$$a{'notes_short'} = shortStr($$a{'notes'});
-					}
-					my $totalAppCount = $backend->itemCount('app');
-					my $listedAppCount = @$apps;
-					$template->param('total_app_count' => $totalAppCount);
-					$template->param('listed_app_count' => $listedAppCount);
-					$template->param('all_apps_listed' => ($totalAppCount == $listedAppCount));
-					$template->param('apps' => $apps);
-			}
-			elsif (($viewType =~ /^edit/) || ($viewType =~ /^single/))
-			{
-				my $app = $backend->app($id);
-				my $devices = $backend->appDevicesUsedList($id);
-				$$app{'app_devices'} = $devices;
-				$template->param($app);
-			}
-			elsif ($viewType =~ /^manage/)
-			{
-				my $app = $backend->app($id);
-				$template->param($app);
-				my $devices = $backend->appDevicesUsedList($id);
-				$template->param('devices' => $devices);
-			}
-		}		
 		elsif ($view eq 'room')
 		{
 			if ($viewType =~ /^default/)
@@ -456,84 +507,37 @@ eval
 		{
 			$template->param('rows' => $backend->rowListInRoom($cgi->id('room')));
 			$template->param($backend->room($cgi->id('room')));
-		}
-		elsif ($view eq 'rack')
+		}	
+		elsif ($view eq 'service')
 		{
 			if ($viewType =~ /^default/)
 			{
-				my $racks = $backend->rackList($orderBy);
-				my $totalRackCount = $backend->itemCount('rack');
-				my $listedRackCount = @$racks;
-				$template->param('total_rack_count' => $totalRackCount);
-				$template->param('listed_rack_count' => $listedRackCount);
-				$template->param('all_racks_listed' => ($totalRackCount == $listedRackCount));
-				$template->param('racks' => $racks);
-			}
-			elsif ($viewType =~ /^physical/)
-			{
-				my @rackIdList = $cgi->rackList;
-				push (@rackIdList, $id) if (scalar(@rackIdList) == 0); # add current rack id if no list
-				die "RMERR: You need to select at least one rack to display.\nError occured" unless $rackIdList[0];
-				my @racks;
-				for my $rackId (@rackIdList)
-				{
-					my $rack = $backend->rack($rackId);
-					$$rack{'rack_layout'} = $backend->rackPhysical($rackId, $cgi->id('device'));
-					push @racks, $rack;
-				}
-				$template->param('rack_list' => \@racks);
-			}
-			else
-			{
-				my $selectedRoom = $cgi->lastCreatedId || $cgi->id('room');
+				my $serviceLevels = $backend->serviceList($orderBy);
 				
-				if (($viewType =~ /^edit/) || ($viewType =~ /^single/) || ($viewType =~ /^create/))
-				{
-					my $rack = {};
-					$rack = $backend->rack($id) if ($id); # used if copying, editing or displaying single view, but not for a plain create
-	
-					$selectedRoom = $$rack{'room'} if (!$selectedRoom); # Use database value for selected if none in CGI - not actually needed in single view
-		
-					if ($viewType !~ /^single/)
-					{	
-						$template->param('roomlist' => $cgi->selectRoom($backend->roomListBasic, $selectedRoom));
-					}
-					
-					# clear rack position and name if we're creating a new device (so copy works)
-					if ($viewType =~ /^create/)
-					{
-						$$rack{'name'} = '';
-					}
+				my $totalServiceCount = $backend->itemCount('service');
+				my $listedServiceCount = @$serviceLevels;
+				$template->param('total_service_count' => $totalServiceCount);
+				$template->param('listed_service_count' => $listedServiceCount);
+				$template->param('all_service_listed' => ($totalServiceCount == $listedServiceCount));
 				
-					$template->param($rack);
+				for my $s (@$serviceLevels)
+				{
+					$$s{'descript_short'} = shortStr($$s{'descript'});
 				}
+				$template->param('services' => $serviceLevels);
+			}
+			elsif (($viewType =~ /^edit/) || ($viewType =~ /^single/))
+			{
+				$template->param($backend->service($id));
 			}
 		}
-		elsif ($view eq 'report')
+		elsif ($view eq 'system')
 		{
-			my $totalDevices = $backend->itemCount('device');
-			my $unrackedDevices = $backend->deviceCountUnracked;
-			$template->param('device_count' => $totalDevices);
-			$template->param('unracked_device_count' => $unrackedDevices);
-			$template->param('racked_device_count' => $totalDevices - $unrackedDevices);
-			$template->param('rack_count' => $backend->itemCount('rack'));
-			my $rackSize = $backend->totalSizeRack;
-			my $deviceSize = $backend->totalSizeDevice;
-			$template->param('total_rack_space' => $rackSize);
-			$template->param('used_rack_space' => $deviceSize);
-			$template->param('free_rack_space' => $rackSize - $deviceSize);
-			$template->param('customer_device_count' => $backend->customerDeviceCount);
-			$template->param('role_device_count' => $backend->roleDeviceCount);
-			$template->param('hardware_device_count' => $backend->hardwareDeviceCount);
-			$template->param('os_device_count' => $backend->osDeviceCount);
-		}		
-		elsif (($view eq 'config') || ($view eq 'help'))
-		{
-			# do nothing - pages are static content
+			print $cgi->header('text/plain');
 		}
 		else
 		{
-			die "RMERR: No such view. This error should not occur, did you manually type this URL?\nError at";
+			die "RMERR: No such view. This error should not occur. Please report to developers.";
 		}
 	}
 	
@@ -542,8 +546,6 @@ eval
 	$selectedRack = $id if (($viewType =~ /^physical/) && ($view eq 'rack'));
 	
 	$template->param('racknavlist' => $cgi->selectRack($backend->rackListBasic(1), $selectedRack));
-		
-	$dbh->disconnect;
 	
 	# Get version, date and user for page footer
 	$template->param('version' => "$VERSION");
@@ -592,5 +594,42 @@ if ($@)
 	my $errMsg = $@;
 	print $cgi->header;
 	my $friendlyErrMsg = RackMonkey::Error::enlighten($errMsg);
-	RackMonkey::Error::display($errMsg, $friendlyErrMsg);
+	RackMonkey::Error::display($errMsg, $friendlyErrMsg, $conf);
+}
+
+sub shortStr
+{
+	my $str = shift;
+	return unless defined $str;
+	if (length($str) > $$conf{'shorttextlen'})
+	{
+		return substr($str, 0, $$conf{'shorttextlen'}).'...';
+	}
+	return '';
+}
+
+sub shortURL
+{
+	my $url = shift;
+	return unless defined $url;
+	if (length($url) > $$conf{'shorturllen'})
+	{
+		return substr($url, 0, $$conf{'shorturllen'}).'...';
+	}
+	return '';
+}
+
+sub calculateAge
+{
+	my $date = shift;
+	return unless defined $date;
+	my ($year, $month, $day) = $date =~ /(\d{4})-(\d{2})-(\d{2})/;
+	if ($year)
+	{
+		$month--; # perl months start at 0
+		my $startTime = timelocal(0, 0, 12, $day, $month, $year);
+		my $age = (time - $startTime) / (86400 * 365.24); # Age in years
+		return sprintf("%.1f", $age);
+	}
+	return '';
 }

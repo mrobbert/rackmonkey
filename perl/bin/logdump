@@ -9,21 +9,24 @@
 use strict;
 use warnings;
 
-use DBI;
+use 5.006_001;
 
-use lib '../';
-use RackMonkey::Conf;
+use Data::Dumper;
+
+use lib '..';
+use RackMonkey::Engine;
+
 
 our $VERSION = '1.2.%BUILD%';
 our $AUTHOR = 'Will Green (wgreen at users.sourceforge.net)';
-
-our $conf = $RackMonkey::Conf::conf;
 
 our $log;
 
 eval
 {
-	my $dbh = DBI->connect($$conf{'dbconnect'}, $$conf{'dbuser'}, $$conf{'dbpass'}, {AutoCommit => 1, RaiseError => 1, PrintError => 0, ShowErrorStatement => 1}); 
+	my $backend = RackMonkey::Engine->new;
+	
+	my $dbh = $backend->dbh;
 	my $sth = $dbh->prepare_cached(qq!
 		SELECT logging.* 
 		FROM logging

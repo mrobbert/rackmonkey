@@ -11,16 +11,14 @@ use warnings;
 
 use 5.006_001;
 
-#use Data::Dumper; # for debug only - comment out from release versions
+use Carp;
+use DBI;
+use Time::Local;
 
 use RackMonkey::Conf;
-use RackMonkey::Helper;
 
 our $VERSION = '1.2.%BUILD%';
 our $AUTHOR = 'Will Green (wgreen at users.sourceforge.net)';
-
-our $conf;
-$conf = $RackMonkey::Conf::conf;
 
 ##############################################################################
 # Common Methods                                                             #
@@ -28,9 +26,38 @@ $conf = $RackMonkey::Conf::conf;
 
 sub new
 {
-	my ($className, $dbh) = @_;
-	my $self = {'dbh' => $dbh};
+	my ($className) = @_;
+	my $conf = RackMonkey::Conf->new;
+	
+	croak "RM_ENGINE: No database specified in configuration file. Check value of 'dbconnect' in rackmonkey.conf." unless ($$conf{'dbconnect'});
+	
+	# If using SQLite only connect if database file exists, don't create it
+	my ($currentDriver, $dataSource) = $$conf{'dbconnect'} =~ /dbi:(.*?):(.*)/;
+	$currentDriver = "DBD::$currentDriver";
+	if ($currentDriver eq 'DBD::SQLite')
+	{
+		my ($dataBasePath) = $dataSource =~ /dbname=(.*)/;
+		croak "RM_ENGINE: SQLite database '$dataBasePath' does not exist. Check the 'dbconnect' path in rackmonkey.conf and that you have created a RackMonkey database as per the install guide." unless (-e $dataBasePath)
+	}
+	
+	my $dbh = DBI->connect($$conf{'dbconnect'}, $$conf{'dbuser'}, $$conf{'dbpass'}, {AutoCommit => 1, RaiseError => 1, PrintError => 0, ShowErrorStatement => 1}); 
+	_checkSupportedDriver($$conf{'dbconnect'});
+	
+	my $self = {'dbh' => $dbh, 'conf' => $conf};
 	bless $self, $className;
+}
+
+sub DESTROY
+{
+	my $self = shift;
+	$self->dbh->disconnect;
+}
+
+sub getConf
+{
+	my ($self, $key) = @_;
+	my $conf = $self->{'conf'};
+	return $conf->getConf($key);
 }
 
 sub dbh # should this be a private method?
@@ -42,7 +69,7 @@ sub dbh # should this be a private method?
 sub entryBasic
 {
 	my ($self, $id, $table) = @_;
-	die 'RMERR: Not a valid table.' unless $table =~ /^[a-z_]+$/;
+	croak 'RM_ENGINE: Not a valid table.' unless $table =~ /^[a-z_]+$/;
 	my $sth = $self->dbh->prepare_cached(qq!
 		SELECT id, name 
 		FROM $table 
@@ -50,14 +77,14 @@ sub entryBasic
 	!);
 	$sth->execute($id);
 	my $entry = $sth->fetchrow_hashref('NAME_lc');
-	die "RMERR: No such entry '$id' in table '$table'.\nError occured" unless defined($$entry{'id'});
+	croak "RM_ENGINE: No such entry '$id' in table '$table'." unless defined($$entry{'id'});
 	return $entry;
 }
 
 sub listBasic
 {
 	my ($self, $table) = @_;
-	die "RMERR: Not a valid table." unless $table =~ /^[a-z_]+$/;
+	croak "RM_ENGINE: Not a valid table." unless $table =~ /^[a-z_]+$/;
 	my $sth = $self->dbh->prepare_cached(qq!
 		SELECT 
 			id, 
@@ -75,7 +102,7 @@ sub listBasic
 sub listBasicMeta
 {
 	my ($self, $table) = @_;
-	die "RMERR: Not a valid table" unless $table =~ /^[a-z_]+$/;
+	croak "RM_ENGINE: Not a valid table" unless $table =~ /^[a-z_]+$/;
 	my $sth = $self->dbh->prepare_cached(qq!
 		SELECT 
 			id, 
@@ -93,7 +120,7 @@ sub listBasicMeta
 sub itemCount
 {
 	my ($self, $table) = @_;
-	die "RMERR: Not a valid table" unless $table =~ /^[a-z_]+$/;	
+	croak "RM_ENGINE: Not a valid table" unless $table =~ /^[a-z_]+$/;	
 	my $sth = $self->dbh->prepare(qq!
 		SELECT count(*) 
 		FROM $table  
@@ -106,17 +133,17 @@ sub itemCount
 sub performAct
 {
 	my ($self, $type, $act, $updateUser, $record) = @_;
-	die "RMERR: '$type' is not a recognised type. This error should not occur, did you manually type this URL?\nError occured" unless $type =~ /^(?:building|room|row|rack|device|hardware|os|service|role|domain|org|app|report)$/;
+	croak "RM_ENGINE: '$type' is not a recognised type. This error should not occur, did you manually type this URL?" unless $type =~ /^(?:building|room|row|rack|device|hardware|os|service|role|domain|org|app|report)$/;
 	my $actStr = $act;
 	my $typeStr = $type;
 	$act = 'update' if ($act eq 'insert');
-	die "RMERR: '$act is not a recognised act. This error should not occur, did you manually type this URL?\nError occured" unless $act =~ /^(?:update|delete)$/;
+	croak "RM_ENGINE: '$act is not a recognised act. This error should not occur, did you manually type this URL?" unless $act =~ /^(?:update|delete)$/;
 	
 	# check username for update is valid
 
-	die "RMERR: User update names must be less than ".$$conf{'maxstring'}." characters.\nError occured" unless (length($updateUser) <= $$conf{'maxstring'});
-	die "RMERR: You cannot use the username 'install', it's reserved for use by Rackmonkey.\nError occured" if (lc($updateUser) eq 'install');
-	die "RMERR: You cannot use the username 'rackmonkey', it's reserved for use by Rackmonkey.\nError occured" if (lc($updateUser) eq 'rackmonkey');
+	croak "RM_ENGINE: User update names must be less than ".$self->getConf('maxstring')." characters." unless (length($updateUser) <= $self->getConf('maxstring'));
+	croak "RM_ENGINE: You cannot use the username 'install', it's reserved for use by Rackmonkey." if (lc($updateUser) eq 'install');
+	croak "RM_ENGINE: You cannot use the username 'rackmonkey', it's reserved for use by Rackmonkey." if (lc($updateUser) eq 'rackmonkey');
 	
 	# calculate update time (always GMT)
 	my ($sec, $min, $hour, $day, $month, $year) = (gmtime)[0,1,2,3,4,5];
@@ -142,6 +169,85 @@ sub _lastInsertId
     return $self->dbh->last_insert_id(undef, undef, $table, undef);
 }
 
+# Checks that the DBD driver is compatible with RackMonkey
+sub _checkSupportedDriver
+{
+	my $dbconnect = shift;
+	
+	# Get driver version number
+	my ($currentDriver) = $dbconnect =~ /dbi:(.*?):/;
+	$currentDriver = "DBD::$currentDriver";
+	my $driverVersion = eval("\$${currentDriver}::VERSION");
+	
+	# Check we're using SQLite, Postgres or MySQL
+	unless (($currentDriver eq 'DBD::SQLite') || ($currentDriver eq 'DBD::Pg') || ($currentDriver eq 'DBD::mysql'))
+	{
+		croak "RM_ENGINE: You tried to use an unsupported database driver '$currentDriver'. RackMonkey supports SQLite (DBD::SQLite), Postgres (DBD::Pg) or MySQL (DBD::mysql).";
+	}
+	
+	# If using SQLite, version v1.09 or higher is required in order to support ADD COLUMN
+	if (($currentDriver eq 'DBD::SQLite') && ($driverVersion < 1.09))
+	{
+		croak "RM_ENGINE: RackMonkey requires DBD::SQLite v1.09 or higher. You are using DBD::SQLite v$driverVersion. Please consult the installation instructions.";
+	}
+	
+	# Postgres only works properly with DBI v1.43 or higher (due to last insert ID issues)
+	if ($currentDriver eq 'DBD::Postgres')
+	{
+		my $DBIVersion = eval("\$DBI::VERSION");
+		unless ($DBIVersion > 1.43)
+		{
+			croak "RM_ENGINE: You need to use DBI version v1.43 or higher with Postgres. You are using DBI v$DBIVersion. Please consult the installation instructions.";
+		}
+	}
+}
+
+sub _checkName
+{
+	my ($self, $name) = @_; 
+	croak "RM_ENGINE: You must specify a name." unless defined $name;
+	unless ($name =~ /^\S+/)
+	{
+		croak "RM_ENGINE: You must specify a valid name. Names may not begin with white space.";
+	}
+	unless (length($name) <= $self->getConf('maxstring'))
+	{
+		croak "RM_ENGINE: Names cannot exceed ".$self->getConf('maxstring')." characters.";
+	}
+}
+
+sub _checkNotes
+{
+	my ($self, $notes) = @_; 
+	return unless defined $notes;
+	unless (length($notes) <= $self->getConf('maxnote'))
+	{
+		croak "RM_ENGINE: Notes cannot exceed ".$self->getConf('maxnote')." characters.";
+	}
+}
+
+sub _checkDate
+{
+	my ($self, $date) = @_; 
+	return unless $date;
+	croak "RM_ENGINE: Date not in valid format (YYYY-MM-DD)." unless $date =~ /^\d{4}-\d\d?-\d\d?$/;
+	my ($year, $month, $day) = split '-', $date;
+	eval { timelocal(0, 0, 12, $day, $month - 1, $year - 1900); }; # perl months begin at 0 and perl years at 1900
+	croak "RM_ENGINE: $year-$month-$day is not a valid date of the form YYYY-MM-DD. Check that the date exists. NB. Date validation currently only accepts years 1970 - 2038. This limitation will be lifted in a later release.\n$@" if ($@);
+	return sprintf("%04d-%02d-%02d", $year, $month, $day);
+}
+
+sub _httpFixer
+{
+	my ($self, $url) = @_;
+	return unless defined $url;
+	return unless (length($url)); # Don't add to empty strings
+	unless ($url =~ /^\w+:\/\//)  # Does URL begin with a protocol?
+	{
+		$url = "http://$url";
+	}
+	return $url;
+}
 
 ##############################################################################
 # Building Methods                                                           #
@@ -150,7 +256,7 @@ sub _lastInsertId
 sub building
 {
 	my ($self, $id) = @_;
-	die "RMERR: Unable to retrieve building. No building id specified.\nError occured" unless ($id);
+	croak "RM_ENGINE: Unable to retrieve building. No building id specified." unless ($id);
 	my $sth = $self->dbh->prepare(qq!
 		SELECT building.* 
 		FROM building 
@@ -158,7 +264,7 @@ sub building
 	!);
 	$sth->execute($id);	
 	my $building = $sth->fetchrow_hashref('NAME_lc');
-	die "RMERR: No such building id.\nError occured" unless defined($$building{'id'});
+	croak "RM_ENGINE: No such building id." unless defined($$building{'id'});
 	return $building;
 }
 
@@ -181,7 +287,7 @@ sub buildingList
 sub updateBuilding
 {
 	my ($self, $updateTime, $updateUser, $record) = @_;
-	die "RMERR: Unable to update building. No building record specified.\nError occured" unless ($record);
+	croak "RM_ENGINE: Unable to update building. No building record specified." unless ($record);
 	
 	my ($sth, $newId);
 
@@ -189,7 +295,7 @@ sub updateBuilding
 	{	
 		$sth = $self->dbh->prepare(qq!UPDATE building SET name = ?, name_short = ?, notes = ?, meta_update_time = ?, meta_update_user = ? WHERE id = ?!);
 		my $ret = $sth->execute($self->_validateBuildingUpdate($record), $updateTime, $updateUser, $$record{'id'});
-		die "RMERR: Update failed. This building may have been removed before the update occured.\nError occured" if ($ret eq '0E0');
+		croak "RM_ENGINE: Update failed. This building may have been removed before the update occured." if ($ret eq '0E0');
 	}
 	else
 	{
@@ -204,20 +310,20 @@ sub deleteBuilding
 {
 	my ($self, $updateTime, $updateUser, $record) = @_;
 	my $deleteId = (ref $record eq 'HASH') ? $$record{'id'} : $record;
-	die "RMERR: Delete failed. No building id specified.\nError occured" unless ($deleteId);
+	croak "RM_ENGINE: Delete failed. No building id specified." unless ($deleteId);
 	my $sth = $self->dbh->prepare(qq!DELETE FROM building WHERE id = ?!);
 	my $ret = $sth->execute($deleteId);
-	die "RMERR: Delete failed. This building does not currently exist, it may have been removed already.\nError occured" if ($ret eq '0E0');
+	croak "RM_ENGINE: Delete failed. This building does not currently exist, it may have been removed already." if ($ret eq '0E0');
 	return $deleteId;
 }
 
 sub _validateBuildingUpdate
 {
 	my ($self, $record) = @_;
-	die "RMERR_INTERNAL: Unable to validate building. No building record specified.\nError occured" unless ($record);
-	checkName($$record{'name'});
+	croak "RM_ENGINE: Unable to validate building. No building record specified." unless ($record);
+	$self->_checkName($$record{'name'});
 	# need to add validation for short name
-	checkNotes($$record{'notes'});
+	$self->_checkNotes($$record{'notes'});
 	return ($$record{'name'}, $$record{'name_short'}, $$record{'notes'});
 }
 
@@ -229,7 +335,7 @@ sub _validateBuildingUpdate
 sub room
 {
 	my ($self, $id) = @_;
-	die "RMERR: Unable to retrieve room. No room id specified.\nError occured" unless ($id);
+	croak "RM_ENGINE: Unable to retrieve room. No room id specified." unless ($id);
 	my $sth = $self->dbh->prepare(qq!
 		SELECT 
 			room.*, 
@@ -242,7 +348,7 @@ sub room
 	!);
 	$sth->execute($id);	
 	my $room = $sth->fetchrow_hashref('NAME_lc');
-	die "RMERR: No such room id.\nError occured" unless defined($$room{'id'});
+	croak "RM_ENGINE: No such room id." unless defined($$room{'id'});
 	return $room;
 }
 
@@ -315,7 +421,7 @@ sub roomListBasic
 sub updateRoom
 {
 	my ($self, $updateTime, $updateUser, $record) = @_;
-	die "RMERR: Unable to update room. No room record specified.\nError occured" unless ($record);
+	croak "RM_ENGINE: Unable to update room. No room record specified." unless ($record);
 		
 	my ($sth, $newId);
 	
@@ -323,7 +429,7 @@ sub updateRoom
 	{	
 		$sth = $self->dbh->prepare(qq!UPDATE room SET name = ?, building =?, notes = ?, meta_update_time = ?, meta_update_user = ? WHERE id = ?!);
 		my $ret = $sth->execute($self->_validateRoomUpdate($record), $updateTime, $updateUser, $$record{'id'});
-		die "RMERR: Update failed. This room may have been removed before the update occured.\nError occured" if ($ret eq '0E0');
+		croak "RM_ENGINE: Update failed. This room may have been removed before the update occured." if ($ret eq '0E0');
 	}
 	else
 	{
@@ -343,9 +449,9 @@ sub updateRoom
 			eval { $self->dbh->rollback(); };
 			if ($@)
 			{
-				die "RMERR: Room creation failed - $errorMsg\nIn addition transaction roll back failed - $@\nError occured";
+				croak "RM_ENGINE: Room creation failed - $errorMsg. In addition transaction roll back failed - $@.";
 			}
-			die "RMERR: Room creation failed - $errorMsg\nError occured";
+			croak "RM_ENGINE: Room creation failed - $errorMsg";
 		}
 		$self->dbh->{AutoCommit} = 1; 
 	}
@@ -356,7 +462,7 @@ sub deleteRoom
 {
 	my ($self, $updateTime, $updateUser, $record) = @_;
 	my $deleteId = (ref $record eq 'HASH') ? $$record{'id'} : $record;
-	die "RMERR: Delete failed. No room id specified.\nError occured" unless ($deleteId);
+	croak "RM_ENGINE: Delete failed. No room id specified." unless ($deleteId);
 	
 	my ($ret, $sth);
 	$self->dbh->{AutoCommit} = 0;    # need to delete room and hidden rows together
@@ -374,21 +480,21 @@ sub deleteRoom
 		eval { $self->dbh->rollback(); };
 		if ($@)
 		{
-			die "RMERR: Room deletion failed - $errorMsg\nIn addition transaction roll back failed - $@\nError occured";
+			croak "RM_ENGINE: Room deletion failed - $errorMsg. In addition transaction roll back failed - $@.";
 		}
-		die "RMERR: Room deletion failed - $errorMsg\nError occured";
+		croak "RM_ENGINE: Room deletion failed - $errorMsg.";
 	}	
 	$self->dbh->{AutoCommit} = 1; 
-	die "RMERR: This room does not currently exist, it may have been removed already.\nError occured" if ($ret eq '0E0');
+	croak "RM_ENGINE: This room does not currently exist, it may have been removed already." if ($ret eq '0E0');
 	return $deleteId;
 }
 
 sub _validateRoomUpdate
 {
 	my ($self, $record) = @_;
-	die "RMERR_INTERNAL: Unable to validate building. No building record specified.\nError occured" unless ($record);
-	checkName($$record{'name'});
-	checkNotes($$record{'notes'});
+	croak "RM_ENGINE: Unable to validate room. No room record specified." unless ($record);
+	$self->_checkName($$record{'name'});
+	$self->_checkNotes($$record{'notes'});
 	return ($$record{'name'}, $$record{'building_id'}, $$record{'notes'});
 }
 
@@ -414,7 +520,7 @@ sub row
 	!);
 	$sth->execute($id);	
 	my $row = $sth->fetchrow_hashref('NAME_lc');
-	die "RMERR: No such row id.\nError occured" unless defined($$row{'id'});
+	croak "RM_ENGINE: No such row id." unless defined($$row{'id'});
 	return $row;
 }
 
@@ -502,15 +608,15 @@ sub deleteRow
 {
 	my ($self, $updateTime, $updateUser, $record) = @_;
 	my $deleteId = (ref $record eq 'HASH') ? $$record{'id'} : $record;
-	die "RMERR: Delete failed. No row id specified.\nError occured" unless ($deleteId);
-	die "RMERR: This method is not yet supported.\nError occured";
+	croak "RM_ENGINE: Delete failed. No row id specified." unless ($deleteId);
+	croak "RM_ENGINE: This method is not yet supported.";
 	return $deleteId;
 }
 
 sub updateRow
 {
 	my ($self, $updateTime, $updateUser, $record) = @_;
-	die "RMERR: Unable to update row. No row record specified.\nError occured" unless ($record);
+	croak "RM_ENGINE: Unable to update row. No row record specified." unless ($record);
 	
 	my ($sth, $newId);
 		
@@ -518,7 +624,7 @@ sub updateRow
 	{	
 		$sth = $self->dbh->prepare(qq!UPDATE row SET name = ?, room = ?, room_pos = ?, hidden_row = ?, notes = ?, meta_update_time = ?, meta_update_user = ? WHERE id = ?!);
 		my $ret = $sth->execute($self->_validateRowUpdate($record), $updateTime, $updateUser, $$record{'id'});
-		die "RMERR: Update failed. This row may have been removed before the update occured.\nError occured" if ($ret eq '0E0');
+		croak "RM_ENGINE: Update failed. This row may have been removed before the update occured." if ($ret eq '0E0');
 	}
 	else
 	{
@@ -532,9 +638,9 @@ sub updateRow
 sub _validateRowUpdate
 {
 	my ($self, $record) = @_;
-	die "RMERR_INTERNAL: Unable to validate row. No row record specified.\nError occured" unless ($record);
-	checkName($$record{'name'});
-	checkNotes($$record{'notes'});
+	croak "RM_ENGINE: Unable to validate row. No row record specified." unless ($record);
+	$self->_checkName($$record{'name'});
+	$self->_checkNotes($$record{'notes'});
 	return ($$record{'name'}, $$record{'room'}, $$record{'room_pos'}, $$record{'hidden_row'}, $$record{'notes'});
 }
 
@@ -571,7 +677,7 @@ sub rack
 	!);
 	$sth->execute($id);	
 	my $rack = $sth->fetchrow_hashref('NAME_lc');
-	die "RMERR: No such rack id.\nError occured" unless defined($$rack{'id'});
+	croak "RM_ENGINE: No such rack id." unless defined($$rack{'id'});
 	return $rack;
 }
 
@@ -744,7 +850,7 @@ sub rackPhysical # This method is all rather inelegant and doesn't deal with rac
 sub updateRack
 {
 	my ($self, $updateTime, $updateUser, $record) = @_;
-	die "RMERR: Unable to update rack. No rack record specified.\nError occured" unless ($record);
+	croak "RM_ENGINE: Unable to update rack. No rack record specified." unless ($record);
 	
 	my ($sth, $newId);
 	
@@ -754,7 +860,7 @@ sub updateRack
 		$sth = $self->dbh->prepare(qq!SELECT id FROM row WHERE room = ? ORDER BY id LIMIT 1!);
 		$sth->execute($$record{'room'});
 		$$record{'row'} = ($sth->fetchrow_array)[0];
-		die "RMERR: Unable to update rack. Unable to determine row for rack.\nError occured" unless $$record{'row'};
+		croak "RM_ENGINE: Unable to update rack. Couldn't determine room or row for rack. Did you specify a row or room?" unless $$record{'row'};
 	}
 
 	# force row_pos to 0 until rows are supported
@@ -767,7 +873,7 @@ sub updateRack
 	{	
 		$sth = $self->dbh->prepare(qq!UPDATE rack SET name = ?, row = ?, row_pos = ?, hidden_rack = ?, size = ?, notes = ?, meta_update_time = ?, meta_update_user = ? WHERE id = ?!);
 		my $ret = $sth->execute($self->_validateRackUpdate($record), $updateTime, $updateUser, $$record{'id'});
-		die "RMERR: Update failed. This rack may have been removed before the update occured.\nError occured" if ($ret eq '0E0');
+		croak "RM_ENGINE: Update failed. This rack may have been removed before the update occured." if ($ret eq '0E0');
 	}
 	else
 	{
@@ -782,25 +888,26 @@ sub deleteRack
 {
 	my ($self, $updateTime, $updateUser, $record) = @_;
 	my $deleteId = (ref $record eq 'HASH') ? $$record{'id'} : $record;
-	die "RMERR: Delete failed. No rack id specified.\nError occured" unless ($deleteId);
+	croak "RM_ENGINE: Delete failed. No rack id specified." unless ($deleteId);
 	my $sth = $self->dbh->prepare(qq!DELETE FROM rack WHERE id = ?!);
 	my $ret = $sth->execute($deleteId);
-	die "RMERR: Delete failed. This rack does not currently exist, it may have been removed already.\nError occured" if ($ret eq '0E0');
+	croak "RM_ENGINE: Delete failed. This rack does not currently exist, it may have been removed already." if ($ret eq '0E0');
 	return $deleteId;
 }
 
 sub _validateRackUpdate
 {
 	my ($self, $record) = @_;
-	die "RMERR_INTERNAL: Unable to validate rack. No rack record specified.\nError occured" unless ($record);
-	checkName($$record{'name'});
-	checkNotes($$record{'notes'});
-	my $highestPos = $self->_highestUsedInRack($$record{'id'});
+	croak "RM_ENGINE: Unable to validate rack. No rack record specified." unless ($record);
+	$self->_checkName($$record{'name'});
+	$self->_checkNotes($$record{'notes'});
+	croak "RM_ENGINE: You must specify a size for your rack." unless $$record{'size'};
+	my $highestPos = $self->_highestUsedInRack($$record{'id'}) || 0;
 	if ($highestPos > $$record{'size'})
 	{
-		die "RMERR: You cannot reduce the rack size to $$record{'size'} U as there is a device at position $highestPos.\nError occured";
+		croak "RM_ENGINE: You cannot reduce the rack size to $$record{'size'} U as there is a device at position $highestPos.";
 	}
-	die "RMERR_INTERNAL: Rack sizes must be between 1 and ".$$conf{'maxracksize'}." units.\nError occured" unless (($$record{'size'} > 0) && ($$record{'size'} < $$conf{'maxracksize'}));
+	croak "RM_ENGINE: Rack sizes must be between 1 and ".$self->getConf('maxracksize')." units." unless (($$record{'size'} > 0) && ($$record{'size'} < $self->getConf('maxracksize')));
 	return ($$record{'name'}, $$record{'row'}, $$record{'row_pos'}, $$record{'hidden_rack'}, $$record{'size'}, $$record{'notes'});
 }
 
@@ -851,7 +958,7 @@ sub hardware
 		
 	$sth->execute($id);	
 	my $hardware = $sth->fetchrow_hashref();
-	die "RMERR: No such hardware id. This item of hardware may have been deleted.\nError at" unless defined($$hardware{'id'});
+	croak "RM_ENGINE: No such hardware id. This item of hardware may have been deleted.\nError at" unless defined($$hardware{'id'});
 	return $hardware;
 }
 
@@ -901,7 +1008,7 @@ sub hardwareListBasic
 sub updateHardware
 {
 	my ($self, $updateTime, $updateUser, $record) = @_;
-	die "RMERR: Unable to update hardware. No hardware record specified.\nError occured" unless ($record);
+	croak "RM_ENGINE: Unable to update hardware. No hardware record specified." unless ($record);
 	
 	my ($sth, $newId);
 	
@@ -909,7 +1016,7 @@ sub updateHardware
 	{	
 		$sth = $self->dbh->prepare(qq!UPDATE hardware SET name = ?, manufacturer =?, size = ?, image = ?, support_url = ?, spec_url = ?, notes = ?, meta_update_time = ?, meta_update_user = ? WHERE id = ?!);
 		my $ret = $sth->execute($self->_validateHardwareUpdate($record), $updateTime, $updateUser, $$record{'id'});
-		die "RMERR: Update failed. This hardware may have been removed before the update occured.\nError occured" if ($ret eq '0E0');
+		croak "RM_ENGINE: Update failed. This hardware may have been removed before the update occured." if ($ret eq '0E0');
 	}
 	else
 	{
@@ -924,29 +1031,29 @@ sub deleteHardware
 {
 	my ($self, $updateTime, $updateUser, $record) = @_;
 	my $deleteId = (ref $record eq 'HASH') ? $$record{'id'} : $record;
-	die "RMERR: Delete failed. No hardware id specified.\nError occured" unless ($deleteId);
+	croak "RM_ENGINE: Delete failed. No hardware id specified." unless ($deleteId);
 	my $sth = $self->dbh->prepare(qq!DELETE FROM hardware WHERE id = ?!);
 	my $ret = $sth->execute($deleteId);
-	die "RMERR: Delete failed. This hardware does not currently exist, it may have been removed already.\nError occured" if ($ret eq '0E0');
+	croak "RM_ENGINE: Delete failed. This hardware does not currently exist, it may have been removed already." if ($ret eq '0E0');
 	return $deleteId;
 }
 
 sub _validateHardwareUpdate
 {
 	my ($self, $record) = @_;
-	die "RMERR_INTERNAL: Unable to validate hardware. No hardware record specified.\nError occured" unless ($record);
+	croak "RM_ENGINE: Unable to validate hardware. No hardware record specified." unless ($record);
 
-	$$record{'support_url'} = httpFixer($$record{'support_url'});
-	$$record{'spec_url'} = httpFixer($$record{'spec_url'});
+	$$record{'support_url'} = $self->_httpFixer($$record{'support_url'});
+	$$record{'spec_url'} = $self->_httpFixer($$record{'spec_url'});
 
-	die "RMERR: You must specify a name for the hardware.\nError occured" unless (length($$record{'name'}) > 1);
-	die "RMERR: Names must be less than ".$$conf{'maxstring'}." characters.\nError occured" unless (length($$record{'name'}) <= $$conf{'maxstring'});
+	croak "RM_ENGINE: You must specify a name for the hardware." unless (length($$record{'name'}) > 1);
+	croak "RM_ENGINE: Names must be less than ".$self->getConf('maxstring')." characters." unless (length($$record{'name'}) <= $self->getConf('maxstring'));
 	# no validation for $$record{'manufacturer_id'} - foreign key constraints will catch
-	die "RMERR: Size must be between 1 and ".$$conf{'maxracksize'}." units." unless (($$record{'size'} > 0) && ($$record{'size'} <= $$conf{'maxracksize'}));
-	die "RMERR: Image filenames must be between 0 and ".$$conf{'maxstring'}." characters." unless ((length($$record{'image'}) >= 0) && (length($$record{'image'}) <= $$conf{'maxstring'}));
-	die "RMERR: Support URLs must be between 0 and ".$$conf{'maxstring'}." characters." unless ((length($$record{'support_url'}) >= 0) && (length($$record{'support_url'}) <= $$conf{'maxstring'}));
-	die "RMERR: Specification URLs must be between 0 and ".$$conf{'maxstring'}." characters." unless ((length($$record{'spec_url'}) >= 0) && (length($$record{'spec_url'}) <= $$conf{'maxstring'}));
-	die "RMERR: Notes cannot exceed ".$$conf{'maxnote'}." characters." unless (length($$record{'notes'}) <= $$conf{'maxnote'});
+	croak "RM_ENGINE: Size must be between 1 and ".$self->getConf('maxracksize')." units." unless (($$record{'size'} > 0) && ($$record{'size'} <= $self->getConf('maxracksize')));
+	croak "RM_ENGINE: Image filenames must be between 0 and ".$self->getConf('maxstring')." characters." unless ((length($$record{'image'}) >= 0) && (length($$record{'image'}) <= $self->getConf('maxstring')));
+	croak "RM_ENGINE: Support URLs must be between 0 and ".$self->getConf('maxstring')." characters." unless ((length($$record{'support_url'}) >= 0) && (length($$record{'support_url'}) <= $self->getConf('maxstring')));
+	croak "RM_ENGINE: Specification URLs must be between 0 and ".$self->getConf('maxstring')." characters." unless ((length($$record{'spec_url'}) >= 0) && (length($$record{'spec_url'}) <= $self->getConf('maxstring')));
+	croak "RM_ENGINE: Notes cannot exceed ".$self->getConf('maxnote')." characters." unless (length($$record{'notes'}) <= $self->getConf('maxnote'));
 	
 	return ($$record{'name'}, $$record{'manufacturer_id'}, $$record{'size'}, $$record{'image'}, $$record{'support_url'}, $$record{'spec_url'}, $$record{'notes'});
 }
@@ -994,7 +1101,7 @@ sub os
 	
 	$sth->execute($id);	
 	my $os = $sth->fetchrow_hashref('NAME_lc');
-	die "RMERR: No such operating system id. This operating system may have been deleted.\nError occured" unless defined($$os{'id'});
+	croak "RM_ENGINE: No such operating system id. This operating system may have been deleted." unless defined($$os{'id'});
 	return $os;
 }
 
@@ -1022,7 +1129,7 @@ sub osList
 sub updateOs
 {
 	my ($self, $updateTime, $updateUser, $record) = @_;
-	die "RMERR: Unable to update OS. No OS record specified.\nError occured" unless ($record);
+	croak "RM_ENGINE: Unable to update OS. No OS record specified." unless ($record);
 
 	my ($sth, $newId);
 	
@@ -1030,7 +1137,7 @@ sub updateOs
 	{	
 		$sth = $self->dbh->prepare(qq!UPDATE os SET name = ?, manufacturer = ?, notes = ?, meta_update_time = ?, meta_update_user = ? WHERE id = ?!);
 		my $ret = $sth->execute($self->_validateOsUpdate($record), $updateTime, $updateUser, $$record{'id'});
-		die "RMERR: Update failed. This OS may have been removed before the update occured.\nError occured" if ($ret eq '0E0');
+		croak "RM_ENGINE: Update failed. This OS may have been removed before the update occured." if ($ret eq '0E0');
 	}
 	else
 	{
@@ -1045,20 +1152,20 @@ sub deleteOs
 {
 	my ($self, $updateTime, $updateUser, $record) = @_;
 	my $deleteId = (ref $record eq 'HASH') ? $$record{'id'} : $record;
-	die "RMERR: Delete failed. No OS id specified.\nError occured" unless ($deleteId);
+	croak "RM_ENGINE: Delete failed. No OS id specified." unless ($deleteId);
 	my $sth = $self->dbh->prepare(qq!DELETE FROM os WHERE id = ?!);
 	my $ret = $sth->execute($deleteId);
-	die "RMERR: Delete failed. This OS does not currently exist, it may have been removed already.\nError occured" if ($ret eq '0E0');
+	croak "RM_ENGINE: Delete failed. This OS does not currently exist, it may have been removed already." if ($ret eq '0E0');
 	return $deleteId;
 }
 
 sub _validateOsUpdate
 {
 	my ($self, $record) = @_;
-	die "RMERR: You must specify a name for the operating system.\nError occured" unless (length($$record{'name'}) > 1);
-	die "RMERR: Names must be less than ".$$conf{'maxstring'}." characters.\nError occured" unless (length($$record{'name'}) <= $$conf{'maxstring'});
+	croak "RM_ENGINE: You must specify a name for the operating system." unless (length($$record{'name'}) > 1);
+	croak "RM_ENGINE: Names must be less than ".$self->getConf('maxstring')." characters." unless (length($$record{'name'}) <= $self->getConf('maxstring'));
 	# no validation for $$record{'manufacturer_id'} - foreign key constraints will catch
-	die "RMERR: Notes cannot exceed '.$$conf{'maxnote'}.' characters.\nError occured" unless (length($$record{'notes'}) <= $$conf{'maxnote'});
+	croak "RM_ENGINE: Notes cannot exceed '.$self->getConf('maxnote').' characters." unless (length($$record{'notes'}) <= $self->getConf('maxnote'));
 	return ($$record{'name'}, $$record{'manufacturer_id'}, $$record{'notes'});
 }
 
@@ -1098,7 +1205,7 @@ sub org
 	!);
 	$sth->execute($id);	
 	my $org = $sth->fetchrow_hashref('NAME_lc');
-	die 'RMERR: No such organisation id.' unless defined($$org{'id'});
+	croak 'RM_ENGINE: No such organisation id.' unless defined($$org{'id'});
 	return $org;
 }
 
@@ -1121,7 +1228,7 @@ sub orgList
 sub updateOrg
 {
 	my ($self, $updateTime, $updateUser, $record) = @_;
-	die "RMERR: Unable to update org. No org record specified.\nError occured" unless ($record);
+	croak "RM_ENGINE: Unable to update org. No org record specified." unless ($record);
 
 	my ($sth, $newId);
 	
@@ -1129,7 +1236,7 @@ sub updateOrg
 	{	
 		$sth = $self->dbh->prepare(qq!UPDATE org SET name = ?, account_no = ?, customer = ?, software = ?, hardware = ?, descript = ?, home_page = ?, notes = ?, meta_update_time = ?, meta_update_user = ? WHERE id = ?!);
 		my $ret = $sth->execute($self->_validateOrgUpdate($record), $updateTime, $updateUser, $$record{'id'});
-		die "RMERR: Update failed. This org may have been removed before the update occured.\nError occured" if ($ret eq '0E0');
+		croak "RM_ENGINE: Update failed. This org may have been removed before the update occured." if ($ret eq '0E0');
 	}
 	else
 	{
@@ -1144,10 +1251,10 @@ sub deleteOrg
 {
 	my ($self, $updateTime, $updateUser, $record) = @_;
 	my $deleteId = (ref $record eq 'HASH') ? $$record{'id'} : $record;
-	die "RMERR: Delete failed. No org id specified.\nError occured" unless ($deleteId);
+	croak "RM_ENGINE: Delete failed. No org id specified." unless ($deleteId);
 	my $sth = $self->dbh->prepare(qq!DELETE FROM org WHERE id = ?!);
 	my $ret = $sth->execute($deleteId);
-	die "RMERR: Delete failed. This org does not currently exist, it may have been removed already.\nError occured" if ($ret eq '0E0');
+	croak "RM_ENGINE: Delete failed. This org does not currently exist, it may have been removed already." if ($ret eq '0E0');
 	return $deleteId;
 }
 
@@ -1155,14 +1262,14 @@ sub _validateOrgUpdate
 {
 	my ($self, $record) = @_;
 
-	$$record{'home_page'} = httpFixer($$record{'home_page'});
+	$$record{'home_page'} = $self->_httpFixer($$record{'home_page'});
 
-	die "RMERR: You must specify a name for the organisation.\nError occured" unless (length($$record{'name'}) > 1);
-	die "RMERR: Names must be less than ".$$conf{'maxstring'}." characters.\nError occured" unless (length($$record{'name'}) <= $$conf{'maxstring'});
-	die "RMERR: Account numbers must be less than ".$$conf{'maxstring'}." characters.\nError occured" unless (length($$record{'account_no'}) <= $$conf{'maxstring'});
-	die "RMERR: Descriptions cannot exceed ".$$conf{'maxnote'}." characters.\nError occured" unless (length($$record{'descript'}) <= $$conf{'maxnote'});
-	die "RMERR: Home page URLs cannot exceed ".$$conf{'maxstring'}." characters.\nError occured" unless (length($$record{'home_page'}) <= $$conf{'maxstring'});
-	die "RMERR: Notes cannot exceed ".$$conf{'maxnote'}." characters.\nError occured" unless (length($$record{'notes'}) <= $$conf{'maxnote'});
+	croak "RM_ENGINE: You must specify a name for the organisation." unless (length($$record{'name'}) > 1);
+	croak "RM_ENGINE: Names must be less than ".$self->getConf('maxstring')." characters." unless (length($$record{'name'}) <= $self->getConf('maxstring'));
+	croak "RM_ENGINE: Account numbers must be less than ".$self->getConf('maxstring')." characters." unless (length($$record{'account_no'}) <= $self->getConf('maxstring'));
+	croak "RM_ENGINE: Descriptions cannot exceed ".$self->getConf('maxnote')." characters." unless (length($$record{'descript'}) <= $self->getConf('maxnote'));
+	croak "RM_ENGINE: Home page URLs cannot exceed ".$self->getConf('maxstring')." characters." unless (length($$record{'home_page'}) <= $self->getConf('maxstring'));
+	croak "RM_ENGINE: Notes cannot exceed ".$self->getConf('maxnote')." characters." unless (length($$record{'notes'}) <= $self->getConf('maxnote'));
 	
 	# normalise input for boolean values
 	$$record{'customer'} = $$record{'customer'} ? 1 : 0;
@@ -1204,7 +1311,7 @@ sub domain
 	!);
 	$sth->execute($id);	
 	my $domain = $sth->fetchrow_hashref('NAME_lc');
-	die "RMERR: No such domain id.\nError occured" unless defined($$domain{'id'});
+	croak "RM_ENGINE: No such domain id." unless defined($$domain{'id'});
 	return $domain;
 }
 
@@ -1227,7 +1334,7 @@ sub domainList
 sub updateDomain
 {
 	my ($self, $updateTime, $updateUser, $record) = @_;
-	die "RMERR: Unable to update domain. No domain record specified.\nError occured" unless ($record);
+	croak "RM_ENGINE: Unable to update domain. No domain record specified." unless ($record);
 
 	my ($sth, $newId);
 	
@@ -1235,7 +1342,7 @@ sub updateDomain
 	{	
 		$sth = $self->dbh->prepare(qq!UPDATE domain SET name = ?, descript = ?, notes = ?, meta_update_time = ?, meta_update_user = ? WHERE id = ?!);
 		my $ret = $sth->execute($self->_validateDomainUpdate($record), $updateTime, $updateUser, $$record{'id'});
-		die "RMERR: Update failed. This domain may have been removed before the update occured.\nError occured" if ($ret eq '0E0');		
+		croak "RM_ENGINE: Update failed. This domain may have been removed before the update occured." if ($ret eq '0E0');		
 	}
 	else
 	{
@@ -1250,20 +1357,20 @@ sub deleteDomain
 {
 	my ($self, $updateTime, $updateUser, $record) = @_;
 	my $deleteId = (ref $record eq 'HASH') ? $$record{'id'} : $record;
-	die "RMERR: Delete failed. No domain id specified.\nError occured" unless ($deleteId);
+	croak "RM_ENGINE: Delete failed. No domain id specified." unless ($deleteId);
 	my $sth = $self->dbh->prepare(qq!DELETE FROM domain WHERE id = ?!);
 	my $ret = $sth->execute($deleteId);
-	die "RMERR: Delete failed. This domain does not currently exist, it may have been removed already.\nError occured" if ($ret eq '0E0');
+	croak "RM_ENGINE: Delete failed. This domain does not currently exist, it may have been removed already." if ($ret eq '0E0');
 	return $deleteId;
 }
 
 sub _validateDomainUpdate # Should we remove or warn on domains beginning with . ?
 {
 	my ($self, $record) = @_;
-	die "RMERR: You must specify a name for the domain.\nError occured" unless (length($$record{'name'}) > 1);
-	die "RMERR: Names must be less than ".$$conf{'maxstring'}." characters.\nError occured" unless (length($$record{'name'}) <= $$conf{'maxstring'});
-	die "RMERR: Descriptions cannot exceed ".$$conf{'maxstring'}." characters.\nError occured" unless (length($$record{'descript'}) <= $$conf{'maxstring'});
-	die "RMERR: Notes cannot exceed ".$$conf{'maxnote'}." characters.\nError occured" unless (length($$record{'notes'}) <= $$conf{'maxnote'});
+	croak "RM_ENGINE: You must specify a name for the domain." unless (length($$record{'name'}) > 1);
+	croak "RM_ENGINE: Names must be less than ".$self->getConf('maxstring')." characters." unless (length($$record{'name'}) <= $self->getConf('maxstring'));
+	croak "RM_ENGINE: Descriptions cannot exceed ".$self->getConf('maxstring')." characters." unless (length($$record{'descript'}) <= $self->getConf('maxstring'));
+	croak "RM_ENGINE: Notes cannot exceed ".$self->getConf('maxnote')." characters." unless (length($$record{'notes'}) <= $self->getConf('maxnote'));
 	return ($$record{'name'}, $$record{'descript'}, $$record{'notes'});
 }
 
@@ -1319,7 +1426,7 @@ sub device
 	!);
 	$sth->execute($id);	
 	my $device = $sth->fetchrow_hashref('NAME_lc');
-	die 'RMERR: No such device id.' unless defined($$device{'id'});
+	croak 'RM_ENGINE: No such device id.' unless defined($$device{'id'});
 	return $device;
 }
 
@@ -1489,7 +1596,7 @@ sub deviceCountUnracked
 sub updateDevice
 {
 	my ($self, $updateTime, $updateUser, $record) = @_;
-	die "RMERR: Unable to update device. No building device specified.\nError occured" unless ($record);
+	croak "RM_ENGINE: Unable to update device. No building device specified." unless ($record);
 	
 	my ($sth, $newId);
 
@@ -1497,7 +1604,7 @@ sub updateDevice
 	{	
 		$sth = $self->dbh->prepare(qq!UPDATE device SET name = ?, domain = ?, rack = ?, rack_pos = ?, hardware = ?, serial_no = ?, asset_no = ?, purchased = ?, os = ?, os_version = ?, customer = ?, service = ?, role = ?, in_service = ?, notes = ?, meta_update_time = ?, meta_update_user = ? WHERE id = ?!);
 		my $ret = $sth->execute($self->_validateDeviceInput($record), $updateTime, $updateUser, $$record{'id'});
-		die "RMERR: Update failed. This device may have been removed before the update occured.\nError occured" if ($ret eq '0E0');
+		croak "RM_ENGINE: Update failed. This device may have been removed before the update occured." if ($ret eq '0E0');
 	}
 	else
 	{
@@ -1512,20 +1619,20 @@ sub deleteDevice
 {
 	my ($self, $updateTime, $updateUser, $record) = @_;
 	my $deleteId = (ref $record eq 'HASH') ? $$record{'id'} : $record;
-	die "RMERR: Delete failed. No device id specified.\nError occured" unless ($deleteId);
+	croak "RM_ENGINE: Delete failed. No device id specified." unless ($deleteId);
 	my $sth = $self->dbh->prepare(qq!DELETE FROM device WHERE id = ?!);
 	my $ret = $sth->execute($deleteId);
-	die "RMERR: Delete failed. This device does not currently exist, it may have been removed already.\nError occured" if ($ret eq '0E0');
+	croak "RM_ENGINE: Delete failed. This device does not currently exist, it may have been removed already." if ($ret eq '0E0');
 	return $deleteId;
 }
 
 sub _validateDeviceInput # doesn't check much at present
 {
 	my ($self, $record) = @_;
-	die "RMERR_INTERNAL: Unable to validate device. No device record specified.\nError occured" unless ($record);
-	checkName($$record{'name'});
-	checkNotes($$record{'notes'});
-	$$record{'purchased'} = checkDate($$record{'purchased'}); # check date and coerce to YYYY-MM-DD format
+	croak "RM_ENGINE: Unable to validate device. No device record specified." unless ($record);
+	$self->_checkName($$record{'name'});
+	$self->_checkNotes($$record{'notes'});
+	$$record{'purchased'} = $self->_checkDate($$record{'purchased'}); # check date and coerce to YYYY-MM-DD format
 	
 	# normalise in service value so it can be stored as an integer
 	$$record{'in_service'} = $$record{'in_service'} ? 1 : 0;
@@ -1542,7 +1649,7 @@ sub _validateDeviceInput # doesn't check much at present
 	else # location is in a real rack
 	{
 		# check we have a position
-		die "RMERR: You need to specify a Rack Position.\nError occured" unless (length($$record{'rack_pos'}) > 0);
+		croak "RM_ENGINE: You need to specify a Rack Position." unless (length($$record{'rack_pos'}) > 0);
 		
 		# get the size of this hardware
 		my $hardware = $self->hardware($$record{'hardware'});
@@ -1550,7 +1657,7 @@ sub _validateDeviceInput # doesn't check much at present
 		
 	 	unless ($$record{'rack_pos'} > 0 and $$record{'rack_pos'} + $$hardware{'size'} - 1 <= $$rack{'size'})
 		{
-			die "RMERR: The device '".$$record{'name'}."' cannot fit at that location. This rack is ".$$rack{'size'}." U in height. This device is $hardwareSize U and you placed it at position ".$$record{'rack_pos'}.".\nError occured";
+			croak "RM_ENGINE: The device '".$$record{'name'}."' cannot fit at that location. This rack is ".$$rack{'size'}." U in height. This device is $hardwareSize U and you placed it at position ".$$record{'rack_pos'}.".";
 		}
 		
 		# ensure the location doesn't overlap any other devices in this rack
@@ -1565,7 +1672,7 @@ sub _validateDeviceInput # doesn't check much at present
 			my $pos = $_;
 			for my $r (@$rackLayout)
 			{
-				die "RMERR: Cannot put the device '".$$record{'name'}."' here (position ".$$record{'rack_pos'}." in rack ".$$rack{'name'}.") because it overlaps with the device '".$$r{'name'}."'.\nError occured" if ($$r{'rack_pos'} == $pos and $$r{'name'} and ($$r{'id'} ne $$record{'id'}));
+				croak "RM_ENGINE: Cannot put the device '".$$record{'name'}."' here (position ".$$record{'rack_pos'}." in rack ".$$rack{'name'}.") because it overlaps with the device '".$$r{'name'}."'." if ($$r{'rack_pos'} == $pos and $$r{'name'} and ($$r{'id'} ne $$record{'id'}));
 			}
 		}
 	}
@@ -1613,7 +1720,7 @@ sub role
 	!);
 	$sth->execute($id);	
 	my $role = $sth->fetchrow_hashref('NAME_lc');
-	die "RMERR: No such role id.\nError occured" unless defined($$role{'id'});
+	croak "RM_ENGINE: No such role id." unless defined($$role{'id'});
 	return $role;
 }
 
@@ -1635,7 +1742,7 @@ sub roleList
 sub updateRole
 {
 	my ($self, $updateTime, $updateUser, $record) = @_;
-	die "RMERR: Unable to update role. No role record specified.\nError occured" unless ($record);
+	croak "RM_ENGINE: Unable to update role. No role record specified." unless ($record);
 
 	my ($sth, $newId);
 	
@@ -1643,7 +1750,7 @@ sub updateRole
 	{	
 		$sth = $self->dbh->prepare(qq!UPDATE role SET name = ?, descript = ?, notes = ?, meta_update_time = ?, meta_update_user = ? WHERE id = ?!);
 		my $ret = $sth->execute($self->_validateRoleUpdate($record), $updateTime, $updateUser, $$record{'id'});
-		die "RMERR: Update failed. This role may have been removed before the update occured.\nError occured" if ($ret eq '0E0');
+		croak "RM_ENGINE: Update failed. This role may have been removed before the update occured." if ($ret eq '0E0');
 	}
 	else
 	{
@@ -1658,20 +1765,20 @@ sub deleteRole
 {
 	my ($self, $updateTime, $updateUser, $record) = @_;
 	my $deleteId = (ref $record eq 'HASH') ? $$record{'id'} : $record;
-	die "RMERR: Delete failed. No role id specified.\nError occured" unless ($deleteId);
+	croak "RM_ENGINE: Delete failed. No role id specified." unless ($deleteId);
 	my $sth = $self->dbh->prepare(qq!DELETE FROM role WHERE id = ?!);
 	my $ret = $sth->execute($deleteId);
-	die "RMERR: Delete failed. This role does not currently exist, it may have been removed already.\nError occured" if ($ret eq '0E0');
+	croak "RM_ENGINE: Delete failed. This role does not currently exist, it may have been removed already." if ($ret eq '0E0');
 	return $deleteId;
 }
 
 sub _validateRoleUpdate
 {
 	my ($self, $record) = @_;
-	die "RMERR: You must specify a name for the role.\nError occured" unless (length($$record{'name'}) > 1);
-	die "RMERR: Names must be less than ".$$conf{'maxstring'}." characters.\nError occured" unless (length($$record{'name'}) <= $$conf{'maxstring'});
-	die "RMERR: Descriptions cannot exceed ".$$conf{'maxstring'}." characters.\nError occured" unless (length($$record{'desc'}) <= $$conf{'maxstring'});
-	die "RMERR: Notes cannot exceed ".$$conf{'maxnote'}." characters.\nError occured" unless (length($$record{'notes'}) <= $$conf{'maxnote'});
+	croak "RM_ENGINE: You must specify a name for the role." unless (length($$record{'name'}) > 1);
+	croak "RM_ENGINE: Names must be less than ".$self->getConf('maxstring')." characters." unless (length($$record{'name'}) <= $self->getConf('maxstring'));
+	croak "RM_ENGINE: Descriptions cannot exceed ".$self->getConf('maxstring')." characters." unless (length($$record{'desc'}) <= $self->getConf('maxstring'));
+	croak "RM_ENGINE: Notes cannot exceed ".$self->getConf('maxnote')." characters." unless (length($$record{'notes'}) <= $self->getConf('maxnote'));
 	return ($$record{'name'}, $$record{'descript'}, $$record{'notes'});
 }
 
@@ -1707,7 +1814,7 @@ sub service
 	!);
 	$sth->execute($id);	
 	my $service = $sth->fetchrow_hashref('NAME_lc');
-	die "RMERR: No such service id.\nError occured" unless defined($$service{'id'});
+	croak "RM_ENGINE: No such service id." unless defined($$service{'id'});
 	return $service;
 }
 
@@ -1729,7 +1836,7 @@ sub serviceList
 sub updateService
 {
 	my ($self, $updateTime, $updateUser, $record) = @_;
-	die "RMERR: Unable to update service level. No service level record specified.\nError occured" unless ($record);
+	croak "RM_ENGINE: Unable to update service level. No service level record specified." unless ($record);
 
 	my ($sth, $newId);
 	
@@ -1737,7 +1844,7 @@ sub updateService
 	{	
 		$sth = $self->dbh->prepare(qq!UPDATE service SET name = ?, descript = ?, notes = ?, meta_update_time = ?, meta_update_user = ? WHERE id = ?!);
 		my $ret = $sth->execute($self->_validateServiceUpdate($record), $updateTime, $updateUser, $$record{'id'});
-		die "RMERR: Update failed. This service level may have been removed before the update occured.\nError occured" if ($ret eq '0E0');
+		croak "RM_ENGINE: Update failed. This service level may have been removed before the update occured." if ($ret eq '0E0');
 	}
 	else
 	{
@@ -1752,20 +1859,20 @@ sub deleteService
 {
 	my ($self, $updateTime, $updateUser, $record) = @_;
 	my $deleteId = (ref $record eq 'HASH') ? $$record{'id'} : $record;
-	die "RMERR: Delete failed. No service level id specified.\nError occured" unless ($deleteId);
+	croak "RM_ENGINE: Delete failed. No service level id specified." unless ($deleteId);
 	my $sth = $self->dbh->prepare(qq!DELETE FROM service WHERE id = ?!);
 	my $ret = $sth->execute($deleteId);
-	die "RMERR: Delete failed. This service level does not currently exist, it may have been removed already.\nError occured" if ($ret eq '0E0');
+	croak "RM_ENGINE: Delete failed. This service level does not currently exist, it may have been removed already." if ($ret eq '0E0');
 	return $deleteId;
 }
 
 sub _validateServiceUpdate
 {
 	my ($self, $record) = @_;
-	die "RMERR: You must specify a name for the service level.\nError occured" unless (length($$record{'name'}) > 1);
-	die "RMERR: Names must be less than ".$$conf{'maxstring'}." characters.\nError occured" unless (length($$record{'name'}) <= $$conf{'maxstring'});
-	die "RMERR: Descriptions cannot exceed ".$$conf{'maxstring'}." characters.\nError occured" unless (length($$record{'desc'}) <= $$conf{'maxstring'});
-	die "RMERR: Notes cannot exceed ".$$conf{'maxnote'}." characters.\nError occured" unless (length($$record{'notes'}) <= $$conf{'maxnote'});
+	croak "RM_ENGINE: You must specify a name for the service level." unless (length($$record{'name'}) > 1);
+	croak "RM_ENGINE: Names must be less than ".$self->getConf('maxstring')." characters." unless (length($$record{'name'}) <= $self->getConf('maxstring'));
+	croak "RM_ENGINE: Descriptions cannot exceed ".$self->getConf('maxstring')." characters." unless (length($$record{'desc'}) <= $self->getConf('maxstring'));
+	croak "RM_ENGINE: Notes cannot exceed ".$self->getConf('maxnote')." characters." unless (length($$record{'notes'}) <= $self->getConf('maxnote'));
 	return ($$record{'name'}, $$record{'descript'}, $$record{'notes'});
 }
 
@@ -1777,7 +1884,7 @@ sub _validateServiceUpdate
 sub app
 {
 	my ($self, $id) = @_;
-	die "RMERR: Unable to retrieve app. No app id specified.\nError occured" unless ($id);
+	croak "RM_ENGINE: Unable to retrieve app. No app id specified." unless ($id);
 	my $sth = $self->dbh->prepare(qq!
 		SELECT app.* 
 		FROM app 
@@ -1785,7 +1892,7 @@ sub app
 	!);
 	$sth->execute($id);	
 	my $app = $sth->fetchrow_hashref('NAME_lc');
-	die "RMERR: No such app id.\nError occured" unless defined($$app{'id'});
+	croak "RM_ENGINE: No such app id." unless defined($$app{'id'});
 	return $app;
 }
 
@@ -1853,7 +1960,7 @@ sub appOnDeviceList
 sub updateApp
 {
 	my ($self, $updateTime, $updateUser, $record) = @_;
-	die "RMERR: Unable to update app. No app record specified.\nError occured" unless ($record);
+	croak "RM_ENGINE: Unable to update app. No app record specified." unless ($record);
 	
 	my ($sth, $newId);
 
@@ -1861,7 +1968,7 @@ sub updateApp
 	{	
 		$sth = $self->dbh->prepare(qq!UPDATE app SET name = ?, descript = ?, notes = ?, meta_update_time = ?, meta_update_user = ? WHERE id = ?!);
 		my $ret = $sth->execute($self->_validateAppUpdate($record), $updateTime, $updateUser, $$record{'id'});
-		die "RMERR: Update failed. This app may have been removed before the update occured.\nError occured" if ($ret eq '0E0');
+		croak "RM_ENGINE: Update failed. This app may have been removed before the update occured." if ($ret eq '0E0');
 	}
 	else
 	{
@@ -1876,19 +1983,19 @@ sub deleteApp
 {
 	my ($self, $updateTime, $updateUser, $record) = @_;
 	my $deleteId = (ref $record eq 'HASH') ? $$record{'id'} : $record;
-	die "RMERR: Delete failed. No app id specified.\nError occured" unless ($deleteId);
+	croak "RM_ENGINE: Delete failed. No app id specified." unless ($deleteId);
 	my $sth = $self->dbh->prepare(qq!DELETE FROM app WHERE id = ?!);
 	my $ret = $sth->execute($deleteId);
-	die "RMERR: Delete failed. This app does not currently exist, it may have been removed already.\nError occured" if ($ret eq '0E0');
+	croak "RM_ENGINE: Delete failed. This app does not currently exist, it may have been removed already." if ($ret eq '0E0');
 	return $deleteId;
 }
 
 sub _validateAppUpdate
 {
 	my ($self, $record) = @_;
-	die "RMERR_INTERNAL: Unable to validate app. No app record specified.\nError occured" unless ($record);
-	checkName($$record{'name'});
-	checkNotes($$record{'notes'});
+	croak "RM_ENGINE: Unable to validate app. No app record specified." unless ($record);
+	$self->_checkName($$record{'name'});
+	$self->_checkNotes($$record{'notes'});
 	return ($$record{'name'}, $$record{'descript'}, $$record{'notes'});
 }
 
@@ -1974,7 +2081,7 @@ database handles from other databases will produce undefined results.
 =head2 building($id)
 
 Gets a hash reference to one building specified by $id. If there is no such
-building the library dies.
+building the library croaks.
 
 =head2 buildingCount()
 
@@ -1995,7 +2102,7 @@ Updates or creates a building entry based on the hash ref $record. If
 $$record{'id'} is specified an update will be performed, otherwise a new
 building will be created. $updateTime and $updateUser set the update time and
 user associated with this update. Both are strings, and may be empty. If the
-engine tries to update a record, but no record is updated, the Engine dies.
+engine tries to update a record, but no record is updated, the Engine croaks.
 Returns the id of the updated or created building.
 
 =head2 deleteBuilding($self, $updateTime, $updateUser, $record)
@@ -2004,7 +2111,7 @@ Deletes the building whose id identified by $record. deleteBuilding checks
 whether the record is a hash ref, and if so uses $$record{'id'} as the id,
 otherwise $record is taken to be the id. Support for hash refs allows 
 deleteBuilding to be called with the same data as an update. If no such
-building exists or the delete fails the library dies. $updateTime and 
+building exists or the delete fails the library croaks. $updateTime and 
 $updateUser set the update time and user associated with this delete; at
 present they are disguarded.
 
@@ -2022,7 +2129,7 @@ present they are disguarded.
 =head2 room($id)
 
 Gets a hash reference to one room specified by $id. If there is no such room
-the engine dies.
+the engine croaks.
 
 =head2 roomCount()
 
@@ -2055,7 +2162,7 @@ Updates or creates a room entry based on the hash ref $record. If
 $$record{'id'} is specified an update will be performed, otherwise a new room
 will be created. $updateTime and $updateUser set the update time and user
 associated with this update. Both are strings, and may be empty. If the engine
-tries to update a record, but no record is updated, the Engine dies. Returns
+tries to update a record, but no record is updated, the Engine croaks. Returns
 the id of the updated or created building.
 
 =head2 deleteRoom($updateTime, $updateUser, $record)
@@ -2064,7 +2171,7 @@ Deletes the room whose id identified by $record. deleteRoom checks whether the
 record is a hash ref, and if so uses $$record{'id'} as the id, otherwise 
 $record is taken to be the id. Support for hash refs allows deleteRoom
 to be called with the same data as an update. If no such room exists or the 
-delete fails the library dies. $updateTime and $updateUser set the update time
+delete fails the library croaks. $updateTime and $updateUser set the update time
 and user associated with this delete; at present they are disguarded.
 
  

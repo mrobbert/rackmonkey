@@ -13,14 +13,8 @@ use 5.006_001;
 
 use CGI;
 
-use RackMonkey::Conf;
-use RackMonkey::Helper;
-
 our $VERSION = '1.2.%BUILD%';
 our $AUTHOR = 'Will Green (wgreen at users.sourceforge.net)';
-
-our $conf;
-$conf = $RackMonkey::Conf::conf;
 
 ##############################################################################
 # Common Methods                                                             #
@@ -49,7 +43,7 @@ sub view
 {
 	my $self = shift;
 	my $view = $self->cgi->param('view') || '';
-	$view = $$conf{'defaultview'} unless $view =~/^[a-z_]+$/;
+	$view = 'rack' unless $view =~/^[a-z_]+$/;
 	return $view;
 }
 
@@ -173,6 +167,7 @@ sub vars
 sub header
 {
 	my $self = shift;
+	my $type = shift || 'text/html';
 	return $self->cgi->header;
 }
 
@@ -251,7 +246,7 @@ sub selectProperty # should get all prefill vars going via this sub
 sub selectItem
 {
 	my ($self, $items, $selectedId) = @_;
-	$selectedId = $selectedId || 0;
+	$selectedId ||= 0;
 
 	for my $i (@$items)
 	{
