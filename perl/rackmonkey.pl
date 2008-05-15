@@ -35,13 +35,13 @@ use RackMonkey::Error;
 our $VERSION = '1.2.%BUILD%';
 our $AUTHOR = 'Will Green (wgreen at users.sourceforge.net)';
 
-our ($template, $cgi, $conf);
+our ($template, $cgi, $conf, $backend);
 
 $cgi = new RackMonkey::CGI;
 
 eval 
 {		
-	my $backend = RackMonkey::Engine->new;
+	$backend = RackMonkey::Engine->new;
 	$conf = $$backend{'conf'};
 
 	my $fullURL = $cgi->url;
@@ -57,7 +57,6 @@ eval
 	my $priorOrderBy = $cgi->priorOrderBy;
 	
 	my $loggedInUser = $ENV{'REMOTE_USER'} || $ENV{'REMOTE_ADDR'};
-	
 
 	if ($act) # perform act, and return status: 303 (See Other) to redirect to a view
 	{
@@ -95,6 +94,14 @@ eval
 		unless ($view =~ /^(?:config|help|app|building|device|domain|hardware|org|os|rack|report|role|room|row|service|system)$/)
 		{
 			die "RMERR: '$view' is not a valid view. Did you type the URL manually? Note that view names are singular, for example device NOT devices.";
+		}
+		
+		if ($view eq 'system') # check for this view first: it doesn't use templates
+		{
+			print $cgi->header('text/plain');
+			my %sys = %{$backend->{'sys'}};
+			print map "$_: $sys{$_}\n", sort keys %sys;
+			exit;
 		}
 		
 		my $templatePath = $$conf{'tmplpath'}."/${view}_${viewType}.tmpl";
@@ -531,10 +538,6 @@ eval
 				$template->param($backend->service($id));
 			}
 		}
-		elsif ($view eq 'system')
-		{
-			print $cgi->header('text/plain');
-		}
 		else
 		{
 			die "RMERR: No such view. This error should not occur. Please report to developers.";
@@ -594,7 +597,7 @@ if ($@)
 	my $errMsg = $@;
 	print $cgi->header;
 	my $friendlyErrMsg = RackMonkey::Error::enlighten($errMsg);
-	RackMonkey::Error::display($errMsg, $friendlyErrMsg, $conf);
+	RackMonkey::Error::display($errMsg, $friendlyErrMsg, $backend->{'sys'});
 }
 
 sub shortStr

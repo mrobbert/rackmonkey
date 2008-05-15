@@ -168,7 +168,7 @@ sub header
 {
 	my $self = shift;
 	my $type = shift || 'text/html';
-	return $self->cgi->header;
+	return $self->cgi->header($type);
 }
 
 sub lastCreatedId

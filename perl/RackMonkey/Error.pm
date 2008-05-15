@@ -123,9 +123,9 @@ sub enlighten
 
 sub display
 {
-	my ($errMsg, $friendlyErrMsg, $conf) = @_;
+	my ($errMsg, $friendlyErrMsg, $sys) = @_;
 	
-	my $systemInfo = "";
+	my $systemInfo = join '<br/>', map "$_: $$sys{$_}", sort keys %$sys;
 		
 	$errMsg =~ s/\n/\n\t\t<br\/>/gm; # replace newlines with <br> for HTML	
 	$friendlyErrMsg =~ s/\n/\n\t\t<br\/>/gm; # replace newlines with <br> for HTML

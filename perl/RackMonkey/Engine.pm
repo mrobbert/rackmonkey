@@ -28,29 +28,59 @@ sub new
 {
 	my ($className) = @_;
 	my $conf = RackMonkey::Conf->new;
-	
 	croak "RM_ENGINE: No database specified in configuration file. Check value of 'dbconnect' in rackmonkey.conf." unless ($$conf{'dbconnect'});
 	
-	# If using SQLite only connect if database file exists, don't create it
-	my ($currentDriver, $dataSource) = $$conf{'dbconnect'} =~ /dbi:(.*?):(.*)/;
-	$currentDriver = "DBD::$currentDriver";
-	if ($currentDriver eq 'DBD::SQLite')
+	# The sys hash contains basic system profile information (should be altered to use the DBI DSN parse method?)
+	my ($dbDriver, $dbDataSource) = $$conf{'dbconnect'} =~ /dbi:(.*?):(.*)/;
+	my $sys = 
 	{
-		my ($dataBasePath) = $dataSource =~ /dbname=(.*)/;
-		croak "RM_ENGINE: SQLite database '$dataBasePath' does not exist. Check the 'dbconnect' path in rackmonkey.conf and that you have created a RackMonkey database as per the install guide." unless (-e $dataBasePath)
+		'db_driver' => "DBD::$dbDriver", 
+		'os' => $^O, 
+		'perl_version' => $],
+		'rackmonkey_engine_version' => $VERSION
+	};
+	$$conf{'db_data_source'} = $dbDataSource;
+	
+	# If using SQLite only connect if database file exists, don't create it
+	if ($$sys{'db_driver'} eq 'DBD::SQLite')
+	{
+		my ($databasePath) = $$conf{'db_data_source'} =~ /dbname=(.*)/;
+		croak "RM_ENGINE: SQLite database '$databasePath' does not exist. Check the 'dbconnect' path in rackmonkey.conf and that you have created a RackMonkey database as per the install guide." unless (-e $databasePath)
 	}
 	
 	my $dbh = DBI->connect($$conf{'dbconnect'}, $$conf{'dbuser'}, $$conf{'dbpass'}, {AutoCommit => 1, RaiseError => 1, PrintError => 0, ShowErrorStatement => 1}); 
-	_checkSupportedDriver($$conf{'dbconnect'});
-	
-	my $self = {'dbh' => $dbh, 'conf' => $conf};
-	bless $self, $className;
-}
 
-sub DESTROY
-{
-	my $self = shift;
-	$self->dbh->disconnect;
+	# Checks that the DBD driver is compatible with RackMonkey
+	# Get driver version number
+	my $currentDriver = $$sys{'db_driver'};
+	my $driverVersion = eval("\$${currentDriver}::VERSION");
+	my $DBIVersion = eval("\$DBI::VERSION");
+	$$sys{'db_driver_version'} = $driverVersion;
+	$$sys{'dbi_version'} = $DBIVersion;
+	
+	# Check we're using SQLite, Postgres or MySQL
+	unless (($currentDriver eq 'DBD::SQLite') || ($currentDriver eq 'DBD::Pg') || ($currentDriver eq 'DBD::mysql'))
+	{
+		croak "RM_ENGINE: You tried to use an unsupported database driver '$currentDriver'. RackMonkey supports SQLite (DBD::SQLite), Postgres (DBD::Pg) or MySQL (DBD::mysql).";
+	}
+	
+	# If using SQLite, version v1.09 or higher is required in order to support ADD COLUMN
+	if (($currentDriver eq 'DBD::SQLite') && ($driverVersion < 1.09))
+	{
+		croak "RM_ENGINE: RackMonkey requires DBD::SQLite v1.09 or higher. You are using DBD::SQLite v$driverVersion. Please consult the installation instructions.";
+	}
+	
+	# Postgres only works properly with DBI v1.43 or higher (due to last insert ID issues)
+	if ($currentDriver eq 'DBD::Postgres')
+	{
+		unless ($DBIVersion > 1.43)
+		{
+			croak "RM_ENGINE: You need to use DBI version v1.43 or higher with Postgres. You are using DBI v$DBIVersion. Please consult the installation instructions.";
+		}
+	}
+	
+	my $self = {'dbh' => $dbh, 'conf' => $conf, 'sys' => $sys};
+	bless $self, $className;
 }
 
 sub getConf
@@ -167,39 +197,6 @@ sub _lastInsertId
 {
     my ($self, $table) = @_;
     return $self->dbh->last_insert_id(undef, undef, $table, undef);
-}
-
-# Checks that the DBD driver is compatible with RackMonkey
-sub _checkSupportedDriver
-{
-	my $dbconnect = shift;
-	
-	# Get driver version number
-	my ($currentDriver) = $dbconnect =~ /dbi:(.*?):/;
-	$currentDriver = "DBD::$currentDriver";
-	my $driverVersion = eval("\$${currentDriver}::VERSION");
-	
-	# Check we're using SQLite, Postgres or MySQL
-	unless (($currentDriver eq 'DBD::SQLite') || ($currentDriver eq 'DBD::Pg') || ($currentDriver eq 'DBD::mysql'))
-	{
-		croak "RM_ENGINE: You tried to use an unsupported database driver '$currentDriver'. RackMonkey supports SQLite (DBD::SQLite), Postgres (DBD::Pg) or MySQL (DBD::mysql).";
-	}
-	
-	# If using SQLite, version v1.09 or higher is required in order to support ADD COLUMN
-	if (($currentDriver eq 'DBD::SQLite') && ($driverVersion < 1.09))
-	{
-		croak "RM_ENGINE: RackMonkey requires DBD::SQLite v1.09 or higher. You are using DBD::SQLite v$driverVersion. Please consult the installation instructions.";
-	}
-	
-	# Postgres only works properly with DBI v1.43 or higher (due to last insert ID issues)
-	if ($currentDriver eq 'DBD::Postgres')
-	{
-		my $DBIVersion = eval("\$DBI::VERSION");
-		unless ($DBIVersion > 1.43)
-		{
-			croak "RM_ENGINE: You need to use DBI version v1.43 or higher with Postgres. You are using DBI v$DBIVersion. Please consult the installation instructions.";
-		}
-	}
 }
 
 sub _checkName
