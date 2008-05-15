@@ -942,7 +942,7 @@ sub _validateHardwareUpdate
 	die "RMERR: You must specify a name for the hardware.\nError occured" unless (length($$record{'name'}) > 1);
 	die "RMERR: Names must be less than ".$$conf{'maxstring'}." characters.\nError occured" unless (length($$record{'name'}) <= $$conf{'maxstring'});
 	# no validation for $$record{'manufacturer_id'} - foreign key constraints will catch
-	die "RMERR: Size must be between 1 and ".$$conf{'maxracksixe'}." units." unless (($$record{'size'} > 0) && ($$record{'size'} <= $$conf{'maxracksixe'}));
+	die "RMERR: Size must be between 1 and ".$$conf{'maxracksize'}." units." unless (($$record{'size'} > 0) && ($$record{'size'} <= $$conf{'maxracksize'}));
 	die "RMERR: Image filenames must be between 0 and ".$$conf{'maxstring'}." characters." unless ((length($$record{'image'}) >= 0) && (length($$record{'image'}) <= $$conf{'maxstring'}));
 	die "RMERR: Support URLs must be between 0 and ".$$conf{'maxstring'}." characters." unless ((length($$record{'support_url'}) >= 0) && (length($$record{'support_url'}) <= $$conf{'maxstring'}));
 	die "RMERR: Specification URLs must be between 0 and ".$$conf{'maxstring'}." characters." unless ((length($$record{'spec_url'}) >= 0) && (length($$record{'spec_url'}) <= $$conf{'maxstring'}));
