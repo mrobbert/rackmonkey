@@ -2,7 +2,7 @@
 -- RackMonkey - Know Your Racks - http://www.rackmonkey.org                 --
 -- Version 1.2.%BUILD%                                                      --
 -- (C)2004-2008 Will Green (wgreen at users.sourceforge.net)                --
--- Database schema v2 for Postgres                                          --
+-- Database schema v2.1 for Postgres                                          --
 ------------------------------------------------------------------------------
 
 -- Building the device resides in
@@ -23,7 +23,7 @@ CREATE TABLE room
 (
 	id SERIAL PRIMARY KEY,
 	name VARCHAR NOT NULL,
-	building INTEGER REFERENCES building,
+	building INTEGER NOT NULL REFERENCES building,
 	has_rows INTEGER,
 	notes VARCHAR,
 	meta_default_data INTEGER NOT NULL DEFAULT 0,
@@ -37,7 +37,7 @@ CREATE TABLE row
 (
 	id SERIAL PRIMARY KEY,
 	name VARCHAR NOT NULL,
-	room INTEGER REFERENCES room,
+	room INTEGER NOT NULL REFERENCES room,
 	room_pos INTEGER NOT NULL,
 	hidden_row INTEGER NOT NULL DEFAULT 0,
 	notes VARCHAR,
@@ -52,7 +52,7 @@ CREATE TABLE rack
 (
 	id SERIAL PRIMARY KEY,
 	name VARCHAR NOT NULL,
-	row INTEGER REFERENCES row,
+	row INTEGER NOT NULL REFERENCES row,
 	row_pos INTEGER NOT NULL,
 	hidden_rack INTEGER NOT NULL DEFAULT 0,
 	size INTEGER,
@@ -117,7 +117,7 @@ CREATE TABLE os
 (
 	id SERIAL PRIMARY KEY,
 	name VARCHAR UNIQUE NOT NULL,
-	manufacturer INTEGER REFERENCES org,
+	manufacturer INTEGER NOT NULL REFERENCES org,
 	notes VARCHAR,
 	meta_default_data INTEGER NOT NULL DEFAULT 0,
 	meta_update_time VARCHAR,
@@ -130,7 +130,7 @@ CREATE TABLE hardware
 (
 	id SERIAL PRIMARY KEY,
 	name VARCHAR UNIQUE NOT NULL,
-	manufacturer INTEGER REFERENCES org,
+	manufacturer INTEGER NOT NULL REFERENCES org,
 	size INTEGER NOT NULL,
 	image VARCHAR,
 	support_url VARCHAR,
@@ -160,18 +160,18 @@ CREATE TABLE device
 (
 	id SERIAL PRIMARY KEY,
 	name VARCHAR NOT NULL,
-	domain INTEGER REFERENCES domain,
-	rack INTEGER REFERENCES rack,
+	domain INTEGER NOT NULL REFERENCES domain,
+	rack INTEGER NOT NULL REFERENCES rack,
 	rack_pos INTEGER,
-	hardware INTEGER REFERENCES hardware,
+	hardware INTEGER NOT NULL REFERENCES hardware,
 	serial_no VARCHAR,
 	asset_no VARCHAR,
 	purchased CHAR(10),
-	os INTEGER REFERENCES os,
+	os INTEGER NOT NULL REFERENCES os,
 	os_version VARCHAR, 
-	customer INTEGER REFERENCES org,
-	service INTEGER REFERENCES service,
-	role INTEGER REFERENCES role,
+	customer INTEGER NOT NULL REFERENCES org,
+	service INTEGER NOT NULL REFERENCES service,
+	role INTEGER NOT NULL REFERENCES role,
 	monitored INTEGER,
 	in_service INTEGER,
 	notes VARCHAR,
@@ -205,9 +205,9 @@ CREATE TABLE app_relation
 -- Relates devices to apps
 CREATE TABLE device_app
 (
-	app INTEGER REFERENCES app,
-	device INTEGER REFERENCES device,
-	relation INTEGER REFERENCES app_relation
+	app INTEGER NOT NULL REFERENCES app,
+	device INTEGER NOT NULL REFERENCES device,
+	relation INTEGER NOT NULL REFERENCES app_relation
 );
 
 
