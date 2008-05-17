@@ -77,7 +77,7 @@ latest versions at: http://www.rackmonkey.org/doc/1.2.4
 If you have and questions or issues with RackMonkey please check the following
 resources:
 
-* Troubleshooting doc: doc/install/troubleshooting.txt
+* Troubleshooting doc: doc/troubleshooting.txt
 * Online documentation: http://www.rackmonkey.org/doc/1.2.4
 * FAQ: http://www.rackmonkey.org/faq
 

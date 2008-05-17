@@ -114,7 +114,7 @@ Performing the Upgrade
 
 The upgrade is now complete. No further reconfiguration is required, your
 updated RackMonkey is ready to use. If you experience any problems with the
-upgrade you should consult troubleshooting.txt. 
+upgrade you should consult doc/troubleshooting.txt. 
 
 NB. If running RackMonkey under mod_perl you must restart or HUP your mod_perl 
 instance. This ensures mod_perl reads the new modules.
