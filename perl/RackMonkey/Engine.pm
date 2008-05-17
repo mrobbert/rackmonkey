@@ -898,12 +898,12 @@ sub _validateRackUpdate
 	$self->_checkName($$record{'name'});
 	$self->_checkNotes($$record{'notes'});
 	croak "RM_ENGINE: You must specify a size for your rack." unless $$record{'size'};
+	croak "RM_ENGINE: Rack sizes must be between 1 and ".$self->getConf('maxracksize')." units." unless (($$record{'size'} > 0) && ($$record{'size'} < $self->getConf('maxracksize')));
 	my $highestPos = $self->_highestUsedInRack($$record{'id'}) || 0;
 	if ($highestPos > $$record{'size'})
 	{
 		croak "RM_ENGINE: You cannot reduce the rack size to $$record{'size'} U as there is a device at position $highestPos.";
 	}
-	croak "RM_ENGINE: Rack sizes must be between 1 and ".$self->getConf('maxracksize')." units." unless (($$record{'size'} > 0) && ($$record{'size'} < $self->getConf('maxracksize')));
 	return ($$record{'name'}, $$record{'row'}, $$record{'row_pos'}, $$record{'hidden_rack'}, $$record{'size'}, $$record{'notes'});
 }
 
