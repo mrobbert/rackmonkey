@@ -46,7 +46,7 @@ eval
 
 	my $fullURL = $cgi->url;
 	my $baseURL = $cgi->baseUrl;
-	my $view = $cgi->view;
+	my $view = $cgi->view($$conf{'defaultview'});
 	my $id = $cgi->viewId;
 	my $viewType = $cgi->viewType;
 	my $act =  $cgi->act;

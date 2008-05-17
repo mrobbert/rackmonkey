@@ -41,9 +41,10 @@ sub referer
 
 sub view
 {
-	my $self = shift;
+	my ($self, $defaultView) = @_;
+	$defaultView ||= 'rack';
 	my $view = $self->cgi->param('view') || '';
-	$view = 'rack' unless $view =~/^[a-z_]+$/;
+	$view = $defaultView unless $view =~/^[a-z_]+$/;
 	return $view;
 }
 

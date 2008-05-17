@@ -51,7 +51,6 @@ sub new
 	my $dbh = DBI->connect($$conf{'dbconnect'}, $$conf{'dbuser'}, $$conf{'dbpass'}, {AutoCommit => 1, RaiseError => 1, PrintError => 0, ShowErrorStatement => 1}); 
 
 	# Checks that the DBD driver is compatible with RackMonkey
-	# Get driver version number
 	my $currentDriver = $$sys{'db_driver'};
 	my $driverVersion = eval("\$${currentDriver}::VERSION");
 	my $DBIVersion = eval("\$DBI::VERSION");
