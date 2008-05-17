@@ -34,6 +34,7 @@
 
 		<ul>
 			<li><a href="#couldnt_create_entry_name_is_not_unique">Couldn't Create Entry: Name is not Unique</a></li>
+			<li><a href="#couldnt_load_perl_database_driver">Couldn't Load Perl Database Driver DBD::*</a></li>
 			<li><a href="#couldnt_open_template">Couldn't Open Template</a></li>
 			<li><a href="#delete_violates_data_integrity_check">Delete Violates Data Integrity Check</a></li>
 		</ul>
@@ -43,6 +44,13 @@
 			RackMonkey requires that a item must have a unique name, for example you cannot two organisations called 'Acme Industries'.
 			For devices, you can use the same name, provided the domains are different. For example, you can have a device called 'www' with a domain of 'rackmonkey.org' and a device called 'www' with a domain of 'ibm.com'. Similarly, you can have locations with the same name, provided they are in different container locations.
 			For example, you can have two rooms called 'dc1' if they're in different buildings.
+		</p>
+		
+		<h3 class="error"><a name="couldnt_load_perl_database_driver">Couldn't Load Perl Database Driver DBD::*</a></h3>
+		<p class="error">
+			RackMonkey was unable to load the database driver specified by the dbconnect setting in rackmonkey.conf.
+			There are two main causes of this error. The driver name isn't in the correct case in rackmonkey.conf, for example the MySQL driver name is all lowercase: dbi:mysql.
+			Secondly, the driver may not be installed or available in the path perl is searching for modules. Check the RackMonkey installation instructions for further details.
 		</p>
 		
 		<h3 class="error"><a name="couldnt_open_template">Couldn't Open Template</a></h3>
