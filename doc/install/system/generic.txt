@@ -193,6 +193,10 @@ past releases. Configuration is now stored in a text file, which is read from
 copy conf/rackmonkey.conf-default to /etc/rackmonkey.conf and proceed to the 
 configuration editing section (below).
 
+NB. If you use Postgres or MySQL this configuration file will contain your
+RackMonkey database username and password. For maximum security we recommend
+only root (or the RackMonkey admin) and the web server can read this file.
+
 Changing Configuration Path
 ---------------------------
 If you want to place the configuration in another location you need to tell 
@@ -204,6 +208,11 @@ Editing Configuration
 ---------------------
 Before you can run RackMonkey you need to edit the configuration file to match 
 your directory and database locations.
+
+NB. Configuration names are case sensitive:
+
+	Right: wwwpath = /rackmonkey/www
+	Wrong: WWWPATH = /rackmonkey/www
 
 tmplpath sets the filesystem path to your template files, it should be an
 absolute path and match where you put the files during installation (see 
@@ -232,19 +241,33 @@ SQLite you can leave the DBUSER and DBPASS values blank.
 
 For Postgres
 ------------
-You will create a Postgres database in section 5. For now choose a database 
-name, username and password. For simplicity we recommend you make the database
-and username both 'rackmonkey'. An example configuration would be:
+You will create a Postgres database and user in section 5. For now choose a
+database name, username and password. For simplicity we recommend you make the
+database and username both 'rackmonkey'. An example configuration would be:
 
 	dbconnect = dbi:Pg:dbname=rackmonkey
 	dbuser = rackmonkey
 	dbpass = 7jhH#98*
 
+NB. Don't use this password! You should choose your own secure password.
+
 
 For MySQL
 ---------
-Not yet written. This section will be included in the final v1.2.4 release. Testing of RackMonkey on MySQL is still being carried out.
-    
+NB. MySQL support is still experimental. It will be fully supported in v1.2.5. 
+RackMonkey requires features only available in MySQL 5 or higher, v3 or v4 
+will not work. See install.txt for details of supported versions.
+
+You will create a MySQL database and user in section 5. For now choose a
+database name, username and password. For simplicity we recommend you make the
+database and username both 'rackmonkey'. An example configuration would be:
+
+	dbconnect = dbi:mysql:dbname=rackmonkey
+	dbuser = rackmonkey
+	dbpass = 7jhH#98*
+	
+NB. Don't use this password! You should choose your own secure password.
+
 
 5. Database Set Up
 ==================
@@ -259,6 +282,12 @@ following to set up the database and install the default data (required):
 
     $ sqlite3 [PATH] < sql/schema.sqlite.sql
     $ sqlite3 [PATH] < sql/default_data.sql
+
+You should also install the optional sample data if you want common companies 
+and operating systems etc. set up in RackMonkey (this will save you a lot of 
+work entering data and you can always delete the ones you don't want):
+
+	$ sqlite3 [PATH] < sql/sample_data.sql
 	
 You should then change the permissions of this file and its parent directory 
 to be readable and writable by your web server. For example, you might change
@@ -289,27 +318,66 @@ default data (assumes your database is called rackmonkey):
     $ psql -U rackmonkey rackmonkey < sql/schema.postgres.sql
     $ psql -U rackmonkey rackmonkey < sql/default_data.sql
 
+You should also install the optional sample data if you want common companies 
+and operating systems etc. set up in RackMonkey (this will save you a lot of 
+work entering data and you can always delete the ones you don't want):
+
+	$ psql -U rackmonkey rackmonkey < sql/sample_data.sql
+
 For further information on administering Postgres see:
 http://www.postgresql.org/docs/.
 	
 
 For MySQL
 ------------
-Not yet written. This section will be included in the final v1.2.4 release. Testing of RackMonkey on MySQL is still being carried out.
+Connect to your MySQL instance as a user with admin powers. Then create the 
+rackmonkey database and use it:
 
-Sample Data
------------
-If this is the first time you've installed RackMonkey you should install the
-sample data. This contains common companies, operating systems, roles etc. to
-help get you started quickly. NB. Don't perform this step until you've run the
-schema and default_data files against the database (above). 
+	mysql> create database rackmonkey;
+	Query OK, 1 row affected (0.00 sec)
+	mysql> use rackmonkey;
+	Database changed
 
-To install the sample data run the appropriate command for your database:
+Next, import the RackMonkey schema and default data (required):
 
-    $ sqlite3 [PATH] < sql/sample_data.sql
-    $ psql -U rackmonkey rackmonkey < sql/sample_data.sql
-    $ mysql (needs to be written)
+	mysql> \. sql/schema.mysql.sql
+	Query OK, 0 rows affected (0.36 sec)
+	...
+	mysql> \. sql/default_data.sql
+	Query OK, 1 row affected (0.00 sec)
+	...
 
+Check all queries were OK in the output from the schema import. You can check 
+all 19 tables were imported:
+
+	mysql> show tables;
+	...
+	19 rows in set (0.00 sec)
+	
+You should also install the optional sample data if you want common companies 
+and operating systems etc. set up in RackMonkey (this will save you a lot of 
+work entering data and you can always delete the ones you don't want):
+
+	mysql> \. sql/sample_data.sql
+	Query OK, 1 row affected (0.00 sec)
+	...
+
+Finally you need to create a user and password to match your configuration 
+file (in section 4, above). To local connections only:
+
+	mysql> GRANT ALL ON rackmonkey.* TO 'rackmonkey'@'localhost' IDENTIFIED BY '7jhH#98*';
+	Query OK, 0 rows affected (0.00 sec)
+
+To also allow connections from other servers also run:
+
+	mysql> GRANT ALL ON rackmonkey.* TO 'rackmonkey'@'%' IDENTIFIED BY '7jhH#98*';
+	Query OK, 0 rows affected (0.00 sec)
+
+You should then flush privileges to ensure all connections see them:
+
+	mysql> FLUSH PRIVILEGES;
+	Query OK, 0 rows affected (0.00 sec)
+	
 
 6. Running RackMonkey
 =====================
@@ -319,6 +387,3 @@ table of racks. If everything works correctly you probably want to start
 reading the first steps instructions. Click on the [Help] tab, then choose 
 "First Steps". If you're having trouble getting RackMonkey to run (for example 
 you get an Internal Server Error), read doc/install/troubleshooting.txt.
-
-You may want to install the optional plugins, for further information see
-doc/install/plugins.txt.

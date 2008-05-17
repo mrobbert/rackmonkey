@@ -8,6 +8,20 @@
 You can read the latest version of this document in HTML format at:
 http://www.rackmonkey.org/doc/1.2.4
 
+v1.2.4 Preview 2 - Released 2008-05-17
+--------------------------------------
+* Fixed two bugs with validation which prevented the creation of racks
+* Fixed a bug when creating a room during a rack creation
+* Fixed a bug when creating a room when no buildings exist
+* Added improved error messages for many situations
+* Restructured code: configuration is now part of Engine and Helper module has
+  been dropped. Methods are no longer exported from any modules.
+* Made configuration system more robust
+* Added ability to hide domains in device table views (setting doesn't yet
+  stick, but will do in a later release)
+* Improved install and upgrade documentation (including MySQL instructions)
+* Tightened up foreign key constraints in Postgres to prevent NULL values
+
 v1.2.4 Preview - Released 2008-05-06
 ------------------------------------
 * Improved interface
@@ -68,8 +82,8 @@ the README file for more information.
 
 v1.1-1 - Released 2005-12-04
 ----------------------------
-First proper public release, hosted on Soureforge. 
+First full public release, hosted on Soureforge. 
 
-v1.0 - Not publically released
+v1.0 - Not officially released
 ------------------------------
 Initial experimentation with SQLite backend in 2004. 

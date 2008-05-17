@@ -21,12 +21,24 @@ RackMonkey v1.2.x can be upgraded to the latest version following the
 instructions below. NB. Upgrading from v1.1 is not supported.
 
 Upgrading from earlier releases of v1.2 is straightforward: there are no
-database schema changes. However, there has been a change in the way 
-configuration is stored, which is explained in the instructions below.
+database schema changes (see note about Postgres, below). However, there has
+been a change in the way configuration is stored, which is explained in the
+instructions below.
 
 Despite the fact there are no schema changes in this release, you should take
 a backup of the RackMonkey database before proceeding. For SQLite this can
 be achieved by copying the database file, for Postgres use pg_dump.
+
+Postgres Schema
+---------------
+The Postgres schema has been tweaked in v1.2.4 preview 2 to prevent NULL 
+values being stored in columns which are foreign key constraints. You do not 
+need to update your existing schema, as this change doesn't affect the 
+functionality of RackMonkey (it improves the integrity of data in the case of 
+manual access or bugs in RackMonkey). If you wish to upgrade your schema to 
+the new version, dump your database and create a new database with the new 
+schema, then import your data. In a later release there will be a process for 
+updating the schema automatically.
 
 Rackmonkey Files
 ----------------
@@ -55,11 +67,16 @@ variable names are lower case:
   Right: wwwpath = /rackmonkey/www
   Wrong: WWWPATH = /rackmonkey/www
 
-By default this file is read from /etc/rackmonkey.conf, if you're happy to put it there, simply copy your conf/rackmonkey.conf to /etc/rackmonkey.conf. If you want to put this file in a different location you need to tell RackMonkey where to look by using an environment variable. If you're using Apache you should do this by adding the following line to your httpd.conf:
+By default this file is read from /etc/rackmonkey.conf, if you're happy to put
+it there, simply copy your conf/rackmonkey.conf to /etc/rackmonkey.conf. If 
+you want to put this file in a different location you need to tell RackMonkey 
+where to look by using an environment variable. If you're using Apache you 
+should do this by adding the following line to your httpd.conf:
 
 	SetEnv RACKMONKEY_CONF /<path>/rackmonkey.conf
 	
-Replacing <path> with wherever you put the rackmonkey.conf. You should then get apache to reload its configuration.
+Replacing <path> with wherever you put the rackmonkey.conf. You should then 
+get apache to reload its configuration.
 
 On Debian and Ubuntu:
 	# /etc/init.d/apache2 force-reload
@@ -85,15 +102,16 @@ Performing the Upgrade
 * Upgrade web content: delete all the existing web (www) content and copy the 
   new content into the existing directory (maintaining the layout).
 
-* Upgrade docs: overwrite the existing docs with the new versions.
+* Upgrade docs: delete all the existing docs and copy the new content into
+  the existing docs with the new versions.
 
-* Upgrade code: copy the contents of the perl/RackMonkey directory into your 
-  existing perl/RackMonkey directory. Now copy the new rackmonkey.pl script
-  over the existing one.
-	
-* If running RackMonkey under mod_perl you must restart or HUP your
-  mod_perl instance. This ensures mod_perl reads the new modules.
+* Upgrade code: delete the contents of the perl/RackMonkey directory then copy
+  the new perl/RackMonkey modules into the directory. Finally, copy the new
+  rackmonkey.pl script over the existing one.
 
 The upgrade is now complete. No further reconfiguration is required, your
 updated RackMonkey is ready to use. If you experience any problems with the
 upgrade you should consult troubleshooting.txt. 
+
+NB. If running RackMonkey under mod_perl you must restart or HUP your mod_perl 
+instance. This ensures mod_perl reads the new modules.
