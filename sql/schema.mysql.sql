@@ -23,7 +23,7 @@ CREATE TABLE room
 (
 	id INT AUTO_INCREMENT PRIMARY KEY,
 	name VARCHAR(255) NOT NULL,
-	building INTEGER,
+	building INTEGER NOT NULL,
 	has_rows INTEGER,
 	notes VARCHAR(255),
 	meta_default_data INTEGER NOT NULL DEFAULT 0,
@@ -38,7 +38,7 @@ CREATE TABLE row
 (
 	id INT AUTO_INCREMENT PRIMARY KEY,
 	name VARCHAR(255) NOT NULL,
-	room INTEGER,
+	room INTEGER NOT NULL,
 	room_pos INTEGER NOT NULL,
 	hidden_row INTEGER NOT NULL DEFAULT 0,
 	notes VARCHAR(255),
@@ -54,7 +54,7 @@ CREATE TABLE rack
 (
 	id INT AUTO_INCREMENT PRIMARY KEY,
 	name VARCHAR(255) NOT NULL,
-	row INTEGER,
+	row INTEGER NOT NULL,
 	row_pos INTEGER NOT NULL,
 	hidden_rack INTEGER NOT NULL DEFAULT 0,
 	size INTEGER,
@@ -120,7 +120,7 @@ CREATE TABLE os
 (
 	id INT AUTO_INCREMENT PRIMARY KEY,
 	name VARCHAR(255) UNIQUE NOT NULL,
-	manufacturer INTEGER,
+	manufacturer INTEGER NOT NULL,
 	notes VARCHAR(255),
 	meta_default_data INTEGER NOT NULL DEFAULT 0,
 	meta_update_time VARCHAR(255),
@@ -134,7 +134,7 @@ CREATE TABLE hardware
 (
 	id INT AUTO_INCREMENT PRIMARY KEY,
 	name VARCHAR(255) UNIQUE NOT NULL,
-	manufacturer INTEGER,
+	manufacturer INTEGER NOT NULL,
 	size INTEGER NOT NULL,
 	image VARCHAR(255),
 	support_url VARCHAR(255),
@@ -165,18 +165,18 @@ CREATE TABLE device
 (
 	id INT AUTO_INCREMENT PRIMARY KEY,
 	name VARCHAR(255) NOT NULL,
-	domain INTEGER,
-	rack INTEGER,
+	domain INTEGER NOT NULL,
+	rack INTEGER NOT NULL,
 	rack_pos INTEGER,
-	hardware INTEGER,
+	hardware INTEGER NOT NULL,
 	serial_no VARCHAR(255),
 	asset_no VARCHAR(255),
 	purchased CHAR(10),
-	os INTEGER,
+	os INTEGER NOT NULL,
 	os_version VARCHAR(255), 
-	customer INTEGER,
-	service INTEGER,
-	role INTEGER,
+	customer INTEGER NOT NULL,
+	service INTEGER NOT NULL,
+	role INTEGER NOT NULL,
 	monitored INTEGER,
 	in_service INTEGER,
 	notes VARCHAR(255),
@@ -217,9 +217,9 @@ CREATE TABLE app_relation
 -- Relates devices to apps
 CREATE TABLE device_app
 (
-	app INTEGER,
-	device INTEGER,
-	relation INTEGER,
+	app INTEGER NOT NULL,
+	device INTEGER NOT NULL,
+	relation INTEGER NOT NULL,
 	FOREIGN KEY (app) REFERENCES app(id),
 	FOREIGN KEY (device) REFERENCES device(id),
 	FOREIGN KEY (relation) REFERENCES app_relation(id)			
@@ -259,4 +259,4 @@ CREATE UNIQUE INDEX room_building_unique ON room (name, building); -- ensure bui
 -- install system information
 INSERT INTO rm_meta(id, name, value) VALUES (1, 'system_version', '1.2');
 INSERT INTO rm_meta(id, name, value) VALUES (2, 'system_build', '%BUILD%');
-INSERT INTO rm_meta(id, name, value) VALUES (3, 'schema_version', '2');
+INSERT INTO rm_meta(id, name, value) VALUES (3, 'schema_version', '2.1');
