@@ -26,12 +26,15 @@ sub enlighten
 	# SQLite foreign key constraint: delete
 	elsif ($errStr =~ /violates foreign key constraint "fkd_(.*?)_(.*?)_id"/)
 	{
-		$newErrStr = "Delete violates data integrity check.\nRackMonkey cannot delete that $2, it is listed as a $2 for one or more $1(s).";
+		my $refItem = $1;
+		my $delItem = $2;
+		$delItem = 'row/room' if ($delItem eq 'row');
+		$newErrStr = "Delete violates data integrity check.\nRackMonkey cannot delete that $delItem, it is listed as a $delItem for one or more $refItem(s).";
 	}
-	# SQLite foreign key constraint: insert or update
+	# SQLite foreign key constraint: insert or update (also catches NOT NULL)
 	elsif ($errStr =~ /violates foreign key constraint "fk[iu]_(.*?)_(.*?)_id"/)
 	{
-		$newErrStr = "You need to choose a valid $2 for this $1.";
+		$newErrStr = "You need to choose a valid $2 for this $1. If you choose a $2 it may have been deleted by another user.";
 	}
 	# SQLite unqiueness constraints
 	elsif ($errStr =~ /columns? (.*?) (?:is|are) not unique/)
@@ -45,14 +48,17 @@ sub enlighten
 	# Postgres foreign key constraint: delete
 	elsif ($errStr =~ /delete on table ".*?" violates foreign key constraint "(.*?)_(.*?)_fkey"/)
 	{
-		$newErrStr = "Delete violates data integrity check.\nRackMonkey cannot delete that $2, it is listed as a $2 for one or more $1(s).";
+		my $refItem = $1;
+		my $delItem = $2;
+		$delItem = 'row/room' if ($delItem eq 'row');
+		$newErrStr = "Delete violates data integrity check.\nRackMonkey cannot delete that $delItem, it is listed as a $delItem for one or more $refItem(s).";
 	}
-	# SQLite foreign key constraint: insert/update
+	# Postgres foreign key constraint: insert/update
 	elsif ($errStr =~ /insert or update on table ".*?" violates foreign key constraint "(.*?)_(.*?)_fkey"/)
 	{
-		$newErrStr = "You need to choose a valid $2 for this $1.";
+		$newErrStr = "You need to choose a valid $2 for this $1. If you choose a $2 it may have been deleted by another user.";
 	}
-	# Postgres NOT NULL error (occurs because fk constraint doesn't catch NOT NULL)
+	# Postgres NOT NULL
 	elsif ($errStr =~ /null value in column "(.*?)" violates not-null constraint/)
 	{
 		$newErrStr = "You need to specify a $1.";
@@ -78,10 +84,53 @@ sub enlighten
 		$newErrStr = "Couldn't create $type.\nAn entry of that type with that $property already exists, please choose another combination of $property.";
 	}
 	
+	# MySQL foreign key constraint: delete
+	elsif ($errStr =~ /Cannot delete or update a parent row: a foreign key constraint fails.*?CONSTRAINT.*?`(.*?)_.*?FOREIGN KEY \(`(.*?)`\) /)
+	{
+		my $refItem = $1;
+		my $delItem = $2;
+		$delItem = 'row/room' if ($delItem eq 'row');
+		$newErrStr = "Delete violates data integrity check.\nRackMonkey cannot delete that $delItem, it is listed as a $delItem for one or more $refItem(s).";
+	}
+	# MySQL foreign key constraint: update/insert
+	elsif ($errStr =~ /Cannot add or update a child row: a foreign key constraint fails.*?CONSTRAINT.*?`(.*?)_.*?FOREIGN KEY \(`(.*?)`\) /)
+	{
+		$newErrStr = "You need to choose a valid $2 for this $1. If you choose a $2 it may have been deleted by another user.";
+	}
+	# MySQL NOT NULL
+	elsif ($errStr =~ /Column '(.*?)' cannot be null/)
+	{
+		$newErrStr = "You need to specify a $1.";
+	}
+	# MySQL unqiueness constraints - rather messy
+	elsif ($errStr =~ /Duplicate entry.*?Statement "INSERT INTO (.*?) \(/)
+	{	
+		my $constraint = $1;
+		my $property = 'name';
+		if ($constraint eq 'device')
+		{
+			$property = 'name and domain';
+		}
+		elsif ($constraint eq 'rack' or $constraint eq 'row')
+		{
+			$property = 'name and row or room';
+		}
+		elsif ($constraint eq 'room')
+		{
+			$property = 'name and building';
+		}
+		$newErrStr = "Couldn't create $constraint.\nAn entry of that type with that $property already exists, please choose another combination of $property.";
+	}
+	
 	# DBI errors
 	elsif ($errStr =~ /install_driver\((.*?)\)\s*failed/)
 	{
-		$newErrStr = "Couldn't load perl database driver for the chosen database.\nMake sure you've correctly installed DBD::$1 - see the installation instructions for more details.";
+		$newErrStr = "Couldn't load perl database driver DBD::$1.\nMake sure you've correctly installed DBD::$1. See the installation instructions for more details.";
+		
+	}
+	elsif ($errStr =~ /Can't locate object method "driver" via package "DBD::(.*?)"/)
+	{
+		$newErrStr = "Couldn't load perl database driver DBD::$1.\nHave you got the capitalisation of the name right in rackmonkey.conf? See the installation instructions for more details.";
 		
 	}
 	elsif ($errStr =~ /^DBI connect/)
