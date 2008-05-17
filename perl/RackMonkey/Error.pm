@@ -34,7 +34,7 @@ sub enlighten
 	# SQLite foreign key constraint: insert or update (also catches NOT NULL)
 	elsif ($errStr =~ /violates foreign key constraint "fk[iu]_(.*?)_(.*?)_id"/)
 	{
-		$newErrStr = "You need to choose a valid $2 for this $1. If you choose a $2 it may have been deleted by another user.";
+		$newErrStr = "You need to choose a valid $2 for this $1. If you did choose a $2 it may have been deleted by another user.";
 	}
 	# SQLite unqiueness constraints
 	elsif ($errStr =~ /columns? (.*?) (?:is|are) not unique/)
@@ -56,7 +56,7 @@ sub enlighten
 	# Postgres foreign key constraint: insert/update
 	elsif ($errStr =~ /insert or update on table ".*?" violates foreign key constraint "(.*?)_(.*?)_fkey"/)
 	{
-		$newErrStr = "You need to choose a valid $2 for this $1. If you choose a $2 it may have been deleted by another user.";
+		$newErrStr = "You need to choose a valid $2 for this $1. If you did choose a $2 it may have been deleted by another user.";
 	}
 	# Postgres NOT NULL
 	elsif ($errStr =~ /null value in column "(.*?)" violates not-null constraint/)
@@ -95,7 +95,7 @@ sub enlighten
 	# MySQL foreign key constraint: update/insert
 	elsif ($errStr =~ /Cannot add or update a child row: a foreign key constraint fails.*?CONSTRAINT.*?`(.*?)_.*?FOREIGN KEY \(`(.*?)`\) /)
 	{
-		$newErrStr = "You need to choose a valid $2 for this $1. If you choose a $2 it may have been deleted by another user.";
+		$newErrStr = "You need to choose a valid $2 for this $1. If you did choose a $2 it may have been deleted by another user.";
 	}
 	# MySQL NOT NULL
 	elsif ($errStr =~ /Column '(.*?)' cannot be null/)
