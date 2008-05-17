@@ -5,6 +5,8 @@
 # RackMonkey Configuration                                                   #
 ##############################################################################
 
+# NB. Comments must either start a line or follow whitespace
+
 # Database Connection Settings
 dbconnect = dbi:SQLite:dbname=/home/rackmonkey/rackmonkey.db
 dbuser =
