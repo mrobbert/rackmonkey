@@ -100,6 +100,9 @@ Copy the rackmonkey.pl file and the whole RackMonkey directory from the perl
 directory to a suitable location on your web server (e.g. /rackmonkey) and
 ensure that rackmonkey.pl is executable by the web server user.
 
+NB. Do not install RackMonkey in a path containing spaces as this will cause
+difficulties with configuration and lead to ugly URLs with %20 in them.
+
 For example, to make rackmonkey.pl executable by all users run:
 
     $ chmod 755 rackmonkey.pl
@@ -209,10 +212,12 @@ Editing Configuration
 Before you can run RackMonkey you need to edit the configuration file to match 
 your directory and database locations.
 
-NB. Configuration names are case sensitive:
+Comments in the configuration file are included with the a #. Comments must
+either start a line or be preceded by whitespace. Values in the configuration
+file cannot include spaces and configuration variables are lower case:
 
 	Right: wwwpath = /rackmonkey/www
-	Wrong: WWWPATH = /rackmonkey/www
+	Wrong: WWWPATH = /rackmonkey system/www
 
 tmplpath sets the filesystem path to your template files, it should be an
 absolute path and match where you put the files during installation (see 
@@ -236,7 +241,8 @@ example if you want your database to reside in /home/rack/rackmonkey.db, use:
 
 NB. This path must be writable by the web server and should not be within
 web space, or users will be able to download your database. As we're using
-SQLite you can leave the DBUSER and DBPASS values blank.
+SQLite you can leave the DBUSER and DBPASS values blank. Make sure the
+'SQLite' in the dbconnect string is in the case shown.
 
 
 For Postgres
@@ -249,7 +255,7 @@ database and username both 'rackmonkey'. An example configuration would be:
 	dbuser = rackmonkey
 	dbpass = 7jhH#98*
 
-NB. Don't use this password! You should choose your own secure password.
+NB. Make sure the 'Pg' in the dbconnect string is in the case shown.
 
 
 For MySQL
@@ -266,7 +272,7 @@ database and username both 'rackmonkey'. An example configuration would be:
 	dbuser = rackmonkey
 	dbpass = 7jhH#98*
 	
-NB. Don't use this password! You should choose your own secure password.
+NB. Make sure the 'mysql' in the dbconnect string is all lowercase.
 
 
 5. Database Set Up

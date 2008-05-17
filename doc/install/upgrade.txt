@@ -29,11 +29,11 @@ Despite the fact there are no schema changes in this release, you should take
 a backup of the RackMonkey database before proceeding. For SQLite this can
 be achieved by copying the database file, for Postgres use pg_dump.
 
-Postgres Schema
----------------
-The Postgres schema has been tweaked in v1.2.4 preview 2 to prevent NULL 
-values being stored in columns which are foreign key constraints. You do not 
-need to update your existing schema, as this change doesn't affect the 
+Postgres/MySQL Schema
+---------------------
+The Postgres and MySQL schemas has been tweaked in v1.2.4 preview 2 to prevent
+NULL values being stored in columns which are foreign key constraints. You do 
+not need to update your existing schema, as this change doesn't affect the 
 functionality of RackMonkey (it improves the integrity of data in the case of 
 manual access or bugs in RackMonkey). If you wish to upgrade your schema to 
 the new version, dump your database and create a new database with the new 
@@ -61,11 +61,14 @@ RackMonkey now uses a text file to store configuration information, such as
 the database to use. Before upgrading you should take a backup of 
 RackMonkey/Conf.pm as this file is totally replaced with a new module. You 
 should now copy conf/rackmonkey.conf-default to conf/rackmonkey.conf then use 
-your existing RackMonky/Conf.pm module to fill in the values. NB. The new 
-variable names are lower case:
+your existing RackMonky/Conf.pm module to fill in the values. 
 
-  Right: wwwpath = /rackmonkey/www
-  Wrong: WWWPATH = /rackmonkey/www
+Comments in the configuration file are included with the a #. Comments must
+either start a line or be preceded by whitespace. Values in the configuration
+file cannot include spaces and configuration variables are lower case:
+
+	Right: wwwpath = /rackmonkey/www
+	Wrong: WWWPATH = /rackmonkey system/www
 
 By default this file is read from /etc/rackmonkey.conf, if you're happy to put
 it there, simply copy your conf/rackmonkey.conf to /etc/rackmonkey.conf. If 
