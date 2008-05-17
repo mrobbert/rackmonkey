@@ -665,3 +665,9 @@ FOR EACH ROW BEGIN
   SELECT RAISE(ROLLBACK, 'delete on table "app_relation" violates foreign key constraint "fkd_relation_id"')
   WHERE (SELECT relation FROM device_app WHERE relation = OLD.id) IS NOT NULL;
 END;
+
+
+-- install system information
+INSERT INTO rm_meta(id, name, value) VALUES (1, 'system_version', '1.2');
+INSERT INTO rm_meta(id, name, value) VALUES (2, 'system_build', '%BUILD%');
+INSERT INTO rm_meta(id, name, value) VALUES (3, 'schema_version', '2');

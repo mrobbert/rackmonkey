@@ -254,3 +254,9 @@ CREATE UNIQUE INDEX device_name_unique ON device (name, domain); -- ensure name 
 CREATE UNIQUE INDEX rack_row_unique ON rack (name, row); -- ensure row and rack name are together unique
 CREATE UNIQUE INDEX row_room_unique ON row (name, room); -- ensure room and row name are together unique
 CREATE UNIQUE INDEX room_building_unique ON room (name, building); -- ensure building and room name are together unique
+
+
+-- install system information
+INSERT INTO rm_meta(id, name, value) VALUES (1, 'system_version', '1.2');
+INSERT INTO rm_meta(id, name, value) VALUES (2, 'system_build', '%BUILD%');
+INSERT INTO rm_meta(id, name, value) VALUES (3, 'schema_version', '2');
