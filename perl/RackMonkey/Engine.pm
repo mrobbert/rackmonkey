@@ -898,6 +898,7 @@ sub _validateRackUpdate
 	$self->_checkName($$record{'name'});
 	$self->_checkNotes($$record{'notes'});
 	croak "RM_ENGINE: You must specify a size for your rack." unless $$record{'size'};
+	$$record{'size'} += 0; # Force to numeric for comparison
 	croak "RM_ENGINE: Rack sizes must be between 1 and ".$self->getConf('maxracksize')." units." unless (($$record{'size'} > 0) && ($$record{'size'} < $self->getConf('maxracksize')));
 	my $highestPos = $self->_highestUsedInRack($$record{'id'}) || 0;
 	if ($highestPos > $$record{'size'})
