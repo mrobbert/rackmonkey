@@ -42,7 +42,7 @@ sub enlighten
 		# hack to message to account for the fact that some racks are in the hidden rows (no row management)
 		my $clash = ($1 eq 'name, row') ? 'name and row or room' : $1;
 		
-		$newErrStr = "Couldn't create entry: '$clash' is not unique.\nAn entry of that type with that '$clash' already exists, please choose another '$clash' combination.";
+		$newErrStr = "Couldn't create entry: '$clash' is not unique.\nAn entry of that type with that '$clash' already exists, please choose another '$clash'.";
 	}
 	
 	# Postgres foreign key constraint: delete
@@ -81,7 +81,7 @@ sub enlighten
 		{
 			$property = 'name and building';
 		}
-		$newErrStr = "Couldn't create $type.\nAn entry of that type with that $property already exists, please choose another combination of $property.";
+		$newErrStr = "Couldn't create $type.\nAn entry of that type with that $property already exists, please choose another $property.";
 	}
 	
 	# MySQL foreign key constraint: delete
@@ -103,9 +103,10 @@ sub enlighten
 		$newErrStr = "You need to specify a $1.";
 	}
 	# MySQL unqiueness constraints - rather messy
-	elsif ($errStr =~ /Duplicate entry.*?Statement "INSERT INTO (.*?) \(/)
+	elsif ($errStr =~ /Duplicate entry.*?Statement.*?(INSERT INTO|UPDATE) (.*?)\s/)
 	{	
-		my $constraint = $1;
+		my $actType = ($1 eq 'UPDATE') ? 'update' : 'create';
+		my $constraint = $2;
 		my $property = 'name';
 		if ($constraint eq 'device')
 		{
@@ -119,7 +120,7 @@ sub enlighten
 		{
 			$property = 'name and building';
 		}
-		$newErrStr = "Couldn't create $constraint.\nAn entry of that type with that $property already exists, please choose another combination of $property.";
+		$newErrStr = "Couldn't $actType $constraint.\nAn entry of that type with that $property already exists, please choose another $property.";
 	}
 	
 	# DBI errors
