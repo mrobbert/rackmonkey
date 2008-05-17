@@ -10,7 +10,6 @@ use strict;
 use warnings;
 
 use Carp;
-use Data::Dumper;
 
 our $VERSION = '1.2.%BUILD%';
 our $AUTHOR = 'Will Green (wgreen at users.sourceforge.net)';

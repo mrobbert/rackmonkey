@@ -11,11 +11,8 @@ use warnings;
 
 use 5.006_001;
 
-use Data::Dumper;
-
 use lib '..';
 use RackMonkey::Engine;
-
 
 our $VERSION = '1.2.%BUILD%';
 our $AUTHOR = 'Will Green (wgreen at users.sourceforge.net)';

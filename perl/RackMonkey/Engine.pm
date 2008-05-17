@@ -856,7 +856,7 @@ sub updateRack
 		$sth = $self->dbh->prepare(qq!SELECT id FROM row WHERE room = ? ORDER BY id LIMIT 1!);
 		$sth->execute($$record{'room'});
 		$$record{'row'} = ($sth->fetchrow_array)[0];
-		croak "RM_ENGINE: Unable to update rack. Couldn't determine room or row for rack. Did you specify a row or room?" unless $$record{'row'};
+		croak "RM_ENGINE: Unable to update rack. Couldn't determine room or row for rack. Did you specify a row or room? If you did choose a row or room it may have been deleted by another user." unless $$record{'row'};
 	}
 
 	# force row_pos to 0 until rows are supported
