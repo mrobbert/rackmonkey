@@ -416,7 +416,7 @@ eval
 				if (($viewType =~ /^edit/) || ($viewType =~ /^single/) || ($viewType =~ /^create/))
 				{
 					my $rack = {};
-					$rack = $backend->rack($id) if (($id) && ($viewType !~ /^create/)); # used if copying, editing or displaying single view, but not for a plain create
+					$rack = $backend->rack($id) if ($id); # used if copying, editing or displaying single view, but not for a plain create
 	
 					$selectedRoom = $$rack{'room'} if (!$selectedRoom); # Use database value for selected if none in CGI - not actually needed in single view
 		
@@ -425,10 +425,11 @@ eval
 						$template->param('roomlist' => $cgi->selectRoom($backend->roomListBasic, $selectedRoom));
 					}
 					
-					# clear rack position and name if we're creating a new device (so copy works)
+					# clear rack notes and name if we're creating a new device (so copy works)
 					if ($viewType =~ /^create/)
 					{
 						$$rack{'name'} = '';
+						$$rack{'notes'} = '';
 					}
 				
 					$template->param($rack);
