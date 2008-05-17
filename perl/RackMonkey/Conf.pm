@@ -45,7 +45,8 @@ sub new
 	while (<CONFIG>) 
 	{
 		chomp;
-		s/#.*//;		# comments
+		s/^#.*//;		# comments at start of lines
+		s/\s+#.*//;		# comments after whitespace	
 		s/^\s+//;		# whitespace
 		s/\s+$//;		# 	"	"
 		next unless length;
