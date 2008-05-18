@@ -1,4 +1,4 @@
-﻿package RackMonkey::Engine;
+﻿{'descript'}package RackMonkey::Engine;
 ##############################################################################
 # RackMonkey - Know Your Racks - http://www.rackmonkey.org                   #
 # Version 1.2.%BUILD%                                                        #
@@ -1776,7 +1776,7 @@ sub _validateRoleUpdate
 	my ($self, $record) = @_;
 	croak "RM_ENGINE: You must specify a name for the role." unless (length($$record{'name'}) > 1);
 	croak "RM_ENGINE: Names must be less than ".$self->getConf('maxstring')." characters." unless (length($$record{'name'}) <= $self->getConf('maxstring'));
-	croak "RM_ENGINE: Descriptions cannot exceed ".$self->getConf('maxstring')." characters." unless (length($$record{'desc'}) <= $self->getConf('maxstring'));
+	croak "RM_ENGINE: Descriptions cannot exceed ".$self->getConf('maxstring')." characters." unless (length($$record{'descript'}) <= $self->getConf('maxstring'));
 	croak "RM_ENGINE: Notes cannot exceed ".$self->getConf('maxnote')." characters." unless (length($$record{'notes'}) <= $self->getConf('maxnote'));
 	return ($$record{'name'}, $$record{'descript'}, $$record{'notes'});
 }
@@ -1870,7 +1870,7 @@ sub _validateServiceUpdate
 	my ($self, $record) = @_;
 	croak "RM_ENGINE: You must specify a name for the service level." unless (length($$record{'name'}) > 1);
 	croak "RM_ENGINE: Names must be less than ".$self->getConf('maxstring')." characters." unless (length($$record{'name'}) <= $self->getConf('maxstring'));
-	croak "RM_ENGINE: Descriptions cannot exceed ".$self->getConf('maxstring')." characters." unless (length($$record{'desc'}) <= $self->getConf('maxstring'));
+	croak "RM_ENGINE: Descriptions cannot exceed ".$self->getConf('maxstring')." characters." unless (length($$record{'descript'}) <= $self->getConf('maxstring'));
 	croak "RM_ENGINE: Notes cannot exceed ".$self->getConf('maxnote')." characters." unless (length($$record{'notes'}) <= $self->getConf('maxnote'));
 	return ($$record{'name'}, $$record{'descript'}, $$record{'notes'});
 }
