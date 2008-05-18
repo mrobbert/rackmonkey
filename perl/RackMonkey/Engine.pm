@@ -1684,12 +1684,13 @@ sub _validateDeviceInput # doesn't check much at present
 		
 		# quick and dirty check for overlap, consider each position occupied by the new device and check it's empty
 		# doesn't assume the rackPhyiscal method returns in a particular order
+		my $devId = $$record{'id'} || 0; # id of device if it already exists (so it can ignore clashes with itself)
 		for ($$record{'rack_pos'} .. $$record{'rack_pos'} + $hardwareSize - 1)
 		{
 			my $pos = $_;
 			for my $r (@$rackLayout)
 			{
-				croak "RM_ENGINE: Cannot put the device '".$$record{'name'}."' here (position ".$$record{'rack_pos'}." in rack ".$$rack{'name'}.") because it overlaps with the device '".$$r{'name'}."'." if ($$r{'rack_pos'} == $pos and $$r{'name'} and ($$r{'id'} ne $$record{'id'}));
+				croak "RM_ENGINE: Cannot put the device '".$$record{'name'}."' here (position ".$$record{'rack_pos'}." in rack ".$$rack{'name'}.") because it overlaps with the device '".$$r{'name'}."'." if ($$r{'rack_pos'} == $pos and $$r{'name'} and ($$r{'id'} ne $devId));
 			}
 		}
 	}
