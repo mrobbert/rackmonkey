@@ -162,6 +162,12 @@ sub enlighten
 		$newErrStr = "$1";
 	}
 	
+	# Internal RackMonkey Engine errors without line numbers
+	elsif ($errStr =~ /RM_ENGINE:(.*)/)
+	{
+		$newErrStr = "$1";
+	}
+	
 	# Internal RackMonkey errors for XLS plugin
 	elsif ($errStr =~ /RM2XLS:(.*)at.*?line.*/)
 	{
