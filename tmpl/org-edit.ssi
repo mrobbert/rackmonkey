@@ -8,7 +8,7 @@
 							<input id="descript" name="descript" type="text" size="60" value="<TMPL_VAR ESCAPE=HTML NAME=descript>" />
 						</div>
 						<div>
-							<label for="account_no">Account No.</label><br />
+							<label for="account_no">Account Number</label><br />
 							<input id="account_no" name="account_no" type="text" size="60" value="<TMPL_VAR ESCAPE=HTML NAME=account_no>" />
 						</div>
 						<div>
