@@ -236,8 +236,8 @@ sub _checkDate
 sub _httpFixer
 {
 	my ($self, $url) = @_;
-	return unless defined $url;
-	return unless (length($url)); # Don't add to empty strings
+	return '' unless defined $url;
+	return '' unless (length($url)); # Don't add to empty strings
 	unless ($url =~ /^\w+:\/\//)  # Does URL begin with a protocol?
 	{
 		$url = "http://$url";
