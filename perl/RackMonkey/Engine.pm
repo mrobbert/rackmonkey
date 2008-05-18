@@ -1211,7 +1211,7 @@ sub orgList
 	my $self = shift;
 	my $orderBy = shift || '';
 	$orderBy = 'org.name' unless $orderBy =~ /^[a-z_]+\.[a-z_]+$/;
-	
+	$orderBy .= ' DESC' if ($orderBy eq 'org.customer' or $orderBy eq 'org.hardware' or $orderBy eq 'org.software'); # yeses appear first
 	my $sth = $self->dbh->prepare(qq!
 		SELECT org.*
 		FROM org
