@@ -56,10 +56,15 @@
 					<div>
 						<div class="key">Makes Hardware</div>
 						<div class="value"><input disabled="disabled" type="checkbox" <TMPL_IF NAME=hardware>checked="checked"</TMPL_IF> /></div>
-					</div><TMPL_IF NAME=notes>
+					</div>
 					<div>
 						<div class="key">Home Page</div>
 						<div class="value"><TMPL_IF NAME=home_page><a href="<TMPL_VAR ESCAPE=HTML NAME=home_page>"><TMPL_VAR ESCAPE=HTML NAME=home_page></a><TMPL_ELSE>&nbsp;-</TMPL_IF></div>
+					</div><TMPL_IF NAME=notes>
+					<hr />
+					<div>
+						<div class="key">Notes</div>
+						<div class="value"><TMPL_VAR ESCAPE=HTML NAME=notes></div>
 					</div></TMPL_IF>
 				</td>
 			</tr>
