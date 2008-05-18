@@ -31,8 +31,8 @@ before performing an install as it contains important information on this
 release (including known issues). See the doc/changes.txt document for what's
 new in this release.
 
-Please note that the $ shown at the start of commands represents the shell
-prompt, you should not type it.
+Please note that the $ or # shown at the start of commands represents the 
+shell prompt, you should not type it.
 
 
 2. Obtaining RackMonkey
@@ -43,9 +43,9 @@ Tarball Version
 Visit http://www.rackmonkey.org to download a tarball of RackMonkey. 
 
 RackMonkey releases from v1.2.4 are supplied as gzipped tars.
-The v1.2.4 preview release can be extracted with: 
+The v1.2.4 preview 2 release can be extracted with: 
 
- $ gunzip -c rackmonkey_1.2.4-preview.tar.gz | tar xvf -
+ $ gunzip -c rackmonkey_1.2.4-preview2.tar.gz | tar xvf -
 
 
 Subversion Repository

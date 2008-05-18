@@ -8,21 +8,25 @@
 You can read the latest version of this document in HTML format at:
 http://www.rackmonkey.org/doc/1.2.4
 
-v1.2.4 Preview 2 - Released 2008-05-17
+v1.2.4 Preview 2 - Released 2008-05-18
 --------------------------------------
+* Improved install and upgrade documentation (added MySQL instructions)
+* Added age to device search results and asset info to unracked device view
+* Sorting and filtering now work in unracked device view
 * Added improved error messages for many situations
 * Restructured code: configuration is now part of Engine and Helper module has
   been dropped. Methods are no longer exported from any modules.
-* Made configuration system more robust
 * Added ability to hide domains in device table views (setting doesn't yet
   stick, but will do in a later release)
-* Improved install and upgrade documentation (including MySQL instructions)
+* System information is now included in error reports and config view.
+* Made configuration system more robust
+* Extensive testing of MySQL support on MySQL 5.0.51b
 * Tightened up foreign key constraints in Postgres/MySQL to prevent NULL values
-* Added age to device search results and asset info to unracked device view
 * Fixed two bugs with validation which prevented the creation of racks
 * Fixed a bug when creating a room during a rack creation
 * Fixed a bug when creating a room when no buildings exist
 * Fixed rack copying so it now behaves as expected
+* Fixed a bug in the validation of descriptions for roles and service levels
 * Many other minor bug fixes and improvements
 
 v1.2.4 Preview - Released 2008-05-06

@@ -17,19 +17,21 @@ before using them with this release.
 
 Introduction
 ------------
-Thank you for choosing to try RackMonkey v1.2.4 preview, I hope you find it 
+Thank you for choosing to try RackMonkey v1.2.4 preview 2, I hope you find it 
 useful in bringing (and keeping) order in your data centres.
 
-The final release of v1.2.4 is expected before the end of May 2008.
+The final release of v1.2.4 is expected by mid June 2008.
 
-Release Highlights
-------------------
+Preview 2 Changes from v1.2.3
+-----------------------------
 * Improved interface
 * Device search
 * Device and Rack copying
 * Filtering of Device view
 * Experimental MySQL 5 support
-* Many other changes, see doc/changes.txt
+* Many other changes and improvements
+
+For a list of changes between Preview 1 and Preview 2, see doc/changes.txt.
 
 Security
 --------
@@ -43,7 +45,7 @@ configure, but lacks some of the features of Postgres. Your choice of database
 will not affect the features available in RackMonkey, so it really comes down 
 to personal preference. If you're not sure I'd recommend choosing SQLite as
 there isn't any configuration to do. Experimental support for MySQL is 
-included in this preview release, but has yet to be documented.
+included in this preview release and is now documented.
 
 mod_perl
 --------

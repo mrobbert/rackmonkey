@@ -12,6 +12,7 @@ subject to change before final release. Please don't use this release on
 production systems and make sure you back up any existing RackMonkey databases
 before using them with this release.
 
+
 Generic System Install Guide  
 ============================
 In future RackMonkey will be available in package form for common operating
@@ -21,9 +22,8 @@ preview release all installations should follow this document.
 NB. If you are upgrading an existing RackMonkey installation, refer back to 
 the install.txt file. This file is intended for new installations only.
 
-NB. Installation instructions are not yet complete for MySQL. You can find a 
-MySQL schema in the sql directory, but you may wish to wait for the final 
-release of v1.2.4, which will include MySQL instructions.
+Please note that the $ or # shown at the start of commands represents the 
+shell prompt, you should not type it.
 
 
 1. System Set Up: Generic
@@ -33,7 +33,7 @@ Needed to install RackMonkey
 ----------------------------
 * Web server (e.g. Apache - only limited testing has been done under mod_perl)
 
-* One of the following databases (see README for more):
+* One of the following databases (your OS may include packages for these):
   - SQLite v3.2.2 or higher
       SQLite3 can be obtained from http://www.sqlite.org
   - PostgreSQL v7.4 or higher
@@ -59,7 +59,7 @@ Data::Dumper for debugging. Packaged releases don't use it.
 The easiest way to install modules is with the CPAN shell. You generally need 
 to be root in order to do this. 
 
-    $ perl -eshell -MCPAN
+    # perl -eshell -MCPAN
     
 On Mac OS X you can use sudo to temporarily become root (enter your usual
 password when prompted):
@@ -159,7 +159,8 @@ apache configuration with:
 
 NetBSD
 ------
-Copy conf/httpd-rackmonkey.conf into /usr/local/etc/apache and add the following line to the bottom of /usr/local/etc/apache/httpd.conf
+Copy conf/httpd-rackmonkey.conf into /usr/local/etc/apache and add the
+following line to the bottom of /usr/local/etc/apache/httpd.conf
 
 	Include /usr/local/etc/apache/httpd-rackmonkey.conf
 	
@@ -170,7 +171,9 @@ Then reload apache configuration with:
 	
 Other Operating Systems
 -----------------------
-Copy conf/httpd-rackmonkey.conf into your Apache configuration directory, which is often found in /etc/ or /usr/local/etc and is generally called httpd, apache or apache2. Then add the following line to your httpd.conf:
+Copy conf/httpd-rackmonkey.conf into your Apache configuration directory, 
+which is often found in /etc/ or /usr/local/etc and is generally called httpd, 
+apache or apache2. Then add the following line to your httpd.conf:
 
 	Include /<path>/httpd-rackmonkey.conf
 
@@ -180,9 +183,11 @@ You can then get apache to reload its configuration using:
 
 	# apachectl graceful
 	
-Or, if you don't have apachectrl available, by sending using kill -HUP on the apache parent process.
+Or, if you don't have apachectrl available, by sending using kill -HUP on the 
+apache parent process.
 
-If you're having difficulty locating Apache configuration information you may find http://wiki.apache.org/httpd/DistrosDefaultLayout helpful.
+If you're having difficulty locating Apache configuration information you may 
+find http://wiki.apache.org/httpd/DistrosDefaultLayout helpful.
 
 
 4. Configuring RackMonkey
@@ -295,9 +300,10 @@ work entering data and you can always delete the ones you don't want):
 
 	$ sqlite3 [PATH] < sql/sample_data.sql
 	
-You should then change the permissions of this file and its parent directory 
-to be readable and writable by your web server. For example, you might change
-the owner to 'www' if that is the user your web server runs under.
+You should then change the permissions of the database file [PATH] and its
+parent directory to be readable and writable by your web server. For example,
+you might change the owner to 'www' if that is the user your web server runs
+under.
 
 
 For Postgres
@@ -337,7 +343,7 @@ http://www.postgresql.org/docs/.
 For MySQL
 ------------
 Connect to your MySQL instance as a user with admin powers. Then create the 
-rackmonkey database and use it:
+rackmonkey database and connect to it:
 
 	mysql> create database rackmonkey;
 	Query OK, 1 row affected (0.00 sec)

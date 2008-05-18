@@ -15,19 +15,23 @@ subject to change before final release. Please don't use this release on
 production systems and make sure you back up any existing RackMonkey databases
 before using them with this release.
 
+
 Upgrading RackMonkey
 ====================
 RackMonkey v1.2.x can be upgraded to the latest version following the
 instructions below. NB. Upgrading from v1.1 is not supported.
 
 Upgrading from earlier releases of v1.2 is straightforward: there are no
-database schema changes (see note about Postgres, below). However, there has
+database schema changes (but see note about, below). However, there has
 been a change in the way configuration is stored, which is explained in the
 instructions below.
 
 Despite the fact there are no schema changes in this release, you should take
 a backup of the RackMonkey database before proceeding. For SQLite this can
 be achieved by copying the database file, for Postgres use pg_dump.
+
+Please note that the $ or # shown at the start of commands represents the 
+shell prompt, you should not type it.
 
 Postgres/MySQL Schema
 ---------------------
