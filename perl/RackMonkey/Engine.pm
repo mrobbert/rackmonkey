@@ -1537,9 +1537,26 @@ sub deviceListInRack
 	return $sth->fetchall_arrayref({});		
 }
 
-sub deviceListUnracked # consider merging this with existing device method
+sub deviceListUnracked # consider merging this with existing device method (they have a great deal in common)
 {
 	my $self = shift;
+	my $orderBy = shift || '';
+	my $filters = shift || {};
+	my $filterBy ='';
+	
+	for my $f (keys %$filters)
+	{
+		$filterBy .= " AND $f=".$$filters{"$f"};
+	}
+	
+	$orderBy = 'device.name' unless $orderBy =~ /^[a-z_]+\.[a-z_]+$/;
+
+	# ensure meta_default entries appear last - need a better way to do this
+	$orderBy = 'rack.meta_default_data, '.$orderBy.', device.rack_pos' if ($orderBy =~ /^rack.name/);	
+	$orderBy = 'role.meta_default_data, '.$orderBy if ($orderBy =~ /^role.name/);	
+	$orderBy = 'hardware.meta_default_data, hardware_manufacturer.name, '.$orderBy if ($orderBy =~ /^hardware.name/);	
+	$orderBy = 'os.meta_default_data, '.$orderBy.', device.os_version' if ($orderBy =~ /^os.name/);	
+	
 	my $sth = $self->dbh->prepare(qq!
 		SELECT 
 			device.*,
@@ -1568,7 +1585,8 @@ sub deviceListUnracked # consider merging this with existing device method
 			device.domain = domain.id AND
 			device.role = role.id AND
 			device.os = os.id
-		ORDER BY device.meta_default_data, device.name
+			$filterBy
+		ORDER BY $orderBy
 	!);
 	
 	$sth->execute;

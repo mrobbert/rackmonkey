@@ -173,8 +173,7 @@ eval
 				
 				if ($viewType =~ /^default_unracked/)
 				{
-					$devices = $backend->deviceListUnracked;
-					$template->param('devices' => $devices);
+					$devices = $backend->deviceListUnracked($orderBy, $filterBy, $deviceSearch);
 				}
 				else
 				{

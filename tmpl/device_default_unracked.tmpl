@@ -54,7 +54,7 @@
 				<select name="filter_device_os" onchange="submit()"><TMPL_LOOP NAME=oslist>
 					<option <TMPL_IF NAME=selected>selected="selected"</TMPL_IF> value="<TMPL_VAR ESCAPE=HTML NAME=id>"><TMPL_VAR ESCAPE=HTML NAME=name></option></TMPL_LOOP>
 				</select>
-				<button style="margin-left: 8px" onclick="window.location = '<TMPL_VAR NAME=base_url>?view=device&amp;view_type=default_asset'; return false;">Reset</button>
+				<button style="margin-left: 8px" onclick="window.location = '<TMPL_VAR NAME=base_url>?view=device&amp;view_type=default_unracked'; return false;">Reset</button>
 				<input type="hidden" name="view" value="device"/>
 				<input type="hidden" name="order_by" value="<TMPL_VAR ESCAPE=HTML NAME=order_by>" />		
 			</p>		
@@ -62,17 +62,17 @@
 		<table class="itemtable">
 			<tr>
 				<th>
-					<a title="Sort by name" href="<TMPL_VAR NAME=base_url>?view=device&amp;order_by=device.name">Device</a>
-					<TMPL_UNLESS NAME=hide_domain><a class="small" title="Hide domain" href="<TMPL_VAR NAME=base_url>?view=device&amp;view_type=default_unracked&amp;order_by=device.name&amp;<TMPL_VAR NAME=filter_string>&amp;hide_domain=1">[Dom]</a>
+					<a title="Sort by name" href="<TMPL_VAR NAME=base_url>?view=device&amp;view_type=default_unracked&amp;order_by=device.name">Device</a>
+					<TMPL_UNLESS NAME=hide_domain><a class="small" title="Hide domain" href="<TMPL_VAR NAME=base_url>?view=device&amp;view_type=default_unracked&amp;view_type=default_unracked&amp;order_by=device.name&amp;<TMPL_VAR NAME=filter_string>&amp;hide_domain=1">[Dom]</a>
 					<TMPL_ELSE><a class="small" title="Show domain" href="<TMPL_VAR NAME=base_url>?view=device&amp;view_type=default_unracked&amp;order_by=device.name&amp;<TMPL_VAR NAME=filter_string>">[Dom]</a></TMPL_UNLESS>
 				</th>
-				<th><a title="Sort by Status" href="<TMPL_VAR NAME=base_url>?view=device&amp;order_by=rack.name">Location Status</a></th>
-				<th><a title="Sort by role" href="<TMPL_VAR NAME=base_url>?view=device&amp;order_by=role.name">Role</a></th>			
-				<th><a title="Sort by hardware type" href="<TMPL_VAR NAME=base_url>?view=device&amp;order_by=hardware.name">Hardware</a></th>	
-				<th><a title="Sort by operating system" href="<TMPL_VAR NAME=base_url>?view=device&amp;order_by=os.name">OS</a></th>
-				<th><a title="Sort by serial number" href="<TMPL_VAR NAME=base_url>?view=device&amp;view_type=default_asset&amp;order_by=device.serial_no&amp;<TMPL_VAR NAME=filter_string>">Serial</a></th>		
-				<th><a title="Sort by asset tag" href="<TMPL_VAR NAME=base_url>?view=device&amp;view_type=default_asset&amp;order_by=device.asset_no&amp;<TMPL_VAR NAME=filter_string>">Asset</a></th>			
-				<th style="text-align: right"><a title="Sort by purchase date" href="<TMPL_VAR NAME=base_url>?view=device&amp;view_type=default_asset&amp;order_by=device.purchased&amp;<TMPL_VAR NAME=filter_string>">Purchased</a></th>
+				<th><a title="Sort by Status" href="<TMPL_VAR NAME=base_url>?view=device&amp;view_type=default_unracked&amp;order_by=rack.name">Location Status</a></th>
+				<th><a title="Sort by role" href="<TMPL_VAR NAME=base_url>?view=device&amp;view_type=default_unracked&amp;order_by=role.name">Role</a></th>			
+				<th><a title="Sort by hardware type" href="<TMPL_VAR NAME=base_url>?view=device&amp;view_type=default_unracked&amp;order_by=hardware.name">Hardware</a></th>	
+				<th><a title="Sort by operating system" href="<TMPL_VAR NAME=base_url>?view=device&amp;view_type=default_unracked&amp;order_by=os.name">OS</a></th>
+				<th><a title="Sort by serial number" href="<TMPL_VAR NAME=base_url>?view=device&amp;view_type=default_unracked&amp;view_type=default_asset&amp;order_by=device.serial_no&amp;<TMPL_VAR NAME=filter_string>">Serial</a></th>		
+				<th><a title="Sort by asset tag" href="<TMPL_VAR NAME=base_url>?view=device&amp;view_type=default_unracked&amp;view_type=default_asset&amp;order_by=device.asset_no&amp;<TMPL_VAR NAME=filter_string>">Asset</a></th>			
+				<th style="text-align: right"><a title="Sort by purchase date" href="<TMPL_VAR NAME=base_url>?view=device&amp;view_type=default_unracked&amp;view_type=default_asset&amp;order_by=device.purchased&amp;<TMPL_VAR NAME=filter_string>">Purchased</a></th>
 			</tr><TMPL_IF NAME=devices><TMPL_LOOP NAME=devices>
 			<TMPL_IF NAME="__odd__"><tr class="odd"><TMPL_ELSE><tr class="even"></TMPL_IF>
 				<td><a title="View details for this device" href="<TMPL_VAR NAME=base_url>?view=device&amp;view_type=single&amp;id=<TMPL_VAR ESCAPE=URL NAME=id>"><TMPL_VAR ESCAPE=HTML NAME=name><TMPL_UNLESS NAME=hide_domain><TMPL_UNLESS NAME=domain_meta_default_data>.<TMPL_VAR ESCAPE=HTML NAME=domain_name></TMPL_UNLESS></TMPL_UNLESS></a></td>
