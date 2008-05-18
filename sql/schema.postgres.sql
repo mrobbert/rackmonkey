@@ -2,7 +2,7 @@
 -- RackMonkey - Know Your Racks - http://www.rackmonkey.org                 --
 -- Version 1.2.%BUILD%                                                      --
 -- (C)2004-2008 Will Green (wgreen at users.sourceforge.net)                --
--- Database schema v2.1 for Postgres                                          --
+-- Database schema v2.1 for Postgres                                        --
 ------------------------------------------------------------------------------
 
 -- Building the device resides in
