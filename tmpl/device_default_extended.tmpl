@@ -68,6 +68,7 @@
 				<th><a title="Sort by room" href="<TMPL_VAR NAME=base_url>?view=device&amp;view_type=default_extended&amp;order_by=room.name&amp;<TMPL_VAR NAME=filter_string>">Room</a></th>	
 				<th><a title="Sort by role" href="<TMPL_VAR NAME=base_url>?view=device&amp;view_type=default_extended&amp;order_by=role.name&amp;<TMPL_VAR NAME=filter_string>">Role</a></th>			
 				<th><a title="Sort by hardware type" href="<TMPL_VAR NAME=base_url>?view=device&amp;view_type=default_extended&amp;order_by=hardware.name&amp;<TMPL_VAR NAME=filter_string>">Hardware</a></th>	
+				<th><a title="Sort by hardware size" href="<TMPL_VAR NAME=base_url>?view=device&amp;view_type=default_extended&amp;order_by=hardware.size&amp;<TMPL_VAR NAME=filter_string>">Size (U)</a></th>	
 				<th><a title="Sort by operating system" href="<TMPL_VAR NAME=base_url>?view=device&amp;view_type=default_extended&amp;order_by=os.name&amp;<TMPL_VAR NAME=filter_string>">OS</a></th>	
 				<th><a title="Sort by serial number" href="<TMPL_VAR NAME=base_url>?view=device&amp;view_type=default_extended&amp;order_by=device.serial_no&amp;<TMPL_VAR NAME=filter_string>">Serial</a></th>		
 				<th><a title="Sort by asset tag" href="<TMPL_VAR NAME=base_url>?view=device&amp;view_type=default_extended&amp;order_by=device.asset_no&amp;<TMPL_VAR NAME=filter_string>">Asset</a></th>		
@@ -82,6 +83,7 @@
 				<td><TMPL_UNLESS NAME=building_meta_default_data><TMPL_VAR ESCAPE=HTML NAME=room_name> in <TMPL_IF NAME=building_name_short><TMPL_VAR ESCAPE=HTML NAME=building_name_short><TMPL_ELSE><TMPL_VAR ESCAPE=HTML NAME=building_name></TMPL_IF><TMPL_ELSE>N/A</TMPL_UNLESS></td>
 				<td><TMPL_VAR ESCAPE=HTML NAME=role_name></td>
 				<td><TMPL_UNLESS NAME=hardware_meta_default_data><TMPL_UNLESS NAME=hardware_manufacturer_meta_default_data><TMPL_VAR ESCAPE=HTML NAME=hardware_manufacturer_name> </TMPL_UNLESS></TMPL_UNLESS><TMPL_VAR ESCAPE=HTML NAME=hardware_name></td>
+				<td><TMPL_VAR ESCAPE=HTML NAME=hardware_size></td>
 				<td><TMPL_VAR ESCAPE=HTML NAME=os_name><TMPL_IF NAME=os_version> <TMPL_VAR ESCAPE=HTML NAME=os_version></TMPL_IF></td>
 				<td><TMPL_IF NAME=serial_no><TMPL_VAR ESCAPE=HTML NAME=serial_no><TMPL_ELSE>-</TMPL_IF></td>
 				<td><TMPL_IF NAME=asset_no><TMPL_VAR ESCAPE=HTML NAME=asset_no><TMPL_ELSE>-</TMPL_IF></td>		
@@ -90,7 +92,7 @@
 			</tr>
 			</TMPL_LOOP></TMPL_IF>
 			<tr>
-				<td colspan="10" class="footer">
+				<td colspan="11" class="footer">
 					<TMPL_UNLESS NAME=all_devices_listed><div style="float: right"><a href="<TMPL_VAR NAME=base_url>?view=device&amp;view_type=default">Show all</a></div></TMPL_UNLESS>
 					Showing <TMPL_VAR ESCAPE=HTML NAME=listed_device_count> of <TMPL_VAR ESCAPE=HTML NAME=total_device_count> devices
 				</td>
