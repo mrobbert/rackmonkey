@@ -1046,6 +1046,8 @@ sub _validateHardwareUpdate
 	croak "RM_ENGINE: You must specify a name for the hardware." unless (length($$record{'name'}) > 1);
 	croak "RM_ENGINE: Names must be less than ".$self->getConf('maxstring')." characters." unless (length($$record{'name'}) <= $self->getConf('maxstring'));
 	# no validation for $$record{'manufacturer_id'} - foreign key constraints will catch
+	croak "RM_ENGINE: You must specify a size for your hardware model." unless $$record{'size'};
+	$$record{'size'} += 0; # Force to numeric for comparison
 	croak "RM_ENGINE: Size must be between 1 and ".$self->getConf('maxracksize')." units." unless (($$record{'size'} > 0) && ($$record{'size'} <= $self->getConf('maxracksize')));
 	croak "RM_ENGINE: Image filenames must be between 0 and ".$self->getConf('maxstring')." characters." unless ((length($$record{'image'}) >= 0) && (length($$record{'image'}) <= $self->getConf('maxstring')));
 	croak "RM_ENGINE: Support URLs must be between 0 and ".$self->getConf('maxstring')." characters." unless ((length($$record{'support_url'}) >= 0) && (length($$record{'support_url'}) <= $self->getConf('maxstring')));
