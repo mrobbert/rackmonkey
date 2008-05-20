@@ -8,13 +8,13 @@
 # NB. Comments must either start a line or follow whitespace
 
 # Database Connection Settings
-dbconnect = dbi:SQLite:dbname=/home/rackmonkey/rackmonkey.db
+dbconnect =
 dbuser =
 dbpass =
 
 # Path & URL Constants
-tmplpath = /home/rackmonkey/tmpl
-wwwpath = /rackmonkey/www
+tmplpath =
+wwwpath =
 
 # Plugins
 # Set to 1 to enable links to the relevant experimental plugin.
