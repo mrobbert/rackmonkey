@@ -70,7 +70,7 @@ sub new
 	}
 	
 	# Postgres only works properly with DBI v1.43 or higher (due to last insert ID issues)
-	if ($currentDriver eq 'DBD::Pg' and $DBIVersion < 1.43)
+	if (($currentDriver eq 'DBD::Pg') && ($DBIVersion < 1.43))
 	{
 		croak "RM_ENGINE: You need to use DBI version v1.43 or higher with Postgres. You are using DBI v$DBIVersion. Please consult the installation instructions.";
 	}
