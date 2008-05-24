@@ -22,13 +22,13 @@ table.itemtable td
 
 table.itemtable td.itemname
 {
-	border-left: none;
+	border-right: none;
 	font-weight: bold;
 }
 
 table.itemtable td.edit
 {
-	border-right: none;
+	border-left: none;
 }
 
 table.itemtable tr.odd

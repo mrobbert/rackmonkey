@@ -29,20 +29,21 @@
 		</form>
 		<table class="itemtable">
 			<tr>
-				<th><a title="Sort by name" href="<TMPL_VAR NAME=base_url>?view=app&amp;order_by=app.name">App</a></th>
+				<th colspan="2"><a title="Sort by name" href="<TMPL_VAR NAME=base_url>?view=app&amp;order_by=app.name">App</a></th>
 				<th><a title="Sort by description" href="<TMPL_VAR NAME=base_url>?view=app&amp;order_by=app.descript">Description</a></th>	
 				<th><a title="Sort by notes" href="<TMPL_VAR NAME=base_url>?view=app&amp;order_by=app.notes">Notes</a></th>		
 			</tr>
 			<TMPL_IF NAME=apps>
 			<TMPL_LOOP NAME=apps>
 			<TMPL_IF NAME="__odd__"><tr class="odd"><TMPL_ELSE><tr class="even"></TMPL_IF>
-				<td><a title="View details for this application" href="<TMPL_VAR NAME=base_url>?view=app&amp;view_type=single&amp;id=<TMPL_VAR ESCAPE=URL NAME=id>"><TMPL_VAR ESCAPE=HTML NAME=name></a></td>
+				<td class="itemname"><a title="View details for this application" href="<TMPL_VAR NAME=base_url>?view=app&amp;view_type=single&amp;id=<TMPL_VAR ESCAPE=URL NAME=id>"><TMPL_VAR ESCAPE=HTML NAME=name></a></td>
+				<td class="edit"><button title="Edit this app" onclick="window.location = '<TMPL_VAR NAME=base_url>?view=app&amp;view_type=edit&amp;id=<TMPL_VAR ESCAPE=URL NAME=id>'; return false;">Ed</button></td>
 				<td><TMPL_IF NAME=descript_short><span title="<TMPL_VAR ESCAPE=HTML NAME=descript>"><TMPL_VAR ESCAPE=HTML NAME=descript_short></span><TMPL_ELSE><TMPL_IF NAME=descript><TMPL_VAR ESCAPE=HTML NAME=descript><TMPL_ELSE>-</TMPL_IF></TMPL_IF></td>
 				<td><TMPL_IF NAME=notes_short><span title="<TMPL_VAR ESCAPE=HTML NAME=notes>"><TMPL_VAR ESCAPE=HTML NAME=notes_short></span><TMPL_ELSE><TMPL_IF NAME=notes><TMPL_VAR ESCAPE=HTML NAME=notes><TMPL_ELSE>-</TMPL_IF></TMPL_IF></td>
 			</tr>
 			</TMPL_LOOP></TMPL_IF>
 			<tr>
-				<td colspan="3" class="footer">
+				<td colspan="4" class="footer">
 					Showing <TMPL_VAR ESCAPE=HTML NAME=listed_app_count> of <TMPL_VAR ESCAPE=HTML NAME=total_app_count> apps
 				</td>
 			</tr>
