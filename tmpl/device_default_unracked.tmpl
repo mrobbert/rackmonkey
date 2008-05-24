@@ -75,8 +75,8 @@
 				<th style="text-align: right"><a title="Sort by purchase date" href="<TMPL_VAR NAME=base_url>?view=device&amp;view_type=default_unracked&amp;view_type=default_asset&amp;order_by=device.purchased&amp;<TMPL_VAR NAME=filter_string>">Purchased</a></th>
 			</tr><TMPL_IF NAME=devices><TMPL_LOOP NAME=devices>
 			<TMPL_IF NAME="__odd__"><tr class="odd"><TMPL_ELSE><tr class="even"></TMPL_IF>
-				<td><button title="Edit this device" onclick="window.location = '<TMPL_VAR NAME=base_url>?view=device&amp;view_type=edit&amp;id=<TMPL_VAR ESCAPE=URL NAME=id>'; return false;">Edit</button></td>
-				<td><a title="View details for this device" href="<TMPL_VAR NAME=base_url>?view=device&amp;view_type=single&amp;id=<TMPL_VAR ESCAPE=URL NAME=id>"><TMPL_VAR ESCAPE=HTML NAME=name><TMPL_UNLESS NAME=hide_domain><TMPL_UNLESS NAME=domain_meta_default_data>.<TMPL_VAR ESCAPE=HTML NAME=domain_name></TMPL_UNLESS></TMPL_UNLESS></a></td>
+				<td class="edit"><button title="Edit this device" onclick="window.location = '<TMPL_VAR NAME=base_url>?view=device&amp;view_type=edit&amp;id=<TMPL_VAR ESCAPE=URL NAME=id>'; return false;">Ed</button></td>
+				<td class="itemname"><a title="View details for this device" href="<TMPL_VAR NAME=base_url>?view=device&amp;view_type=single&amp;id=<TMPL_VAR ESCAPE=URL NAME=id>"><TMPL_VAR ESCAPE=HTML NAME=name><TMPL_UNLESS NAME=hide_domain><TMPL_UNLESS NAME=domain_meta_default_data>.<TMPL_VAR ESCAPE=HTML NAME=domain_name></TMPL_UNLESS></TMPL_UNLESS></a></td>
 				<td><TMPL_VAR ESCAPE=HTML NAME=rack_name></td>
 				<td><TMPL_VAR ESCAPE=HTML NAME=role_name></td>
 				<td><TMPL_UNLESS NAME=hardware_meta_default_data><TMPL_UNLESS NAME=hardware_manufacturer_meta_default_data><TMPL_VAR ESCAPE=HTML NAME=hardware_manufacturer_name> </TMPL_UNLESS></TMPL_UNLESS><TMPL_VAR ESCAPE=HTML NAME=hardware_name></td>

@@ -20,6 +20,17 @@ table.itemtable td
 	padding: 4px;
 }
 
+table.itemtable td.itemname
+{
+	border-left: none;
+	font-weight: bold;
+}
+
+table.itemtable td.edit
+{
+	border-right: none;
+}
+
 table.itemtable tr.odd
 {
 	background: #CCC; 
