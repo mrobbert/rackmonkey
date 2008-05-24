@@ -34,9 +34,9 @@
 		<TMPL_IF NAME=customer_device_count>
 		<p>Top ten <a href="<TMPL_VAR NAME=base_url>?view=org">customers</a> by devices hosted.</p>
 		<table class="report">
-			<tr><th>Count</th><th>Customer</th></tr>
+			<tr><th>Count</th><th>Customer</th><th>Devices</th></tr>
 			<TMPL_LOOP NAME=customer_device_count>
-			<tr><td class="numerical"><TMPL_VAR ESCAPE=HTML NAME=num_devices></td><td><a href="<TMPL_VAR NAME=base_url>?view=org&amp;view_type=single&amp;id=<TMPL_VAR ESCAPE=HTML NAME=id>"><TMPL_VAR ESCAPE=HTML NAME=customer></a></td></tr>
+			<tr><td class="numerical"><TMPL_VAR ESCAPE=HTML NAME=num_devices></td><td><a href="<TMPL_VAR NAME=base_url>?view=org&amp;view_type=single&amp;id=<TMPL_VAR ESCAPE=HTML NAME=id>"><TMPL_VAR ESCAPE=HTML NAME=customer></a></td><td style="text-align: center"><a class="small" title="View this customer's devices" href="<TMPL_VAR NAME=base_url>?view=device&amp;filter_device_customer=<TMPL_VAR ESCAPE=URL NAME=id>">&gt;&gt;</a></td></tr>
 			</TMPL_LOOP>
 		</table>
 		<TMPL_ELSE>
@@ -46,9 +46,9 @@
 		<TMPL_IF NAME=role_device_count>
 		<p>Top ten <a href="<TMPL_VAR NAME=base_url>?view=role">roles</a> of devices hosted.</p>
 		<table class="report">
-			<tr><th>Count</th><th>Role</th></tr>
+			<tr><th>Count</th><th>Role</th><th>Devices</th></tr>
 			<TMPL_LOOP NAME=role_device_count>
-			<tr><td class="numerical"><TMPL_VAR ESCAPE=HTML NAME=num_devices></td><td><a href="<TMPL_VAR NAME=base_url>?view=role&amp;view_type=single&amp;id=<TMPL_VAR ESCAPE=HTML NAME=id>"><TMPL_VAR ESCAPE=HTML NAME=role></a></td></tr>
+			<tr><td class="numerical"><TMPL_VAR ESCAPE=HTML NAME=num_devices></td><td><a href="<TMPL_VAR NAME=base_url>?view=role&amp;view_type=single&amp;id=<TMPL_VAR ESCAPE=HTML NAME=id>"><TMPL_VAR ESCAPE=HTML NAME=role></a></td><td style="text-align: center"><a class="small" title="View devices in this role" href="<TMPL_VAR NAME=base_url>?view=device&amp;filter_device_role=<TMPL_VAR ESCAPE=URL NAME=id>">&gt;&gt;</a></td></tr>
 			</TMPL_LOOP>
 		</table>
 		<TMPL_ELSE>
@@ -58,9 +58,9 @@
 		<TMPL_IF NAME=hardware_device_count>
 		<p>Top ten <a href="<TMPL_VAR NAME=base_url>?view=hardware">hardware</a> models hosted.</p>
 		<table class="report">
-			<tr><th>Count</th><th>Hardware</th></tr>
+			<tr><th>Count</th><th>Hardware</th><th>Devices</th></tr>
 			<TMPL_LOOP NAME=hardware_device_count>
-			<tr><td class="numerical"><TMPL_VAR ESCAPE=HTML NAME=num_devices></td><td><a href="<TMPL_VAR NAME=base_url>?view=hardware&amp;view_type=single&amp;id=<TMPL_VAR ESCAPE=HTML NAME=id>"><TMPL_UNLESS NAME=hardware_meta_default_data><TMPL_UNLESS NAME=hardware_manufacturer_meta_default_data><TMPL_VAR ESCAPE=HTML NAME=manufacturer> </TMPL_UNLESS></TMPL_UNLESS><TMPL_VAR ESCAPE=HTML NAME=hardware></a></td></tr>
+			<tr><td class="numerical"><TMPL_VAR ESCAPE=HTML NAME=num_devices></td><td><a href="<TMPL_VAR NAME=base_url>?view=hardware&amp;view_type=single&amp;id=<TMPL_VAR ESCAPE=HTML NAME=id>"><TMPL_UNLESS NAME=hardware_meta_default_data><TMPL_UNLESS NAME=hardware_manufacturer_meta_default_data><TMPL_VAR ESCAPE=HTML NAME=manufacturer> </TMPL_UNLESS></TMPL_UNLESS><TMPL_VAR ESCAPE=HTML NAME=hardware></a></td><td style="text-align: center"><a class="small" title="View devices of this hardware model" href="<TMPL_VAR NAME=base_url>?view=device&amp;filter_device_hardware=<TMPL_VAR ESCAPE=URL NAME=id>">&gt;&gt;</a></td></tr>
 			</TMPL_LOOP>
 		</table>
 		<TMPL_ELSE>
@@ -70,9 +70,9 @@
 		<TMPL_IF NAME=os_device_count>
 		<p>Top ten <a href="<TMPL_VAR NAME=base_url>?view=os">operating systems</a> hosted.</p>
 		<table class="report">
-			<tr><th>Count</th><th>OS</th></tr>
+			<tr><th>Count</th><th>OS</th><th>Devices</th></tr>
 			<TMPL_LOOP NAME=os_device_count>
-			<tr><td class="numerical"><TMPL_VAR ESCAPE=HTML NAME=num_devices></td><td><a href="<TMPL_VAR NAME=base_url>?view=os&amp;view_type=single&amp;id=<TMPL_VAR ESCAPE=HTML NAME=id>"><TMPL_VAR ESCAPE=HTML NAME=os><TMPL_UNLESS NAME=os_meta_default_data> <TMPL_VAR ESCAPE=HTML NAME=version></TMPL_UNLESS></a></td></tr>
+			<tr><td class="numerical"><TMPL_VAR ESCAPE=HTML NAME=num_devices></td><td><a href="<TMPL_VAR NAME=base_url>?view=os&amp;view_type=single&amp;id=<TMPL_VAR ESCAPE=HTML NAME=id>"><TMPL_VAR ESCAPE=HTML NAME=os><TMPL_UNLESS NAME=os_meta_default_data> <TMPL_VAR ESCAPE=HTML NAME=version></TMPL_UNLESS></a></td><td style="text-align: center"><a class="small" title="View devices with this operating system installed" href="<TMPL_VAR NAME=base_url>?view=device&amp;filter_device_os=<TMPL_VAR ESCAPE=URL NAME=id>">&gt;&gt;</a></td></tr>
 			</TMPL_LOOP>
 		</table>
 		<TMPL_ELSE>
