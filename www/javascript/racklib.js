@@ -98,7 +98,7 @@ function nameSearch()
 // Jumpt to a given rack
 function rackSelect()
 {
-	var rackSelect = document.getElementById('rack');
+	var rackSelect = document.getElementById('rack_dropdown');
 	var rackId = rackSelect.options[rackSelect.selectedIndex].value;
 	if (rackId != 0)
 	{ 
