@@ -52,11 +52,9 @@
 					<div>
 						<div class="key">Racks [<a href="<TMPL_VAR NAME=base_url>?view=rack&amp;view_type=create&amp;room_id=<TMPL_VAR ESCAPE=URL NAME=id>&amp;return_view=room&amp;return_view_type=single&amp;return_view_id=<TMPL_VAR ESCAPE=URL NAME=id>">add</a>]</div>
 						<div class="value">
-							<TMPL_IF NAME=racks>
-							<TMPL_LOOP NAME=racks>
+							<TMPL_IF NAME=racks><TMPL_LOOP NAME=racks>
 							<a title="View details for this rack" href="<TMPL_VAR NAME=base_url>?view=rack&amp;view_type=single&amp;id=<TMPL_VAR ESCAPE=URL NAME=id>"><TMPL_VAR ESCAPE=HTML NAME=name></a><TMPL_UNLESS __last__>,</TMPL_UNLESS>
-							</TMPL_LOOP>
-							<TMPL_ELSE>This room contains no racks.</TMPL_IF>
+							</TMPL_LOOP><TMPL_ELSE>This room contains no racks.</TMPL_IF>
 						</div>
 					</div><TMPL_IF NAME=notes>
 					<hr />
@@ -77,3 +75,4 @@
 	</div>
 	<TMPL_INCLUDE NAME="footer.ssi">
 </body>
+</html>
