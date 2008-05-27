@@ -5,7 +5,7 @@
 						</div>
 						<div>
 							<label for="descript">Description</label><br />
-							<textarea name="descript" cols="55" rows="4"><TMPL_VAR ESCAPE=HTML NAME=descript></textarea>
+							<textarea id="descript" name="descript" cols="55" rows="4"><TMPL_VAR ESCAPE=HTML NAME=descript></textarea>
 						</div>
 						<div>
 							<label for="notes">Notes</label><br />
