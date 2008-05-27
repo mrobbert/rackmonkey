@@ -2,7 +2,7 @@
 # RackMonkey - Know Your Racks - http://www.rackmonkey.org                   #
 # Version 1.2.%BUILD%                                                        #
 # (C)2004-2008 Will Green (wgreen at users.sourceforge.net)                  #
-# README for RackMonkey v1.2.4 Preview 2                                     #
+# README for RackMonkey v1.2.4 RC1                                           #
 ##############################################################################
 
 You can read the latest version of this document in HTML format at:
@@ -10,10 +10,9 @@ http://www.rackmonkey.org/doc/1.2.4
 
 WARNING
 =======
-This is a preview release, and as such has undergone limited testing and is
-subject to change before final release. Please don't use this release on
-production systems and make sure you back up any existing RackMonkey databases
-before using them with this release.
+This is a release candidate for RackMonkey v1.2.4: it is not a finished
+release. Please don't use this release on production systems and make sure you
+back up any existing RackMonkey databases before using them with this release.
 
 Introduction
 ------------
@@ -85,7 +84,7 @@ RackMonkey project:
 	
 Acknowledgements: People
 ------------------------
-I would like to thank the following people for their assistance:
+Many people have helped me with the development of RackMonkey, but I would especially like to thank the following:
 
 	* Ben Argyle
 	* Piers Kent
@@ -94,9 +93,11 @@ I would like to thank the following people for their assistance:
 	
 Acknowledgements: Organisations
 -------------------------------
-Code or ideas from the following projects helped or inspired RackMonkey development:
+Apps, code or ideas from the following projects helped or inspired RackMonkey
+development:
 
-	* labs.silverorange.com - tabbed CSS
+	* habilis.net/validator-sac - excellent standalone W3C validator
+	* labs.silverorange.com - inspiration for tabbed CSS design
 	* SQLite project (www.sqlite.org) - original RackMonkey database
 	
 Further Information
