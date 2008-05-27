@@ -36,7 +36,7 @@
 					<th><a title="Sort by size" href="<TMPL_VAR NAME=base_url>?view=rack&amp;order_by=rack.size">Size (U)</a></th>
 					<th><a title="Sort by size" href="<TMPL_VAR NAME=base_url>?view=rack&amp;order_by=free_space">Free (U)</a></th>		
 					<th><a title="Sort by notes" href="<TMPL_VAR NAME=base_url>?view=rack&amp;order_by=rack.notes">Notes</a></th>
-					<th><input onclick="checkboxInvert(document.getElementById('racks'));" type="checkbox" checked="checked"></th>
+					<th><input onclick="checkboxInvert(document.getElementById('racks'));" type="checkbox" checked="checked"/></th>
 				</tr>
 				<TMPL_IF NAME=racks><TMPL_LOOP NAME=racks>
 				<TMPL_IF NAME="__odd__"><tr class="odd"><TMPL_ELSE><tr class="even"></TMPL_IF>
