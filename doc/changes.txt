@@ -8,6 +8,14 @@
 You can read the latest version of this document in HTML format at:
 http://www.rackmonkey.org/doc/1.2.4
 
+v1.2.4 RC1 - Released 2008-06-xx
+--------------------------------
+* Added edit buttons to table views to make editing faster
+* Replaced tick character with checkbox as IE cannot render tick marks
+* Fixed a number of errors in the markup of templates: all pages now validate
+  with the W3C validator again.
+* Sorting now works properly in search results
+
 v1.2.4 Preview 2 - Released 2008-05-18
 --------------------------------------
 * Improved install and upgrade documentation (added MySQL instructions)
@@ -15,7 +23,7 @@ v1.2.4 Preview 2 - Released 2008-05-18
 * Sorting and filtering now work in unracked device view
 * Added improved error messages for many situations
 * Restructured code: configuration is now part of Engine and Helper module has
-  been dropped. Methods are no longer exported from any modules.
+  been dropped. Methods are no longer exported from any modules
 * Added ability to hide domains in device table views (setting doesn't yet
   stick, but will do in a later release)
 * System information is now included in error reports and config view.
