@@ -28,6 +28,7 @@
 		</form>
 		<table class="itemtable">
 			<tr>
+				<th>&nbsp;</th>
 				<th><a title="Sort by name" href="<TMPL_VAR NAME=base_url>?view=room&amp;order_by=room.name">Room</a></th>
 				<th><a title="Sort by building" href="<TMPL_VAR NAME=base_url>?view=room&amp;order_by=building.name">Building</a></th>		
 				<th><a title="Sort by notes" href="<TMPL_VAR NAME=base_url>?view=room&amp;order_by=room.notes">Notes</a></th>		
@@ -35,13 +36,14 @@
 			<TMPL_IF NAME=rooms>
 			<TMPL_LOOP NAME=rooms>
 			<TMPL_IF NAME="__odd__"><tr class="odd"><TMPL_ELSE><tr class="even"></TMPL_IF>
+				<td><button title="Edit this room" onclick="window.location = '<TMPL_VAR NAME=base_url>?view=room&amp;view_type=edit&amp;id=<TMPL_VAR ESCAPE=URL NAME=id>'; return false;">Edit</button></td>
 				<td><a title="View details for this room" href="<TMPL_VAR NAME=base_url>?view=room&amp;view_type=single&amp;id=<TMPL_VAR NAME=id>"><TMPL_VAR ESCAPE=HTML NAME=name></a></td>
 				<td><TMPL_VAR ESCAPE=HTML NAME=building_name></td>
 				<td><TMPL_IF NAME=notes_short><span title="<TMPL_VAR ESCAPE=HTML NAME=notes>"><TMPL_VAR ESCAPE=HTML NAME=notes_short></span><TMPL_ELSE><TMPL_IF NAME=notes><TMPL_VAR ESCAPE=HTML NAME=notes><TMPL_ELSE>-</TMPL_IF></TMPL_IF></td>
 			</tr>
 			</TMPL_LOOP></TMPL_IF>
 			<tr>
-				<td colspan="3" class="footer">
+				<td colspan="4" class="footer">
 					Showing <TMPL_VAR ESCAPE=HTML NAME=listed_room_count> of <TMPL_VAR ESCAPE=HTML NAME=total_room_count> rooms
 				</td>
 			</tr>
