@@ -28,13 +28,14 @@
 			</p>
 			<p>
 				<strong>Device Search</strong><br/>Found <TMPL_VAR ESCAPE=HTML NAME=listed_device_count> devices which match <em><TMPL_VAR ESCAPE=HTML NAME=device_search></em>.
+				<input type="hidden" name="view" value="device"/>
+				<input type="hidden" name="order_by" value="<TMPL_VAR ESCAPE=HTML NAME=order_by>" />
 			</p>
-			<input type="hidden" name="view" value="device"/>
-			<input type="hidden" name="order_by" value="<TMPL_VAR ESCAPE=HTML NAME=order_by>" />
 		</form>
 		<table class="itemtable">
 			<tr>
-				<th colspan="2"><a title="Sort by name" href="<TMPL_VAR NAME=base_url>?view=device&amp;view_type=default_search&amp;order_by=device.name&amp;device_search=<TMPL_VAR ESCAPE=URL NAME=device_search>">Device</a> 
+				<th>&nbsp;</th>
+				<th><a title="Sort by name" href="<TMPL_VAR NAME=base_url>?view=device&amp;view_type=default_search&amp;order_by=device.name&amp;device_search=<TMPL_VAR ESCAPE=URL NAME=device_search>">Device</a> 
 					<TMPL_UNLESS NAME=hide_domain><a class="small" title="Hide domain" href="<TMPL_VAR NAME=base_url>?view=device&amp;view_type=default_search&amp;device_search=<TMPL_VAR ESCAPE=URL NAME=device_search>&amp;hide_domain=1">[Dom]</a>
 					<TMPL_ELSE><a class="small" title="Show domain" href="<TMPL_VAR NAME=base_url>?view=device&amp;view_type=default_search&amp;device_search=<TMPL_VAR ESCAPE=URL NAME=device_search>&amp;hide_domain=0">[Dom]</a></TMPL_UNLESS>
 				</th>
@@ -46,13 +47,12 @@
 				<th><a title="Sort by serial number" href="<TMPL_VAR NAME=base_url>?view=device&amp;view_type=default_search&amp;order_by=device.serial_no&amp;device_search=<TMPL_VAR ESCAPE=URL NAME=device_search>">Serial</a></th>		
 				<th><a title="Sort by asset tag" href="<TMPL_VAR NAME=base_url>?view=device&amp;view_type=default_search&amp;order_by=device.asset_no&amp;device_search=<TMPL_VAR ESCAPE=URL NAME=device_search>">Asset</a></th>				
 				<th><a title="Sort by customer" href="<TMPL_VAR NAME=base_url>?view=device&amp;view_type=default_search&amp;order_by=customer.name&amp;device_search=<TMPL_VAR ESCAPE=URL NAME=device_search>">Customer</a></th>
-				<th><a title="Sort by service level" href="<TMPL_VAR NAME=base_url>?view=device&amp;view_type=default_search&amp;order_by=service.name&amp;device_search=<TMPL_VAR ESCAPE=URL NAME=device_search>">SLA</a></th>	
 				<th style="text-align: right"><a title="Sort by age" href="<TMPL_VAR NAME=base_url>?view=device&amp;view_type=default_search&amp;order_by=device.purchased&amp;device_search=<TMPL_VAR ESCAPE=URL NAME=device_search>">Age</a></th>		
 			</tr>
 			<TMPL_IF NAME=devices><TMPL_LOOP NAME=devices>
 			<TMPL_IF NAME="__odd__"><tr class="odd"><TMPL_ELSE><tr class="even"></TMPL_IF>
+				<td><button title="Edit this device" onclick="window.location = '<TMPL_VAR NAME=base_url>?view=device&amp;view_type=edit&amp;id=<TMPL_VAR ESCAPE=URL NAME=id>'; return false;">Edit</button></td>
 				<td class="itemname"><a title="View details for this device" href="<TMPL_VAR NAME=base_url>?view=device&amp;view_type=single&amp;id=<TMPL_VAR ESCAPE=URL NAME=id>"><TMPL_VAR ESCAPE=HTML NAME=name><TMPL_UNLESS NAME=hide_domain><TMPL_UNLESS NAME=domain_meta_default_data>.<TMPL_VAR ESCAPE=HTML NAME=domain_name></TMPL_UNLESS></TMPL_UNLESS></a></td>
-				<td class="edit"><button title="Edit this device" onclick="window.location = '<TMPL_VAR NAME=base_url>?view=device&amp;view_type=edit&amp;id=<TMPL_VAR ESCAPE=URL NAME=id>'; return false;">Ed</button></td>
 				<td><TMPL_UNLESS NAME=building_meta_default_data><a title="View device in rack" href="<TMPL_VAR NAME=base_url>?view=rack&amp;view_type=physical&amp;id=<TMPL_VAR ESCAPE=URL NAME=rack>&amp;device_id=<TMPL_VAR ESCAPE=URL NAME=id>"><TMPL_ELSE><a title="View unracked devices" href="<TMPL_VAR NAME=base_url>?view=device&amp;view_type=default_unracked"></TMPL_UNLESS><TMPL_VAR ESCAPE=HTML NAME=rack_name><TMPL_UNLESS NAME=building_meta_default_data> [<TMPL_VAR ESCAPE=HTML NAME=rack_pos>]</TMPL_UNLESS></a></td>
 				<td><TMPL_UNLESS NAME=building_meta_default_data><TMPL_VAR ESCAPE=HTML NAME=room_name> in <TMPL_IF NAME=building_name_short><TMPL_VAR ESCAPE=HTML NAME=building_name_short><TMPL_ELSE><TMPL_VAR ESCAPE=HTML NAME=building_name></TMPL_IF><TMPL_ELSE>N/A</TMPL_UNLESS></td>
 				<td><TMPL_VAR ESCAPE=HTML NAME=role_name></td>
@@ -61,12 +61,11 @@
 				<td><TMPL_IF NAME=serial_no><TMPL_VAR ESCAPE=HTML NAME=serial_no><TMPL_ELSE>-</TMPL_IF></td>
 				<td><TMPL_IF NAME=asset_no><TMPL_VAR ESCAPE=HTML NAME=asset_no><TMPL_ELSE>-</TMPL_IF></td>				
 				<td><TMPL_VAR ESCAPE=HTML NAME=customer_name></td>
-				<td><TMPL_VAR ESCAPE=HTML NAME=service_name></td>
 				<td style="text-align: right"><TMPL_IF NAME=age><TMPL_VAR ESCAPE=HTML NAME=age><TMPL_ELSE>-</TMPL_IF></td>
 			</tr>
 			</TMPL_LOOP></TMPL_IF>
 			<tr>
-				<td colspan="12" class="footer">
+				<td colspan="11" class="footer">
 					<TMPL_UNLESS NAME=all_devices_listed><div style="float: right"><a href="<TMPL_VAR NAME=base_url>?view=device&amp;view_type=default">Show all</a></div></TMPL_UNLESS>
 					Showing <TMPL_VAR ESCAPE=HTML NAME=listed_device_count> of <TMPL_VAR ESCAPE=HTML NAME=total_device_count> devices
 				</td>
