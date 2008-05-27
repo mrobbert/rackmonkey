@@ -63,7 +63,7 @@ If you are upgrading from an existing v1.2 release you should follow:
 
 To make RackMonkey installation as easy as possible there are now customised
 instructions for different operating systems. These files have not been added
-to this preview as yet, so please use the generic instructions: 
+to this release as yet, so please use the generic instructions: 
 
 	doc/install/system/generic.txt 
 

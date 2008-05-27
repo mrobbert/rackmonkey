@@ -7,10 +7,9 @@
 
 WARNING
 =======
-This is a preview release, and as such has undergone limited testing and is
-subject to change before final release. Please don't use this release on
-production systems and make sure you back up any existing RackMonkey databases
-before using them with this release.
+This is a release candidate for RackMonkey v1.2.4: it is not a finished
+release. Please don't use this release on production systems and make sure you
+back up any existing RackMonkey databases before using them with this release.
 
 
 Generic System Install Guide  
