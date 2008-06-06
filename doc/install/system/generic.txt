@@ -352,11 +352,7 @@ rackmonkey database and connect to it:
 Next, import the RackMonkey schema and default data (required):
 
 	mysql> \. sql/schema.mysql.sql
-	Query OK, 0 rows affected (0.36 sec)
-	...
 	mysql> \. sql/default_data.sql
-	Query OK, 1 row affected (0.00 sec)
-	...
 
 Check all queries were OK in the output from the schema import. You can check 
 all 19 tables were imported:
@@ -370,24 +366,19 @@ and operating systems etc. set up in RackMonkey (this will save you a lot of
 work entering data and you can always delete the ones you don't want):
 
 	mysql> \. sql/sample_data.sql
-	Query OK, 1 row affected (0.00 sec)
-	...
 
 Finally you need to create a user and password to match your configuration 
 file (in section 4, above). To local connections only:
 
 	mysql> GRANT ALL ON rackmonkey.* TO 'rackmonkey'@'localhost' IDENTIFIED BY '7jhH#98*';
-	Query OK, 0 rows affected (0.00 sec)
 
 To also allow connections from other servers also run:
 
 	mysql> GRANT ALL ON rackmonkey.* TO 'rackmonkey'@'%' IDENTIFIED BY '7jhH#98*';
-	Query OK, 0 rows affected (0.00 sec)
 
 You should then flush privileges to ensure all connections see them:
 
 	mysql> FLUSH PRIVILEGES;
-	Query OK, 0 rows affected (0.00 sec)
 	
 
 6. Running RackMonkey
