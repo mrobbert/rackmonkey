@@ -16,11 +16,9 @@ dbpass =
 tmplpath =
 wwwpath =
 
-# Plugins
-# Set to 1 to enable links to the relevant experimental plugin.
-# Make sure you check install instructions before enabling plugins.
-plugin_pdf = 0
-plugin_xls = 0
+# Plugins - no plugins are included in v1.2.4 - do not try to enable them
+# plugin_pdf = 0
+# plugin_xls = 0
 
 # Preference Constants
 defaultview = rack      # View loaded when none is specified
