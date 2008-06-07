@@ -111,6 +111,7 @@ function rackSelect()
 	}
 }
 
+// Returns true if the pressed key is enter
 function pressedEnter(e)
 {
 	var e = e || window.event;
