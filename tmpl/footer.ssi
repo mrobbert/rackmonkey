@@ -1,6 +1,7 @@
 <!-- footer include: Version 1.2.%BUILD% -->
-	<div id="footer">
-		Created by <a href="http://www.rackmonkey.org">RackMonkey</a> v<TMPL_VAR NAME=version> at <TMPL_VAR NAME=date>. 
-		You are logged in as <TMPL_VAR ESCAPE=HTML NAME=logged_in_user>. 
+	<div id="footer"> 
+		Connected from <TMPL_VAR ESCAPE=HTML NAME=user_ip> and <TMPL_IF NAME=logged_in_user>logged in as <TMPL_VAR ESCAPE=HTML NAME=logged_in_user><TMPL_ELSE>not logged in</TMPL_IF>.
+		Page generated at <TMPL_VAR NAME=date>.<br/>
+		Powered by <a href="http://www.rackmonkey.org">RackMonkey</a> v<TMPL_VAR NAME=version>. &copy;2004-2008 Will Green.
 	</div>
 	<!-- end of footer include -->

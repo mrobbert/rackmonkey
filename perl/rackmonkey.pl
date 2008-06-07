@@ -555,7 +555,9 @@ eval
 	my ($minute, $hour, $day, $month, $year) = (gmtime)[1, 2, 3, 4, 5];
 	my $currentDate = sprintf("%04d-%02d-%02d %02d:%02d GMT", $year+1900, $month+1, $day, $hour, $minute);
 	$template->param('date' => $currentDate);
-	$template->param('logged_in_user' => $loggedInUser);
+	$template->param('logged_in_user' => $ENV{'REMOTE_USER'});
+	$template->param('user_ip' => $ENV{'REMOTE_ADDR'});
+	
 	
 	# Support overriding the next view of the template
 	$template->param('return_view' => $cgi->returnView);
