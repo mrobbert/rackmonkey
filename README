@@ -98,11 +98,11 @@ Apps, code or ideas from the following projects helped or inspired RackMonkey
 development:
 
 	* Homo Habilis Associates: habilis.net/validator-sac
-		Excellent standalone W3C validator used to check RackMonkey templates.
+		Standalone W3C validator used to check RackMonkey templates.
 	* silverorange: labs.silverorange.com
 		Inspiration for tabbed CSS design.
 	* SQLite project: www.sqlite.org
-		Original RackMonkey database engine, made early development easy.
+		Original RackMonkey database engine.
 
 Further Information
 -------------------
