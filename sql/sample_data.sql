@@ -83,7 +83,7 @@ INSERT INTO role (name, descript, notes, meta_update_time, meta_update_user) VAL
 INSERT INTO role (name, descript, notes, meta_update_time, meta_update_user) VALUES('Terminal Server',		'Terminal Server', 'Sample data included with RackMonkey.', '2007-01-01 00:00:00', 'install');
 INSERT INTO role (name, descript, notes, meta_update_time, meta_update_user) VALUES('Web Server',			'Web Server', 'Sample data included with RackMonkey.', '2007-01-01 00:00:00', 'install');
 
--- sample building, room, row and rack and one device
+-- sample building, room, row and rack
 INSERT INTO building (name, name_short, notes, meta_update_time, meta_update_user) VALUES('Acme Data Centre', 'ADC', 'Sample data included with RackMonkey.', '2007-01-01 00:00:00', 'install');
 INSERT INTO room (name, building, has_rows, notes, meta_update_time, meta_update_user) VALUES('101', 6, 0, 'Sample data included with RackMonkey.', '2007-01-01 00:00:00', 'install');
 INSERT INTO row (name, room, room_pos, hidden_row, notes, meta_update_time, meta_update_user) VALUES('-', 6, 0, 1, 'Sample data included with RackMonkey.', '2007-01-01 00:00:00', 'install');
