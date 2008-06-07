@@ -15,6 +15,7 @@ v1.2.4 RC1 - Released 2008-06-xx
 * Fixed a number of errors in the markup of templates: all pages now validate
   with the W3C validator again.
 * Sorting now works properly in search results
+* Improved the included sample data
 
 v1.2.4 Preview 2 - Released 2008-05-18
 --------------------------------------
