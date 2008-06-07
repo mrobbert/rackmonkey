@@ -19,7 +19,7 @@ Introduction
 Thank you for choosing to try RackMonkey v1.2.4 RC1, I hope you find it 
 useful in bringing (and keeping) order in your data centres.
 
-The final release of v1.2.4 is expected by mid June 2008.
+The final release of v1.2.4 is expected during June 2008.
 
 v1.2.4 RC1 Changes from v1.2.3
 ------------------------------
@@ -84,7 +84,8 @@ RackMonkey project:
 	
 Acknowledgements: People
 ------------------------
-Many people have helped me with the development of RackMonkey, but I would especially like to thank the following:
+Many people have helped me with the development of RackMonkey, but I would
+especially like to thank the following:
 
 	* Ben Argyle
 	* Piers Kent
@@ -96,10 +97,13 @@ Acknowledgements: Organisations
 Apps, code or ideas from the following projects helped or inspired RackMonkey
 development:
 
-	* habilis.net/validator-sac - excellent standalone W3C validator
-	* labs.silverorange.com - inspiration for tabbed CSS design
-	* SQLite project (www.sqlite.org) - original RackMonkey database
-	
+	* Homo Habilis Associates: habilis.net/validator-sac
+		Excellent standalone W3C validator used to check RackMonkey templates.
+	* silverorange: labs.silverorange.com
+		Inspiration for tabbed CSS design.
+	* SQLite project: www.sqlite.org
+		Original RackMonkey database engine, made early development easy.
+
 Further Information
 -------------------
 Visit the RackMonkey web site:
