@@ -64,22 +64,24 @@ INSERT INTO hardware (name, manufacturer, size, image, support_url, spec_url, no
 -- sample roles
 INSERT INTO role (name, descript, notes, meta_update_time, meta_update_user) VALUES('App Server', 			'Application Server', 'Sample data included with RackMonkey.', '2007-01-01 00:00:00', 'install');
 INSERT INTO role (name, descript, notes, meta_update_time, meta_update_user) VALUES('AV Encoder', 			'Audio/Video Encoder', 'Sample data included with RackMonkey.', '2007-01-01 00:00:00', 'install');
+INSERT INTO role (name, descript, notes, meta_update_time, meta_update_user) VALUES('AV Streaming', 		'Audio/Video Streaming Server', 'Sample data included with RackMonkey.', '2007-01-01 00:00:00', 'install');
 INSERT INTO role (name, descript, notes, meta_update_time, meta_update_user) VALUES('Data Backup', 			'Data Backup', 'Sample data included with RackMonkey.', '2007-01-01 00:00:00', 'install');
 INSERT INTO role (name, descript, notes, meta_update_time, meta_update_user) VALUES('Data Storage', 		'Data Storage', 'Sample data included with RackMonkey.', '2007-01-01 00:00:00', 'install');
 INSERT INTO role (name, descript, notes, meta_update_time, meta_update_user) VALUES('DB Server', 			'Database Server', 'Sample data included with RackMonkey.', '2007-01-01 00:00:00', 'install');
 INSERT INTO role (name, descript, notes, meta_update_time, meta_update_user) VALUES('Dev Server', 			'Development Server', 'Sample data included with RackMonkey.', '2007-01-01 00:00:00', 'install');
+INSERT INTO role (name, descript, notes, meta_update_time, meta_update_user) VALUES('Disk Array', 			'Disk Array', 'Sample data included with RackMonkey.', '2007-01-01 00:00:00', 'install');
 INSERT INTO role (name, descript, notes, meta_update_time, meta_update_user) VALUES('FC Switch', 			'Fibre Channel Switch', 'Sample data included with RackMonkey.', '2007-01-01 00:00:00', 'install');
 INSERT INTO role (name, descript, notes, meta_update_time, meta_update_user) VALUES('File Server', 			'File Server', 'Sample data included with RackMonkey.', '2007-01-01 00:00:00', 'install');
 INSERT INTO role (name, descript, notes, meta_update_time, meta_update_user) VALUES('General Server', 		'General Purpose Server', 'Sample data included with RackMonkey.', '2007-01-01 00:00:00', 'install');
-INSERT INTO role (name, descript, notes, meta_update_time, meta_update_user) VALUES('Human Interface', 		'Monitor/Keyboard etc.', 'Sample data included with RackMonkey.', '2007-01-01 00:00:00', 'install');
+INSERT INTO role (name, descript, notes, meta_update_time, meta_update_user) VALUES('Human Interface', 		'Monitor, Keyboard etc.', 'Sample data included with RackMonkey.', '2007-01-01 00:00:00', 'install');
 INSERT INTO role (name, descript, notes, meta_update_time, meta_update_user) VALUES('KVM', 					'KVM Switch', 'Sample data included with RackMonkey.', '2007-01-01 00:00:00', 'install');
 INSERT INTO role (name, descript, notes, meta_update_time, meta_update_user) VALUES('Monitoring', 			'Systems Monitoring', 'Sample data included with RackMonkey.', '2007-01-01 00:00:00', 'install');
 INSERT INTO role (name, descript, notes, meta_update_time, meta_update_user) VALUES('Patch Panel', 			'Patch Panel', 'Sample data included with RackMonkey.', '2007-01-01 00:00:00', 'install');
 INSERT INTO role (name, descript, notes, meta_update_time, meta_update_user) VALUES('Physical Storage', 	'Storage for Physical Items', 'Sample data included with RackMonkey.', '2007-01-01 00:00:00', 'install');
 INSERT INTO role (name, descript, notes, meta_update_time, meta_update_user) VALUES('Power', 				'Electrical Power Infrastructure', 'Sample data included with RackMonkey.', '2007-01-01 00:00:00', 'install');
 INSERT INTO role (name, descript, notes, meta_update_time, meta_update_user) VALUES('Router', 				'Network Router', 'Sample data included with RackMonkey.', '2007-01-01 00:00:00', 'install');
-INSERT INTO role (name, descript, notes, meta_update_time, meta_update_user) VALUES('Streaming', 			'Streaming Audio/Video Server', 'Sample data included with RackMonkey.', '2007-01-01 00:00:00', 'install');
 INSERT INTO role (name, descript, notes, meta_update_time, meta_update_user) VALUES('Switch', 				'Network Switch', 'Sample data included with RackMonkey.', '2007-01-01 00:00:00', 'install');
+INSERT INTO role (name, descript, notes, meta_update_time, meta_update_user) VALUES('Tape Drive',			'Tape Drive or Library', 'Sample data included with RackMonkey.', '2007-01-01 00:00:00', 'install');
 INSERT INTO role (name, descript, notes, meta_update_time, meta_update_user) VALUES('Terminal Server',		'Terminal Server', 'Sample data included with RackMonkey.', '2007-01-01 00:00:00', 'install');
 INSERT INTO role (name, descript, notes, meta_update_time, meta_update_user) VALUES('Web Server',			'Web Server', 'Sample data included with RackMonkey.', '2007-01-01 00:00:00', 'install');
 
