@@ -110,13 +110,6 @@ sub orderBy
 	return $orderBy;	
 }
 
-sub priorOrderBy
-{
-	my $self = shift;
-	my $priorCGI = new CGI($self->referer);
-	return $priorCGI->param('order_by');
-}
-
 sub filterString
 {
 	my $self = shift;

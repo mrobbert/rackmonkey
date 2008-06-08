@@ -54,7 +54,6 @@ eval
 	my $deviceSearch = $cgi->deviceSearch;
 	
 	my $orderBy = $cgi->orderBy;
-	my $priorOrderBy = $cgi->priorOrderBy;
 	
 	my $loggedInUser = $ENV{'REMOTE_USER'} || $ENV{'REMOTE_ADDR'};
 
