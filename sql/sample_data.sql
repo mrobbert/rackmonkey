@@ -58,7 +58,7 @@ INSERT INTO os (name, manufacturer, notes, meta_update_time, meta_update_user) V
 
 -- sample hardware
 INSERT INTO hardware (name, manufacturer, size, image, support_url, spec_url, notes, meta_update_time, meta_update_user) VALUES('Catalyst 3560', 		6, 1, NULL, 'http://www.cisco.com/en/US/products/hw/switches/ps5528/tsd_products_support_series_home.html', 'http://www.cisco.com/en/US/products/hw/switches/ps5528/products_data_sheet09186a00801f3d7d.html', 'Sample data included with RackMonkey.', '1985-07-24 00:00:00', 'install');
-INSERT INTO hardware (name, manufacturer, size, image, support_url, spec_url, notes, meta_update_time, meta_update_user) VALUES('Fire T2000', 			24, 2, NULL, 'http://sunsolve.sun.com/handbook_pub/Systems/SunFireT2000/SunFireT2000.html', 'http://sunsolve.sun.com/handbook_pub/Systems/SunFireT2000/spec.html', 'Sample data included with RackMonkey.', '1985-07-24 00:00:00', 'install');
+INSERT INTO hardware (name, manufacturer, size, image, support_url, spec_url, notes, meta_update_time, meta_update_user) VALUES('Fire T2000', 			24, 2, NULL, 'http://sunsolve.sun.com/handbook_pub/Systems/SunFireT2000_R/SunFireT2000_R.html', 'http://sunsolve.sun.com/handbook_pub/Systems/SunFireT2000_R/spec.html', 'Sample data included with RackMonkey.', '1985-07-24 00:00:00', 'install');
 INSERT INTO hardware (name, manufacturer, size, image, support_url, spec_url, notes, meta_update_time, meta_update_user) VALUES('PowerEdge 2850', 		8, 2, NULL, 'http://support.dell.com/support/edocs/systems/pe2850/en/', NULL, 'Sample data included with RackMonkey.', '1985-07-24 00:00:00', 'install');
 
 -- sample roles
