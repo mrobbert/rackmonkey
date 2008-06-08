@@ -38,5 +38,23 @@ INSERT INTO rack (name, row, row_pos, hidden_rack, size, notes, meta_update_time
 INSERT INTO rack (name, row, row_pos, hidden_rack, size, notes, meta_update_time, meta_update_user) VALUES('A4', 8, 0, 0, 20, 'Test data included with RackMonkey.', '1988-02-15 00:00:00', 'rackmonkey');
 
 -- Test Domains
+INSERT INTO domain (name, descript, notes, meta_default_data, meta_update_time, meta_update_user) VALUES('coyotehost.com', '', 'Test data included with RackMonkey.', 0, '1988-02-15 00:00:00', 'rackmonkey');
+INSERT INTO domain (name, descript, notes, meta_default_data, meta_update_time, meta_update_user) VALUES('rrsocial.com', '', 'Test data included with RackMonkey.', 0, '1988-02-15 00:00:00', 'rackmonkey');
 INSERT INTO domain (name, descript, notes, meta_default_data, meta_update_time, meta_update_user) VALUES('rackmonkey.org', '', 'Test data included with RackMonkey.', 0, '1988-02-15 00:00:00', 'rackmonkey');
 INSERT INTO domain (name, descript, notes, meta_default_data, meta_update_time, meta_update_user) VALUES('example.com', '', 'Test data included with RackMonkey.', 0, '1988-02-15 00:00:00', 'rackmonkey');
+
+-- Test Customers
+INSERT INTO org (name, account_no, customer, software, hardware, descript, home_page, notes, meta_default_data, meta_update_time, meta_update_user) VALUES('Coyote', NULL, 1, 0, 0, 'Coyote Hosting', 101, 'Test data included with RackMonkey.', 0, '1988-02-15 00:00:00', 'rackmonkey');
+INSERT INTO org (name, account_no, customer, software, hardware, descript, home_page, notes, meta_default_data, meta_update_time, meta_update_user) VALUES('Roadrunner', NULL, 1, 0, 0, 'Roadrunner Social Network', 102, 'Test data included with RackMonkey.', 0, '1988-02-15 00:00:00', 'rackmonkey');
+
+-- Test Service Levels
+INSERT INTO service (name, descript, notes, meta_default_data, meta_update_time, meta_update_user) VALUES('Basic', 'Basic office hours support.', 'Test data included with RackMonkey.', 0, '1988-02-15 00:00:00', 'rackmonkey');
+INSERT INTO service (name, descript, notes, meta_default_data, meta_update_time, meta_update_user) VALUES('24/7', '24/7 support.', 'Test data included with RackMonkey.', 0, '1988-02-15 00:00:00', 'rackmonkey');
+
+-- Test Hardware
+INSERT INTO hardware (name, manufacturer, size, image, support_url, spec_url, notes, meta_update_time, meta_update_user) VALUES('Fire x4600', 24, 4, NULL, 'http://sunsolve.sun.com/handbook_pub/Systems/SunFireX4600_M2/SunFireX4600_M2.html', 'http://sunsolve.sun.com/handbook_pub/Systems/SunFireX4600_M2/spec.html', 'Test data included with RackMonkey.', '1988-02-15 00:00:00', 'rackmonkey');
+
+-- Test Devices
+-- Two switches
+INSERT INTO device (name, domain, rack, rack_pos, hardware, serial_no, asset_no, purchased, os, os_version, customer, service, role, in_service, notes, meta_default_data, meta_update_time, meta_update_user) VALUES ('sw1', 3, 11, 20, 2, 'ABC123', 'CH1001', '2004-02-29', 10, '', 26, 2, 21, 1, 'Test data included with RackMonkey.', 0, '1988-02-15 00:00:00', 'rackmonkey');
+INSERT INTO device (name, domain, rack, rack_pos, hardware, serial_no, asset_no, purchased, os, os_version, customer, service, role, in_service, notes, meta_default_data, meta_update_time, meta_update_user) VALUES ('sw2', 3, 12, 20, 2, 'ABC124', 'CH1002', '2004-02-29', 10, '', 26, 2, 21, 1, 'Test data included with RackMonkey.', 0, '1988-02-15 00:00:00', 'rackmonkey');
