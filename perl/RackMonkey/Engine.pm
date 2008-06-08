@@ -1064,7 +1064,8 @@ sub hardwareDeviceCount
 			org.name AS manufacturer,
 			COUNT(device.id) AS num_devices,
 			hardware.meta_default_data AS hardware_meta_default_data,
-			org.meta_default_data AS hardware_manufacturer_meta_default_data			
+			org.meta_default_data AS hardware_manufacturer_meta_default_data,
+			SUM(hardware.size) AS space_used			
 		FROM device, hardware, org 
 		WHERE 
 			device.hardware = hardware.id AND
@@ -1174,11 +1175,13 @@ sub osDeviceCount
 			os.name AS os, 
 			device.os_version AS version,
 			COUNT(device.id) AS num_devices,
-			os.meta_default_data AS os_meta_default_data
-		FROM device, os, org 
+			os.meta_default_data AS os_meta_default_data,
+			SUM(hardware.size) AS space_used
+		FROM device, os, org, hardware
 		WHERE 
 			device.os = os.id AND
-			os.manufacturer = org.id 
+			os.manufacturer = org.id AND
+			device.hardware = hardware.id
 		GROUP BY os.id, os.name, device.os_version, os.meta_default_data
 		ORDER BY num_devices DESC
 		LIMIT 10;
@@ -1282,9 +1285,12 @@ sub customerDeviceCount
 		SELECT
 			org.id AS id, 
 			org.name AS customer,
-			COUNT(device.id) AS num_devices 
-		FROM device, org 
-		WHERE device.customer = org.id 
+			COUNT(device.id) AS num_devices,
+			SUM(hardware.size) AS space_used
+		FROM device, org, hardware 
+		WHERE 
+			device.customer = org.id AND
+			device.hardware = hardware.id
 		GROUP BY org.id, org.name 
 		ORDER BY num_devices DESC
 		LIMIT 10;
@@ -1804,9 +1810,12 @@ sub roleDeviceCount
 		SELECT
 			role.id AS id, 
 		 	role.name AS role, 
-			COUNT(device.id) AS num_devices 
-		FROM device, role 
-		WHERE device.role = role.id 
+			COUNT(device.id) AS num_devices,
+			SUM(hardware.size) AS space_used 
+		FROM device, role, hardware 
+		WHERE 
+			device.role = role.id AND
+			device.hardware = hardware.id
 		GROUP BY role.id, role.name 
 		ORDER BY num_devices DESC
 		LIMIT 10;
