@@ -85,6 +85,7 @@ eval
 		
 		my $redirectUrl = "$fullURL?view=$view&view_type=$viewType";
 		$redirectUrl .= "&id=$id" if ($id);
+		$redirectUrl .= "&last_created_id=$lastCreatedId";
 		$cgi->redirect303($redirectUrl);
 	}
 	else # display a view
@@ -557,6 +558,9 @@ eval
 	$template->param('logged_in_user' => $ENV{'REMOTE_USER'});
 	$template->param('user_ip' => $ENV{'REMOTE_ADDR'});
 	
+	# Make the current view and view_type available in the template
+	$template->param('view' => $cgi->view);
+	$template->param('view_type' => $cgi->viewType);
 	
 	# Support overriding the next view of the template
 	$template->param('return_view' => $cgi->returnView);

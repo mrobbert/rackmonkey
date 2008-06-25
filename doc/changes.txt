@@ -16,6 +16,9 @@ v1.2.4 RC1 - Released 2008-06-xx
   with the W3C validator again.
 * Sorting now works properly in search results
 * Improved the included sample data
+* Report now includes total size used for different device types
+* Made returning to an edit view after adding an item work as expected,
+   e.g. adding a new building while creating a room
 
 v1.2.4 Preview 2 - Released 2008-05-18
 --------------------------------------
