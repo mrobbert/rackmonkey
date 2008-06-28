@@ -18,7 +18,7 @@
 	<script type="text/javascript" src="<TMPL_VAR NAME=web_root>/javascript/racklib.js"></script>
 	<link rel="icon" href="<TMPL_VAR NAME=web_root>/graphics/favicon.ico" />
 </head>
-<body onload="if (getCookie('filter') == 'on') { showHideFilters(); }">
+<body onload="if (getCookie('filter') == 'on') { showHideFilters(); } if (getCookie('showdomain') == 'off') { showHideDomain(); }">
 	<TMPL_INCLUDE NAME="nav-device.ssi">
 	<div id="main">
 		<form id="device_options" method="get" action="<TMPL_VAR NAME=base_url>">
@@ -62,8 +62,7 @@
 				<th>&nbsp;</th>
 				<th>
 					<a title="Sort by name" href="<TMPL_VAR NAME=base_url>?view=device&amp;view_type=default_asset&amp;order_by=device.name&amp;<TMPL_VAR NAME=filter_string>">Device</a> 
-					<TMPL_UNLESS NAME=hide_domain><a class="small" title="Hide domain" href="<TMPL_VAR NAME=base_url>?view=device&amp;view_type=default_asset&amp;order_by=device.name&amp;<TMPL_VAR NAME=filter_string>&amp;hide_domain=1">[Dom]</a>
-					<TMPL_ELSE><a class="small" title="Show domain" href="<TMPL_VAR NAME=base_url>?view=device&amp;view_type=default_asset&amp;order_by=device.name&amp;<TMPL_VAR NAME=filter_string>">[Dom]</a></TMPL_UNLESS>
+					<a id="domainLink" class="small" title="Hide domain" href="#" onclick="showHideDomain(); return false;">.dom</a>
 				</th>
 				<th><a title="Sort by rack" href="<TMPL_VAR NAME=base_url>?view=device&amp;view_type=default_asset&amp;order_by=rack.name&amp;<TMPL_VAR NAME=filter_string>">Rack</a></th>
 				<th><a title="Sort by room" href="<TMPL_VAR NAME=base_url>?view=device&amp;view_type=default_asset&amp;order_by=room.name&amp;<TMPL_VAR NAME=filter_string>">Room</a></th>		
@@ -77,7 +76,7 @@
 			<TMPL_LOOP NAME=devices>
 			<TMPL_IF NAME="__odd__"><tr class="odd"><TMPL_ELSE><tr class="even"></TMPL_IF>
 				<td><button title="Edit this device" onclick="window.location = '<TMPL_VAR NAME=base_url>?view=device&amp;view_type=edit&amp;id=<TMPL_VAR ESCAPE=URL NAME=id>'; return false;">Edit</button></td>
-				<td class="itemname"><a title="View details for this device" href="<TMPL_VAR NAME=base_url>?view=device&amp;view_type=single&amp;id=<TMPL_VAR ESCAPE=URL NAME=id>"><TMPL_VAR ESCAPE=HTML NAME=name><TMPL_UNLESS NAME=hide_domain><TMPL_UNLESS NAME=domain_meta_default_data>.<TMPL_VAR ESCAPE=HTML NAME=domain_name></TMPL_UNLESS></TMPL_UNLESS></a></td>
+				<td class="itemname"><a title="View details for this device" href="<TMPL_VAR NAME=base_url>?view=device&amp;view_type=single&amp;id=<TMPL_VAR ESCAPE=URL NAME=id>"><TMPL_VAR ESCAPE=HTML NAME=name><span class='domainSpan'><TMPL_UNLESS NAME=domain_meta_default_data>.<TMPL_VAR ESCAPE=HTML NAME=domain_name></TMPL_UNLESS></span></a></td>
 				<td><TMPL_UNLESS NAME=building_meta_default_data><a title="View device in rack" href="<TMPL_VAR NAME=base_url>?view=rack&amp;view_type=physical&amp;id=<TMPL_VAR ESCAPE=URL NAME=rack>&amp;device_id=<TMPL_VAR ESCAPE=URL NAME=id>"><TMPL_ELSE><a title="View unracked devices" href="<TMPL_VAR NAME=base_url>?view=device&amp;view_type=default_unracked"></TMPL_UNLESS><TMPL_VAR ESCAPE=HTML NAME=rack_name><TMPL_UNLESS NAME=building_meta_default_data> [<TMPL_VAR ESCAPE=HTML NAME=rack_pos>]</TMPL_UNLESS></a></td>
 				<td><TMPL_UNLESS NAME=building_meta_default_data><TMPL_VAR ESCAPE=HTML NAME=room_name> in <TMPL_IF NAME=building_name_short><TMPL_VAR ESCAPE=HTML NAME=building_name_short><TMPL_ELSE><TMPL_VAR ESCAPE=HTML NAME=building_name></TMPL_IF><TMPL_ELSE>N/A</TMPL_UNLESS></td>
 				<td><TMPL_UNLESS NAME=hardware_meta_default_data><TMPL_UNLESS NAME=hardware_manufacturer_meta_default_data><TMPL_VAR ESCAPE=HTML NAME=hardware_manufacturer_name> </TMPL_UNLESS></TMPL_UNLESS><TMPL_VAR ESCAPE=HTML NAME=hardware_name></td>

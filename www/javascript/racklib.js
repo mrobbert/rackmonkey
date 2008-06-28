@@ -32,7 +32,7 @@ function getCookie(name)
 function checkboxInvert(fieldName)
 {
 	for (i = 0; i < fieldName.length; i++)
-	if(fieldName.elements[i].checked == 1)
+	if (fieldName.elements[i].checked == 1)
 	{
 		fieldName.elements[i].checked = 0;
 	}
@@ -53,9 +53,9 @@ function removeChildNodes(node)
 function showHide(element)
 {
 	var ele = document.getElementById(element);
-	if(!ele)
+	if (!ele)
 		return true;
-	if(ele.style.display == "none")
+	if (ele.style.display == "none")
 		ele.style.display = "block";
 	else 
 		ele.style.display = "none";
@@ -67,9 +67,9 @@ function showHideFilters()
 {
 	var filters = document.getElementById('filters');
 	var filtersButton = document.getElementById('filterbutton');
-	if((!filters) || (!filtersButton))
+	if ((!filters) || (!filtersButton))
 		return true;
-	if(filters.style.display == "none")
+	if (filters.style.display == "none")
 	{
 		filters.style.display = "block";
 		filtersButton.childNodes[0].nodeValue = "Hide Filters";
@@ -77,12 +77,49 @@ function showHideFilters()
 	}
 	else 
     {
-		filters.style.display="none";
+		filters.style.display = "none";
 		filtersButton.childNodes[0].nodeValue = "Show Filters";
 		setCookie('filter', 'off');
 	}
 	return true;
 } 
+
+// Show or hide domains in device table vew - should be made more generic
+function showHideDomain()
+{
+	var spans = document.getElementsByTagName('span');
+	if (!spans)
+		return true;
+	
+	var domainSpans = [];
+	
+	for (var i = 0; i < spans.length; i++)
+	{
+		if (spans[i].className == 'domainSpan')
+			domainSpans.push(spans[i]);
+	}
+	
+	if (!domainSpans[0])
+		return true;
+
+	if (domainSpans[0].style.display == "none")
+	{
+		for (var i = 0; i < domainSpans.length; i++)
+		{
+			domainSpans[i].style.display = "inline";
+		}
+		setCookie('showdomain', 'on');
+	}
+	else 
+    {
+		for (var i = 0; i < domainSpans.length; i++)
+		{
+			domainSpans[i].style.display = "none";
+		}
+		setCookie('showdomain', 'off');
+	}
+	return true;
+}
 
 // Search for a device by name
 function nameSearch()
