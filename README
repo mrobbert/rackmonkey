@@ -27,8 +27,8 @@ Contents
 8. Legal Notices
 
 
-Introduction
-============
+1. Introduction
+===============
 RackMonkey is a web-based tool for managing racks of equipment such as web
 servers, video encoders, routers and storage devices. Using a simple interface 
 you can keep track of what's where, which OS it runs, when it was purchased,
@@ -38,8 +38,8 @@ Thank you for choosing to try RackMonkey v1.2.4, I hope you find it useful in
 bringing (and keeping) order in your data centres.
 
 
-New in this Release
-===================
+2. New in this Release
+======================
 v1.2.4 has a large number of improvements over v1.2.3. These include:
 
 * Improved interface
@@ -51,22 +51,22 @@ v1.2.4 has a large number of improvements over v1.2.3. These include:
 For a more detailed list of changes in this release see doc/changes.txt.
 
 
-Obtaining RackMonkey
+3. Obtaining RackMonkey
 =======================
 The easiest way to obtain a copy of RackMonkey is to download a tarball of the
 current release from http://www.rackmonkey.org.
 
 
-Installation
-============
+4. Installation
+===============
 For installation instructions please see:
 
 * New installs: doc/install-generic.txt.
 * Upgrades:		doc/upgrade.txt
 
 
-Documentation
-=============
+5. Documentation
+================
 You can find RackMonkey documentation:
 
 * In the doc directory included in the RackMonkey distribution
@@ -74,8 +74,8 @@ You can find RackMonkey documentation:
 * Online at http://www.rackmonkey.org/doc
 
 
-Support
-=======
+6. Support
+==========
 If you have and questions or issues with RackMonkey please check the following
 resources:
 
@@ -94,8 +94,8 @@ You should also join the announce list to hear about issues and new releases:
 	http://lists.sourceforge.net/lists/listinfo/rackmonkey-announce
 
 
-Acknowledgements
-================
+7. Acknowledgements
+===================
 
 Code Contributors
 -----------------
