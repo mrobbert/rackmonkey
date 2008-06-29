@@ -62,7 +62,7 @@ current release from http://www.rackmonkey.org.
 For installation instructions please see:
 
 * New installs: doc/install-generic.txt.
-* Upgrades:		doc/upgrade.txt
+* Upgrades:     doc/upgrade.txt
 
 
 5. Documentation
@@ -91,7 +91,8 @@ When logging a support request please include as much detail as possible:
 operating system, database software and revision, and any error messages.
 
 You should also join the announce list to hear about issues and new releases:
-	http://lists.sourceforge.net/lists/listinfo/rackmonkey-announce
+
+    http://lists.sourceforge.net/lists/listinfo/rackmonkey-announce
 
 
 7. Acknowledgements
@@ -102,33 +103,33 @@ Code Contributors
 I would like to thank the following for their contribution of code to the
 RackMonkey project:
 
-	* Pierre Larsson - XLS Export Plugin (rack2xls.pl)
-	
+    * Pierre Larsson - XLS Export Plugin (rack2xls.pl)
+    
 NB. This plugin isn't yet included in the release version of RackMonkey.
-	
+    
 People
 ------
 Many people have helped me with the development of RackMonkey, but I would
 especially like to thank the following:
 
-	* Ben Argyle
-	* Piers Kent
-	* Tim Sweetman
-	* Nicola Worthington
-	
+    * Ben Argyle
+    * Piers Kent
+    * Tim Sweetman
+    * Nicola Worthington
+    
 Organisations
 -------------
 Apps, code or ideas from the following projects helped or inspired RackMonkey
 development:
 
-	* Homo Habilis Associates: habilis.net/validator-sac
-		Standalone W3C validator used to check RackMonkey templates.
-	* silverorange: labs.silverorange.com
-		Inspiration for tabbed CSS design.
-	* SQLite project: www.sqlite.org
-		Original RackMonkey database engine.
-	
-	
+    * Homo Habilis Associates: habilis.net/validator-sac
+        Standalone W3C validator used to check RackMonkey templates.
+    * silverorange: labs.silverorange.com
+        Inspiration for tabbed CSS design.
+    * SQLite project: www.sqlite.org
+        Original RackMonkey database engine.
+    
+    
 Legal Notices
 =============
 RackMonkey (C)2004-2008 Will Green. RackMonkey is a trademark of Will Green.
