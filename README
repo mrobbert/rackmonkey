@@ -8,9 +8,134 @@
 You can read the latest version of this document in HTML format at:
 http://www.rackmonkey.org/doc/1.2.4
 
-Legal Notice
-------------	
+WARNING
+=======
+This is a release candidate for RackMonkey v1.2.4: it is not a finished
+release. Please don't use this release on production systems and make sure you
+back up any existing RackMonkey databases before using them with this release.
+
+
+Contents
+========
+1. Introduction
+2. New in this Release
+3. Obtaining RackMonkey
+4. Installation
+5. Documentation
+6. Support
+7. Acknowledgements
+8. Legal Notices
+
+
+Introduction
+============
+RackMonkey is a web-based tool for managing racks of equipment such as web
+servers, video encoders, routers and storage devices. Using a simple interface 
+you can keep track of what's where, which OS it runs, when it was purchased,
+who it belongs and what it's used for.
+
+Thank you for choosing to try RackMonkey v1.2.4, I hope you find it useful in
+bringing (and keeping) order in your data centres.
+
+
+New in this Release
+===================
+v1.2.4 has a large number of improvements over v1.2.3. These include:
+
+* Improved interface
+* Device search
+* Device and Rack copying
+* Filtering of Device view
+* Experimental MySQL 5 support
+
+For a more detailed list of changes in this release see doc/changes.txt.
+
+
+Obtaining RackMonkey
+=======================
+The easiest way to obtain a copy of RackMonkey is to download a tarball of the
+current release from http://www.rackmonkey.org.
+
+
+Installation
+============
+For installation instructions please see:
+
+* New installs: doc/install-generic.txt.
+* Upgrades:		doc/upgrade.txt
+
+
+Documentation
+=============
+You can find RackMonkey documentation:
+
+* In the doc directory included in the RackMonkey distribution
+* Within the application itself by selecting the help tab
+* Online at http://www.rackmonkey.org/doc
+
+
+Support
+=======
+If you have and questions or issues with RackMonkey please check the following
+resources:
+
+* RackMonkey Documentation (see above)
+* Troubleshooting doc: doc/troubleshooting.txt
+* FAQ: http://www.rackmonkey.org/faq
+
+If you're still stuck, please log a support request at:
+
+    http://www.rackmonkey.org/support
+
+When logging a support request please include as much detail as possible:
+operating system, database software and revision, and any error messages.
+
+You should also join the announce list to hear about issues and new releases:
+	http://lists.sourceforge.net/lists/listinfo/rackmonkey-announce
+
+
+Acknowledgements
+================
+
+Code Contributors
+-----------------
+I would like to thank the following for their contribution of code to the
+RackMonkey project:
+
+	* Pierre Larsson - XLS Export Plugin (rack2xls.pl)
+	
+NB. This plugin isn't yet included in the release version of RackMonkey.
+	
+People
+------
+Many people have helped me with the development of RackMonkey, but I would
+especially like to thank the following:
+
+	* Ben Argyle
+	* Piers Kent
+	* Tim Sweetman
+	* Nicola Worthington
+	
+Organisations
+-------------
+Apps, code or ideas from the following projects helped or inspired RackMonkey
+development:
+
+	* Homo Habilis Associates: habilis.net/validator-sac
+		Standalone W3C validator used to check RackMonkey templates.
+	* silverorange: labs.silverorange.com
+		Inspiration for tabbed CSS design.
+	* SQLite project: www.sqlite.org
+		Original RackMonkey database engine.
+	
+	
+Legal Notices
+=============
 RackMonkey (C)2004-2008 Will Green. RackMonkey is a trademark of Will Green.
+
+RackMonkey includes example data to demonstrate the software and get you 
+started. The inclusion of a particular company or product does not imply an 
+endorsement by the author.
 
 This program is free software; you can redistribute it and/or modify it
 under the terms of the GNU General Public License as published by the Free
@@ -25,107 +150,3 @@ more details.
 You should have received a copy of the GNU General Public License along
 with this program; if not, write to the Free Software Foundation, Inc.,
 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
-
-WARNING
-=======
-This is a release candidate for RackMonkey v1.2.4: it is not a finished
-release. Please don't use this release on production systems and make sure you
-back up any existing RackMonkey databases before using them with this release.
-
-Introduction
-------------
-Thank you for choosing to try RackMonkey v1.2.4 RC1, I hope you find it 
-useful in bringing (and keeping) order in your data centres.
-
-The final release of v1.2.4 is expected during June 2008.
-
-v1.2.4 RC1 Changes from v1.2.3
-------------------------------
-* Improved interface
-* Device search
-* Device and Rack copying
-* Filtering of Device view
-* Experimental MySQL 5 support
-* Many other changes and improvements
-
-For a list of changes between Preview 2 and RC1, see doc/changes.txt.
-
-Security
---------
-You should be aware that RackMonkey has not been fully security-hardened, so
-should not be deployed on unprotected public web sites.
-
-Database Support
-----------------
-RackMonkey supports SQLite or Postgres (PostgreSQL). SQLite is trivial to
-configure, but lacks some of the features of Postgres. Your choice of database
-will not affect the features available in RackMonkey, so it really comes down 
-to personal preference. If you're not sure I'd recommend choosing SQLite as
-there isn't any configuration to do. Experimental support for MySQL is 
-included in this release.
-
-mod_perl
---------
-A limited amount of testing has been done under mod_perl, but there may still
-be issues. Use with caution.
-
-Installation or Upgrading
--------------------------
-Please read the doc/install/install.txt file.
-
-User Documentation
-------------------
-Once installed you should read doc/userguide.txt for advice on getting started
-with RackMonkey.
-
-Developer Guide
----------------
-If you'd like to extend RackMonkey or integrate it into other applications, 
-please read doc/devguide.txt.
-
-Licence
--------
-This software is licensed under the GPL. See doc/licence.txt for details.
-
-Example Data
-------------
-RackMonkey includes example data to demonstrate the software and get you 
-started. The inclusion of a particular product does not imply an endorsement
-by the author.
-
-Code Contributors
------------------
-I would like to thank the following for their contribution of code to the
-RackMonkey project:
-
-	* Pierre Larsson - XLS Export Plugin (rack2xls.pl)
-	
-Acknowledgements: People
-------------------------
-Many people have helped me with the development of RackMonkey, but I would
-especially like to thank the following:
-
-	* Ben Argyle
-	* Piers Kent
-	* Tim Sweetman
-	* Nicola Worthington
-	
-Acknowledgements: Organisations
--------------------------------
-Apps, code or ideas from the following projects helped or inspired RackMonkey
-development:
-
-	* Homo Habilis Associates: habilis.net/validator-sac
-		Standalone W3C validator used to check RackMonkey templates.
-	* silverorange: labs.silverorange.com
-		Inspiration for tabbed CSS design.
-	* SQLite project: www.sqlite.org
-		Original RackMonkey database engine.
-
-Further Information
--------------------
-Visit the RackMonkey web site:
-	http://www.rackmonkey.org
-
-Join the announce list:
-	http://lists.sourceforge.net/lists/listinfo/rackmonkey-announce
