@@ -19,7 +19,7 @@ systems and include more OS specific installation instructions. For this
 preview release all installations should follow this document.
 
 NB. If you are upgrading an existing RackMonkey installation, refer back to 
-the install.txt file. This file is intended for new installations only.
+doc/upgrade.txt. This file is intended for new installations only.
 
 Please note that the $ or # shown at the start of commands represents the 
 shell prompt, you should not type it.
