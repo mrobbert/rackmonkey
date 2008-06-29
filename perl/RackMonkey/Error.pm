@@ -188,7 +188,7 @@ sub display
 	}
 	else
 	{
-		$systemInfo = 'System information is not available. This is probably because RackMonkey Engine failed to initialise.'
+		$systemInfo = 'System information is not available. This is probably because the RackMonkey Engine failed to initialise.'
 	}
 		
 	$errMsg =~ s/\n/\n\t\t<br\/>/gm; # replace newlines with <br> for HTML	
