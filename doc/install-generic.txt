@@ -41,7 +41,7 @@ Needed to install RackMonkey
       MySQL can be obtained from http://dev.mysql.com/downloads/mysql/
 
   NB. SQLite is the simplest database to administer. If you aren't an
-  experienced database administrator we recommend you use SQLite.
+  experienced database administrator I recommend you use SQLite.
     
 * Perl 5.61 or higher (5.84 or higher recommended) with the following modules:
   - DBI (v1.43 or higher if using Postgres)
@@ -201,7 +201,7 @@ copy conf/rackmonkey.conf-default to /etc/rackmonkey.conf and proceed to the
 configuration editing section (below).
 
 NB. If you use Postgres or MySQL this configuration file will contain your
-RackMonkey database username and password. For maximum security we recommend
+RackMonkey database username and password. For maximum security I recommend
 only root (or the RackMonkey admin) and the web server can read this file.
 
 Changing Configuration Path
@@ -252,7 +252,7 @@ SQLite you can leave the DBUSER and DBPASS values blank. Make sure the
 For Postgres
 ------------
 You will create a Postgres database and user in section 5. For now choose a
-database name, username and password. For simplicity we recommend you make the
+database name, username and password. For simplicity I recommend you make the
 database and username both 'rackmonkey'. An example configuration would be:
 
 	dbconnect = dbi:Pg:dbname=rackmonkey
@@ -284,7 +284,7 @@ RackMonkey requires features only available in MySQL 5 or higher, v3 or v4
 will not work.
 
 You will create a MySQL database and user in section 5. For now choose a
-database name, username and password. For simplicity we recommend you make the
+database name, username and password. For simplicity I recommend you make the
 database and username both 'rackmonkey'. An example configuration would be:
 
 	dbconnect = dbi:mysql:dbname=rackmonkey

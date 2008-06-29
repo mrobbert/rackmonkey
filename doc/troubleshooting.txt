@@ -30,13 +30,13 @@ Common reasons for RackMonkey failing to run are:
 
 * ExecCGI isn't turned on for the directory in which rackmonkey.pl resides or
   for files of type .pl (this problem applies to Apache web servers).
-  Edit your Apache configuration to allow CGIs to be run. For more help on
-  using Apache see: http://httpd.apache.org/docs/
+  See the installation instructions for advice on fixing this.
         
 * Missing modules
   This is usually indicated by an error of the form:
       Can't locate MODULE.pm in @INC ....
-  Make sure you installed all the required modules (see section 3, above).
+  Make sure you installed all the required modules. See the installation
+  instructions for advice on fixing this.
 
 * DOS line endings on files
   If you have DOS line endings on files it can break the #! line. Try
