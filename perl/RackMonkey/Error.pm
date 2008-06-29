@@ -181,7 +181,15 @@ sub display
 {
 	my ($errMsg, $friendlyErrMsg, $sys) = @_;
 	
-	my $systemInfo = join '<br/>', map "$_: $$sys{$_}", sort keys %$sys;
+	my $systemInfo;
+	if (keys %$sys > 0)
+	{
+		$systemInfo = join '<br/>', map "$_: $$sys{$_}", sort keys %$sys;
+	}
+	else
+	{
+		$systemInfo = 'System information is not available. This is probably because RackMonkey Engine failed to initialise.'
+	}
 		
 	$errMsg =~ s/\n/\n\t\t<br\/>/gm; # replace newlines with <br> for HTML	
 	$friendlyErrMsg =~ s/\n/\n\t\t<br\/>/gm; # replace newlines with <br> for HTML
@@ -203,7 +211,7 @@ sub display
 		<p><strong>Fixing the problem:</strong></p>
 		<ul>
 			<li>Use the web browser back button to return to the previous page and correct the problem</li>
-			<li>View <a href="./rackmonkey.pl?view=help&amp;view_type=errors">Help for Error Messages</a> (local)</li>	
+			<li>View <a href="./rackmonkey.pl?view=help&amp;view_type=errors">Help for Error Messages</a> (local, may not work if RackMonkey has yet to initialise)</li>	
 			<li>View <a href="http://www.rackmonkey.org/doc/1.2.4">Online Help</a> (requires Internet connectivity)</li>			
 			<li>Go to RackMonkey <a href="./rackmonkey.pl">home view</a></li>
 		</ul>
