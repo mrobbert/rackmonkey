@@ -22,6 +22,7 @@ v1.2.4 RC1 - Released 2008-07-xx
 * Showing and hiding of domain in device table views now works and the setting
    is saved in a cookie
 * Many documentation improvements
+* Tested on Firefox 3
 
 v1.2.4 Preview 2 - Released 2008-05-18
 --------------------------------------
