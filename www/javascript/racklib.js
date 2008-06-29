@@ -109,6 +109,9 @@ function showHideDomain()
 			domainSpans[i].style.display = "inline";
 		}
 		setCookie('showdomain', 'on');
+		var link = document.getElementById('domainLink');
+		if (link)
+			link.title = "Hide domain";
 	}
 	else 
     {
@@ -117,6 +120,9 @@ function showHideDomain()
 			domainSpans[i].style.display = "none";
 		}
 		setCookie('showdomain', 'off');
+		var link = document.getElementById('domainLink');
+		if (link)
+			link.title = "Show domain";
 	}
 	return true;
 }
