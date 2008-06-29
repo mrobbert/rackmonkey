@@ -5,11 +5,25 @@
 # RackMonkey v1.2.4 Generic System Install Guide                             #
 ##############################################################################
 
+You can read the latest version of this document in HTML format at:
+http://www.rackmonkey.org/doc/1.2.4
+
 WARNING
 =======
 This is a release candidate for RackMonkey v1.2.4: it is not a finished
 release. Please don't use this release on production systems and make sure you
 back up any existing RackMonkey databases before using them with this release.
+
+
+Contents
+========
+1. Introduction  
+2. System Set Up
+3. Installing RackMonkey
+4. Configuring the Web Server
+5. Configuring RackMonkey
+6. Database Set Up
+7. Running RackMonkey
 
 
 1. Introduction  
@@ -81,7 +95,7 @@ Then install the database driver for the database you're using:
 Once you have obtained a copy of RackMonkey (see README) you should have a
 directory with the following layout:
 
-  conf	      Includes RackMonkey and Apache configuration files
+  conf        Includes RackMonkey and Apache configuration files
   doc         Documentation for RackMonkey
   README      Read this before you start
   perl        Contains the perl scripts and modules
@@ -132,23 +146,23 @@ reread its configuration.
 
 On Debian and Ubuntu:
 
-	# /etc/init.d/apache2 force-reload
+    # /etc/init.d/apache2 force-reload
 
 On Red Hat based Linux systems (including CentOS and RHEL):
 
-	# service httpd reload
-	
-	
+    # service httpd reload
+    
+    
 Mac OS X 10.5 (Leopard)
 -----------------------
 Open a terminal and become root with:
 
-	$ sudo bash
+    $ sudo bash
 
 Copy conf/httpd-rackmonkey.conf into /private/etc/apache2/other/ and reload
 apache configuration with:
 
-	# apachectl graceful
+    # apachectl graceful
 
 
 NetBSD
@@ -156,27 +170,27 @@ NetBSD
 Copy conf/httpd-rackmonkey.conf into /usr/local/etc/apache and add the
 following line to the bottom of /usr/local/etc/apache/httpd.conf
 
-	Include /usr/local/etc/apache/httpd-rackmonkey.conf
-	
+    Include /usr/local/etc/apache/httpd-rackmonkey.conf
+    
 Then reload apache configuration with:
 
-	# /etc/rc.d/apache reload
-	
-	
+    # /etc/rc.d/apache reload
+    
+    
 Other Operating Systems
 -----------------------
 Copy conf/httpd-rackmonkey.conf into your Apache configuration directory, 
 which is often found in /etc/ or /usr/local/etc and is generally called httpd, 
 apache or apache2. Then add the following line to your httpd.conf:
 
-	Include /<path>/httpd-rackmonkey.conf
+    Include /<path>/httpd-rackmonkey.conf
 
 Replacing <path> with wherever you put httpd-rackmonkey.conf.
 
 You can then get apache to reload its configuration using:
 
-	# apachectl graceful
-	
+    # apachectl graceful
+    
 Or, if you don't have apachectrl available, by sending using kill -HUP on the 
 apache parent process.
 
@@ -215,19 +229,19 @@ Comments in the configuration file are included with the a #. Comments must
 either start a line or be preceded by whitespace. Values in the configuration
 file cannot include spaces and configuration variables are lower case:
 
-	Right: wwwpath = /rackmonkey/www
-	Wrong: WWWPATH = /rackmonkey system/www
+    Right: wwwpath = /rackmonkey/www
+    Wrong: WWWPATH = /rackmonkey system/www
 
 tmplpath sets the filesystem path to your template files, it should be an
 absolute path and match where you put the files during installation (see 
 section 2, above), something like:
 
-	tmplpath = /home/rackmonkey/tmpl
+    tmplpath = /home/rackmonkey/tmpl
 
 wwwpath sets the path within web space that your web content resides (that is
 relative to the DocumentRoot in Apache), for example:
 
-	wwwpath = /rackmonkey/www
+    wwwpath = /rackmonkey/www
 
 You now need to configure RackMonkey to connect to your database.
 
@@ -236,7 +250,7 @@ For SQLite
 When using SQLite you need to choose a filesystem path for your database, for
 example if you want your database to reside in /home/rack/rackmonkey.db, use:
     
-	dbconnect = dbi:SQLite:dbname=/home/rack/rackmonkey.db
+    dbconnect = dbi:SQLite:dbname=/home/rack/rackmonkey.db
 
 NB. This path must be writable by the web server and should not be within
 web space, or users will be able to download your database. As we're using
@@ -250,26 +264,26 @@ You will create a Postgres database and user in section 5. For now choose a
 database name, username and password. For simplicity I recommend you make the
 database and username both 'rackmonkey'. An example configuration would be:
 
-	dbconnect = dbi:Pg:dbname=rackmonkey
-	dbuser = rackmonkey
-	dbpass = 7jhH#98*
+    dbconnect = dbi:Pg:dbname=rackmonkey
+    dbuser = rackmonkey
+    dbpass = 7jhH#98*
 
 NB. Make sure the 'Pg' in the dbconnect string is in the case shown.
 
 If your database is on a remote server you need to add the hostname of the
 database server. For example, if your database server is db1.example.com:
 
-	dbconnect = dbi:Pg:dbname=rackmonkey;host=db1.example.com
-	
+    dbconnect = dbi:Pg:dbname=rackmonkey;host=db1.example.com
+    
 If your database server is not using the standard Postgres port (5432) you
 should also indicate this in the connection string. For example, if your 
 database is on db1.example.com port 9000:
 
-	dbconnect = dbi:Pg:dbname=rackmonkey;host=db1.example.com;port=9000
-	
+    dbconnect = dbi:Pg:dbname=rackmonkey;host=db1.example.com;port=9000
+    
 You can also connect to a local database on another port:
 
-	dbconnect = dbi:Pg:dbname=rackmonkey;port=9000
+    dbconnect = dbi:Pg:dbname=rackmonkey;port=9000
 
 
 For MySQL
@@ -282,26 +296,26 @@ You will create a MySQL database and user in section 5. For now choose a
 database name, username and password. For simplicity I recommend you make the
 database and username both 'rackmonkey'. An example configuration would be:
 
-	dbconnect = dbi:mysql:dbname=rackmonkey
-	dbuser = rackmonkey
-	dbpass = 7jhH#98*
-	
+    dbconnect = dbi:mysql:dbname=rackmonkey
+    dbuser = rackmonkey
+    dbpass = 7jhH#98*
+    
 NB. Make sure the 'mysql' in the dbconnect string is all lowercase.
 
 If your database is on a remote server you need to add the hostname of the
 database server. For example, if your database server is db1.example.com:
 
-	dbconnect = dbi:mysql:dbname=rackmonkey;host=db1.example.com
-	
+    dbconnect = dbi:mysql:dbname=rackmonkey;host=db1.example.com
+    
 If your database server is not using the standard MySQL port (3306) you should
 also indicate this in the connection string. For example, if your database is
 on db1.example.com port 9000:
 
-	dbconnect = dbi:mysql:dbname=rackmonkey;host=db1.example.com;port=9000
-	
+    dbconnect = dbi:mysql:dbname=rackmonkey;host=db1.example.com;port=9000
+    
 You can also connect to a local database on another port:
 
-	dbconnect = dbi:mysql:dbname=rackmonkey;port=9000
+    dbconnect = dbi:mysql:dbname=rackmonkey;port=9000
 
 
 6. Database Set Up
@@ -322,8 +336,8 @@ You should also install the optional sample data if you want common companies
 and operating systems etc. set up in RackMonkey (this will save you a lot of 
 work entering data and you can always delete the ones you don't want):
 
-	$ sqlite3 [PATH] < sql/sample_data.sql
-	
+    $ sqlite3 [PATH] < sql/sample_data.sql
+    
 You should then change the permissions of the database file [PATH] and its
 parent directory to be readable and writable by your web server. For example,
 you might change the owner to 'www' if that is the user your web server runs
@@ -336,19 +350,19 @@ Using the values you set in section 4 you can create your RackMonkey user
 and database. Assuming you called both your user and database 'rackmonkey'
 you run (entering your chosen password when prompted):
 
-	# su - postgres
+    # su - postgres
 
-	$ createuser --pwprompt
-	Enter name of role to add: rackmonkey
-	Enter password for new role: 
-	Enter it again: 
-	Shall the new role be a superuser? (y/n) n
-	Shall the new role be allowed to create databases? (y/n) n
-	Shall the new role be allowed to create more new roles? (y/n) n
-	CREATE ROLE
+    $ createuser --pwprompt
+    Enter name of role to add: rackmonkey
+    Enter password for new role: 
+    Enter it again: 
+    Shall the new role be a superuser? (y/n) n
+    Shall the new role be allowed to create databases? (y/n) n
+    Shall the new role be allowed to create more new roles? (y/n) n
+    CREATE ROLE
 
-	$ createdb -O rackmonkey rackmonkey
-	CREATE DATABASE
+    $ createdb -O rackmonkey rackmonkey
+    CREATE DATABASE
 
 Run both of the following to set up the database and install the 
 default data (assumes your database is called rackmonkey):
@@ -360,53 +374,53 @@ You should also install the optional sample data if you want common companies
 and operating systems etc. set up in RackMonkey (this will save you a lot of 
 work entering data and you can always delete the ones you don't want):
 
-	$ psql -U rackmonkey rackmonkey < sql/sample_data.sql
+    $ psql -U rackmonkey rackmonkey < sql/sample_data.sql
 
 For further information on administering Postgres see:
 http://www.postgresql.org/docs/.
-	
+    
 
 For MySQL
 ------------
 Connect to your MySQL instance as a user with admin powers. Then create the 
 rackmonkey database and connect to it:
 
-	mysql> create database rackmonkey;
-	Query OK, 1 row affected (0.00 sec)
-	mysql> use rackmonkey;
-	Database changed
+    mysql> create database rackmonkey;
+    Query OK, 1 row affected (0.00 sec)
+    mysql> use rackmonkey;
+    Database changed
 
 Next, import the RackMonkey schema and default data (required):
 
-	mysql> \. sql/schema.mysql.sql
-	mysql> \. sql/default_data.sql
+    mysql> \. sql/schema.mysql.sql
+    mysql> \. sql/default_data.sql
 
 Check all queries were OK in the output from the schema import. You can check 
 all 19 tables were imported:
 
-	mysql> show tables;
-	...
-	19 rows in set (0.00 sec)
-	
+    mysql> show tables;
+    ...
+    19 rows in set (0.00 sec)
+    
 You should also install the optional sample data if you want common companies 
 and operating systems etc. set up in RackMonkey (this will save you a lot of 
 work entering data and you can always delete the ones you don't want):
 
-	mysql> \. sql/sample_data.sql
+    mysql> \. sql/sample_data.sql
 
 Finally you need to create a user and password to match your configuration 
 file (in section 4, above). To local connections only:
 
-	mysql> GRANT ALL ON rackmonkey.* TO 'rackmonkey'@'localhost' IDENTIFIED BY '7jhH#98*';
+    mysql> GRANT ALL ON rackmonkey.* TO 'rackmonkey'@'localhost' IDENTIFIED BY '7jhH#98*';
 
 To also allow connections from other servers also run:
 
-	mysql> GRANT ALL ON rackmonkey.* TO 'rackmonkey'@'%' IDENTIFIED BY '7jhH#98*';
+    mysql> GRANT ALL ON rackmonkey.* TO 'rackmonkey'@'%' IDENTIFIED BY '7jhH#98*';
 
 You should then flush privileges to ensure all connections see them:
 
-	mysql> FLUSH PRIVILEGES;
-	
+    mysql> FLUSH PRIVILEGES;
+    
 
 7. Running RackMonkey
 =====================
