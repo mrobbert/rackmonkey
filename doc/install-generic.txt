@@ -12,11 +12,13 @@ release. Please don't use this release on production systems and make sure you
 back up any existing RackMonkey databases before using them with this release.
 
 
-Generic System Install Guide  
-============================
+1. Introduction  
+===============
+This document explains how to install RackMonkey.
+
 In future RackMonkey will be available in package form for common operating
 systems and include more OS specific installation instructions. For this 
-preview release all installations should follow this document.
+release all installations should follow this document.
 
 NB. If you are upgrading an existing RackMonkey installation, refer back to 
 doc/upgrade.txt. This file is intended for new installations only.
@@ -25,12 +27,11 @@ Please note that the $ or # shown at the start of commands represents the
 shell prompt, you should not type it.
 
 
-1. System Set Up: Generic
-=========================
+2. System Set Up
+================
+You need the following in order to install and use RackMonkey:
 
-Needed to install RackMonkey
-----------------------------
-* Web server (e.g. Apache - only limited testing has been done under mod_perl)
+* Web server (Apache recommended)
 
 * One of the following databases (your OS may include packages for these):
   - SQLite v3.2.2 or higher
@@ -51,9 +52,6 @@ Needed to install RackMonkey
     - DBD::SQLite v1.09+ - for SQLite
     - DBD::Pg - for Postgres
     - DBD::mysql - for MySQL
-
-NB. If you check a version out of the subversion repository it may use 
-Data::Dumper for debugging. Packaged releases don't use it.
 
 The easiest way to install modules is with the CPAN shell. You generally need 
 to be root in order to do this. 
@@ -78,13 +76,10 @@ Then install the database driver for the database you're using:
     MySQL:    install DBD::mysql
 
 
-2. Installing RackMonkey
+3. Installing RackMonkey
 ========================
-NB. If you are upgrading an existing RackMonkey installation, refer back to 
-the install.txt file. This file is intended for new installations only.
-
-Once you have obtained a copy of RackMonkey (see install.txt) you should have 
-a directory with the following layout:
+Once you have obtained a copy of RackMonkey (see README) you should have a
+directory with the following layout:
 
   conf	      Includes RackMonkey and Apache configuration files
   doc         Documentation for RackMonkey
@@ -93,7 +88,7 @@ a directory with the following layout:
   sql         SQL to create the RackMonkey database
   t           Directory containing test scripts
   tmpl        HTML::Template files for the web interface
-  www         Web space files, e.g. images, css files
+  www         Web space files, e.g. help, images, CSS files
 
 Copy the rackmonkey.pl file and the whole RackMonkey directory from the perl
 directory to a suitable location on your web server (e.g. /rackmonkey) and
@@ -120,7 +115,7 @@ RackMonkey from another location you will need to update httpd-rackmonkey.conf
 to reflect this in section 3 (below).
 
 
-3. Configuring the Web Server
+4. Configuring the Web Server
 =============================
 RackMonkey includes an Apache configuration snippet that allows you to enable
 the right settings for http://<yourserver>/rackmonkey. If you are happy to
@@ -189,7 +184,7 @@ If you're having difficulty locating Apache configuration information you may
 find http://wiki.apache.org/httpd/DistrosDefaultLayout helpful.
 
 
-4. Configuring RackMonkey
+5. Configuring RackMonkey
 =========================
 
 Configuration Overview
@@ -309,7 +304,7 @@ You can also connect to a local database on another port:
 	dbconnect = dbi:mysql:dbname=rackmonkey;port=9000
 
 
-5. Database Set Up
+6. Database Set Up
 ==================
 Before you can run RackMonkey you need to set up the database. You must run
 the schema and default_data SQL files against the database or else it won't
@@ -413,7 +408,7 @@ You should then flush privileges to ensure all connections see them:
 	mysql> FLUSH PRIVILEGES;
 	
 
-6. Running RackMonkey
+7. Running RackMonkey
 =====================
 You can now start the app by pointing your browser at the location of the
 rackmonkey.pl script. You should be presented with a screen showing an empty

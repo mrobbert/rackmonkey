@@ -45,8 +45,8 @@ updating the schema automatically.
 
 Rackmonkey Files
 ----------------
-Once you have obtained a copy of RackMonkey (see install.txt) you should have 
-a directory with the following layout:
+Once you have obtained a copy of RackMonkey (see README) you should have a 
+directory with the following layout:
 
   conf	      Includes RackMonkey and Apache configuration files
   doc         Documentation for RackMonkey
