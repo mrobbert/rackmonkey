@@ -31,30 +31,42 @@
 		</p>
 		<h2>Introduction</h2>
 		<p>
-			Welcome to RackMonkey help.
-			You may find it helpful to open the help section in a separate tab or window so you can read it while using RackMonkey.
-			RackMonkey's documentation is still a work in progress, check the <a href="http://www.rackmonkey.org/doc/1.2.4">online documentation</a> for the latest updates.
+			Welcome to RackMonkey help. These pages are designed to get you working with RackMonkey quickly and efficiently.
+			These documents are updated from time to time: you can always read the latest documentation at <a href="http://www.rackmonkey.org/doc/1.2.4">rackmonkey.org</a>.
 		</p>
 		<p>
-		In the RackMonkey help parts of the interface are referred to like this: <strong>[Config > Organisations]</strong>, this means select the Config tab at the top of the screen then choose organisations. The help includes screenshots, letters in brackets, such as (E), refer to a label on a screenshot.
+			In the RackMonkey help parts of the interface are referred to like this: <strong>[Config > Organisations]</strong>, this means select the Config tab at the top of the screen then choose organisations. The help includes screenshots, letters in brackets, such as <strong>(E)</strong>, refer to a label on a screenshot.
 		</p>
 		<p><strong>Tip:</strong> Hovering your mouse over many items (such as buttons) provides additional information.</p>
+
+		
+		<h2>Getting Started</h2>
+
+		<h3>Interface Basics</h3>
+		
+		<img src="<TMPL_VAR NAME=web_root>/graphics/help/navbar.png" width="734" height="48" alt="" class="screenshot" />
+		
+		<p>The top of every RackMonkey screen looks similar to the above screenshot. There is a set of tabs <strong>(A)</strong> which provide access to the key parts of the application, a dropdown of all your racks <strong>(B)</strong> so you can quickly view a rack layout and a search box which allows you to find devices by name, asset or serial number <strong>(C)</strong>.</p>
+		
+		<p>The following sections outline each part of the interface, but first there's a description of how the different views fit together.</p>
+		
 		<h3>RackMonkey Organisation</h3>
 		<ul>
 			<li>Servers, routers, switches etc. are <strong>devices</strong> and are contained within <strong>racks</strong>.</li>
 			<li>A <strong>device</strong> has a <strong>hardware</strong> model and an <strong>operating system</strong>.</li>
-			<li>A <strong>device</strong> has a <strong>domain</strong>, a <strong>role</strong>, a <strong>customer</strong> and a <strong>service level</strong>.</li>
+			<li>A <strong>device</strong> has a <strong>domain</strong> (such as rackmonkey.org), a <strong>role</strong> (such as database server), a <strong>customer</strong> and a <strong>service level</strong>.</li>
 			<li><strong>Apps</strong> run on <strong>devices</strong>.</li>
 			<li><strong>Racks</strong> are organised in <strong>rows</strong> which reside in <strong>rooms</strong> within <strong>buildings</strong>.</li>
-			<li><strong>Buildings</strong>, <strong>rooms</strong>, <strong>domains</strong>, <strong>hardware</strong> models, <strong>operating systems</strong>, <strong>organisations</strong> (such as customers and manufacturers), <strong>roles</strong> and <strong>service levels</strong> can be found under <strong>[Config]</strong>.
 		</ul>
 		
-		<h2>Getting Started</h2>
+		<h3>Config</h3>		
 		<p>
-			If you have just installed RackMonkey you should read <a href="<TMPL_VAR NAME=base_url>?view=help&amp;view_type=first_steps">First Steps</a>. Otherwise, read on to get an introduction to using RackMonkey.
+		The <strong>[Config]</strong> tab contains most of the basic building blocks of RackMonkey data. Here you can configure <strong>Buildings</strong>, <strong>Rooms</strong>, <strong>Domains</strong>, <strong>Hardware</strong> models, <strong>Operating Systems</strong>, <strong>Organisations</strong> (such as customers and manufacturers), <strong>Roles</strong> and <strong>Service Levels</strong>. It's a good idea to add your own commonly used items to these categories when you start using RackMonkey. If the sample data was installed with RackMonkey you will have a selection of operating systems and hardware to get you started.
 		</p>
-
-		<h3>Working with Racks</h3>
+		<img src="<TMPL_VAR NAME=web_root>/graphics/help/config.png" width="734" height="315" alt="" class="screenshot" />
+		
+						
+		<h3>Racks</h3>
 		<p>
 		You can get to the Racks view by clicking on the <strong>[Racks]</strong> tab in the navigation bar at the top of the screen. This view gives you an overview of your racks, which room they reside in and the number of devices they contain. If you click on the link in the <strong>Layout</strong> column (A in screenshot) you will see the <strong>physical</strong> layout of the rack (see below for details of this view). If you want to see multiple racks side-by-side, select the check boxes in the Racks view (B) and click the <strong>Device Layout</strong> button the bottom of the Racks view (C). You can also view the physical view of a rack at by using the dropdown (D) and create a new rack with the <strong>New Rack</strong> button (E).
 		</p>
