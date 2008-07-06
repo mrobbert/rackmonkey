@@ -33,16 +33,16 @@
 		</p>
 		<h2>RackMonkey User Guide</h2>
 		<p>
-			This guide should help you get started with RackMonkey and demonstrate some of its key features.
-			This document is updated from time to time: you can always read the latest version at <a href="http://www.rackmonkey.org/doc/1.2.4">rackmonkey.org</a>. This page includes screenshots, letters in brackets such as <strong>(E)</strong>, refer to a label on a screenshot.
+			This guide will help you get started with RackMonkey and demonstrate some of its key features.
+			This page includes screenshots: letters in brackets, such as <strong>(E)</strong>, are used to refer to different screenshot areas from within the text.
+			This document is updated from time to time: you can always read the latest version at <a href="http://www.rackmonkey.org/doc/1.2.4">rackmonkey.org</a>. 
 		</p>
 		<p><strong>Tip:</strong> Hovering your mouse over many items interface items (such as buttons) provides additional information.</p>
-		<h2>Getting Started</h2>
 		<h3>Interface Basics</h3>
+		<h4>Navigation</h4>
 		<img src="<TMPL_VAR NAME=web_root>/graphics/help/navbar.png" width="734" height="48" alt="" class="screenshot" />
-		<p>The top of every RackMonkey screen looks similar to the above screenshot. There is a set of tabs <strong>(A)</strong> which provide access to the key parts of the application, a dropdown of all your racks <strong>(B)</strong> so you can quickly view a rack layout and a search box which allows you to search for devices <strong>(C)</strong>. To find a device, enter its name, serial or asset number, then click <em>Find</em>. The search is not case sensitive and will also find partial matches. For example, searching for 'www' will find devices called 'WWW', 'www21' and 'www22'.</p>
-		<p>The following sections outline each part of the interface, but first there's a description of how the different views fit together.</p>
-		<h3>RackMonkey Organisation</h3>
+		<p>The top of every RackMonkey screen looks similar to the screenshot above. There is a set of tabs <strong>(A)</strong> that provide access to the key parts of the application, a dropdown to jump to a physical view of a rack <strong>(B)</strong> and a search box <strong>(C)</strong> which allows you to find devices  by name, serial or asset number. The search is not case-sensitive and will also find partial matches. For example, searching for 'www' will find devices called 'WWW', 'www21' and 'www22'.</p>
+		<h4>RackMonkey Organisation</h4>
 		<ul>
 			<li>Servers, routers, switches etc. are <strong>devices</strong> and are contained within <strong>racks</strong>.</li>
 			<li>A <strong>device</strong> has a <strong>hardware</strong> model and an <strong>operating system</strong>.</li>
@@ -50,39 +50,44 @@
 			<li><strong>Apps</strong> run on <strong>devices</strong>.</li>
 			<li><strong>Racks</strong> are organised in <strong>rows</strong> which reside in <strong>rooms</strong> within <strong>buildings</strong>.</li>
 		</ul>
-
 		<h3>Config</h3>		
 		<p>
-			The <strong>Config</strong> tab contains most of the basic building blocks of RackMonkey data. Here you can configure <strong>Buildings</strong>, <strong>Rooms</strong>, <strong>Domains</strong>, <strong>Hardware</strong> models, <strong>Operating Systems</strong>, <strong>Organisations</strong> (such as customers and manufacturers), <strong>Roles</strong> and <strong>Service Levels</strong>. It's a good idea to add your own commonly used items to these categories when you start using RackMonkey. If the sample data was installed with RackMonkey you will have a selection of operating systems and hardware to get you started.
+			The <strong>Config</strong> tab contains most of the basic building blocks of RackMonkey data. Here you can configure <strong>Buildings</strong>, <strong>Rooms</strong>, <strong>Domains</strong>, <strong>Hardware</strong> models, <strong>Operating Systems</strong>, <strong>Organisations</strong> (such as customers and manufacturers), <strong>Roles</strong> and <strong>Service Levels</strong>. It's a good idea to add your own commonly used items to these categories when you start using RackMonkey. If the sample data was installed with RackMonkey you will have a selection of operating systems and hardware to get you started (see the install documentation for information on sample data).
 		</p>
 		<img src="<TMPL_VAR NAME=web_root>/graphics/help/config.png" width="734" height="315" alt="" class="screenshot" />
 		<h3>Working with Devices</h3>
 		<h4>Deciding How to View Devices</h4>
 		<p>
-			The <strong>Devices</strong> tab (screenshot below) allows you to see all the devices and their configuration. There are several different devices views which show different information; you can select an alternate view from the <em>View Type</em> dropdown <strong>(A)</strong>. For example, if you are interested in asset information (such as serial number and age of device), choose the <em>Asset</em> view. To sort the table by a particular column click on its name; for example you could sort devices by <em>Customer</em> rather than the default name (chosen by clicking on the <em>Device</em> column). You can show/hide domain information for devices by clicking the <em>.dom</em> link <strong>(D)</strong>.
+			The <strong>Devices</strong> tab (screenshot below) allows you to see all the devices and their configuration. There are several devices views which present different information; you can select an alternate view from the <em>View Type</em> dropdown <strong>(A)</strong>. For example, if you are interested in asset information (such as serial number and age of device), choose the <em>Asset</em> view. To sort the table by a particular column click on its name; for example you could sort devices by <em>Customer</em> rather than the default name (chosen by clicking on the <em>Device</em> column). You can show/hide domain information for devices by clicking the <em>.dom</em> link <strong>(D)</strong>.
 		</p>
 		<p>
-			The <em>Show Filters</em> button <strong>(C)</strong> brings up the filter options that allow you to narrow down the devices shown to those of interest; for example you can show all devices for a given customer or all those running Ubuntu. To return to a view of all devices click the <em>Reset</em> button at the right of the filters or select the <em>Show All</em> link (not pictured) in the footer of the table. 
+			The <em>Show Filters</em> button <strong>(C)</strong> brings up the filter options that allow you to narrow down the devices shown to those of interest; for example you can show all devices for a given customer or all those running Ubuntu. To return to a view of all devices, click the <em>Reset</em> button at the right of the filters or select the <em>Show All</em> link (not pictured) in the table footer. 
 		</p>
 		<h4>Working with Individual Devices</h4>
 		<p>
-			To view the full details for an individual device, select its name <strong>(E)</strong>. This brings up a separate screen which also allows you to edit, copy or delete the device. You can also edit a device directly be selecting the edit button next to its name <strong>(F)</strong>. To view a device within its rack, select the link in the rack column <strong>(G)</strong>. The <em>New Device</em> button <strong>(B)</strong> allows you to create a new device; if populating a whole rack you may find it easier to do this Rack Physical View (discussed above).
+			To view the full details for an individual device, select its name <strong>(E)</strong>. This brings up a separate screen which also allows you to edit, copy or delete the device. You can also edit a device directly be selecting the edit button next to its name <strong>(F)</strong>. To view a device within its rack, select the link in the rack column <strong>(G)</strong>. The <em>New Device</em> button <strong>(B)</strong> allows you to create a new device; if populating a whole rack you may find it easier to do this Racks Physical View (discussed below).
 		</p>		
 		<img src="<TMPL_VAR NAME=web_root>/graphics/help/devices.png" width="734" height="420" alt="" class="screenshot" />
 		<h3>Racks</h3>
+		<h4>Racks Table</h4>
 		<p>
-			You can get to the Racks view by clicking on the <strong>[Racks]</strong> tab in the navigation bar at the top of the screen. This view gives you an overview of your racks, which room they reside in and the number of devices they contain. If you click on the link in the <strong>Layout</strong> column (A in screenshot) you will see the <strong>physical</strong> layout of the rack (see below for details of this view). If you want to see multiple racks side-by-side, select the check boxes in the Racks view (B) and click the <strong>Device Layout</strong> button the bottom of the Racks view (C). You can also view the physical view of a rack at by using the dropdown (D) and create a new rack with the <strong>New Rack</strong> button (E).
+			The <strong>Racks</strong> view (screenshot below) gives you an overview of your racks: which room they reside in and the number of devices they contain. To view the details of a particular rack select its name <strong>(B)</strong>. To view the layout of devices within a rack select the relevant entry in the layout column <strong>(D)</strong> (See Racks Physical View, below, for details). If you want to see multiple racks side-by-side, select the check boxes next to the racks you wish to view <strong>(F)</strong> (selecting the check mark in the top column toggles the selected racks) and click the <em>Device Layout</em> button <strong>(G)</strong>. You can sort the racks table by clicking on the headings at the top of the table. For example selecting <em>Free U</em> will sort the racks from least to most free space.
+		</p>
+		<p>
+			You can see the number of devices within a rack in the <em>Layout</em> column <strong>(D)</strong>. The total and used space in rack units are shown
+			in the <em>Size (U)</em> and <em>Free (U)</em> columns <strong>(E)</strong>. To create a new rack use the button <strong>(A)</strong>, to edit a rack select the <em>Edit</em> button next to its name <strong>(C)</strong>.
 		</p>
 		<img src="<TMPL_VAR NAME=web_root>/graphics/help/racks.png" width="734" height="452" alt="" class="screenshot" />
+		<h4>Racks Physical View</h4>
 		<p>
-			In the <strong>Physical</strong> rack view you can see the contents of your racks. You can jump to physical view at any time using the dropdown (D in the above screenshot). This view shows the name (F in the screenshot, below) and hardware type of the device (in the screenshot example, Sun Fire T2000: you can hover over the hardware name to see the manufacturer).
-			If you want to view more details on a device, simple click on its name (F). To edit a device, click on the <strong>Ed</strong> link (G).
-			You can add a new device to a rack at a given position by clicking on the <strong>+</strong> symbol (H). This is a fast way to populate a new rack with devices. To move a device to a different position, select the <strong>Ed</strong> link and update the <strong>Location</strong>.
+			In the <strong>Physical Rack</strong> View (screenshot below) you can see the contents of your racks. You can jump to physical view at any time using the dropdown <strong>(C)</strong>. This view shows the name and hardware type of the device of each device <strong>(A)</strong> (you can hover over the hardware name to see the manufacturer) together with an <em>[Ed]</em> link which allows you to edit the device.
+			You can add a new device to a rack at a given position by clicking on the <strong>+</strong> symbol <strong>(B)</strong>. This is a fast way to populate a new rack with devices.
 		</p>
+		<p>In order to view more than one rack side-by-side you need to select them in the Racks Table (see above).</p>
 		<img src="<TMPL_VAR NAME=web_root>/graphics/help/racksphysical.png" width="734" height="395" alt="" class="screenshot" />
 		<h3>Reports</h3>
 		<p>
-			The <strong>reports</strong> tab gives you information on all your devices and racks. For example, you can see the total space available in your racks
+			The <strong>Reports</strong> tab gives you information on all your devices and racks. For example, you can see the total space available in your racks
 			as well as the customers with the most devices, most common operating systems etc. The reports view will be expanded upon in future releases.
 		</p>
 	</div>
