@@ -34,7 +34,7 @@ In future RackMonkey will be available in package form for common operating
 systems and include more OS specific installation instructions. For this 
 release all installations should follow this document.
 
-NB. If you are upgrading an existing RackMonkey installation, refer back to 
+If you are upgrading an existing RackMonkey installation, refer back to 
 doc/upgrade.txt. This file is intended for new installations only.
 
 Please note that the $ or # shown at the start of commands represents the 
