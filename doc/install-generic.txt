@@ -409,11 +409,11 @@ work entering data and you can always delete the ones you don't want):
     mysql> \. sql/sample_data.sql
 
 Finally you need to create a user and password to match your configuration 
-file (in section 4, above). To local connections only:
+file (in section 4, above). For local connections:
 
     mysql> GRANT ALL ON rackmonkey.* TO 'rackmonkey'@'localhost' IDENTIFIED BY '7jhH#98*';
 
-To also allow connections from other servers also run:
+To also allow connections from other servers run:
 
     mysql> GRANT ALL ON rackmonkey.* TO 'rackmonkey'@'%' IDENTIFIED BY '7jhH#98*';
 
