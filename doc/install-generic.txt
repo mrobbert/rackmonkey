@@ -342,6 +342,9 @@ parent directory to be readable and writable by your web server. For example,
 you might change the owner to 'www' if that is the user your web server runs
 under.
 
+For further information on administering SQLite see:
+http://www.sqlite.org/docs.html
+
 
 For Postgres
 ------------
@@ -417,6 +420,9 @@ To also allow connections from other servers also run:
 You should then flush privileges to ensure all connections see them:
 
     mysql> FLUSH PRIVILEGES;
+
+For further information on administering MySQL see:
+http://dev.mysql.com/doc/
     
 
 7. Running RackMonkey
