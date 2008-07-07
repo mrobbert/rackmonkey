@@ -53,7 +53,6 @@ directory with the following layout:
   README      Read this before you start
   perl        Contains the perl scripts and modules
   sql         SQL to create the RackMonkey database
-  t           Directory containing test scripts
   tmpl        HTML::Template files for the web interface
   www         Web space files, e.g. images, css files
 

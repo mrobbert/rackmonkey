@@ -100,7 +100,6 @@ directory with the following layout:
   README      Read this before you start
   perl        Contains the perl scripts and modules
   sql         SQL to create the RackMonkey database
-  t           Directory containing test scripts
   tmpl        HTML::Template files for the web interface
   www         Web space files, e.g. help, images, CSS files
 
@@ -386,9 +385,7 @@ Connect to your MySQL instance as a user with admin powers. Then create the
 rackmonkey database and connect to it:
 
     mysql> create database rackmonkey;
-    Query OK, 1 row affected (0.00 sec)
     mysql> use rackmonkey;
-    Database changed
 
 Next, import the RackMonkey schema and default data (required):
 
