@@ -428,8 +428,8 @@ http://dev.mysql.com/doc/
 7. Running RackMonkey
 =====================
 You can now start the app by pointing your browser at the location of the
-rackmonkey.pl script. You should be presented with a screen showing an empty
-table of racks. If everything works correctly you probably want to start
-reading the first steps instructions. Click on the [Help] tab, then choose 
-"First Steps". If you're having trouble getting RackMonkey to run (for example 
-you get an Internal Server Error), read doc/troubleshooting.txt.
+rackmonkey.pl script. You should be presented with a screen showing a list of 
+racks. If everything works correctly you probably want to start reading the 
+User Guide, which you can find under the [Help] tab in the RackMonkey 
+interface. If you're having trouble getting RackMonkey to run (for example you
+get an Internal Server Error), read doc/troubleshooting.txt.
