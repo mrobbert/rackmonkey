@@ -21,9 +21,9 @@ RackMonkey v1.2.x can be upgraded to the latest version following the
 instructions below. NB. Upgrading from v1.1 is not supported.
 
 Upgrading from earlier releases of v1.2 is straightforward: there are no
-database schema changes (but see note about, below). However, there has
-been a change in the way configuration is stored, which is explained in the
-instructions below.
+database schema changes (but see note about Postgres/MySQL Schema, below). 
+However, there has been a change in the way configuration is stored, which is 
+explained in the instructions below.
 
 Despite the fact there are no schema changes in this release, you should take
 a backup of the RackMonkey database before proceeding. For SQLite this can
@@ -34,9 +34,9 @@ shell prompt, you should not type it.
 
 Postgres/MySQL Schema
 ---------------------
-The Postgres and MySQL schemas has been tweaked in v1.2.4 preview 2 to prevent
-NULL values being stored in columns which are foreign key constraints. You do 
-not need to update your existing schema, as this change doesn't affect the 
+The Postgres and MySQL schemas has been tweaked in v1.2.4 to prevent NULL 
+values being stored in columns which are foreign key constraints. You do not 
+need to update your existing schema, as this change doesn't affect the 
 functionality of RackMonkey (it improves the integrity of data in the case of 
 manual access or bugs in RackMonkey). If you wish to upgrade your schema to 
 the new version, dump your database and create a new database with the new 
