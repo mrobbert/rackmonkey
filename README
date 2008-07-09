@@ -105,7 +105,8 @@ RackMonkey project:
 
     * Pierre Larsson - XLS Export Plugin (rack2xls.pl)
     
-NB. This plugin isn't yet included in the release version of RackMonkey.
+NB. This plugin isn't included in the release version of RackMonkey v1.2.4,
+but will be part of future releases.
     
 People
 ------
