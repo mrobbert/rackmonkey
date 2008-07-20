@@ -8,6 +8,10 @@
 You can read the latest version of this document in HTML format at:
 http://www.rackmonkey.org/doc/1.2.4
 
+v1.2.4 - Released 2008-07-20
+----------------------------
+* Minor tweaks to documentation
+
 v1.2.4 RC1 - Released 2008-07-07
 --------------------------------
 * Added edit buttons to table views to make editing faster
