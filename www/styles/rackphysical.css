@@ -71,7 +71,8 @@ th.rack_header
 	background: #444;
 	color: #FFF;
 	border: solid 1px #000;
-	padding: 5px;
+	padding: 2px;
+	text-align: center;
 }
 a.rack_header
 {

@@ -1,3 +1,8 @@
+NB. While the code of RackMonkey is covered by this licence it also includes 
+content licensed from third parties under different conditions. Be sure to 
+check the Legal Notices in the README file.
+
+
 		    GNU GENERAL PUBLIC LICENSE
 		       Version 2, June 1991
 
