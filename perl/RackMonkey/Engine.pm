@@ -1078,6 +1078,24 @@ sub hardwareDeviceCount
 	return $sth->fetchall_arrayref({});
 }
 
+sub hardwareWithDevice
+{
+	my $self = shift;
+	my $sth = $self->dbh->prepare(qq!
+		SELECT
+			DISTINCT hardware.id, hardware.name, hardware.meta_default_data
+		FROM 
+			device, hardware
+		WHERE 
+			device.hardware = hardware.id
+		ORDER BY
+		 	hardware.meta_default_data DESC,
+			hardware.name
+	!);
+	$sth->execute;
+	return $sth->fetchall_arrayref({});
+}
+
 ##############################################################################
 # Operating System Methods                                                   #  
 ##############################################################################
@@ -1190,6 +1208,24 @@ sub osDeviceCount
 	return $sth->fetchall_arrayref({});
 }
 
+sub osWithDevice
+{
+	my $self = shift;
+	my $sth = $self->dbh->prepare(qq!
+		SELECT
+			DISTINCT os.id, os.name, os.meta_default_data
+		FROM 
+			os, device
+		WHERE 
+			device.os = os.id
+		ORDER BY 
+			os.meta_default_data DESC,
+			os.name
+	!);
+	$sth->execute;
+	return $sth->fetchall_arrayref({});
+}
+
 ##############################################################################
 # Organisation Methods                                                       #  
 ##############################################################################
@@ -1294,6 +1330,24 @@ sub customerDeviceCount
 		GROUP BY org.id, org.name 
 		ORDER BY num_devices DESC
 		LIMIT 10;
+	!);
+	$sth->execute;
+	return $sth->fetchall_arrayref({});
+}
+
+sub customerWithDevice
+{
+	my $self = shift;
+	my $sth = $self->dbh->prepare(qq!
+		SELECT
+			DISTINCT org.id, org.name, org.meta_default_data
+		FROM 
+			org, device
+		WHERE 
+			device.customer = org.id
+		ORDER BY 
+			org.meta_default_data DESC,
+			org.name
 	!);
 	$sth->execute;
 	return $sth->fetchall_arrayref({});
@@ -1819,6 +1873,24 @@ sub roleDeviceCount
 		GROUP BY role.id, role.name 
 		ORDER BY num_devices DESC
 		LIMIT 10;
+	!);
+	$sth->execute;
+	return $sth->fetchall_arrayref({});
+}
+
+sub roleWithDevice
+{
+	my $self = shift;
+	my $sth = $self->dbh->prepare(qq!
+		SELECT
+			DISTINCT role.id, role.name, role.meta_default_data
+		FROM 
+			role, device
+		WHERE 
+			device.role = role.id
+		ORDER BY 
+			role.meta_default_data DESC,
+			role.name
 	!);
 	$sth->execute;
 	return $sth->fetchall_arrayref({});

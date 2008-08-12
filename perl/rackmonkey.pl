@@ -32,6 +32,8 @@ use RackMonkey::CGI;
 use RackMonkey::Engine;
 use RackMonkey::Error;
 
+use Data::Dumper;
+
 our $VERSION = '1.2.%BUILD%';
 our $AUTHOR = 'Will Green (wgreen at users.sourceforge.net)';
 
@@ -183,19 +185,19 @@ eval
 				
 				my $filterBy = $cgi->filterBy;
 			
-				my $customers = $backend->listBasicMeta('customer');
+				my $customers = $backend->customerWithDevice;
 				unshift @$customers, {'id' => '', name => 'All'};
 				$template->param('customerlist' => $cgi->selectItem($customers, $$filterBy{'device.customer'}));
 			
-				my $roles = $backend->listBasicMeta('role');
+				my $roles = $backend->roleWithDevice;
 				unshift @$roles, {'id' => '', name => 'All'};
 				$template->param('rolelist' => $cgi->selectItem($roles, $$filterBy{'device.role'}));
 
-				my $hardware = $backend->listBasicMeta('hardware');
+				my $hardware = $backend->hardwareWithDevice;
 				unshift @$hardware, {'id' => '', name => 'All'};
 				$template->param('hardwarelist' => $cgi->selectItem($hardware, $$filterBy{'device.hardware'}));
 
-				my $os = $backend->listBasicMeta('os');
+				my $os = $backend->osWithDevice;
 				unshift @$os, {'id' => '', name => 'All'};
 				$template->param('oslist' => $cgi->selectItem($os, $$filterBy{'device.os'}));
 							
