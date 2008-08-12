@@ -8,6 +8,11 @@
 You can read the latest version of this document in HTML format at:
 http://www.rackmonkey.org/doc/1.2.4
 
+v1.2.5 Preview 1 - Released 2008-xx-xx
+--------------------------------------
+* Improvements to UI
+* Support for deletion in table and physical rack views
+
 v1.2.4 - Released 2008-07-20
 ----------------------------
 * Minor tweaks to documentation

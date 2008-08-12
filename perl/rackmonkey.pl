@@ -82,10 +82,11 @@ eval
 		
 		my $lastCreatedId = $backend->performAct($cgi->actOn, $act, $loggedInUser, scalar($cgi->vars));
 		$id = $lastCreatedId if (!$id); # use lastCreatedId if there isn't an id
-		
 		my $redirectUrl = "$fullURL?view=$view&view_type=$viewType";
 		$redirectUrl .= "&id=$id" if ($id);
 		$redirectUrl .= "&last_created_id=$lastCreatedId";
+		$redirectUrl .= "&device_search=$deviceSearch" if ($deviceSearch);
+		
 		$cgi->redirect303($redirectUrl);
 	}
 	else # display a view
