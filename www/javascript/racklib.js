@@ -163,3 +163,9 @@ function pressedEnter(e)
 		return true;
 	return false;
 }
+
+// Confirm deletions
+function confirmDel(name)
+{
+	return confirm("Are you sure you want to delete " + name + "?\nThis cannot be undone.");
+}
