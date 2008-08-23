@@ -7,6 +7,7 @@
 			<ul>
 				<li><a class="unselected" href="<TMPL_VAR NAME=base_url>?view=rack">Racks</a></li>
 				<li><a class="selected" href="<TMPL_VAR NAME=base_url>?view=device">Devices</a></li>
+				<li><a class="unselected" href="<TMPL_VAR NAME=base_url>?view=network">Nets</a></li>
 				<li><a class="unselected" href="<TMPL_VAR NAME=base_url>?view=app">Apps</a></li>
 				<li><a class="unselected" href="<TMPL_VAR NAME=base_url>?view=config">Config</a></li>
 				<li><a class="unselected" href="<TMPL_VAR NAME=base_url>?view=report">Reports</a></li>

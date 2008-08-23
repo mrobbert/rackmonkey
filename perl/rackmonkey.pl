@@ -94,7 +94,7 @@ eval
 	else # display a view
 	{
 		# check the view is valid
-		unless ($view =~ /^(?:config|help|app|building|device|domain|hardware|org|os|rack|report|role|room|row|service|system)$/)
+		unless ($view =~ /^(?:config|help|app|building|device|domain|hardware|network|org|os|rack|report|role|room|row|service|system)$/)
 		{
 			die "RMERR: '$view' is not a valid view. Did you type the URL manually? Note that view names are singular, for example device NOT devices.";
 		}
@@ -110,7 +110,7 @@ eval
 		my $templatePath = $$conf{'tmplpath'}."/${view}_${viewType}.tmpl";
 		$template = HTML::Template->new('filename' => $templatePath, 'die_on_bad_params' => 0, 'global_vars' => 1, 'case_sensitive' => 1, 'loop_context_vars' => 1);
 		
-		if (($view eq 'config') || ($view eq 'help'))
+		if (($view eq 'config') || ($view eq 'help') || ($view eq 'network'))
 		{
 			# do nothing - pages are static content
 		}
