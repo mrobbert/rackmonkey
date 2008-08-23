@@ -6,6 +6,8 @@
 ------------------------------------------------------------------------------
 
 -- Need to do FK for new tables
+-- All electrical measurements are in 1/1000th of standard, e.g. 0.001 A
+-- Rack measurements are all in 1/6 of rack (allows three positions and half U)
 
 -- Building the device resides in
 CREATE TABLE building
@@ -144,6 +146,7 @@ CREATE TABLE hardware
 		CONSTRAINT fk_manufacturer_id REFERENCES org(id),	
 	size INTEGER NOT NULL,
 	network_port_count INTEGER NOT NULL DEFAULT 0,
+	psu_count INTEGER NOT NULL DEFAULT 1,
 	image CHAR,
 	support_url CHAR,
 	spec_url CHAR,
@@ -195,7 +198,35 @@ CREATE TABLE device
 		CONSTRAINT fk_role_id REFERENCES role(id),	
 	monitored INTEGER,
 	in_service INTEGER,
-	system_check_date CHAR, -- date on which the system information was last checked
+	system_check_date CHAR, -- date on which the system information was last checked	
+	notes CHAR,
+	meta_default_data INTEGER NOT NULL DEFAULT 0,
+	meta_update_time CHAR,
+	meta_update_user CHAR
+);
+
+
+-- Power Supply to devices
+CREATE TABLE power_supply
+(
+	id INTEGER PRIMARY KEY AUTOINCREMENT,
+	name CHAR NOT NULL COLLATE NOCASE,
+	max_current INTEGER,
+	on_ups INTEGER NOT NULL DEFAULT 0,
+	notes CHAR,
+	meta_default_data INTEGER NOT NULL DEFAULT 0,
+	meta_update_time CHAR,
+	meta_update_user CHAR
+);
+
+
+-- Device Power Units
+CREATE TABLE device_psu
+(
+	id INTEGER PRIMARY KEY AUTOINCREMENT,
+	name CHAR NOT NULL COLLATE NOCASE,
+	supply INTEGER NOT NULL
+		CONSTRAINT fk_power_supply_id REFERENCES power_supply(id),
 	supply_voltage_idle INTEGER,
 	supply_current_idle INTEGER,
 	supply_realpower_idle INTEGER,
@@ -207,11 +238,21 @@ CREATE TABLE device
 	supply_voltage_max INTEGER,
 	supply_current_max INTEGER,
 	supply_realpower_max INTEGER,
-	supply_measurement_max_date CHAR,	
+	supply_measurement_max_date CHAR,
 	notes CHAR,
 	meta_default_data INTEGER NOT NULL DEFAULT 0,
 	meta_update_time CHAR,
 	meta_update_user CHAR
+);
+
+
+-- map PSUs to devices
+CREATE TABLE device_device_psu
+(
+	device_psu INTEGER NOT NULL
+		CONSTRAINT fk_net_device_psu_id REFERENCES device_psu(id),
+	device INTEGER NOT NULL
+		CONSTRAINT fk_device_id REFERENCES device(id)
 );
 
 
