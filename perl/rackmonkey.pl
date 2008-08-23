@@ -401,7 +401,7 @@ eval
 			{
 				my @rackIdList = $cgi->rackList;
 				push (@rackIdList, $id) if (scalar(@rackIdList) == 0); # add current rack id if no list
-				die "RMERR: You need to select at least one rack to display." unless $rackIdList[0];
+				die "RMERR: You need to select at least one rack to display. Use the checkboxes at the right of the rack table to select racks." unless $rackIdList[0];
 				my @racks;
 				for my $rackId (@rackIdList)
 				{
