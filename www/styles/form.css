@@ -71,3 +71,11 @@ table.form div.key
 	font-family: verdana, helvetica, sans-serif;
 	margin-bottom: 0.25em;
 }
+
+table.form span.key
+{
+	font-weight: bold;
+	color: #444;
+	font-size: smaller;
+	font-family: verdana, helvetica, sans-serif;
+}

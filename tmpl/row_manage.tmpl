@@ -17,89 +17,35 @@
 	</style>
 	<script type="text/javascript" src="<TMPL_VAR NAME=web_root>/javascript/racklib.js"></script>
 	<link rel="icon" href="<TMPL_VAR NAME=web_root>/graphics/favicon.ico" />
-	<script type="text/javascript">
-	// array of row data to populate form
-	var rowData = new Array();
-	<TMPL_LOOP NAME=rows>rowData[<TMPL_VAR ESCAPE=HTML NAME=id>] = ['<TMPL_VAR ESCAPE=HTML NAME=name>', '<TMPL_VAR ESCAPE=HTML NAME=room_pos>'];
-	</TMPL_LOOP>
-	
-	function arrayLoop()
-	{
-		for (i in rowData)
-		{
-			alert(rowData[i][0]);
-		}
-	}
-	
-	function populateRows(fieldName, rowArray)
-	{
-		//removeChildNodes(fieldName);
-	
-		var tableBody = document.createElement("tbody");
-		
-		for (i in rowArray)
-		{
-			var row = document.createElement("tr");
-			
-			var rowPosCell = document.createElement("td");
-			var rowPosText = document.createTextNode(rowArray[i][1]);
-			rowPosCell.appendChild(rowPosText);
-			row.appendChild(rowPosCell);
-			
-			var rowNameCell = document.createElement("td");
-			var rowNameInput = document.createElement("input");
-			rowNameInput.type = 'text';
-			rowNameInput.size = 12;
-			rowNameInput.value = rowArray[i][0];
-			rowNameCell.appendChild(rowNameInput);
-			row.appendChild(rowNameCell);
-
-			var rowDeleteCell = document.createElement("td");
-			var rowDeleteButton = document.createElement("input");
-			rowDeleteButton.type = 'button';
-			rowDeleteButton.value = 'X';
-			rowDeleteButton.width = 40;
-			rowDeleteCell.appendChild(rowDeleteButton);
-			row.appendChild(rowDeleteCell);			
-
-			tableBody.appendChild(row);
-		}
-
-		field = document.getElementById(fieldName);
-		field.appendChild(tableBody);
-	}
-	</script>
 </head>
-<body onload="populateRows('rowlist', rowData);">
+<body>
 <TMPL_INCLUDE NAME="nav-config.ssi">
 	<div id="main">
 		<table class="form">
 			<tr>
 				<th>
-					<span class="title">Manage Rows (not yet supported)</span>
+					<span class="title">Manage Rows</span>
 				</th>
 			</tr>
 			<tr>
 				<td>
-					<label>Room</label><br />
-					<TMPL_VAR ESCAPE=HTML NAME=name> in <TMPL_VAR ESCAPE=HTML NAME=building_name>
-					<br /><br />	
-					<input disabled="disabled" <TMPL_IF has_rows>checked="checked"</TMPL_IF> type="checkbox" name="has_rows" /> Organised into Rows
-					<br /><br />
-					<TMPL_IF has_rows>
-					<table id="rowlist">
-					<tr>
-						<th>#</th><th>Row Name</th><th>&nbsp;</th>
-					</tr>
-					</table>
-					<p><input type="button" value="Add Row" /></p>
-					</TMPL_IF>
+					<div>
+						<div class="key">Room</div>
+						<div class="value"><TMPL_VAR ESCAPE=HTML NAME=name> in <TMPL_VAR ESCAPE=HTML NAME=building_name></div>
+					</div>
+					<div>					
+						<span class="key">Organised into Rows</span>  <input <TMPL_IF has_rows>checked="checked"</TMPL_IF> type="checkbox" name="has_rows" /> 
+					</div>
+					<div>					
+						<span class="key">Row Count</span> <input type="text" size="3" name="row_count" value="<TMPL_VAR ESCAPE=HTML NAME=row_count>"/>  
+					</div>
+					<p><em>This is a simplified version of the row manager. A full version will appear in a future release.</em></p>
 				</td>
 			</tr>
 			<tr>
 				<td class="footer">		
 					<button style="float: left" title="Cancel changing rows in room" onclick="window.location = '<TMPL_VAR NAME=base_url>?view=room&amp;view_type=single&amp;id=<TMPL_VAR ESCAPE=URL NAME=id>'; return false;">Cancel</button>
-					<button style="float: right" disabled="disabled" title="Save changes to rows in this room">Save</button>	
+					<button style="float: right" title="Save changes to rows in this room">Save</button>	
 					<span class="updated">Entry last updated by <TMPL_VAR ESCAPE=HTML NAME=meta_update_user> at <TMPL_VAR ESCAPE=HTML NAME=meta_update_time> GMT</span>
 				</td>
 			</tr>
