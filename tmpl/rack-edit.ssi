@@ -18,6 +18,11 @@
 							<input id="size" name="size" type="text" size="4" value="<TMPL_VAR ESCAPE=HTML NAME=size>" />
 						</div>
 						<div>
+							<label for="numbering_direction">Numbered From: </label><br />
+							<input type="radio" name="numbering_direction" value="0" <TMPL_UNLESS NAME="numbering_direction">checked="checked"</TMPL_UNLESS> /> Bottom<br>
+							<input type="radio" name="numbering_direction" value="1" <TMPL_IF NAME="numbering_direction">checked="checked"</TMPL_IF>/> Top<br>
+						</div>
+						<div>
 							<label for="notes">Notes</label><br />
 							<textarea id="notes" name="notes" cols="55" rows="4"><TMPL_VAR ESCAPE=HTML NAME=notes></textarea>
 						</div>
