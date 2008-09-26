@@ -2,7 +2,7 @@
 -- RackMonkey - Know Your Racks - http://www.rackmonkey.org                 --
 -- Version 1.2.%BUILD%                                                      --
 -- (C)2004-2008 Will Green (wgreen at users.sourceforge.net)                --
--- Database schema v2 for SQLite                                            --
+-- Database schema v3 for SQLite                                            --
 ------------------------------------------------------------------------------
 
 -- Building the device resides in
@@ -59,6 +59,7 @@ CREATE TABLE rack
 	row_pos INTEGER NOT NULL,
 	hidden_rack INTEGER NOT NULL DEFAULT 0,
 	size INTEGER,
+	numbering_direction INTEGER NOT NULL DEFAULT 0,
 	notes CHAR,
 	meta_default_data INTEGER NOT NULL DEFAULT 0,
 	meta_update_time CHAR,

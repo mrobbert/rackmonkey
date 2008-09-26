@@ -666,7 +666,7 @@ sub rack
 			row.room = room.id AND
 			room.building = building.id AND
 			rack.id = ?
-		GROUP BY rack.id, rack.name, rack.row, rack.row_pos, rack.hidden_rack, rack.size, rack.notes, rack.meta_default_data, rack.meta_update_time, rack.meta_update_user, row.name, row.hidden_row, room.id, room.name, building.name, building.name_short
+		GROUP BY rack.id, rack.name, rack.row, rack.row_pos, rack.hidden_rack, rack.numbering_direction, rack.size, rack.notes, rack.meta_default_data, rack.meta_update_time, rack.meta_update_user, row.name, row.hidden_row, room.id, room.name, building.name, building.name_short
 	!);
 	$sth->execute($id);	
 	my $rack = $sth->fetchrow_hashref('NAME_lc');
@@ -701,7 +701,7 @@ sub rackList
 			rack.row = row.id AND
 			row.room = room.id AND
 			room.building = building.id
-		GROUP BY rack.id, rack.name, rack.row, rack.row_pos, rack.hidden_rack, rack.size, rack.notes, rack.meta_default_data, rack.meta_update_time, rack.meta_update_user, row.name, row.hidden_row, room.id, room.name, building.name, building.name_short
+		GROUP BY rack.id, rack.name, rack.row, rack.row_pos, rack.hidden_rack, rack.size, rack.numbering_direction, rack.notes, rack.meta_default_data, rack.meta_update_time, rack.meta_update_user, row.name, row.hidden_row, room.id, room.name, building.name, building.name_short
 		ORDER BY $orderBy
 	!);
 	$sth->execute;
@@ -864,13 +864,13 @@ sub updateRack
 	
 	if ($$record{'id'})
 	{	
-		$sth = $self->dbh->prepare(qq!UPDATE rack SET name = ?, row = ?, row_pos = ?, hidden_rack = ?, size = ?, notes = ?, meta_update_time = ?, meta_update_user = ? WHERE id = ?!);
+		$sth = $self->dbh->prepare(qq!UPDATE rack SET name = ?, row = ?, row_pos = ?, hidden_rack = ?, size = ?, numbering_direction = ?, notes = ?, meta_update_time = ?, meta_update_user = ? WHERE id = ?!);
 		my $ret = $sth->execute($self->_validateRackUpdate($record), $updateTime, $updateUser, $$record{'id'});
 		croak "RM_ENGINE: Update failed. This rack may have been removed before the update occured." if ($ret eq '0E0');
 	}
 	else
 	{
-		$sth = $self->dbh->prepare(qq!INSERT INTO rack (name, row, row_pos, hidden_rack, size, notes, meta_update_time, meta_update_user) VALUES(?, ?, ?, ?, ?, ?, ?, ?)!);
+		$sth = $self->dbh->prepare(qq!INSERT INTO rack (name, row, row_pos, hidden_rack, size, numbering_direction, notes, meta_update_time, meta_update_user) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?)!);
 		$sth->execute($self->_validateRackUpdate($record), $updateTime, $updateUser);
 		$newId = $self->_lastInsertId('rack');
 	}
@@ -897,12 +897,13 @@ sub _validateRackUpdate
 	croak "RM_ENGINE: You must specify a size for your rack." unless $$record{'size'};
 	$$record{'size'} += 0; # Force to numeric for comparison
 	croak "RM_ENGINE: Rack sizes must be between 1 and ".$self->getConf('maxracksize')." units." unless (($$record{'size'} > 0) && ($$record{'size'} < $self->getConf('maxracksize')));
+	$$record{'numbering_direction'} = $$record{'numbering_direction'} ? 1 : 0;
 	my $highestPos = $self->_highestUsedInRack($$record{'id'}) || 0;
 	if ($highestPos > $$record{'size'})
 	{
 		croak "RM_ENGINE: You cannot reduce the rack size to $$record{'size'} U as there is a device at position $highestPos.";
 	}
-	return ($$record{'name'}, $$record{'row'}, $$record{'row_pos'}, $$record{'hidden_rack'}, $$record{'size'}, $$record{'notes'});
+	return ($$record{'name'}, $$record{'row'}, $$record{'row_pos'}, $$record{'hidden_rack'}, $$record{'size'}, $$record{'numbering_direction'}, $$record{'notes'});
 }
 
 sub _highestUsedInRack

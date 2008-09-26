@@ -51,11 +51,11 @@
 					<div>	
 						<div class="key">Size (Free Space)</div>
 						<div class="value"><TMPL_VAR ESCAPE=HTML NAME=size>U (<TMPL_VAR ESCAPE=HTML NAME=free_space>U)</div>
-					</div><TMPL_IF NAME=notes>
+					</div>
 					<div>
 						<div class="key">Numbered From</div>
 						<div class="value"><TMPL_IF NAME="numbering_direction">Top<TMPL_ELSE>Bottom</TMPL_IF></div>
-					</div>
+					</div><TMPL_IF NAME=notes>
 					<div style="margin-top: 8px;">	
 						<div class="key">Notes</div>
 						<div class="value"><TMPL_VAR ESCAPE=HTML NAME=notes></div>
