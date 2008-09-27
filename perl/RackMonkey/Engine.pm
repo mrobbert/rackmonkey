@@ -15,6 +15,8 @@ use Carp;
 use DBI;
 use Time::Local;
 
+use Data::Dumper;
+
 use RackMonkey::Conf;
 
 our $VERSION = '1.2.%BUILD%';
@@ -766,12 +768,13 @@ sub rackListBasic
 	return $sth->fetchall_arrayref({});
 }
 
-sub rackPhysical # This method is all rather inelegant and doesn't deal with racks numbered from the top
+sub rackPhysical 
 {
-	my ($self, $rackid, $selectDev) = @_;
-	$selectDev ||= -1; # not zero so we don't select empty positions
+	my ($self, $rackid, $selectDev, $tableFormat) = @_;
 	my $devices = $self->deviceListInRack($rackid);
-
+	$selectDev ||= -1; # not zero so we don't select empty positions
+	$tableFormat ||= 0;
+	
 	my $sth = $self->dbh->prepare(qq!
 		SELECT 
 			rack.*
@@ -781,62 +784,51 @@ sub rackPhysical # This method is all rather inelegant and doesn't deal with rac
 	$sth->execute($rackid);
 	my $rack = $sth->fetchrow_hashref('NAME_lc');
 
-	my @rackLayout;
-	my $debugOut;
+	my @rackLayout = ('1' .. $$rack{'size'}); # populate the rack positions
 	
-	# adjust device positions so they start from the *highest* rack position
+	# insert each device into the rack layout
 	for my $dev (@$devices)
-	{	
-		if ($$dev{'hardware_size'} > 1)
+	{
+		my $sizeCount = $$dev{'hardware_size'};
+		my $position = $$dev{'rack_pos'};
+		while ($sizeCount > 0)
 		{
-			$$dev{'rack_pos'} += $$dev{'hardware_size'} - 1;
+			# make a copy of the device so we can adjust it independently of it's other appearances
+			my %devEntry = %$dev;
+			$devEntry{'rack_location'} = $rackLayout[$position-1];
+			$rackLayout[$position-1] = \%devEntry;
+			$sizeCount--;
+			$position++;
 		}
 	}
 
-	my $position = $$rack{'size'};
-	while ($position > 0)
+	if ($tableFormat)
 	{
-		for my $dev (@$devices)
+		# unless numbering from the top of the rack we need to reverse the rack positions
+		@rackLayout = reverse @rackLayout unless ($$rack{'numbering_direction'});
+		
+		# iterate over every position and replace multiple unit sized entries with one and markers
+		my $position = 0;
+		my %seenIds;
+		
+		while ($position < $$rack{'size'})
 		{
-			if ($$dev{'rack_pos'} == $position)
+			if (ref $rackLayout[$position] eq 'HASH')
 			{
-				$rackLayout[$position] = $dev;
-				$rackLayout[$position]{'is_selected'} = ($rackLayout[$position]{'id'} == $selectDev); # flag the selected device
-				my $size = $$dev{'hardware_size'} || 0;
-				while ($size > 1)
+				my $dev = $rackLayout[$position];
+				if ($seenIds{$$dev{'id'}} == 1) # if we've seen this device before put in a placeholder entry for this position
 				{
-					$position--;
-					$size--;
-					$rackLayout[$position] = {'rack_pos' => $position, 'id' => $$dev{'id'}, 'name' => $$dev{'name'}, 'hardware_size' => 0};
+					$rackLayout[$position] = {'rack_pos' => $position, 'rack_location' => $$dev{'rack_location'}, 'id' => $$dev{'id'}, 'name' => $$dev{'name'}, 'hardware_size' => 0};
 				}
+				$seenIds{$$dev{'id'}} = 1;
 			}
+			else
+			{
+				$rackLayout[$position] = {'rack_id' => $$rack{'id'}, 'rack_location' => $rackLayout[$position], 'id' => 0, 'name' => '', 'hardware_size' => '1', };
+			}
+			$position++;	
 		}
-		unless (defined($rackLayout[$position]))
-		{
-			$rackLayout[$position] = {'rack_pos' => $position, 'id' => 0, 'name' => '', 'hardware_size' => '1'};	
-		}
-		$position--;
 	}
-	shift @rackLayout; # remove superfluous last entry
-
-	# Format rack positions to be fixed length for racks up to 1000U
-	my $posFormat = "%d";
-	if (($$rack{'size'} >= 10) && ($$rack{'size'} < 100))
-	{
-		$posFormat = "%02d";
-	}
-	elsif (($$rack{'size'} >= 100) && ($$rack{'size'} < 1000))
-	{
-		$posFormat = "%03d";
-	}
-	for my $r (@rackLayout)
-	{
-		$$r{'rack_pos'} = sprintf($posFormat, $$r{'rack_pos'});
-		$$r{'rack_id'} = $rackid; # include rack identifier in each entry - should review this when considering namespacing (see todo)
-	}	
-	
-	@rackLayout = reverse @rackLayout;  # racks are numbered from the bottom at present - will be configurable in later release
-	
 	return \@rackLayout;
 }
 
@@ -1738,7 +1730,7 @@ sub _validateDeviceInput # doesn't check much at present
 		# ensure the location doesn't overlap any other devices in this rack
 		
 		# get the layout of this rack
-		my $rackLayout = $self->rackPhysical($$record{'rack'});	
+		my $rackLayout = $self->rackPhysical($$record{'rack'}, undef, 1);	
 		
 		# quick and dirty check for overlap, consider each position occupied by the new device and check it's empty
 		# doesn't assume the rackPhyiscal method returns in a particular order

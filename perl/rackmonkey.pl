@@ -406,7 +406,7 @@ eval
 				for my $rackId (@rackIdList)
 				{
 					my $rack = $backend->rack($rackId);
-					$$rack{'rack_layout'} = $backend->rackPhysical($rackId, $cgi->id('device'));
+					$$rack{'rack_layout'} = $backend->rackPhysical($rackId, $cgi->id('device'), 1);
 					push @racks, $rack;
 				}
 				$template->param('rack_list' => \@racks);
