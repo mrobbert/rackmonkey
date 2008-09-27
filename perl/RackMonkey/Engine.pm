@@ -820,7 +820,7 @@ sub rackPhysical
 			if (ref $rackLayout[$position] eq 'HASH')
 			{
 				my $dev = $rackLayout[$position];
-				if ($seenIds{$$dev{'id'}} == 1) # if we've seen this device before put in a placeholder entry for this position
+				if (defined($seenIds{$$dev{'id'}}) and $seenIds{$$dev{'id'}} == 1) # if we've seen this device before put in a placeholder entry for this position
 				{
 					$rackLayout[$position] = {'rack_pos' => $position, 'rack_location' => $$dev{'rack_location'}, 'id' => $$dev{'id'}, 'name' => $$dev{'name'}, 'hardware_size' => 0};
 				}
