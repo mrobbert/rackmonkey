@@ -21,7 +21,10 @@ IMG,
 	display: none;
 }
 
-#footer
+#footer,
+#footer a
 {
 	font-size: 6pt;
+	color: black;
+	text-decoration: none;
 }
