@@ -791,6 +791,10 @@ sub rackPhysical
 	{
 		my $sizeCount = $$dev{'hardware_size'};
 		my $position = $$dev{'rack_pos'};
+		
+		# select (highlight) device if requested
+		$$dev{'is_selected'} = ($$dev{'id'} == $selectDev);
+		
 		while ($sizeCount > 0)
 		{
 			# make a copy of the device so we can adjust it independently of it's other appearances
@@ -807,7 +811,7 @@ sub rackPhysical
 		# unless numbering from the top of the rack we need to reverse the rack positions
 		@rackLayout = reverse @rackLayout unless ($$rack{'numbering_direction'});
 		
-		# iterate over every position and replace multiple unit sized entries with one and markers
+		# iterate over every position and replace multiple unit sized entries with one entry and placeholders
 		my $position = 0;
 		my %seenIds;
 		
@@ -822,7 +826,7 @@ sub rackPhysical
 				}
 				$seenIds{$$dev{'id'}} = 1;
 			}
-			else
+			else # an empty position
 			{
 				$rackLayout[$position] = {'rack_id' => $$rack{'id'}, 'rack_location' => $rackLayout[$position], 'id' => 0, 'name' => '', 'hardware_size' => '1', };
 			}
