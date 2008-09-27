@@ -1,0 +1,27 @@
+/*
+##############################################################################
+# RackMonkey - Know Your Racks - http://www.rackmonkey.org                   #
+# Version 1.2.%BUILD%                                                        #
+# (C)2004-2008 Will Green (wgreen at users.sourceforge.net)                  #
+# CSS styling for printing                                                   #
+##############################################################################
+*/
+
+.rack_physical_num,
+a.rack_header
+{
+	color: black;
+	background: white;
+}
+
+IMG,
+#navbar,
+#user_connection
+{
+	display: none;
+}
+
+#footer
+{
+	font-size: 6pt;
+}
