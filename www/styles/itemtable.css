@@ -20,9 +20,24 @@ table.itemtable td
 	padding: 4px;
 }
 
-table.itemtable td.itemname
+table.itemtable #item_name
 {
 	font-weight: bold;
+	border-right: none;
+
+}
+
+table.itemtable #item_edit
+{
+	border-left: none;
+    border-right: none;
+	padding-right: 0px;
+}
+
+table.itemtable #item_delete
+{
+	border-left: none;
+	padding-left: 3px;
 }
 
 table.itemtable tr.odd

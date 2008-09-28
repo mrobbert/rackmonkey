@@ -7,16 +7,29 @@
 ##############################################################################
 */
 
+*,
+a,
 .rack_physical_num,
-a.rack_header
+table.itemtable th,
+table.itemtable th a,
+table.itemtable td.footer a
 {
 	color: black;
 	background: white;
+	text-decoration: none;
 }
 
 IMG,
 #navbar,
-#user_connection
+#user_connection,
+#main #device_options,
+#domainLink,
+#search_explain,
+.no_print,
+INPUT,
+BUTTON,
+SELECT,
+table.itemtable td.footer
 {
 	display: none;
 }

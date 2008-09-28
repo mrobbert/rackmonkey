@@ -13,6 +13,7 @@ v1.2.5 Preview 1 - Released 2008-xx-xx
 * Improvements to UI
 * Support for deletion in table and physical rack views
 * Support for numbering racks from the top as well as bottom
+* Print CSS for much better quality printouts
 
 v1.2.4 - Released 2008-07-20
 ----------------------------
