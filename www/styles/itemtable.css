@@ -21,21 +21,21 @@ table.itemtable td
 	padding: 4px;
 }
 
-table.itemtable #item_name
+table.itemtable td.item_name
 {
 	font-weight: bold;
 	border-right: none;
 
 }
 
-table.itemtable #item_edit
+table.itemtable td.item_edit
 {
 	border-left: none;
     border-right: none;
 	padding-right: 0px;
 }
 
-table.itemtable #item_delete
+table.itemtable td.item_delete
 {
 	border-left: none;
 	padding-left: 3px;

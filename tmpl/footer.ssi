@@ -1,6 +1,6 @@
 <!-- footer include: Version 1.2.%BUILD% -->
 	<div id="footer"> 
-		<span id="user_connection"><em>Connected from <TMPL_VAR ESCAPE=HTML NAME=user_ip> and <TMPL_IF NAME=logged_in_user>logged in as <TMPL_VAR ESCAPE=HTML NAME=logged_in_user><TMPL_ELSE>not logged in</TMPL_IF>.</span>
+		<em><span id="user_connection">Connected from <TMPL_VAR ESCAPE=HTML NAME=user_ip> and <TMPL_IF NAME=logged_in_user>logged in as <TMPL_VAR ESCAPE=HTML NAME=logged_in_user><TMPL_ELSE>not logged in</TMPL_IF>.</span>
 		Page generated at <TMPL_VAR NAME=date>.
 		<a href="http://www.rackmonkey.org">RackMonkey</a> v<TMPL_VAR NAME=version>. &copy;2004-2008 Will Green.</em>
 	</div>
