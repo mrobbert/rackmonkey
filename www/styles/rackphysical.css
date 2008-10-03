@@ -15,7 +15,8 @@
 	color: white;
 	border-color: black;
 	background-color: #444;
-	padding: 1px 2px;	
+	padding: 1px 2px;
+	height: 14px;	
 }
 
 .rack_physical_dev
@@ -78,7 +79,7 @@
 	border-spacing: 0px;
 	border-width: 1px;
 	border-collapse: collapse;
-	margin: 8px 8px 4px 0px;
+	margin: 8px 8px 8px 0px;
 }
 
 td
