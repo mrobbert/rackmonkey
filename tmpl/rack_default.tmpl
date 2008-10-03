@@ -24,7 +24,7 @@
 <body>
 	<TMPL_INCLUDE NAME="nav-rack.ssi">
 	<div id="main">
-		<form method="get" action="<TMPL_VAR NAME=base_url>">
+		<form id="racks" method="get" action="<TMPL_VAR NAME=base_url>">
 			<table class="itemtable">
 				<tr>
 					<th colspan="3"><a title="Create a new rack" onclick="window.location = '<TMPL_VAR NAME=base_url>?view=rack&amp;view_type=create'; return false;"><img style="float: right; border: none" src="<TMPL_VAR NAME=web_root>/graphics/icons/add.png" width="14" height="14" alt=""/></a><a title="Sort by name" href="<TMPL_VAR NAME=base_url>?view=rack&amp;order_by=rack.name">Rack</a></th>
@@ -47,7 +47,7 @@
 					<td><TMPL_VAR ESCAPE=HTML NAME=size></td>
 					<td><TMPL_VAR ESCAPE=HTML NAME=free_space></td>
 					<td><TMPL_IF NAME=notes_short><span title="<TMPL_VAR ESCAPE=HTML NAME=notes>"><TMPL_VAR ESCAPE=HTML NAME=notes_short></span><TMPL_ELSE><TMPL_IF NAME=notes><TMPL_VAR ESCAPE=HTML NAME=notes><TMPL_ELSE>-</TMPL_IF></TMPL_IF></td>
-					<td class="no_print"><input type="checkbox" name="rack_list" value="<TMPL_VAR ESCAPE=HTML NAME=id>" /></td>
+					<td id="racks" class="no_print"><input type="checkbox" name="rack_list" value="<TMPL_VAR ESCAPE=HTML NAME=id>" /></td>
 				</tr></TMPL_LOOP></TMPL_IF>
 				<tr>
 					<td colspan="10" class="footer">
