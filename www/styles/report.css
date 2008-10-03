@@ -39,3 +39,8 @@ h3
 	margin-top: 1.25em;
 	margin-bottom: -0.6em;
 }
+
+table.report #item_name
+{
+	font-weight: bold;
+}
