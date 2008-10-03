@@ -29,7 +29,8 @@ IMG,
 INPUT,
 BUTTON,
 SELECT,
-table.itemtable td.footer
+table.itemtable td.footer,
+a.small
 {
 	display: none;
 }
@@ -40,4 +41,12 @@ table.itemtable td.footer
 	font-size: 6pt;
 	color: black;
 	text-decoration: none;
+}
+
+table.form td.footer
+{
+	border: solid 1px #000;
+	text-align: left;
+	font-style: italic;
+	font-size: 8pt;
 }

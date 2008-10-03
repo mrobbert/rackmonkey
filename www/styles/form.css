@@ -18,6 +18,8 @@ table.form
 
 table.form th
 {
+	border: solid 1px #000;
+	border-collapse: collapse;
 	padding: 5px;
 	background: #444;
 	color: white;
