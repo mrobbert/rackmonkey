@@ -11,6 +11,7 @@ table.itemtable
 {
 	border-collapse: collapse;
 	margin-right: 12px;
+	margin-top: 12px;
 }
 
 table.itemtable td
