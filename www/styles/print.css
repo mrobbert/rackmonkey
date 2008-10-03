@@ -26,6 +26,7 @@ IMG,
 #main #device_options,
 #domainLink,
 #search_explain,
+#help_nav,
 .no_print,
 INPUT,
 BUTTON,
@@ -34,6 +35,16 @@ table.itemtable td.footer,
 a.small
 {
 	display: none;
+}
+
+img.screenshot
+{
+	display: block;
+}
+
+.print_break
+{
+	page-break-before: always;	
 }
 
 #footer,
