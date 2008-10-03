@@ -28,6 +28,7 @@
 		<table class="rack_physical">
 			<tr>
 				<th class="rack_header" colspan="2">
+						<a title="View extended information for devices" href="<TMPL_VAR NAME=base_url>?view=rack&amp;view_type=physical_extended&amp;id=<TMPL_VAR ESCAPE=URL NAME=id>"><img style="border: none; vertical-align: bottom;" src="<TMPL_VAR NAME=web_root>/graphics/icons/information.png" width="14" height="14" alt=""/></a> 
 					<TMPL_IF NAME=rack2xls_url><button title="Export this rack to an Excel spreadsheet" class="small" style="float: right;" onclick="window.location = '<TMPL_VAR NAME=rack2xls_url>?view=rack&amp;view_type=xls_export&amp;id=<TMPL_VAR ESCAPE=URL NAME=id>'">XLS</button></TMPL_IF>
 					<TMPL_IF NAME=rack2pdf_url><button title="Export this rack to a PDF document" class="small" style="float: right; margin-right: 2px;" onclick="window.location = '<TMPL_VAR NAME=rack2pdf_url>?view=rack&amp;view_type=pdf_export&amp;id=<TMPL_VAR ESCAPE=URL NAME=id>'">PDF</button></TMPL_IF>
 					<a class="rack_header" href="<TMPL_VAR NAME=base_url>?view=rack&amp;view_type=single&amp;id=<TMPL_VAR ESCAPE=URL NAME=id>">Rack <TMPL_VAR ESCAPE=HTML NAME=name> in <TMPL_VAR ESCAPE=HTML NAME=room_name></a>
@@ -45,7 +46,7 @@
 					</TMPL_IF>
 					<TMPL_IF NAME=name>
 					<a title="Edit device '<TMPL_VAR ESCAPE=HTML NAME=name>'" href="<TMPL_VAR NAME=base_url>?view=device&amp;view_type=edit&amp;id=<TMPL_VAR ESCAPE=URL NAME=id>"><img style="float: left; border: none" src="<TMPL_VAR NAME=web_root>/graphics/icons/pencil.png" width="14" height="14" alt=""/></a> 
-					<a class="racklayout" title="View details for <TMPL_VAR ESCAPE=HTML NAME=name><TMPL_UNLESS NAME=domain_meta_default_data>.<TMPL_VAR ESCAPE=HTML NAME=domain_name></TMPL_UNLESS>" href="<TMPL_VAR NAME=base_url>?view=device&amp;view_type=single&amp;id=<TMPL_VAR ESCAPE=URL NAME=id>"><TMPL_VAR ESCAPE=HTML NAME=name></a>
+					<a class="racklayout" title="View details for <TMPL_VAR ESCAPE=HTML NAME=name><TMPL_UNLESS NAME=domain_meta_default_data>.<TMPL_VAR ESCAPE=HTML NAME=domain_name></TMPL_UNLESS>" href="<TMPL_VAR NAME=base_url>?view=device&amp;view_type=single&amp;id=<TMPL_VAR ESCAPE=URL NAME=id>"><strong><TMPL_VAR ESCAPE=HTML NAME=name></strong></a>
 					</TMPL_IF>
 					<TMPL_IF NAME=hardware_name>(<span title="Hardware: <TMPL_UNLESS NAME=hardware_meta_default_data><TMPL_VAR ESCAPE=HTML NAME=hardware_manufacturer_name> </TMPL_UNLESS><TMPL_VAR ESCAPE=HTML NAME=hardware_name>"><TMPL_VAR ESCAPE=HTML NAME=hardware_name></span>)</TMPL_IF>
 				</span></td>

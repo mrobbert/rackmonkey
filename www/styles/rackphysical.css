@@ -27,6 +27,15 @@
 	padding: 1px 3px;	
 }
 
+.rack_physical_dev_wide
+{
+	font-family: verdana, sans-serif;	
+	font-size: 9px;
+	background-color: #DDD;
+	width: 600px;
+	padding: 1px 3px;	
+}
+
 .rack_physical_selected
 {
 	font-family: Verdana, sans-serif;
@@ -36,12 +45,30 @@
 	padding: 1px 3px;	
 }
 
+.rack_physical_selected_wide
+{
+	font-family: Verdana, sans-serif;
+	font-size: 9px;
+	background-color: #F90;
+	width: 600px;
+	padding: 1px 3px;	
+}
+
 .rack_physical_empty
 {
 	font-family: Verdana, sans-serif;
 	font-size: 9px;
 	background-color: white;
 	width: 220px;
+	padding: 1px 3px;	
+}
+
+.rack_physical_empty_wide
+{
+	font-family: Verdana, sans-serif;
+	font-size: 9px;
+	background-color: white;
+	width: 600px;
 	padding: 1px 3px;	
 }
 

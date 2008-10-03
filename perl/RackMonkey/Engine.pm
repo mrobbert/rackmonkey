@@ -1571,9 +1571,11 @@ sub deviceListInRack
 			hardware_manufacturer.meta_default_data	AS hardware_manufacturer_meta_default_data,
 			hardware.size				AS hardware_size,
 			domain.name					AS domain_name,
-			domain.meta_default_data	AS domain_meta_default_data
+			domain.meta_default_data	AS domain_meta_default_data,
+			role.name 					AS role_name, 
+			customer.name 				AS customer_name
 		FROM
-			device, rack, row, room, building, hardware, org hardware_manufacturer, domain
+			device, rack, row, room, building, hardware, org hardware_manufacturer, domain, role, org customer
 		WHERE
 			device.meta_default_data = 0 AND
 			device.rack = rack.id AND 
@@ -1583,6 +1585,8 @@ sub deviceListInRack
 			device.hardware = hardware.id AND
 			hardware.manufacturer = hardware_manufacturer.id AND
 			device.domain = domain.id AND
+			device.role = role.id AND
+			device.customer = customer.id AND
 			rack.id = ?
 		ORDER BY rack.row_pos
 	!);
