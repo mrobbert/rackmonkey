@@ -1,0 +1,64 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+<!-- 
+##############################################################################
+# RackMonkey - Know Your Racks - http://www.rackmonkey.org                   #
+# Version 1.2.%BUILD%                                                        #
+# (C)2004-2008 Will Green (wgreen at users.sourceforge.net)                  #
+# Rack physical template                                                     #
+##############################################################################
+-->
+<head>
+	<title>Rack Device Layout (Extended) | RackMonkey</title>
+	<style type="text/css" media="all">
+	@import "<TMPL_VAR NAME=web_root>/styles/main.css";
+	@import "<TMPL_VAR NAME=web_root>/styles/tabs.css";
+	@import "<TMPL_VAR NAME=web_root>/styles/rackphysical.css";
+	</style>
+	<style type="text/css" media="print">
+	@import "<TMPL_VAR NAME=web_root>/styles/print.css";	
+	</style>
+	<script type="text/javascript" src="<TMPL_VAR NAME=web_root>/javascript/racklib.js"></script>
+	<link rel="icon" href="<TMPL_VAR NAME=web_root>/graphics/favicon.ico" />
+</head>
+<body>
+	<TMPL_INCLUDE NAME="nav-rack.ssi">
+	<div id="main">
+		<TMPL_LOOP NAME=rack_list>
+		<table class="rack_physical">
+			<tr>
+				<th class="rack_header" colspan="2">
+						<a title="View basic information for devices" href="<TMPL_VAR NAME=base_url>?view=rack&amp;view_type=physical&amp;id=<TMPL_VAR ESCAPE=URL NAME=id>"><img style="border: none; vertical-align: bottom;" src="<TMPL_VAR NAME=web_root>/graphics/icons/information.png" width="14" height="14" alt=""/></a> 
+					<TMPL_IF NAME=rack2xls_url><button title="Export this rack to an Excel spreadsheet" class="small" style="float: right;" onclick="window.location = '<TMPL_VAR NAME=rack2xls_url>?view=rack&amp;view_type=xls_export&amp;id=<TMPL_VAR ESCAPE=URL NAME=id>'">XLS</button></TMPL_IF>
+					<TMPL_IF NAME=rack2pdf_url><button title="Export this rack to a PDF document" class="small" style="float: right; margin-right: 2px;" onclick="window.location = '<TMPL_VAR NAME=rack2pdf_url>?view=rack&amp;view_type=pdf_export&amp;id=<TMPL_VAR ESCAPE=URL NAME=id>'">PDF</button></TMPL_IF>
+					<a class="rack_header" href="<TMPL_VAR NAME=base_url>?view=rack&amp;view_type=single&amp;id=<TMPL_VAR ESCAPE=URL NAME=id>">Rack <TMPL_VAR ESCAPE=HTML NAME=name> in <TMPL_VAR ESCAPE=HTML NAME=room_name></a>
+				</th>
+			</tr>
+			<TMPL_LOOP NAME=rack_layout>
+			<tr>
+				<td class="rack_physical_num"><TMPL_VAR ESCAPE=HTML NAME=rack_location></td>
+				<TMPL_IF NAME=hardware_size><td rowspan="<TMPL_VAR ESCAPE=HTML NAME=hardware_size>" <TMPL_IF NAME=is_selected>class="rack_physical_selected_wide"<TMPL_ELSE><TMPL_IF NAME=name>class="rack_physical_dev_wide"<TMPL_ELSE>class="rack_physical_empty_wide"</TMPL_IF></TMPL_IF>>
+					<span style="vertical-align: middle">
+					<TMPL_IF NAME=name>
+					<a onclick="return confirmDel('<TMPL_VAR ESCAPE=HTML NAME=name>')" title="Delete device '<TMPL_VAR ESCAPE=HTML NAME=name>'" href="<TMPL_VAR NAME=base_url>?view=rack&amp;view_type=physical&amp;id=<TMPL_VAR ESCAPE=URL NAME=rack_id>&amp;act=delete&amp;act_on=device&amp;act_id=<TMPL_VAR ESCAPE=URL NAME=id>"><img style="float: right; border: none" src="<TMPL_VAR NAME=web_root>/graphics/icons/delete.png" width="14" height="14" alt=""/></a>
+					<TMPL_ELSE>
+					<a title="Add a device in this rack at this location" href="<TMPL_VAR NAME=base_url>?view=device&amp;view_type=create&amp;select_rack=<TMPL_VAR ESCAPE=URL NAME=rack_id>&amp;select_position=<TMPL_VAR ESCAPE=URL NAME=rack_location>"><img style="float: right; border: none" src="<TMPL_VAR NAME=web_root>/graphics/icons/add.png" width="14" height="14" alt=""/></a>
+					</TMPL_IF>
+					<TMPL_IF NAME=name>
+					<a title="Edit device '<TMPL_VAR ESCAPE=HTML NAME=name>'" href="<TMPL_VAR NAME=base_url>?view=device&amp;view_type=edit&amp;id=<TMPL_VAR ESCAPE=URL NAME=id>"><img style="float: left; border: none" src="<TMPL_VAR NAME=web_root>/graphics/icons/pencil.png" width="14" height="14" alt=""/></a> 
+					<a class="racklayout" title="View details for <TMPL_VAR ESCAPE=HTML NAME=name><TMPL_UNLESS NAME=domain_meta_default_data>.<TMPL_VAR ESCAPE=HTML NAME=domain_name></TMPL_UNLESS>" href="<TMPL_VAR NAME=base_url>?view=device&amp;view_type=single&amp;id=<TMPL_VAR ESCAPE=URL NAME=id>"><strong><TMPL_VAR ESCAPE=HTML NAME=name></strong></a>
+					(<TMPL_IF NAME=hardware_name><TMPL_UNLESS NAME=hardware_meta_default_data><TMPL_VAR ESCAPE=HTML NAME=hardware_manufacturer_name> </TMPL_UNLESS><TMPL_VAR ESCAPE=HTML NAME=hardware_name></TMPL_IF>)
+					 - Customer: <TMPL_IF NAME=customer_name><TMPL_VAR ESCAPE=HTML NAME=customer_name><TMPL_ELSE>N/A</TMPL_IF>
+					 - Role: <TMPL_IF NAME=role_name><TMPL_VAR ESCAPE=HTML NAME=role_name><TMPL_ELSE>N/A</TMPL_IF>
+					 - Serial: <TMPL_IF NAME=serial_no><TMPL_VAR ESCAPE=HTML NAME=serial_no><TMPL_ELSE>N/A</TMPL_IF>
+					 - Asset: <TMPL_IF NAME=asset_no><TMPL_VAR ESCAPE=HTML NAME=asset_no><TMPL_ELSE>N/A</TMPL_IF>					
+					</TMPL_IF>
+				</span></td>
+				</TMPL_IF>
+			</tr></TMPL_LOOP>
+		</table>
+		</TMPL_LOOP>
+	</div>
+	<TMPL_INCLUDE NAME="footer.ssi">
+</body>
+</html>
