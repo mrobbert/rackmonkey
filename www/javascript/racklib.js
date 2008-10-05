@@ -62,6 +62,22 @@ function showHide(element)
 	return true;
 }
 
+// Returns true if the pressed key is enter
+function pressedEnter(e)
+{
+	var e = e || window.event;
+	var kCode = e.which || e.keyCode;
+	if (kCode == 13)
+		return true;
+	return false;
+}
+
+// Confirm deletions
+function confirmDel(name)
+{
+	return confirm("Are you sure you want to delete " + name + "?\nThis cannot be undone.");
+}
+
 // Show or hide a button with the id 'filterbutton' and a block called 'filters', remembers setting with cookie - should be made more generic
 function showHideFilters()
 {
@@ -152,20 +168,4 @@ function rackSelect()
 	{
 		window.location = '?view=rack&view_type=default'; 
 	}
-}
-
-// Returns true if the pressed key is enter
-function pressedEnter(e)
-{
-	var e = e || window.event;
-	var kCode = e.which || e.keyCode;
-	if (kCode == 13)
-		return true;
-	return false;
-}
-
-// Confirm deletions
-function confirmDel(name)
-{
-	return confirm("Are you sure you want to delete " + name + "?\nThis cannot be undone.");
 }
