@@ -24,15 +24,12 @@
 <body>
 	<TMPL_INCLUDE NAME="nav-app.ssi">
 	<div id="main">
-		<p><strong>You can create applications entries in this release of RackMonkey, but not assign them to devices.</strong></p>
-		<form method="get" action="<TMPL_VAR NAME=base_url>">
-			<p>
-				<button style="margin-right: 20px" title="Create a new application" onclick="window.location = '<TMPL_VAR NAME=base_url>?view=app&amp;view_type=create'; return false;">New App</button>
-			</p>
-		</form>
 		<table class="itemtable">
 			<tr>
-				<th colspan="3"><a title="Sort by name" href="<TMPL_VAR NAME=base_url>?view=app&amp;order_by=app.name">App</a></th>
+				<th colspan="3">
+					<a title="Create a new app" onclick="window.location = '<TMPL_VAR NAME=base_url>?view=app&amp;view_type=create'; return false;"><img class="create" src="<TMPL_VAR NAME=web_root>/graphics/icons/add.png" width="14" height="14" alt=""/></a>
+					<a title="Sort by name" href="<TMPL_VAR NAME=base_url>?view=app&amp;order_by=app.name">App</a>
+				</th>
 				<th><a title="Sort by description" href="<TMPL_VAR NAME=base_url>?view=app&amp;order_by=app.descript">Description</a></th>	
 				<th><a title="Sort by notes" href="<TMPL_VAR NAME=base_url>?view=app&amp;order_by=app.notes">Notes</a></th>		
 			</tr>

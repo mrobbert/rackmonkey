@@ -43,8 +43,7 @@
 						<button style="float: left" title="Cancel creating this room" onclick="window.location = '<TMPL_VAR NAME=base_url>?view=<TMPL_VAR ESCAPE=URL NAME=return_view>&amp;view_type=<TMPL_VAR ESCAPE=URL NAME=return_view_type>&amp;id=<TMPL_VAR ESCAPE=URL NAME=return_view_id>'; return false;">Cancel</button>
 						<TMPL_ELSE>
 						<input type="hidden" name="view" value="room" />
-						<input type="hidden" name="view_type" value="single" />
-						<button style="float: left" title="Cancel creating this room" onclick="window.location = '<TMPL_VAR NAME=base_url>?view=room&amp;view_type=default'; return false;">Cancel</button>
+						<button style="float: left" title="Cancel creating this room" onclick="window.location = '<TMPL_VAR NAME=base_url>?view=room'; return false;">Cancel</button>
 						</TMPL_IF>
 
 						<input type="hidden" name="act" value="insert" />

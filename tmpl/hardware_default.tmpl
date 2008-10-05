@@ -24,14 +24,12 @@
 <body>
 	<TMPL_INCLUDE NAME="nav-config.ssi">
 	<div id="main">
-		<form method="get" action="<TMPL_VAR NAME=base_url>">
-			<p>
-				<button style="margin-right: 20px" title="Create a new hardware model" onclick="window.location = '<TMPL_VAR NAME=base_url>?view=hardware&amp;view_type=create'; return false;">New Hardware</button>
-			</p>
-		</form>
 		<table class="itemtable">
 			<tr>
-				<th colspan="3"><a title="Sort by name" href="<TMPL_VAR NAME=base_url>?view=hardware&amp;order_by=hardware.name">Hardware</a></th>
+				<th colspan="3">
+					<a title="Create a new hardware model" onclick="window.location = '<TMPL_VAR NAME=base_url>?view=hardware&amp;view_type=create'; return false;"><img class="create" src="<TMPL_VAR NAME=web_root>/graphics/icons/add.png" width="14" height="14" alt=""/></a>
+					<a title="Sort by name" href="<TMPL_VAR NAME=base_url>?view=hardware&amp;order_by=hardware.name">Hardware</a>
+				</th>
 				<th><a title="Sort by manufacturer" href="<TMPL_VAR NAME=base_url>?view=hardware&amp;order_by=org.name">Manufacturer</a></th>	
 				<th><a title="Sort by size" href="<TMPL_VAR NAME=base_url>?view=hardware&amp;order_by=hardware.size">Size</a></th>	
 				<th><a title="Sort by support site" href="<TMPL_VAR NAME=base_url>?view=hardware&amp;order_by=hardware.support_url">Supp</a></th>		

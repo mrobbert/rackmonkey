@@ -14,6 +14,13 @@ table.itemtable
 	margin-top: 12px;
 }
 
+table.itemtable img.create
+{
+	float: right;
+	margin-left: 4px; 
+	border: none;
+}
+
 table.itemtable td
 {
 	border: solid black;
@@ -25,7 +32,7 @@ table.itemtable td.item_name
 {
 	font-weight: bold;
 	border-right: none;
-
+	min-width: 6em;
 }
 
 table.itemtable td.item_edit
@@ -57,7 +64,7 @@ table.itemtable th
 	background: #444;
 	color: #FFF;
 	border: solid 1px #000;
-	padding: 5px;
+	padding: 4px;
 }
 
 table.itemtable  a

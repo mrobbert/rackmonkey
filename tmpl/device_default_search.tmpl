@@ -24,20 +24,14 @@
 <body onload="if (getCookie('showdomain') == 'off') { showHideDomain(); }">
 	<TMPL_INCLUDE NAME="nav-device.ssi">
 	<div id="main">
-		<form id="device_options" method="get" action="<TMPL_VAR NAME=base_url>">
-			<p>
-				<button style="margin-right: 20px" title="Create a new device" onclick="window.location = '<TMPL_VAR NAME=base_url>?view=device&amp;view_type=create'; return false;">New Device</button>
-				<button style="margin-left: -20px" title="View all devices" onclick="window.location = '<TMPL_VAR NAME=base_url>?view=device&amp;view_type=default'; return false;">View All</button>
-			</p>
 			<p>
 				<strong>Device Search</strong><br/>Found <TMPL_VAR ESCAPE=HTML NAME=listed_device_count> devices which match <em><TMPL_VAR ESCAPE=HTML NAME=device_search></em>.
-				<input type="hidden" name="view" value="device"/>
-				<input type="hidden" name="order_by" value="<TMPL_VAR ESCAPE=HTML NAME=order_by>" />
 			</p>
-		</form>
 		<table class="itemtable">
 			<tr>
-				<th colspan="3"><a title="Sort by name" href="<TMPL_VAR NAME=base_url>?view=device&amp;view_type=default_search&amp;order_by=device.name&amp;device_search=<TMPL_VAR ESCAPE=URL NAME=device_search>">Device</a> 
+				<th colspan="3">
+					<a title="Create a new device" onclick="window.location = '<TMPL_VAR NAME=base_url>?view=device&amp;view_type=create'; return false;"><img class="create" src="<TMPL_VAR NAME=web_root>/graphics/icons/add.png" width="14" height="14" alt=""/></a>
+					<a title="Sort by name" href="<TMPL_VAR NAME=base_url>?view=device&amp;view_type=default_search&amp;order_by=device.name&amp;device_search=<TMPL_VAR ESCAPE=URL NAME=device_search>">Device</a> 
 					<a id="domainLink" class="small" title="Hide domain" href="#" onclick="showHideDomain(); return false;">.dom</a>
 				</th>
 				<th><a title="Sort by rack" href="<TMPL_VAR NAME=base_url>?view=device&amp;view_type=default_search&amp;order_by=rack.name&amp;device_search=<TMPL_VAR ESCAPE=URL NAME=device_search>">Rack</a></th>

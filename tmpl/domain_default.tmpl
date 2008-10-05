@@ -24,14 +24,12 @@
 <body>
 	<TMPL_INCLUDE NAME="nav-config.ssi">
 	<div id="main">
-		<form method="get" action="<TMPL_VAR NAME=base_url>">
-			<p>
-				<button style="margin-right: 20px" title="Create a new domain" onclick="window.location = '<TMPL_VAR NAME=base_url>?view=domain&amp;view_type=create'; return false;">New Domain</button>
-			</p>
-		</form>
 		<table class="itemtable">
 			<tr>
-				<th colspan="3"><a title="Sort by name" href="<TMPL_VAR NAME=base_url>?view=domain&amp;order_by=domain.name">Domain</a></th>
+				<th colspan="3">
+					<a title="Create a new domain" onclick="window.location = '<TMPL_VAR NAME=base_url>?view=domain&amp;view_type=create'; return false;"><img class="create" src="<TMPL_VAR NAME=web_root>/graphics/icons/add.png" width="14" height="14" alt=""/></a>
+					<a title="Sort by name" href="<TMPL_VAR NAME=base_url>?view=domain&amp;order_by=domain.name">Domain</a>
+				</th>
 				<th><a title="Sort by description" href="<TMPL_VAR NAME=base_url>?view=domain&amp;order_by=domain.descript">Description</a></th>	
 				<th><a title="Sort by notes" href="<TMPL_VAR NAME=base_url>?view=domain&amp;order_by=domain.notes">Notes</a></th>		
 			</tr>

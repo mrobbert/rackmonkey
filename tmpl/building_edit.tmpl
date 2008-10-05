@@ -36,10 +36,9 @@
 				</tr>
 				<tr>
 					<td class="footer">
-						<button style="float: left" title="Cancel editing this building" onclick="window.location = '<TMPL_VAR NAME=base_url>?view=building&amp;view_type=single&amp;id=<TMPL_VAR ESCAPE=URL NAME=id>'; return false;">Cancel</button>
+						<button style="float: left" title="Cancel editing this building" onclick="window.location = '<TMPL_VAR NAME=base_url>?view=building'; return false;">Cancel</button>
 						<button style="float: right" title="Save this building" type="submit">Save</button>	
 						<input type="hidden" name="view" value="building" />
-						<input type="hidden" name="view_type" value="single" />
 						<input type="hidden" name="id" value="<TMPL_VAR ESCAPE=HTML NAME=id>" />
 						<input type="hidden" name="act" value="update" />
 						<input type="hidden" name="act_on" value="building" />

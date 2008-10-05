@@ -24,14 +24,12 @@
 <body>
 	<TMPL_INCLUDE NAME="nav-config.ssi">
 	<div id="main">
-		<form method="get" action="<TMPL_VAR NAME=base_url>">
-			<p>
-				<button style="margin-right: 20px" title="Create a new operating system" onclick="window.location = '<TMPL_VAR NAME=base_url>?view=os&amp;view_type=create'; return false;">New OS</button>
-			</p>
-		</form>
 		<table class="itemtable">
 			<tr>
-				<th colspan="3"><a title="Sort by name" href="<TMPL_VAR NAME=base_url>?view=os&amp;order_by=os.name">OS</a></th>
+				<th colspan="3">
+					<a title="Create a new operating system" onclick="window.location = '<TMPL_VAR NAME=base_url>?view=os&amp;view_type=create'; return false;"><img class="create" src="<TMPL_VAR NAME=web_root>/graphics/icons/add.png" width="14" height="14" alt=""/></a>
+					<a title="Sort by name" href="<TMPL_VAR NAME=base_url>?view=os&amp;order_by=os.name">OS</a>
+				</th>
 				<th><a class="sort" title="Sort by developer" href="<TMPL_VAR NAME=base_url>?view=os&amp;order_by=org.name">Developer</a></th>		
 			</tr>
 			<TMPL_IF NAME=operatingsystems>
