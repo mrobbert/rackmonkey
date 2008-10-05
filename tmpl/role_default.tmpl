@@ -31,6 +31,7 @@
 					<a title="Sort by name" href="<TMPL_VAR NAME=base_url>?view=role&amp;order_by=role.name">Role</a>
 				</th>
 				<th><a title="Sort by description" href="<TMPL_VAR NAME=base_url>?view=role&amp;order_by=role.descript">Description</a> </th>	
+				<th><a title="Sort by notes" href="<TMPL_VAR NAME=base_url>?view=role&amp;order_by=role.notes">Notes</a></th>		
 			</tr>
 			<TMPL_IF NAME=roles>
 			<TMPL_LOOP NAME=roles>
@@ -39,10 +40,11 @@
 				<td class="item_edit"><a title="Edit role '<TMPL_VAR ESCAPE=HTML NAME=name>'" href="<TMPL_VAR NAME=base_url>?view=role&amp;view_type=edit&amp;id=<TMPL_VAR ESCAPE=URL NAME=id>"><img style="float: left; border: none" src="<TMPL_VAR NAME=web_root>/graphics/icons/pencil.png" width="14" height="14" alt=""/></a></td>
 				<td class="item_delete"><a onclick="return confirmDel('<TMPL_VAR ESCAPE=HTML NAME=name>')" title="Delete role '<TMPL_VAR ESCAPE=HTML NAME=name>'" href="<TMPL_VAR NAME=base_url>?view=role&amp;act=delete&amp;act_on=role&amp;act_id=<TMPL_VAR ESCAPE=URL NAME=id>"><img style="float: left; border: none" src="<TMPL_VAR NAME=web_root>/graphics/icons/delete.png" width="14" height="14" alt=""/></a></td>
 				<td><TMPL_IF NAME=descript_short><span title="<TMPL_VAR ESCAPE=HTML NAME=descript>"><TMPL_VAR ESCAPE=HTML NAME=descript_short></span><TMPL_ELSE><TMPL_IF NAME=descript><TMPL_VAR ESCAPE=HTML NAME=descript><TMPL_ELSE>-</TMPL_IF></TMPL_IF></td>
+				<td><TMPL_IF NAME=notes_short><span title="<TMPL_VAR ESCAPE=HTML NAME=notes>"><TMPL_VAR ESCAPE=HTML NAME=notes_short></span><TMPL_ELSE><TMPL_IF NAME=notes><TMPL_VAR ESCAPE=HTML NAME=notes><TMPL_ELSE>-</TMPL_IF></TMPL_IF></td>
 			</tr>
 			</TMPL_LOOP></TMPL_IF>
 			<tr>
-				<td colspan="4" class="footer">
+				<td colspan="5" class="footer">
 					Showing <TMPL_VAR ESCAPE=HTML NAME=listed_role_count> of <TMPL_VAR ESCAPE=HTML NAME=total_role_count> roles 
 				</td>
 			</tr>

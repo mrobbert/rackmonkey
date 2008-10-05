@@ -33,7 +33,8 @@
 				<th><a title="Sort by description" href="<TMPL_VAR NAME=base_url>?view=org&amp;order_by=org.descript">Description</a></th>
 				<th><a title="Sort by whether organisation is a customer" href="<TMPL_VAR NAME=base_url>?view=org&amp;order_by=org.customer">Cus</a></th>
 				<th><a title="Sort by whether organisation produces software" href="<TMPL_VAR NAME=base_url>?view=org&amp;order_by=org.software">SW</a></th>
-				<th><a title="Sort by whether organisation produces hardware" href="<TMPL_VAR NAME=base_url>?view=org&amp;order_by=org.hardware">HW</a></th>			
+				<th><a title="Sort by whether organisation produces hardware" href="<TMPL_VAR NAME=base_url>?view=org&amp;order_by=org.hardware">HW</a></th>
+				<th><a title="Sort by notes" href="<TMPL_VAR NAME=base_url>?view=org&amp;order_by=org.notes">Notes</a></th>		
 			</tr>
 			<TMPL_IF NAME=orgs>
 			<TMPL_LOOP NAME=orgs>
@@ -45,10 +46,11 @@
 				<td class="yesno"><TMPL_IF NAME=customer>Y<TMPL_ELSE>N</TMPL_IF></td>
 				<td class="yesno"><TMPL_IF NAME=software>Y<TMPL_ELSE>N</TMPL_IF></td>
 				<td class="yesno"><TMPL_IF NAME=hardware>Y<TMPL_ELSE>N</TMPL_IF></td>
+				<td><TMPL_IF NAME=notes_short><span title="<TMPL_VAR ESCAPE=HTML NAME=notes>"><TMPL_VAR ESCAPE=HTML NAME=notes_short></span><TMPL_ELSE><TMPL_IF NAME=notes><TMPL_VAR ESCAPE=HTML NAME=notes><TMPL_ELSE>-</TMPL_IF></TMPL_IF></td>
 			</tr>
 			</TMPL_LOOP></TMPL_IF>
 			<tr>
-				<td colspan="7" class="footer">
+				<td colspan="8" class="footer">
 					Showing <TMPL_VAR ESCAPE=HTML NAME=listed_org_count> of <TMPL_VAR ESCAPE=HTML NAME=total_org_count> organisations 
 				</td>
 			</tr>
