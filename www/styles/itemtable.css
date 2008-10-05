@@ -67,6 +67,12 @@ table.itemtable th
 	padding: 4px;
 }
 
+table.itemtable tr th:first-child
+{
+	min-width: 9em;
+}
+
+
 table.itemtable  a
 {
 	text-decoration: none;
