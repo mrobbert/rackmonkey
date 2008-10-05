@@ -35,19 +35,16 @@
 					</td>
 				</tr>
 				<tr>
-					<td class="footer">
-						<TMPL_IF NAME=return_view>
+					<td id="hidden_fields" class="footer">
 						<input type="hidden" name="view" value="<TMPL_VAR ESCAPE=HTML NAME=return_view>" />
+						<TMPL_IF NAME=return_view_type>
 						<input type="hidden" name="view_type" value="<TMPL_VAR ESCAPE=HTML NAME=return_view_type>" />
 						<input type="hidden" name="id" value="<TMPL_VAR ESCAPE=HTML NAME=return_view_id>" />
-						<button style="float: left" title="Cancel creating this service" onclick="window.location = '<TMPL_VAR NAME=base_url>?view=<TMPL_VAR ESCAPE=URL NAME=return_view>&amp;view_type=<TMPL_VAR ESCAPE=URL NAME=return_view_type>&amp;id=<TMPL_VAR ESCAPE=URL NAME=return_view_id>'; return false;">Cancel</button>
-						<TMPL_ELSE>
-						<input type="hidden" name="view" value="service" />
-						<button style="float: left" title="Cancel creating this service" onclick="window.location = '<TMPL_VAR NAME=base_url>?view=service'; return false;">Cancel</button>
 						</TMPL_IF>
 						<input type="hidden" name="act" value="insert" />
 						<input type="hidden" name="act_on" value="service" />
-						<button style="float: right" title="Save this service" type="submit">Save</button>
+						<button style="float: left" title="Cancel creating this service level" onclick="window.location = '<TMPL_VAR NAME=base_url>?view=<TMPL_VAR ESCAPE=URL NAME=return_view><TMPL_IF NAME=return_view_type>&amp;view_type=<TMPL_VAR ESCAPE=URL NAME=return_view_type>&amp;id=<TMPL_VAR ESCAPE=URL NAME=return_view_id></TMPL_IF>'; return false;">Cancel</button>
+						<button style="float: right" title="Save this service level" type="submit">Save</button>
 						&nbsp;
 					</td>
 				</tr>

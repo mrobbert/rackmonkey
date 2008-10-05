@@ -566,9 +566,9 @@ eval
 	$template->param('view_type' => $cgi->viewType);
 	
 	# Support overriding the next view of the template
-	$template->param('return_view' => $cgi->returnView);
-	$template->param('return_view_type' => $cgi->returnViewType);
-	$template->param('return_view_id' => $cgi->returnViewId);
+	$template->param('return_view' => $cgi->returnView || $view);
+	$template->param('return_view_type' => $cgi->returnViewType || '');
+	$template->param('return_view_id' => $cgi->returnViewId || 0);
 	
 	# support hiding and showing of filters 
 	$template->param('show_filters' => $cgi->showFilters);
