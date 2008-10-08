@@ -1701,7 +1701,7 @@ sub deleteDevice
 	return $deleteId;
 }
 
-sub _validateDeviceInput # doesn't check much at present
+sub _validateDeviceInput
 {
 	my ($self, $record) = @_;
 	croak "RM_ENGINE: Unable to validate device. No device record specified." unless ($record);
@@ -1748,7 +1748,7 @@ sub _validateDeviceInput # doesn't check much at present
 			my $pos = $_;
 			for my $r (@$rackLayout)
 			{
-				croak "RM_ENGINE: Cannot put the device '".$$record{'name'}."' here (position ".$$record{'rack_pos'}." in rack ".$$rack{'name'}.") because it overlaps with the device '".$$r{'name'}."'." if ($$r{'rack_pos'} == $pos and $$r{'name'} and ($$r{'id'} ne $devId));
+				croak "RM_ENGINE: Cannot put the device '".$$record{'name'}."' here (position ".$$record{'rack_location'}." in rack ".$$rack{'name'}.") because it overlaps with the device '".$$r{'name'}."'." if ($$r{'rack_location'} == $pos and $$r{'name'} and ($$r{'id'} ne $devId));
 			}
 		}
 	}
