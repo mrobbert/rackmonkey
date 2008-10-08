@@ -403,13 +403,15 @@ eval
 				push (@rackIdList, $id) if (scalar(@rackIdList) == 0); # add current rack id if no list
 				die "RMERR: You need to select at least one rack to display. Use the checkboxes at the right of the rack table to select racks." unless $rackIdList[0];
 				my @racks;
+				my $selectDevice = $cgi->id('device');
 				for my $rackId (@rackIdList)
 				{
 					my $rack = $backend->rack($rackId);
-					$$rack{'rack_layout'} = $backend->rackPhysical($rackId, $cgi->id('device'), 1);
+					$$rack{'rack_layout'} = $backend->rackPhysical($rackId, $selectDevice, 1);
 					push @racks, $rack;
 				}
 				$template->param('rack_list' => \@racks);
+				$template->param('device_id' => $selectDevice)
 			}
 			else
 			{
