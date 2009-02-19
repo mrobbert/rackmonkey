@@ -46,7 +46,7 @@
 				<td class="yesno"><TMPL_IF NAME=customer>Y<TMPL_ELSE>N</TMPL_IF></td>
 				<td class="yesno"><TMPL_IF NAME=software>Y<TMPL_ELSE>N</TMPL_IF></td>
 				<td class="yesno"><TMPL_IF NAME=hardware>Y<TMPL_ELSE>N</TMPL_IF></td>
-				<td><TMPL_IF NAME=notes_short><span title="<TMPL_VAR ESCAPE=HTML NAME=notes>"><TMPL_VAR ESCAPE=HTML NAME=notes_short></span><TMPL_ELSE><TMPL_IF NAME=notes><TMPL_VAR ESCAPE=HTML NAME=notes><TMPL_ELSE>-</TMPL_IF></TMPL_IF></td>
+				<td><TMPL_IF NAME=notes_short><span title="<TMPL_VAR NAME=notes>"><TMPL_VAR NAME=notes_short></span><TMPL_ELSE><TMPL_IF NAME=notes><TMPL_VAR NAME=notes><TMPL_ELSE>-</TMPL_IF></TMPL_IF></td>
 			</tr>
 			</TMPL_LOOP></TMPL_IF>
 			<tr>

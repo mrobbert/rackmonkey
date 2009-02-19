@@ -123,6 +123,7 @@ eval
 					for my $a (@$apps)
 					{
 						$$a{'descript_short'} = shortStr($$a{'descript'});
+						$$a{'notes'} = formatNotes($$a{'notes'}, 1);
 						$$a{'notes_short'} = shortStr($$a{'notes'});
 					}
 					my $totalAppCount = $backend->itemCount('app');
@@ -135,6 +136,12 @@ eval
 			elsif (($viewType =~ /^edit/) || ($viewType =~ /^single/))
 			{
 				my $app = $backend->app($id);
+				
+				if ($viewType =~ /^single/)
+				{
+					$$app{'notes'} = formatNotes($$app{'notes'});
+				}
+				
 				my $devices = $backend->appDevicesUsedList($id);
 				$$app{'app_devices'} = $devices;
 				$template->param($app);
@@ -152,6 +159,10 @@ eval
 			if ($viewType =~ /^default/)
 			{
 					my $buildings = $backend->buildingList($orderBy);
+					for my $b (@$buildings)
+					{
+						$$b{'notes'} = formatNotes($$b{'notes'}, 1);
+					}
 					my $totalBuildingCount = $backend->itemCount('building');
 					my $listedBuildingCount = @$buildings;
 					$template->param('total_building_count' => $totalBuildingCount);
@@ -165,6 +176,8 @@ eval
 				if ($viewType =~ /^single/)
 				{
 					$$building{'rooms'} = $backend->roomListInBuilding($id);
+					$$building{'notes'} = formatNotes($$building{'notes'});
+					
 				}
 				$template->param($building);
 			}
@@ -289,6 +302,7 @@ eval
 				my $domains = $backend->domainList($orderBy);
 				for my $d (@$domains)
 				{
+					$$d{'notes'} = formatNotes($$d{'notes'}, 1);
 					$$d{'descript_short'} = shortStr($$d{'descript'});
 				}
 				my $totalDomainCount = $backend->itemCount('domain');
@@ -300,7 +314,12 @@ eval
 			}
 			elsif (($viewType =~ /^edit/) || ($viewType =~ /^single/))
 			{
-				$template->param($backend->domain($id));
+				my $domain = $backend->domain($id);
+				if ($viewType =~ /^single/)
+				{
+					$$domain{'notes'} = formatNotes($$domain{'notes'});
+				}
+				$template->param($domain);
 			}
 		}
 		elsif ($view eq 'hardware')
@@ -308,6 +327,10 @@ eval
 			if ($viewType =~ /^default/)
 			{
 				my $hardware = $backend->hardwareList($orderBy);
+				for my $h (@$hardware)
+				{
+					$$h{'notes'} = formatNotes($$h{'notes'}, 1);
+				}
 				my $totalHardwareCount = $backend->itemCount('hardware');
 				my $listedHardwareCount = @$hardware;
 				$template->param('total_hardware_count' => $totalHardwareCount);
@@ -322,6 +345,10 @@ eval
 				if (($viewType =~ /^edit/) || ($viewType =~ /^single/))
 				{
 					my $hardware = $backend->hardware($id);
+					if ($viewType =~ /^single/)
+					{
+						$$hardware{'notes'} = formatNotes($$hardware{'notes'});
+					}
 					$selectedManufacturer = $$hardware{'manufacturer'} if (!$selectedManufacturer); # Use database value for selected if none in CGI
 					$$hardware{'support_url_short'} = shortURL($$hardware{'support_url'}); # not actually needed by edit view
 					$$hardware{'spec_url_short'} = shortURL($$hardware{'spec_url'}); # not actually needed by edit view			
@@ -348,13 +375,19 @@ eval
 				
 				for my $o (@$orgs)
 				{
+					$$o{'notes'} = formatNotes($$o{'notes'}, 1);
 					$$o{'descript_short'} = shortStr($$o{'descript'});
 				}
 				$template->param('orgs' => $orgs);
 			}
 			elsif (($viewType =~ /^edit/) || ($viewType =~ /^single/))
 			{
-				$template->param($backend->org($id));
+				my $org = $backend->org($id);
+				if ($viewType =~ /^single/)
+				{
+					$$org{'notes'} = formatNotes($$org{'notes'});
+				}
+				$template->param($org);
 			}
 			elsif ($viewType =~ /^create/)
 			{
@@ -366,6 +399,10 @@ eval
 			if ($viewType =~ /^default/)
 			{
 				my $os = $backend->osList($orderBy);
+				for my $o (@$os)
+				{
+					$$o{'notes'} = formatNotes($$o{'notes'}, 1);
+				}
 				my $totalOSCount = $backend->itemCount('os');
 				my $listedOSCount = @$os;
 				$template->param('total_os_count' => $totalOSCount);
@@ -380,6 +417,10 @@ eval
 				if (($viewType =~ /^edit/) || ($viewType =~ /^single/))
 				{
 					my $operatingSystem = $backend->os($id);
+					if ($viewType =~ /^single/)
+					{
+						$$operatingSystem{'notes'} = formatNotes($$operatingSystem{'notes'});
+					}
 					$template->param($operatingSystem);
 					$selectedManufacturer = $$operatingSystem{'manufacturer'} if (!$selectedManufacturer); # Use database value for selected if none in CGI
 				}
@@ -395,6 +436,10 @@ eval
 			if ($viewType =~ /^default/)
 			{
 				my $racks = $backend->rackList($orderBy);
+				for my $r (@$racks)
+				{
+					$$r{'notes'} = formatNotes($$r{'notes'}, 1);
+				}
 				my $totalRackCount = $backend->itemCount('rack');
 				my $listedRackCount = @$racks;
 				$template->param('total_rack_count' => $totalRackCount);
@@ -432,6 +477,10 @@ eval
 					if ($viewType !~ /^single/)
 					{	
 						$template->param('roomlist' => $cgi->selectRoom($backend->roomListBasic, $selectedRoom));
+					}
+					else
+					{
+						$$rack{'notes'} = formatNotes($$rack{'notes'});
 					}
 					
 					# clear rack notes and name if we're creating a new device (so copy works)
@@ -477,13 +526,19 @@ eval
 				
 				for my $r (@$roles)
 				{
+					$$r{'notes'} = formatNotes($$r{'notes'}, 1);
 					$$r{'descript_short'} = shortStr($$r{'descript'});
 				}
 				$template->param('roles' => $roles);
 			}
 			elsif (($viewType =~ /^edit/) || ($viewType =~ /^single/))
 			{
-				$template->param($backend->role($id));
+				my $role = $backend->role($id);
+				if ($viewType =~ /^single/)
+				{
+					$$role{'notes'} = formatNotes($$role{'notes'});
+				}				
+				$template->param($role);
 			}
 		}
 		elsif ($view eq 'room')
@@ -491,6 +546,10 @@ eval
 			if ($viewType =~ /^default/)
 			{
 					my $rooms = $backend->roomList($orderBy);
+					for my $r (@$rooms)
+					{
+						$$r{'notes'} = formatNotes($$r{'notes'}, 1);
+					}
 					my $totalRoomCount = $backend->itemCount('room');
 					my $listedRoomCount = @$rooms;
 					$template->param('total_room_count' => $totalRoomCount);
@@ -505,6 +564,10 @@ eval
 				if (($viewType =~ /^edit/) || ($viewType =~ /^single/))
 				{
 					my $room = $backend->room($id);
+					if ($viewType =~ /^single/)
+					{
+						$$room{'notes'} = formatNotes($$room{'notes'});
+					}
 					$$room{'row_count'} = $backend->rowCountInRoom($id);
 					$selectedBuilding = $$room{'building'} if (!$selectedBuilding); # Use database value for selected if none in CGI - not actually needed in single view
 					if ($viewType =~ /^single/)
@@ -539,13 +602,19 @@ eval
 				
 				for my $s (@$serviceLevels)
 				{
+					$$s{'notes'} = formatNotes($$s{'notes'}, 1);
 					$$s{'descript_short'} = shortStr($$s{'descript'});
 				}
 				$template->param('services' => $serviceLevels);
 			}
 			elsif (($viewType =~ /^edit/) || ($viewType =~ /^single/))
 			{
-				$template->param($backend->service($id));
+				my $service = $backend->service($id);
+				if ($viewType =~ /^single/)
+				{
+					$$service{'notes'} = formatNotes($$service{'notes'});
+				}
+				$template->param($service);
 			}
 		}
 		else
@@ -660,10 +729,14 @@ sub formatNotes
 	unless ($inline)
 	{
 		$note =~ s/\n/<br>/sg; # turn newlines into break tags
+		$note =~ s/\[(.*?)\|(.*?)\]/<a href="$1">$2<\/a>/sg; # create hyperlinks
+	}
+	else
+	{
+		$note =~ s/\[(.*?)\|(.*?)\]/$2 ($1)/sg; # can't make proper hyperlinks inline as they may be truncated
 	}
 	
 	$note =~ s/\*\*\*(.*?)\*\*\*/<strong>$1<\/strong>/sg; # strong using ***
 	$note =~ s/\*\*(.*?)\*\*/<em>$1<\/em>/sg; # emphasis using **
-	$note =~ s/\[(.*?)\|(.*?)\]/<a href="$1">$2<\/a>/sg; # create hyperlinks
 	return $note;
 }

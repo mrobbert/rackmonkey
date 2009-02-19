@@ -9,6 +9,7 @@
 
 table.itemtable
 {
+	border: solid black 1px;
 	border-collapse: collapse;
 	margin-right: 12px;
 	margin-top: 12px;
@@ -23,8 +24,7 @@ table.itemtable img.create
 
 table.itemtable td
 {
-	border: solid black;
-	border-width: 1px;
+	border: solid black 1px;
 	padding: 4px;
 }
 
@@ -63,7 +63,7 @@ table.itemtable th
 	text-align: left;
 	background: #444;
 	color: #FFF;
-	border: solid 1px #000;
+	border: solid black 1px;
 	padding: 4px;
 }
 

@@ -22,7 +22,7 @@ plugin_xls = 0
 # Preference Constants
 defaultview = rack      # View loaded when none is specified
 dateformat = %Y-%m-%d   # Format used to display dates (not currently used)
-shorttextlen = 32       # Shorten long text for table views
+shorttextlen = 64       # Shorten long text for table views
 shorturllen = 64        # Shorten long URLs for display
 
 # Validation Constants

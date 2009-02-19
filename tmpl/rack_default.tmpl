@@ -48,7 +48,7 @@
 					<td><TMPL_VAR ESCAPE=HTML NAME=room_name> in <TMPL_IF NAME=building_name_short><TMPL_VAR ESCAPE=HTML NAME=building_name_short><TMPL_ELSE><TMPL_VAR ESCAPE=HTML NAME=building_name></TMPL_IF></td>
 					<td><TMPL_VAR ESCAPE=HTML NAME=size></td>
 					<td><TMPL_VAR ESCAPE=HTML NAME=free_space></td>
-					<td><TMPL_IF NAME=notes_short><span title="<TMPL_VAR ESCAPE=HTML NAME=notes>"><TMPL_VAR ESCAPE=HTML NAME=notes_short></span><TMPL_ELSE><TMPL_IF NAME=notes><TMPL_VAR ESCAPE=HTML NAME=notes><TMPL_ELSE>-</TMPL_IF></TMPL_IF></td>
+					<td><TMPL_IF NAME=notes_short><span title="<TMPL_VAR NAME=notes>"><TMPL_VAR NAME=notes_short></span><TMPL_ELSE><TMPL_IF NAME=notes><TMPL_VAR NAME=notes><TMPL_ELSE>-</TMPL_IF></TMPL_IF></td>
 					<td class="no_print"><input type="checkbox" name="rack_list" value="<TMPL_VAR ESCAPE=HTML NAME=id>" /></td>
 				</tr></TMPL_LOOP></TMPL_IF>
 				<tr>
