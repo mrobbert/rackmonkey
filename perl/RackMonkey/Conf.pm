@@ -2,7 +2,7 @@ package RackMonkey::Conf;
 ##############################################################################
 # RackMonkey - Know Your Racks - http://www.rackmonkey.org                   #
 # Version 1.2.%BUILD%                                                        #
-# (C)2004-2008 Will Green (wgreen at users.sourceforge.net)                  #
+# (C)2004-2009 Will Green (wgreen at users.sourceforge.net)                  #
 # Configuration for RackMonkey                                               #
 ##############################################################################
 

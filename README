@@ -1,13 +1,14 @@
 ##############################################################################
 # RackMonkey - Know Your Racks - http://www.rackmonkey.org                   #
 # Version 1.2.%BUILD%                                                        #
-# (C)2004-2008 Will Green (wgreen at users.sourceforge.net)                  #
-# README for RackMonkey v1.2.4                                               #
+# (C)2004-2009 Will Green (wgreen at users.sourceforge.net)                  #
+# README for RackMonkey v1.2.5                                               #
 ##############################################################################
 
 You can read the latest version of this document in HTML format at:
-http://www.rackmonkey.org/doc/1.2.4
+http://www.rackmonkey.org/doc/1.2.5
 
+The README for v1.2.5 is still being written.
 
 Contents
 ========
@@ -129,7 +130,7 @@ development:
     
 Legal Notices
 =============
-RackMonkey (C)2004-2008 Will Green. RackMonkey is a trademark of Will Green.
+RackMonkey (C)2004-2009 Will Green. RackMonkey is a trademark of Will Green.
 
 RackMonkey includes example data to demonstrate the software and get you 
 started. The inclusion of a particular company or product does not imply an 

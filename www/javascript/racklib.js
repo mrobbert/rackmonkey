@@ -1,7 +1,7 @@
 //////////////////////////////////////////////////////////////////////////////
 // RackMonkey - Know Your Racks - http://www.rackmonkey.org                 //  
 // Version 1.2.%BUILD%                                                      //
-// (C)2004-2008 Will Green (wgreen at users.sourceforge.net)                //
+// (C)2004-2009 Will Green (wgreen at users.sourceforge.net)                //
 // RackMonkey JavaScript library                                            //
 //////////////////////////////////////////////////////////////////////////////
 
@@ -76,6 +76,16 @@ function pressedEnter(e)
 function confirmDel(name)
 {
 	return confirm("Are you sure you want to delete " + name + "?\nThis cannot be undone.");
+}
+
+// Show the notes style key
+function showNotesStyleKey()
+{
+	var notesStyleKey = document.getElementById('notes_style_key');
+	if (!notesStyleKey)
+		return true;
+	notesStyleKey.style.display = "block";
+	return true;
 }
 
 // Show or hide a button with the id 'filterbutton' and a block called 'filters', remembers setting with cookie - should be made more generic

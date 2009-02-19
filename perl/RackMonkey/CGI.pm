@@ -2,9 +2,11 @@ package RackMonkey::CGI;
 ##############################################################################
 # RackMonkey - Know Your Racks - http://www.rackmonkey.org                   #
 # Version 1.2.%BUILD%                                                        #
-# (C)2004-2008 Will Green (wgreen at users.sourceforge.net)                  #
+# (C)2004-2009 Will Green (wgreen at users.sourceforge.net)                  #
 # CGI Support for Rackmonkey                                                 #
 ##############################################################################
+
+# This module is due to be phased out in RackMonkey v1.2.6
 
 use strict;
 use warnings;

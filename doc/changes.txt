@@ -1,14 +1,14 @@
 ##############################################################################
 # RackMonkey - Know Your Racks - http://www.rackmonkey.org                   #
 # Version 1.2.%BUILD%                                                        #
-# (C)2004-2008 Will Green (wgreen at users.sourceforge.net)                  #
+# (C)2004-2009 Will Green (wgreen at users.sourceforge.net)                  #
 # RackMonkey Change Log                                                      #
 ##############################################################################
 
 You can read the latest version of this document in HTML format at:
 http://www.rackmonkey.org/doc/1.2.4
 
-v1.2.5 Preview 1 - Released 2008-xx-xx
+v1.2.5 Preview 1 - Released 2009-xx-xx
 --------------------------------------
 * Improvements to UI
 * Support for deletion in table and physical rack views

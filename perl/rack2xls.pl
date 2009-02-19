@@ -2,14 +2,14 @@
 ##############################################################################
 # RackMonkey - Know Your Racks - http://www.rackmonkey.org                   #
 # Version 1.2.%BUILD%                                                        #
-# (C)2004-2008 Will Green (wgreen at users.sourceforge.net)                  #
+# (C)2004-2009 Will Green (wgreen at users.sourceforge.net)                  #
 # RackMonkey XLS Spreadsheet Export Script                                   #
 ##############################################################################
 
-# NB. This code hasn't been updated to use new conf format, so doesn't
-#     currently run.
+# Portions of this code contributed by Pierre Larsson, 
+#	(C)2007-2008 Pierre Larsson
 
-# Portions of this code contributed by Pierre Larsson, (C)2007 Pierre Larsson
+# This plugin is still being worked on and isn't yet fully functional.
 
 # This program is free software; you can redistribute it and/or modify it
 # under the terms of the GNU General Public License as published by the Free
@@ -37,33 +37,36 @@ use Spreadsheet::WriteExcel;
 use RackMonkey::CGI;
 use RackMonkey::Engine;
 use RackMonkey::Error;
-use RackMonkey::Helper;
 use RackMonkey::Conf;
 
 our $VERSION = '1.2.%BUILD%';
 our $AUTHOR = 'Will Green (wgreen at users.sourceforge.net)';
 
-our ($template, $cgi);
+our ($template, $cgi, $conf, $backend);
 
 $cgi = new RackMonkey::CGI;
 	
+my $rack_layout;
 eval 
 {
-	my $dbh = DBI->connect(DBDCONNECT, DBUSER, DBPASS, {AutoCommit => 1, RaiseError => 1, PrintError => 0, ShowErrorStatement => 1}); 
-	checkSupportedDriver;
-	my $backend = new RackMonkey::Engine($dbh);
 
-	my $fullURL = $cgi->url;
-	my $baseURL = $cgi->baseUrl;
-	my $view = $cgi->view;
-	my $id = $cgi->viewId;
-	my $viewType = $cgi->viewType;
-	my $act =  $cgi->act;
-	my $orderBy = $cgi->orderBy;
-	my $filterBy = $cgi->filterBy;
+        $backend = RackMonkey::Engine->new;
+        $conf = $$backend{'conf'};
+
+        my $fullURL = $cgi->url;
+        my $baseURL = $cgi->baseUrl;
+        my $view = $cgi->view($$conf{'defaultview'});
+        my $id = $cgi->viewId;
+        my $viewType = $cgi->viewType;
+        my $act =  $cgi->act;
+        my $filterBy = $cgi->filterBy;
+        my $deviceSearch = $cgi->deviceSearch;
+
+        my $orderBy = $cgi->orderBy;
+
+        my $loggedInUser = $ENV{'REMOTE_USER'} || $ENV{'REMOTE_ADDR'};
 
 	# Export rack physical view
-	
 	if (($view eq 'rack') && ($viewType =~ /^xls_export/))
 	{
 		my @rackIdList = $cgi->rackList;
@@ -74,8 +77,7 @@ eval
 		{
 			my $rack = $backend->rack($rackId);
 			$$rack{'rack_layout'} = $backend->rackPhysical($rackId, $cgi->id('device'));
- 			push @racks, $rack;
-		}
+ 			push @racks, $rack; }
 
 		print "Content-type: application/vnd.ms-excel\n";
 		print "Content-Disposition: attachment; filename=rack.xls\n\n";
@@ -87,11 +89,11 @@ eval
 		my $worksheet = $workbook->addworksheet();
 
 		# Add custom colors
-		my $lightblue = $workbook->set_custom_color(40, '#6699FF');
+		my $grey = $workbook->set_custom_color(40, '#282828');
 
 		#  Add and define default format
 		my $format = $workbook->addformat(); # Add a format
-		$format->set_font('Arial');
+		$format->set_font('Verdana');
 		$format->set_size(10);
 		$format->set_border(1);
 
@@ -111,12 +113,12 @@ eval
 
 		#  Add and define headers format
 		my $headers_format = $workbook->addformat(); # Add a format
-		$headers_format->set_font('Arial');
+		$headers_format->set_font('Verdana');
 		$headers_format->set_size(12);
 		$headers_format->set_align('center');
-		$headers_format->set_bold();
-		$headers_format->set_bg_color($lightblue);
+		$headers_format->set_bg_color($grey);
 		$headers_format->set_border(1);
+		$headers_format->set_color('white');
 
 		my $product_header = $workbook->addformat(
 			border  => 5,
@@ -127,9 +129,20 @@ eval
 			bold  => 3,
 			bg_color  => 'grey',
 		);
+		$worksheet->write(0, 0, "Device", $headers_format);
+		$worksheet->write(0, 1, "Rack", $headers_format);
+		$worksheet->write(0, 2, "Room", $headers_format);
+		$worksheet->write(0, 3, "Role", $headers_format);
+		$worksheet->write(0, 4, "Hardware", $headers_format);
+		$worksheet->write(0, 5, "Size (U)", $headers_format);
+		$worksheet->write(0, 6, "OS", $headers_format);
+		$worksheet->write(0, 7, "Serial", $headers_format);
+		$worksheet->write(0, 8, "Asset", $headers_format);
+		$worksheet->write(0, 9, "Customer", $headers_format);
+		$worksheet->write(0, 10, "SLA", $headers_format);
 								      
 		my $col = 0;
-		my $row = 2;
+		my $row = 1;
 		$worksheet->set_column(1 , 1 , 15);
 		$worksheet->set_column(2, 2 , 30);
 		$worksheet->set_column(5, 5 , 15);
@@ -141,13 +154,65 @@ eval
 
 		foreach my $rack(@racks)
 		{
+		
+		my $last_name;
+		
 			foreach my $rack_layout(@{$rack->{rack_layout}})
 			{
-				$worksheet->write($row, $col, $rack_layout->{rack_pos}, $format);
-				$worksheet->write($row, $col+1, $rack_layout->{name}, $format);
-				$row++
+
+				if ( $rack_layout->{name} ne $last_name )
+				{
+
+					if ( $rack_layout->{name} )
+					{
+						my $device = $backend->device($rack_layout->{id});
+
+						$worksheet->write($row, $col, $device->{name}, $format);
+						$worksheet->write($row, $col+1, "$device->{rack_name} [$device->{rack_pos}]", $format);
+						$worksheet->write($row, $col+2, "$device->{room_name} in $device->{building_name}", $format);
+						if ( $rack_layout->{role} )
+						{
+							$worksheet->write($row, $col+3, $backend->role($rack_layout->{role})->{name}, $format);
+						}else
+						{
+
+							$worksheet->write($row, $col+3, "", $format);
+						}
+						$worksheet->write($row, $col+4, $rack_layout->{hardware_name}, $format);
+						$worksheet->write($row, $col+5, $rack_layout->{hardware_size}, $format);
+						if ( $device->{os_name} )
+						{
+							$worksheet->write($row, $col+6, $device->{os_name}, $format);
+						}else
+						{
+
+							$worksheet->write($row, $col+6, "", $format);
+						}
+						if ( $device->{serial_no} )
+						{
+							$worksheet->write($row, $col+7, $device->{serial_no}, $format);
+						}else
+						{
+							$worksheet->write($row, $col+7, "-", $format);
+						}
+						if ( $device->{asset_no} )
+						{
+							$worksheet->write($row, $col+8, $device->{asset_no}, $format);
+						}else
+						{
+							$worksheet->write($row, $col+8, "-", $format);
+						}
+						$worksheet->write($row, $col+9, $device->{customer_name}, $format);
+						$worksheet->write($row, $col+10, $device->{service_name}, $format);
+						$last_name = $device->{name};
+						$row++;
+					}
+				}
 			}
+
 		}
+		$worksheet->set_column('A:K', 20);
+
 		
 		my ($minute, $hour, $day, $month, $year) = (gmtime)[1, 2, 3, 4, 5];
 		my $currentDate = sprintf("%04d-%02d-%02d %02d:%02d GMT", $year+1900, $month+1, $day, $hour, $minute);
@@ -159,6 +224,15 @@ eval
 			size  => 9,
 			bold  => 3
 		);
+
+		my $merge_format = $workbook->add_format(
+                                        border  => 6,
+                                        valign  => 'vcenter',
+                                        align   => 'center',
+                                      );
+
+		#$worksheet->merge_range('B3:D4', 'Vertical and horizontal', $merge_format);
+
 		$worksheet->write($row+2, 0, "Generated by RackMonkey v$VERSION on $currentDate", $footerFormat);
 	}
 	elsif (($view eq 'device') && ($viewType =~ /^xls_export/))

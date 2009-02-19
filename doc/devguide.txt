@@ -1,15 +1,15 @@
 ##############################################################################
 # RackMonkey - Know Your Racks - http://www.rackmonkey.org                   #
 # Version 1.2.%BUILD%                                                        #
-# (C)2004-2008 Will Green (wgreen at users.sourceforge.net)                  #
+# (C)2004-2009 Will Green (wgreen at users.sourceforge.net)                  #
 # RackMonkey Developer Guide                                                 #
 ##############################################################################
 
 You can read the latest version of this document in HTML format at:
-http://www.rackmonkey.org/doc/1.2.4
+http://www.rackmonkey.org/doc/1.2.5
 
 This document is out-of-date. Please await an updated version which will be
-included in the final release of RackMonkey v1.2.4.
+included in the final release of RackMonkey v1.2.5.
 
 Developer Guide to RackMonkey v1.2
 ==================================
@@ -118,9 +118,9 @@ path in @INC will be added soon.
 
 Porting RackMonkey to Another Database
 --------------------------------------
-If neither SQLite nor Postgres is appropriate for you, you may consider porting
+If SQLite, Postgres nor MySQL is appropriate for you, you may consider porting
 RackMonkey::Engine to another database. Before you do this, I would strongly
-advise you try using SQLite and Postgres first, as porting RackMonkey to a
+advise you try using the supported databases first, as porting RackMonkey to a
 new database isn't for the faint-hearted.
 
 Key database features used by RackMonkey (with example):

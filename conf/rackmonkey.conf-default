@@ -1,7 +1,7 @@
 ##############################################################################
 # RackMonkey - Know Your Racks - http://www.rackmonkey.org                   #
 # Version 1.2.%BUILD%                                                        #
-# (C)2004-2008 Will Green (wgreen at users.sourceforge.net)                  #
+# (C)2004-2009 Will Green (wgreen at users.sourceforge.net)                  #
 # RackMonkey Configuration                                                   #
 ##############################################################################
 
@@ -16,9 +16,8 @@ dbpass =
 tmplpath =
 wwwpath =
 
-# Plugins - no plugins are included in v1.2.4 - do not try to enable them
-# plugin_pdf = 0
-# plugin_xls = 0
+# Plugins - to enable a plugin set its value to 1
+plugin_xls = 0
 
 # Preference Constants
 defaultview = rack      # View loaded when none is specified

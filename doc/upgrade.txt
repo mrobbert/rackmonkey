@@ -1,12 +1,15 @@
 ##############################################################################
 # RackMonkey - Know Your Racks - http://www.rackmonkey.org                   #
 # Version 1.2.%BUILD%                                                        #
-# (C)2004-2008 Will Green (wgreen at users.sourceforge.net)                  #
-# RackMonkey v1.2.4 Upgrade Guide                                            #
+# (C)2004-2009 Will Green (wgreen at users.sourceforge.net)                  #
+# RackMonkey v1.2.5 Upgrade Guide                                            #
 ##############################################################################
 
 You can read the latest version of this document in HTML format at:
-http://www.rackmonkey.org/doc/1.2.4
+http://www.rackmonkey.org/doc/1.2.5
+
+The upgrade guide for v1.2.5 is still being written. Should separate the file
+into two, one from v1.2.4 and one from earlier releases.
 
 
 Upgrading RackMonkey
@@ -14,28 +17,30 @@ Upgrading RackMonkey
 RackMonkey v1.2.x can be upgraded to the latest version following the
 instructions below. NB. Upgrading from v1.1 is not supported.
 
-Upgrading from earlier releases of v1.2 is straightforward: there are no
-database schema changes (but see note about Postgres/MySQL Schema, below). 
-However, there has been a change in the way configuration is stored, which is 
+Upgrading from earlier releases of v1.2 is straightforward: but there is a
+schema change in this release. Users coming from v1.2.3 or earlier should also
+note that there has been a change in the way configuration is stored, which is 
 explained in the instructions below.
 
-Despite the fact there are no schema changes in this release, you should take
-a backup of the RackMonkey database before proceeding. For SQLite this can
-be achieved by copying the database file, for Postgres use pg_dump.
+Please ensure you take a full backup of the RackMonkey database before
+upgrading. For SQLite you can do this by copying the DB file, for other
+databases please refer to their respective documentation. 
 
 Please note that the $ or # shown at the start of commands represents the 
 shell prompt, you should not type it.
 
-Postgres/MySQL Schema
----------------------
+Schema Upgrade
+--------------
+
+Changes from v1.2.4
+-------------------
+Added column to support numbering of racks from top as well as bottom.
+
+Changes from v1.2.3
+-------------------
 The Postgres and MySQL schemas has been tweaked in v1.2.4 to prevent NULL 
-values being stored in columns which are foreign key constraints. You do not 
-need to update your existing schema, as this change doesn't affect the 
-functionality of RackMonkey (it improves the integrity of data in the case of 
-manual access or bugs in RackMonkey). If you wish to upgrade your schema to 
-the new version, dump your database and create a new database with the new 
-schema, then import your data. In a later release there will be a process for 
-updating the schema automatically.
+values being stored in columns which are foreign key constraints. 
+
 
 Rackmonkey Files
 ----------------
