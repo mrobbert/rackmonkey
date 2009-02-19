@@ -658,5 +658,6 @@ sub formatNotes
 	
 	$note =~ s/\n/<br>/sg; # turn newlines into break tags
 	$note =~ s/\*\*(.*?)\*\*/<em>$1<\/em>/sg; # emphasis using **
+	$note =~ s/\[(.*?)\|(.*?)\]/<a href="$1">$2<\/a>/sg; # create hyperlinks
 	return $note;
 }
