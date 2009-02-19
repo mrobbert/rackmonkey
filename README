@@ -29,21 +29,18 @@ servers, video encoders, routers and storage devices. Using a simple interface
 you can keep track of what's where, which OS it runs, when it was purchased,
 who it belongs and what it's used for.
 
-Thank you for choosing to try RackMonkey v1.2.4, I hope you find it useful in
+Thank you for choosing to try RackMonkey v1.2.5, I hope you find it useful in
 bringing (and keeping) order in your data centres.
 
 
 2. New in this Release
 ======================
-v1.2.4 has a large number of improvements over v1.2.3. These include:
+v1.2.5 has a number of improvements over v1.2.4. These include:
 
-* Improved interface
-* Device search
-* Device and Rack copying
-* Filtering of Device view
-* Experimental MySQL 5 support
+* Add here...
 
-For a more detailed list of changes in this release see doc/changes.txt.
+For a more detailed list of changes in this and prior releases
+see doc/changes.txt.
 
 
 3. Obtaining RackMonkey
@@ -57,8 +54,8 @@ current release from http://www.rackmonkey.org.
 For installation instructions please see:
 
 * New installs: doc/install-generic.txt.
-* Upgrades:     doc/upgrade.txt
-
+* Upgrade from v1.2.4: doc/upgrade.txt
+* Upgrade from other releases: doc/upgrade-older.txt
 
 5. Documentation
 ================
@@ -100,8 +97,6 @@ RackMonkey project:
 
     * Pierre Larsson - XLS Export Plugin (rack2xls.pl)
     
-NB. This plugin isn't included in the release version of RackMonkey v1.2.4,
-but will be part of future releases.
     
 People
 ------
