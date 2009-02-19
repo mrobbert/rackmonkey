@@ -654,9 +654,15 @@ sub calculateAge
 sub formatNotes
 {
 	my $note = shift;
+	my $inline = shift || 0;
 	my $note = encode_entities($note); # we don't use HTML::Template escape so have to encode here
 	
-	$note =~ s/\n/<br>/sg; # turn newlines into break tags
+	unless ($inline)
+	{
+		$note =~ s/\n/<br>/sg; # turn newlines into break tags
+	}
+	
+	$note =~ s/\*\*\*(.*?)\*\*\*/<strong>$1<\/strong>/sg; # strong using ***
 	$note =~ s/\*\*(.*?)\*\*/<em>$1<\/em>/sg; # emphasis using **
 	$note =~ s/\[(.*?)\|(.*?)\]/<a href="$1">$2<\/a>/sg; # create hyperlinks
 	return $note;
