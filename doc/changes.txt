@@ -120,4 +120,6 @@ First full public release, hosted on Soureforge.
 
 v1.0 - Not officially released
 ------------------------------
-Initial experimentation with SQLite backend in 2004. 
+Initial experimentation with SQLite backend starting in March 2004. The
+exact date of the first code is not known but RackMonkey now celebrates
+its birthday on 15th March. 
