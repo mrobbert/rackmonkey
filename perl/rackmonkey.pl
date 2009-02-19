@@ -26,6 +26,7 @@ use warnings;
 use 5.006_001;
 
 use HTML::Template;
+use HTML::Entities;
 use Time::Local;
 
 use RackMonkey::CGI;
@@ -235,10 +236,14 @@ eval
 						$$device{'apps'} = $backend->appOnDeviceList($id);	
 					}
 
-					if (($viewType =~ /^single/) && (lc($$device{'hardware_manufacturer_name'}) =~ /dell/)) # kludgey!
-					{
-						$template->param('dell_query' => $$conf{'dellquery'});
-
+					if ($viewType =~ /^single/)
+					{						
+						$$device{'notes'} = formatNotes($$device{'notes'});
+						
+						if (lc($$device{'hardware_manufacturer_name'}) =~ /dell/) # not very extensible
+						{	
+							$template->param('dell_query' => $$conf{'dellquery'});
+						}
 					}
 
 					if ($viewType !~ /^single/)
@@ -644,4 +649,14 @@ sub calculateAge
 		return sprintf("%.1f", $age);
 	}
 	return '';
+}
+
+sub formatNotes
+{
+	my $note = shift;
+	my $note = encode_entities($note); # we don't use HTML::Template escape so have to encode here
+	
+	$note =~ s/\n/<br>/sg; # turn newlines into break tags
+	$note =~ s/\*\*(.*?)\*\*/<em>$1<\/em>/sg; # emphasis using **
+	return $note;
 }
