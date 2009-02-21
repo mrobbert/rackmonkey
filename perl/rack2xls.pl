@@ -82,22 +82,22 @@ eval {
 
         # Add a worksheet and set formats
         my $worksheet = $workbook->addworksheet();
-        my ($format, $headers_format, $url_format) = formatSpreadsheet($workbook);
+        my ($format, $headers_format, $footerFormat, $url_format) = formatSpreadsheet($workbook);
 
-        $worksheet->write(0, 0,  "Device",   $headers_format);
-        $worksheet->write(0, 1,  "Rack",     $headers_format);
-        $worksheet->write(0, 2,  "Room",     $headers_format);
-        $worksheet->write(0, 3,  "Role",     $headers_format);
-        $worksheet->write(0, 4,  "Hardware", $headers_format);
-        $worksheet->write(0, 5,  "Size (U)", $headers_format);
-        $worksheet->write(0, 6,  "OS",       $headers_format);
-        $worksheet->write(0, 7,  "Serial",   $headers_format);
-        $worksheet->write(0, 8,  "Asset",    $headers_format);
-        $worksheet->write(0, 9,  "Customer", $headers_format);
-        $worksheet->write(0, 10, "SLA",      $headers_format);
+        # create the headers and set the column widths
+        $worksheet->write(0, 0,  "Device",        $headers_format);
+        $worksheet->write(0, 1,  "Rack",          $headers_format);
+        $worksheet->write(0, 2,  "Room",          $headers_format);
+        $worksheet->write(0, 3,  "Role",          $headers_format);
+        $worksheet->write(0, 4,  "Hardware",      $headers_format);
+        $worksheet->write(0, 5,  "Size (U)",      $headers_format);
+        $worksheet->write(0, 6,  "OS",            $headers_format);
+        $worksheet->write(0, 7,  "Serial",        $headers_format);
+        $worksheet->write(0, 8,  "Asset",         $headers_format);
+        $worksheet->write(0, 9,  "Customer",      $headers_format);
+        $worksheet->write(0, 10, "Service Level", $headers_format);
 
-        my $col = 0;
-        my $row = 1;
+        $worksheet->set_column(0,  0,  15);
         $worksheet->set_column(1,  1,  15);
         $worksheet->set_column(2,  2,  30);
         $worksheet->set_column(5,  5,  15);
@@ -107,63 +107,67 @@ eval {
         $worksheet->set_column(9,  9,  12);
         $worksheet->set_column(10, 10, 50);
 
+        # start writing data in the first column and below the header
+        my $col = 0;
+        my $row = 1;
+
         foreach my $rack (@racks)
         {
             my $last_name = '';
-            foreach my $rack_layout (@{ $rack->{rack_layout} })
+            for my $rack_layout (@{$rack->{'rack_layout'}})
             {
-                if ($rack_layout->{name} ne $last_name)
+                if ($rack_layout->{'name'} ne $last_name)
                 {
-                    if ($rack_layout->{name})
+                    if ($rack_layout->{'name'})
                     {
-                        my $device = $backend->device($rack_layout->{id});
+                        my $device = $backend->device($rack_layout->{'id'});
 
-                        $worksheet->write($row, $col,     $device->{name},                                    $format);
+                        $worksheet->write($row, $col,     $device->{'name'},                                  $format);
                         $worksheet->write($row, $col + 1, "$device->{rack_name} [$device->{rack_pos}]",       $format);
                         $worksheet->write($row, $col + 2, "$device->{room_name} in $device->{building_name}", $format);
 
-                        if ($rack_layout->{role})
+                        if ($rack_layout->{'role'})
                         {
-                            $worksheet->write($row, $col + 3, $backend->role($rack_layout->{role})->{name}, $format);
+                            $worksheet->write($row, $col + 3, $backend->role($rack_layout->{'role'})->{'name'}, $format);
                         }
                         else
                         {
                             $worksheet->write($row, $col + 3, "", $format);
                         }
 
-                        $worksheet->write($row, $col + 4, $rack_layout->{hardware_name}, $format);
-                        $worksheet->write($row, $col + 5, $rack_layout->{hardware_size}, $format);
+                        $worksheet->write($row, $col + 4, $rack_layout->{'hardware_name'}, $format);
+                        $worksheet->write($row, $col + 5, $rack_layout->{'hardware_size'}, $format);
 
-                        if ($device->{os_name})
+                        if ($device->{'os_name'})
                         {
-                            $worksheet->write($row, $col + 6, $device->{os_name}, $format);
+                            $worksheet->write($row, $col + 6, $device->{'os_name'}, $format);
                         }
                         else
                         {
                             $worksheet->write($row, $col + 6, "", $format);
                         }
 
-                        if ($device->{serial_no})
+                        if ($device->{'serial_no'})
                         {
-                            $worksheet->write($row, $col + 7, $device->{serial_no}, $format);
+                            $worksheet->write($row, $col + 7, $device->{'serial_no'}, $format);
                         }
                         else
                         {
                             $worksheet->write($row, $col + 7, "-", $format);
                         }
 
-                        if ($device->{asset_no})
+                        if ($device->{'asset_no'})
                         {
-                            $worksheet->write($row, $col + 8, $device->{asset_no}, $format);
+                            $worksheet->write($row, $col + 8, $device->{'asset_no'}, $format);
                         }
                         else
                         {
                             $worksheet->write($row, $col + 8, "-", $format);
                         }
 
-                        $worksheet->write($row, $col + 9,  $device->{customer_name}, $format);
-                        $worksheet->write($row, $col + 10, $device->{service_name},  $format);
-                        $last_name = $device->{name};
+                        $worksheet->write($row, $col + 9,  $device->{'customer_name'}, $format);
+                        $worksheet->write($row, $col + 10, $device->{'service_name'},  $format);
+                        $last_name = $device->{'name'};
                         $row++;
                     }
                 }
@@ -171,25 +175,16 @@ eval {
         }
         $worksheet->set_column('A:K', 20);
 
-        my ($minute, $hour, $day, $month, $year) = (gmtime)[1, 2, 3, 4, 5];
-        my $currentDate = sprintf("%04d-%02d-%02d %02d:%02d GMT", $year + 1900, $month + 1, $day, $hour, $minute);
-
-        my $footerFormat = $workbook->addformat(
-            valign => 'vcenter',
-            align  => 'left',
-            font   => 'Verdana',
-            size   => 9,
-            bold   => 3
-        );
-
         my $merge_format = $workbook->add_format(
-            border => 6,
-            valign => 'vcenter',
-            align  => 'center',
+            'border' => 6,
+            'valign' => 'vcenter',
+            'align'  => 'center',
         );
 
         #$worksheet->merge_range('B3:D4', 'Vertical and horizontal', $merge_format);
 
+        my ($minute, $hour, $day, $month, $year) = (gmtime)[1, 2, 3, 4, 5];
+        my $currentDate = sprintf("%04d-%02d-%02d %02d:%02d GMT", $year + 1900, $month + 1, $day, $hour, $minute);
         $worksheet->write($row + 2, 0, "Generated by RackMonkey v$VERSION on $currentDate", $footerFormat);
     }
     elsif (($view eq 'device') && ($viewType =~ /^xls_export/))
@@ -202,19 +197,84 @@ eval {
 
         # Add a worksheet and set formats
         my $worksheet = $workbook->addworksheet();
-        my ($format, $headers_format, $url_format) = formatSpreadsheet($workbook);
+        my ($format, $headers_format, $footerFormat, $url_format) = formatSpreadsheet($workbook);
 
-        $worksheet->write(0, 0,  "Device",   $headers_format);
-        $worksheet->write(0, 1,  "Rack",     $headers_format);
-        $worksheet->write(0, 2,  "Room",     $headers_format);
-        $worksheet->write(0, 3,  "Role",     $headers_format);
-        $worksheet->write(0, 4,  "Hardware", $headers_format);
-        $worksheet->write(0, 5,  "Size (U)", $headers_format);
-        $worksheet->write(0, 6,  "OS",       $headers_format);
-        $worksheet->write(0, 7,  "Serial",   $headers_format);
-        $worksheet->write(0, 8,  "Asset",    $headers_format);
-        $worksheet->write(0, 9,  "Customer", $headers_format);
-        $worksheet->write(0, 10, "SLA",      $headers_format);
+        # create the headers and set the column widths
+        $worksheet->write(0, 0,  "Device",         $headers_format);
+        $worksheet->write(0, 1,  "Domain",         $headers_format);
+        $worksheet->write(0, 2,  "Racking Status", $headers_format);
+        $worksheet->write(0, 3,  "Position",       $headers_format);
+        $worksheet->write(0, 4,  "Rack",           $headers_format);
+        $worksheet->write(0, 5,  "Room",           $headers_format);
+        $worksheet->write(0, 6,  "Building",       $headers_format);
+        $worksheet->write(0, 7,  "Role",           $headers_format);
+        $worksheet->write(0, 8,  "Manufacturer",   $headers_format);
+        $worksheet->write(0, 9,  "Hardware",       $headers_format);
+        $worksheet->write(0, 10, "Size (U)",       $headers_format);
+        $worksheet->write(0, 11, "OS",             $headers_format);
+        $worksheet->write(0, 12, "Serial",         $headers_format);
+        $worksheet->write(0, 13, "Asset",          $headers_format);
+        $worksheet->write(0, 14, "Customer",       $headers_format);
+        $worksheet->write(0, 15, "Service Level",  $headers_format);
+
+        $worksheet->set_column(0, 0, 15);
+        $worksheet->set_column(1, 1, 25);
+        $worksheet->set_column(2, 2, 16);
+        $worksheet->set_column(3, 4, 9);
+        $worksheet->set_column(5, 5, 12);
+        $worksheet->set_column(6, 6, 18);
+        $worksheet->set_column(7, 7, 14);
+        $worksheet->set_column(8, 8, 14);
+        $worksheet->set_column(9, 9, 16);
+
+        # start writing data in the first column and below the header
+        my $col = 0;
+        my $row = 1;
+
+        my $devices = $backend->deviceList;
+        for my $device (@$devices)
+        {
+            $worksheet->write($row, $col++, $device->{'name'}, $format);
+
+            if ($device->{'domain'})
+            {
+                $worksheet->write($row, $col++, $device->{'domain_name'}, $format);
+            }
+            else
+            {
+                $worksheet->write($row, $col++, '-', $format);
+            }
+
+            if ($device->{'building_meta_default_data'})
+            {
+                $worksheet->write($row, $col++, $device->{'building_name'}, $format);
+                $worksheet->write($row, $col++, '-',                        $format);
+                $worksheet->write($row, $col++, '-',                        $format);
+                $worksheet->write($row, $col++, '-',                        $format);
+                $worksheet->write($row, $col++, '-',                        $format);
+            }
+            else
+            {
+                $worksheet->write($row, $col++, 'racked',                   $format);
+                $worksheet->write($row, $col++, $device->{'rack_pos'},      $format);
+                $worksheet->write($row, $col++, $device->{'rack_name'},     $format);
+                $worksheet->write($row, $col++, $device->{'room_name'},     $format);
+                $worksheet->write($row, $col++, $device->{'building_name'}, $format);
+            }
+
+            $worksheet->write($row, $col++, $device->{'role_name'},                  $format);
+            $worksheet->write($row, $col++, $device->{'hardware_manufacturer_name'}, $format);
+            $worksheet->write($row, $col++, $device->{'hardware_name'},              $format);
+            $worksheet->write($row, $col++, $device->{'hardware_size'},              $format);
+
+            $row++;
+            $col = 0;
+        }
+
+        my ($minute, $hour, $day, $month, $year) = (gmtime)[1, 2, 3, 4, 5];
+        my $currentDate = sprintf("%04d-%02d-%02d %02d:%02d GMT", $year + 1900, $month + 1, $day, $hour, $minute);
+        $worksheet->write($row + 2, 0, "Generated by RackMonkey v$VERSION on $currentDate", $footerFormat);
+
     }
     else
     {
@@ -237,42 +297,49 @@ sub formatSpreadsheet
     my $grey = $workbook->set_custom_color(40, '#282828');
 
     # Add and define default format
-    my $format = $workbook->addformat();            # Add a format
+    my $format = $workbook->addformat();
     $format->set_font('Verdana');
     $format->set_size(10);
-    $format->set_border(1);
 
-    my $textwrap_format = $workbook->addformat();   # Add textwrap format
+    my $textwrap_format = $workbook->addformat();
     $textwrap_format->copy($format);
     $textwrap_format->set_text_wrap();
 
-    $format->set_align('center');
+    $format->set_align('left');
 
     # Add and define url format
-    my $url_format = $workbook->addformat();        # Add a format
+    my $url_format = $workbook->addformat();
     $url_format->set_font('Arial');
     $url_format->set_size(10);
-    $url_format->set_align('center');
+    $url_format->set_align('left');
     $url_format->set_underline();
-    $url_format->set_border(1);
 
     # Add and define headers format
-    my $headers_format = $workbook->addformat();    # Add a format
+    my $headers_format = $workbook->addformat();
     $headers_format->set_font('Verdana');
     $headers_format->set_size(12);
-    $headers_format->set_align('center');
+    $headers_format->set_align('left');
     $headers_format->set_bg_color($grey);
-    $headers_format->set_border(1);
     $headers_format->set_color('white');
 
     my $product_header = $workbook->addformat(
-        border   => 5,
-        valign   => 'vcenter',
-        align    => 'center',
-        font     => 'Arial',
-        size     => 15,
-        bold     => 3,
-        bg_color => 'grey',
+        'border'   => 5,
+        'valign'   => 'vcenter',
+        'align'    => 'left',
+        'font'     => 'Arial',
+        'size'     => 15,
+        'bold'     => 3,
+        'bg_color' => 'grey',
     );
-    return ($format, $headers_format, $url_format);
+
+    my $footerFormat = $workbook->addformat(
+        'valign' => 'vcenter',
+        'align'  => 'left',
+        'font'   => 'Verdana',
+        'size'   => 9,
+        'bold'   => 3,
+        'italic' => 1
+    );
+
+    return ($format, $headers_format, $footerFormat, $url_format);
 }
