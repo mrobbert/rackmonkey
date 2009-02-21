@@ -724,7 +724,7 @@ sub formatNotes
 {
 	my $note = shift;
 	my $inline = shift || 0;
-	my $note = encode_entities($note); # we don't use HTML::Template escape so have to encode here
+	$note = encode_entities($note); # we don't use HTML::Template escape so have to encode here
 	
 	unless ($inline)
 	{
