@@ -41,6 +41,7 @@ sub enlighten
     # SQLite unqiueness constraints
     elsif ($errStr =~ /columns? (.*?) (?:is|are) not unique/)
     {
+
         # hack to message to account for the fact that some racks are in the hidden rows (no row management)
         my $clash = ($1 eq 'name, row') ? 'name and row or room' : $1;
 

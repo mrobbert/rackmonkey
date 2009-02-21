@@ -103,17 +103,17 @@ eval {
         if ($view eq 'system')             # check for this view first: it doesn't use templates
         {
             print $cgi->header('text/plain');
-            my %sys = %{ $backend->{'sys'} };
+            my %sys = %{$backend->{'sys'}};
             print map "$_: $sys{$_}\n", sort keys %sys;
             exit;
         }
 
         my $templatePath = $$conf{'tmplpath'} . "/${view}_${viewType}.tmpl";
-        $template =
-          HTML::Template->new('filename' => $templatePath, 'die_on_bad_params' => 0, 'global_vars' => 1, 'case_sensitive' => 1, 'loop_context_vars' => 1);
+        $template = HTML::Template->new('filename' => $templatePath, 'die_on_bad_params' => 0, 'global_vars' => 1, 'case_sensitive' => 1, 'loop_context_vars' => 1);
 
         if (($view eq 'config') || ($view eq 'help') || ($view eq 'network') || ($view eq 'power'))
         {
+
             # do nothing - pages are static content
         }
         elsif ($view eq 'app')
@@ -200,19 +200,19 @@ eval {
                 my $filterBy = $cgi->filterBy;
 
                 my $customers = $backend->customerWithDevice;
-                unshift @$customers, { 'id' => '', name => 'All' };
+                unshift @$customers, {'id' => '', name => 'All'};
                 $template->param('customerlist' => $cgi->selectItem($customers, $$filterBy{'device.customer'}));
 
                 my $roles = $backend->roleWithDevice;
-                unshift @$roles, { 'id' => '', name => 'All' };
+                unshift @$roles, {'id' => '', name => 'All'};
                 $template->param('rolelist' => $cgi->selectItem($roles, $$filterBy{'device.role'}));
 
                 my $hardware = $backend->hardwareWithDevice;
-                unshift @$hardware, { 'id' => '', name => 'All' };
+                unshift @$hardware, {'id' => '', name => 'All'};
                 $template->param('hardwarelist' => $cgi->selectItem($hardware, $$filterBy{'device.hardware'}));
 
                 my $os = $backend->osWithDevice;
-                unshift @$os, { 'id' => '', name => 'All' };
+                unshift @$os, {'id' => '', name => 'All'};
                 $template->param('oslist' => $cgi->selectItem($os, $$filterBy{'device.os'}));
 
                 for my $d (@$devices)    # calculate age of devices
@@ -243,7 +243,7 @@ eval {
                 if (($viewType =~ /^edit/) || ($viewType =~ /^single/) || ($viewType =~ /^create/))
                 {
                     my $device = {};
-                    
+
                     if ($id)
                     {
                         $device          = $backend->device($id);
@@ -263,6 +263,7 @@ eval {
 
                     if ($viewType !~ /^single/)
                     {
+
                         # Use database value for selected if none in CGI
                         $selectedHardware = $$device{'hardware'} if (!$selectedHardware);
                         $selectedOs       = $$device{'os'}       if (!$selectedOs);
@@ -393,7 +394,7 @@ eval {
             }
             elsif ($viewType =~ /^create/)
             {
-                $template->param({ 'customer' => $cgi->customer, 'software' => $cgi->software, 'hardware' => $cgi->hardware });
+                $template->param({'customer' => $cgi->customer, 'software' => $cgi->software, 'hardware' => $cgi->hardware});
             }
         }
         elsif ($view eq 'os')

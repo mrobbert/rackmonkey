@@ -50,7 +50,7 @@ sub new
           unless (-e $databasePath);
     }
 
-    my $dbh = DBI->connect($$conf{'dbconnect'}, $$conf{'dbuser'}, $$conf{'dbpass'}, { AutoCommit => 1, RaiseError => 1, PrintError => 0, ShowErrorStatement => 1 });
+    my $dbh = DBI->connect($$conf{'dbconnect'}, $$conf{'dbuser'}, $$conf{'dbpass'}, {AutoCommit => 1, RaiseError => 1, PrintError => 0, ShowErrorStatement => 1});
 
     # Checks that the DBD driver is compatible with RackMonkey
     my $currentDriver = $$sys{'db_driver'};
@@ -77,7 +77,7 @@ sub new
         croak "RM_ENGINE: You need to use DBI version v1.43 or higher with Postgres. You are using DBI v$DBIVersion. Please consult the installation instructions.";
     }
 
-    my $self = { 'dbh' => $dbh, 'conf' => $conf, 'sys' => $sys };
+    my $self = {'dbh' => $dbh, 'conf' => $conf, 'sys' => $sys};
     bless $self, $className;
 }
 
@@ -455,7 +455,7 @@ sub updateRoom
             $sth = $self->dbh->prepare(qq!INSERT INTO room (name, building, notes, meta_update_time, meta_update_user) VALUES(?, ?, ?, ?, ?)!);
             $sth->execute($self->_validateRoomUpdate($record), $updateTime, $updateUser);
             $newId = $self->_lastInsertId('room');
-            my $hiddenRow = { 'name' => '-', room => "$newId", 'room_pos' => 0, 'hidden_row' => 1, 'notes' => '' };
+            my $hiddenRow = {'name' => '-', room => "$newId", 'room_pos' => 0, 'hidden_row' => 1, 'notes' => ''};
             $self->updateRow($updateTime, $updateUser, $hiddenRow);
             $self->dbh->commit();
         };
@@ -862,8 +862,8 @@ sub rackPhysical
             if (ref $rackLayout[$position] eq 'HASH')
             {
                 my $dev = $rackLayout[$position];
-                if (defined($seenIds{ $$dev{'id'} })
-                    and $seenIds{ $$dev{'id'} } == 1)    # if we've seen this device before put in a placeholder entry for this position
+                if (defined($seenIds{$$dev{'id'}})
+                    and $seenIds{$$dev{'id'}} == 1)    # if we've seen this device before put in a placeholder entry for this position
                 {
                     $rackLayout[$position] = {
                         'rack_pos'      => $position,
@@ -873,11 +873,11 @@ sub rackPhysical
                         'hardware_size' => 0
                     };
                 }
-                $seenIds{ $$dev{'id'} } = 1;
+                $seenIds{$$dev{'id'}} = 1;
             }
-            else                                         # an empty position
+            else                                       # an empty position
             {
-                $rackLayout[$position] = { 'rack_id' => $$rack{'id'}, 'rack_location' => $rackLayout[$position], 'id' => 0, 'name' => '', 'hardware_size' => '1', };
+                $rackLayout[$position] = {'rack_id' => $$rack{'id'}, 'rack_location' => $rackLayout[$position], 'id' => 0, 'name' => '', 'hardware_size' => '1',};
             }
             $position++;
         }
