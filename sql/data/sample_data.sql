@@ -53,7 +53,8 @@ INSERT INTO os (name, manufacturer, notes, meta_update_time, meta_update_user) V
 INSERT INTO os (name, manufacturer, notes, meta_update_time, meta_update_user) VALUES('Solaris', 					24, '', '1985-07-24 00:00:00', 'install');
 INSERT INTO os (name, manufacturer, notes, meta_update_time, meta_update_user) VALUES('SUSE Linux', 				20, '', '1985-07-24 00:00:00', 'install');
 INSERT INTO os (name, manufacturer, notes, meta_update_time, meta_update_user) VALUES('Ubuntu',		 				4, '', '1985-07-24 00:00:00', 'install');
-INSERT INTO os (name, manufacturer, notes, meta_update_time, meta_update_user) VALUES('VMware ESX Server', 			25, '', '1985-07-24 00:00:00', 'install');
+INSERT INTO os (name, manufacturer, notes, meta_update_time, meta_update_user) VALUES('ESX', 						25, '', '1985-07-24 00:00:00', 'install');
+INSERT INTO os (name, manufacturer, notes, meta_update_time, meta_update_user) VALUES('ESXi', 						25, '', '1985-07-24 00:00:00', 'install');
 INSERT INTO os (name, manufacturer, notes, meta_update_time, meta_update_user) VALUES('Windows Server', 			17, '', '1985-07-24 00:00:00', 'install');
 
 -- sample hardware

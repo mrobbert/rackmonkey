@@ -9,9 +9,6 @@
 -- All trademarks are the property of their respective owners.
 
 -- This data is designed to help test RackMonkey and provide a simple set of items for the creation of screenshots and other documentation.
--- The names rrsocial.com and coyotehost.com were not registered when this test data was created and are fictional.
--- This file should not be included in final distributions
-
 -- This data should be applied after the default and sample data
 
 -- Test Buildings (there is already one building in the sample data set)
@@ -39,14 +36,14 @@ INSERT INTO rack (name, row, row_pos, hidden_rack, size, notes, meta_update_time
 INSERT INTO rack (name, row, row_pos, hidden_rack, size, notes, meta_update_time, meta_update_user) VALUES('A4', 8, 0, 0, 20, 'Test data included with RackMonkey.', '1988-02-15 00:00:00', 'rackmonkey');
 
 -- Test Domains
-INSERT INTO domain (name, descript, notes, meta_default_data, meta_update_time, meta_update_user) VALUES('coyotehost.com', '', 'Test data included with RackMonkey.', 0, '1988-02-15 00:00:00', 'rackmonkey');
-INSERT INTO domain (name, descript, notes, meta_default_data, meta_update_time, meta_update_user) VALUES('rrsocial.com', '', 'Test data included with RackMonkey.', 0, '1988-02-15 00:00:00', 'rackmonkey');
+INSERT INTO domain (name, descript, notes, meta_default_data, meta_update_time, meta_update_user) VALUES('coyote.example.com', '', 'Test data included with RackMonkey.', 0, '1988-02-15 00:00:00', 'rackmonkey');
+INSERT INTO domain (name, descript, notes, meta_default_data, meta_update_time, meta_update_user) VALUES('roadrunner.example.com', '', 'Test data included with RackMonkey.', 0, '1988-02-15 00:00:00', 'rackmonkey');
 INSERT INTO domain (name, descript, notes, meta_default_data, meta_update_time, meta_update_user) VALUES('rackmonkey.org', '', 'Test data included with RackMonkey.', 0, '1988-02-15 00:00:00', 'rackmonkey');
 INSERT INTO domain (name, descript, notes, meta_default_data, meta_update_time, meta_update_user) VALUES('example.com', '', 'Test data included with RackMonkey.', 0, '1988-02-15 00:00:00', 'rackmonkey');
 
 -- Test Customers
-INSERT INTO org (name, account_no, customer, software, hardware, descript, home_page, notes, meta_default_data, meta_update_time, meta_update_user) VALUES('Coyote', NULL, 1, 0, 0, 'Coyote Hosting', 101, 'Test data included with RackMonkey.', 0, '1988-02-15 00:00:00', 'rackmonkey');
-INSERT INTO org (name, account_no, customer, software, hardware, descript, home_page, notes, meta_default_data, meta_update_time, meta_update_user) VALUES('Roadrunner', NULL, 1, 0, 0, 'Roadrunner Social Network', 102, 'Test data included with RackMonkey.', 0, '1988-02-15 00:00:00', 'rackmonkey');
+INSERT INTO org (name, account_no, customer, software, hardware, descript, home_page, notes, meta_default_data, meta_update_time, meta_update_user) VALUES('Coyote', NULL, 1, 0, 0, 'Wile E. Coyote', 101, 'Test data included with RackMonkey.', 0, '1988-02-15 00:00:00', 'rackmonkey');
+INSERT INTO org (name, account_no, customer, software, hardware, descript, home_page, notes, meta_default_data, meta_update_time, meta_update_user) VALUES('Road Runner', NULL, 1, 0, 0, 'Road Runner', 102, 'Test data included with RackMonkey.', 0, '1988-02-15 00:00:00', 'rackmonkey');
 
 -- Test Service Levels
 INSERT INTO service (name, descript, notes, meta_default_data, meta_update_time, meta_update_user) VALUES('Basic', 'Basic office hours support.', 'Test data included with RackMonkey.', 0, '1988-02-15 00:00:00', 'rackmonkey');
