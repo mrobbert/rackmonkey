@@ -218,6 +218,7 @@ eval
 				for my $d (@$devices) # calculate age of devices
 				{
 					$$d{'age'} = calculateAge($$d{'purchased'});
+					$$d{'notes'} = formatNotes($$d{'notes'}, 1);
 				}
 
 				$template->param('device_search' => $deviceSearch);

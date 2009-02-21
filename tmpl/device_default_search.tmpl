@@ -43,6 +43,7 @@
 				<th><a title="Sort by asset tag" href="<TMPL_VAR NAME=base_url>?view=device&amp;view_type=default_search&amp;order_by=device.asset_no&amp;device_search=<TMPL_VAR ESCAPE=URL NAME=device_search>">Asset</a></th>				
 				<th><a title="Sort by customer" href="<TMPL_VAR NAME=base_url>?view=device&amp;view_type=default_search&amp;order_by=customer.name&amp;device_search=<TMPL_VAR ESCAPE=URL NAME=device_search>">Customer</a></th>
 				<th style="text-align: right"><a title="Sort by age" href="<TMPL_VAR NAME=base_url>?view=device&amp;view_type=default_search&amp;order_by=device.purchased&amp;device_search=<TMPL_VAR ESCAPE=URL NAME=device_search>">Age</a></th>		
+				<th><a title="Sort by notes" href="<TMPL_VAR NAME=base_url>?view=device&amp;view_type=default_search&amp;order_by=device.notes&amp;device_search=<TMPL_VAR ESCAPE=URL NAME=device_search>">Notes</a></th>		
 			</tr>
 			<TMPL_IF NAME=devices><TMPL_LOOP NAME=devices>
 			<TMPL_IF NAME="__odd__"><tr class="odd"><TMPL_ELSE><tr class="even"></TMPL_IF>
@@ -58,10 +59,11 @@
 				<td><TMPL_IF NAME=asset_no><TMPL_VAR ESCAPE=HTML NAME=asset_no><TMPL_ELSE>-</TMPL_IF></td>				
 				<td><TMPL_VAR ESCAPE=HTML NAME=customer_name></td>
 				<td style="text-align: right"><TMPL_IF NAME=age><TMPL_VAR ESCAPE=HTML NAME=age><TMPL_ELSE>-</TMPL_IF></td>
+				<td><TMPL_IF NAME=notes_short><span title="<TMPL_VAR NAME=notes>"><TMPL_VAR NAME=notes_short></span><TMPL_ELSE><TMPL_IF NAME=notes><TMPL_VAR NAME=notes><TMPL_ELSE>-</TMPL_IF></TMPL_IF></td>	
 			</tr>
 			</TMPL_LOOP></TMPL_IF>
 			<tr>
-				<td colspan="12" class="footer">
+				<td colspan="13" class="footer">
 					<TMPL_UNLESS NAME=all_devices_listed><div style="float: right"><a href="<TMPL_VAR NAME=base_url>?view=device&amp;view_type=default">Show all</a></div></TMPL_UNLESS>
 					Showing <TMPL_VAR ESCAPE=HTML NAME=listed_device_count> of <TMPL_VAR ESCAPE=HTML NAME=total_device_count> devices
 				</td>
