@@ -72,12 +72,13 @@ eval
 		{
 			my $rack = $backend->rack($rackId);
 			$$rack{'rack_layout'} = $backend->rackPhysical($rackId, $cgi->id('device'));
- 			push @racks, $rack; }
+ 			push @racks, $rack; 
+		}
 
 		print "Content-type: application/vnd.ms-excel\n";
 		print "Content-Disposition: attachment; filename=rack.xls\n\n";
 
-		# Create a new Excel workbook
+		# Create a new workbook
 		my $workbook = Spreadsheet::WriteExcel->new("-");
 
 		# Add a worksheet and set formats
@@ -194,12 +195,31 @@ eval
 	}
 	elsif (($view eq 'device') && ($viewType =~ /^xls_export/))
 	{
-		# we don't yet support exporting the device table
-		die "RM2XLS: Not yet supported. Error at"
+		print "Content-type: application/vnd.ms-excel\n";
+		print "Content-Disposition: attachment; filename=devicelist.xls\n\n";
+		
+		# Create a new workbook
+		my $workbook = Spreadsheet::WriteExcel->new("-");
+
+		# Add a worksheet and set formats
+		my $worksheet = $workbook->addworksheet();
+		my ($format, $headers_format, $url_format) = formatSpreadsheet($workbook);
+
+		$worksheet->write(0, 0, "Device", $headers_format);
+		$worksheet->write(0, 1, "Rack", $headers_format);
+		$worksheet->write(0, 2, "Room", $headers_format);
+		$worksheet->write(0, 3, "Role", $headers_format);
+		$worksheet->write(0, 4, "Hardware", $headers_format);
+		$worksheet->write(0, 5, "Size (U)", $headers_format);
+		$worksheet->write(0, 6, "OS", $headers_format);
+		$worksheet->write(0, 7, "Serial", $headers_format);
+		$worksheet->write(0, 8, "Asset", $headers_format);
+		$worksheet->write(0, 9, "Customer", $headers_format);
+		$worksheet->write(0, 10, "SLA", $headers_format);
 	}
 	else
 	{
-		die "RM2XLS: Not a valid view for rack2xls. Error at"
+		die "RM2XLS: Not a valid view for rack2xls."
 	}
 };
 if ($@)
