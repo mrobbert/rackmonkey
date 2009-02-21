@@ -78,9 +78,9 @@
 				<th><a title="Sort by notes" href="<TMPL_VAR NAME=base_url>?view=device&amp;view_type=default_unracked&amp;order_by=device.notes">Notes</a></th>		
 			</tr><TMPL_IF NAME=devices><TMPL_LOOP NAME=devices>
 			<TMPL_IF NAME="__odd__"><tr class="odd"><TMPL_ELSE><tr class="even"></TMPL_IF>
-				<td class="item_name"><a title="View details for this device" href="<TMPL_VAR NAME=base_url>?view=device&amp;view_type=single&amp;id=<TMPL_VAR ESCAPE=URL NAME=id>"><TMPL_VAR ESCAPE=HTML NAME=name><span class='domainSpan'><TMPL_UNLESS NAME=domain_meta_default_data>.<TMPL_VAR ESCAPE=HTML NAME=domain_name></TMPL_UNLESS></span></a></td>
-				<td class="item_edit"><a title="Edit device '<TMPL_VAR ESCAPE=HTML NAME=name>'" href="<TMPL_VAR NAME=base_url>?view=device&amp;view_type=edit&amp;id=<TMPL_VAR ESCAPE=URL NAME=id>"><img style="float: left; border: none" src="<TMPL_VAR NAME=web_root>/graphics/icons/pencil.png" width="14" height="14" alt=""/></a></td>
-				<td class="item_delete"><a onclick="return confirmDel('<TMPL_VAR ESCAPE=HTML NAME=name>')" title="Delete device '<TMPL_VAR ESCAPE=HTML NAME=name>'" href="<TMPL_VAR NAME=base_url>?view=device&amp;view_type=default_unracked&amp;act=delete&amp;act_on=device&amp;act_id=<TMPL_VAR ESCAPE=URL NAME=id>"><img style="float: left; border: none" src="<TMPL_VAR NAME=web_root>/graphics/icons/delete.png" width="14" height="14" alt=""/></a></td>						
+				<td class="item_name" <TMPL_UNLESS in_service>style="background: #FBB"</TMPL_UNLESS>><a title="View details for this device" href="<TMPL_VAR NAME=base_url>?view=device&amp;view_type=single&amp;id=<TMPL_VAR ESCAPE=URL NAME=id>"><TMPL_VAR ESCAPE=HTML NAME=name><span class='domainSpan'><TMPL_UNLESS NAME=domain_meta_default_data>.<TMPL_VAR ESCAPE=HTML NAME=domain_name></TMPL_UNLESS></span></a></td>
+				<td class="item_edit" <TMPL_UNLESS in_service>style="background: #FBB"</TMPL_UNLESS>><a title="Edit device '<TMPL_VAR ESCAPE=HTML NAME=name>'" href="<TMPL_VAR NAME=base_url>?view=device&amp;view_type=edit&amp;id=<TMPL_VAR ESCAPE=URL NAME=id>"><img style="float: left; border: none" src="<TMPL_VAR NAME=web_root>/graphics/icons/pencil.png" width="14" height="14" alt=""/></a></td>
+				<td class="item_delete" <TMPL_UNLESS in_service>style="background: #FBB"</TMPL_UNLESS>><a onclick="return confirmDel('<TMPL_VAR ESCAPE=HTML NAME=name>')" title="Delete device '<TMPL_VAR ESCAPE=HTML NAME=name>'" href="<TMPL_VAR NAME=base_url>?view=device&amp;view_type=default_unracked&amp;act=delete&amp;act_on=device&amp;act_id=<TMPL_VAR ESCAPE=URL NAME=id>"><img style="float: left; border: none" src="<TMPL_VAR NAME=web_root>/graphics/icons/delete.png" width="14" height="14" alt=""/></a></td>						
 				<td><TMPL_VAR ESCAPE=HTML NAME=rack_name></td>
 				<td><TMPL_VAR ESCAPE=HTML NAME=role_name></td>
 				<td><TMPL_UNLESS NAME=hardware_meta_default_data><TMPL_UNLESS NAME=hardware_manufacturer_meta_default_data><TMPL_VAR ESCAPE=HTML NAME=hardware_manufacturer_name> </TMPL_UNLESS></TMPL_UNLESS><TMPL_VAR ESCAPE=HTML NAME=hardware_name></td>
@@ -94,7 +94,7 @@
 			<tr>
 				<td colspan="11" class="footer">
 					<TMPL_UNLESS NAME=all_devices_listed><div style="float: right"><a href="<TMPL_VAR NAME=base_url>?view=device&amp;view_type=default">Show all</a></div></TMPL_UNLESS>
-					Showing <TMPL_VAR ESCAPE=HTML NAME=listed_device_count> of <TMPL_VAR ESCAPE=HTML NAME=total_device_count> devices
+					Showing <TMPL_VAR ESCAPE=HTML NAME=listed_device_count> of <TMPL_VAR ESCAPE=HTML NAME=total_device_count> devices. <em>Devices with a pink background aren't in service.</em>
 				</td>
 			</tr>
 		</table>
