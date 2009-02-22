@@ -99,6 +99,12 @@ sub actOn
     $self->cgi->param('act_on');
 }
 
+sub queryOn
+{
+    my $self = shift;
+    $self->cgi->param('query_on');
+}
+
 sub orderBy
 {
     my $self = shift;

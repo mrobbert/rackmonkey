@@ -18,6 +18,7 @@ wwwpath =
 
 # Plugins - to enable a plugin set its value to 1
 plugin_xls = 0
+plugin_dns = 0
 
 # Preference Constants
 defaultview = rack      # View loaded when none is specified

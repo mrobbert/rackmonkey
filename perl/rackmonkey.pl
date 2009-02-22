@@ -664,6 +664,15 @@ eval {
         $rack2XLSURL =~ s/\/(.*?)\.pl/rack2xls.pl/;
         $template->param('rack2xls_url' => $rack2XLSURL);
     }
+    
+    # DNS Plugin
+    my $rackDNSURL = '';
+    if ($$conf{'plugin_dns'})
+    {
+        $rackDNSURL = $baseURL;
+        $rackDNSURL =~ s/\/(.*?)\.pl/rackdns.pl/;
+        $template->param('rackdns_url' => $rackDNSURL);
+    }
 
     $template->param('base_url' => $baseURL);
     $template->param('web_root' => $$conf{'wwwpath'});
