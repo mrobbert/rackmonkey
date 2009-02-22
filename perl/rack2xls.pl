@@ -221,19 +221,20 @@ eval {
         $worksheet->write(0, 16, "Service Level", $headers_format);
         $worksheet->write(0, 17, "Notes",         $headers_format);
 
-        $worksheet->set_column(0,  0,  15);
-        $worksheet->set_column(1,  1,  25);
-        $worksheet->set_column(2,  2,  11);
+        $worksheet->set_column(0,  0,  18);
+        $worksheet->set_column(1,  1,  30);
+        $worksheet->set_column(2,  2,  12);
         $worksheet->set_column(3,  3,  16);
         $worksheet->set_column(4,  5,  9);
         $worksheet->set_column(6,  6,  12);
-        $worksheet->set_column(7,  7,  18);
-        $worksheet->set_column(8,  8,  14);
-        $worksheet->set_column(9,  9,  14);
-        $worksheet->set_column(10, 10, 16);
+        $worksheet->set_column(7,  7,  20);
+        $worksheet->set_column(8,  8,  18);
+        $worksheet->set_column(9,  9,  16);
+        $worksheet->set_column(10, 10, 20);
         $worksheet->set_column(11, 11, 12);
-        $worksheet->set_column(12, 14, 14);
-        $worksheet->set_column(15, 16, 16);
+        $worksheet->set_column(12, 14, 16);
+        $worksheet->set_column(15, 15, 20);
+        $worksheet->set_column(16, 16, 22);
         $worksheet->set_column(17, 17, 50);
 
         # start writing data in the first column and below the header
@@ -339,8 +340,8 @@ sub formatSpreadsheet
 
     # Add and define default format
     my $format = $workbook->addformat(
-        'font'       => 'Verdana',
-        'size'       => 10
+        'font' => 'Verdana',
+        'size' => 10
     );
 
     my $textwrap_format = $workbook->addformat();
