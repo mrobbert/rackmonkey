@@ -16,7 +16,7 @@ dbpass =
 tmplpath =
 wwwpath =
 
-# Plugins - to enable a plugin uncomment the appropriate line
+# Plugins - to enable/disable a plugin (un)comment the appropriate line
 plugin_xls = rack2xls.pl
 plugin_dns = rackdns.pl
 

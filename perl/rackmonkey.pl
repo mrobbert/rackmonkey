@@ -174,6 +174,7 @@ eval {
                 for my $b (@$buildings)
                 {
                     $$b{'notes'} = formatNotes($$b{'notes'}, 1);
+                    $$b{'notes_short'} = shortStr($$b{'notes'});
                 }
                 my $totalBuildingCount  = $backend->itemCount('building');
                 my $listedBuildingCount = @$buildings;
@@ -230,6 +231,7 @@ eval {
                 {
                     $$d{'age'} = calculateAge($$d{'purchased'});
                     $$d{'notes'} = formatNotes($$d{'notes'}, 1);
+                    $$d{'notes_short'} = shortStr($$d{'notes'});
                 }
 
                 $template->param('device_search' => $deviceSearch);
@@ -318,6 +320,7 @@ eval {
                 for my $d (@$domains)
                 {
                     $$d{'notes'} = formatNotes($$d{'notes'}, 1);
+                    $$d{'notes_short'} = shortStr($$d{'notes'});
                     $$d{'descript_short'} = shortStr($$d{'descript'});
                 }
                 my $totalDomainCount  = $backend->itemCount('domain');
@@ -345,6 +348,7 @@ eval {
                 for my $h (@$hardware)
                 {
                     $$h{'notes'} = formatNotes($$h{'notes'}, 1);
+                    $$h{'notes_short'} = shortStr($$h{'notes'});
                 }
                 my $totalHardwareCount  = $backend->itemCount('hardware');
                 my $listedHardwareCount = @$hardware;
@@ -391,6 +395,7 @@ eval {
                 for my $o (@$orgs)
                 {
                     $$o{'notes'} = formatNotes($$o{'notes'}, 1);
+                    $$o{'notes_short'} = shortStr($$o{'notes'});
                     $$o{'descript_short'} = shortStr($$o{'descript'});
                 }
                 $template->param('orgs' => $orgs);
@@ -417,6 +422,7 @@ eval {
                 for my $o (@$os)
                 {
                     $$o{'notes'} = formatNotes($$o{'notes'}, 1);
+                    $$o{'notes_short'} = shortStr($$o{'notes'});
                 }
                 my $totalOSCount  = $backend->itemCount('os');
                 my $listedOSCount = @$os;
@@ -454,6 +460,7 @@ eval {
                 for my $r (@$racks)
                 {
                     $$r{'notes'} = formatNotes($$r{'notes'}, 1);
+                    $$r{'notes_short'} = shortStr($$r{'notes'});
                 }
                 my $totalRackCount  = $backend->itemCount('rack');
                 my $listedRackCount = @$racks;
@@ -543,6 +550,7 @@ eval {
                 for my $r (@$roles)
                 {
                     $$r{'notes'} = formatNotes($$r{'notes'}, 1);
+                    $$r{'notes_short'} = shortStr($$r{'notes'});    
                     $$r{'descript_short'} = shortStr($$r{'descript'});
                 }
                 $template->param('roles' => $roles);
@@ -565,6 +573,7 @@ eval {
                 for my $r (@$rooms)
                 {
                     $$r{'notes'} = formatNotes($$r{'notes'}, 1);
+                    $$r{'notes_short'} = shortStr($$r{'notes'});
                 }
                 my $totalRoomCount  = $backend->itemCount('room');
                 my $listedRoomCount = @$rooms;
@@ -619,6 +628,7 @@ eval {
                 for my $s (@$serviceLevels)
                 {
                     $$s{'notes'} = formatNotes($$s{'notes'}, 1);
+                    $$s{'notes_short'} = shortStr($$s{'notes'});
                     $$s{'descript_short'} = shortStr($$s{'descript'});
                 }
                 $template->param('services' => $serviceLevels);
