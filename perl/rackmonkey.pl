@@ -277,10 +277,11 @@ eval {
                     # clear values unique to a device if we're copying an existing device
                     if ($viewType =~ /^create/)
                     {
-                        $$device{'name'}      = '';
-                        $$device{'rack_pos'}  = '';
-                        $$device{'asset_no'}  = '';
-                        $$device{'serial_no'} = '';
+                        $$device{'name'}       = '';
+                        $$device{'rack_pos'}   = '';
+                        $$device{'asset_no'}   = '';
+                        $$device{'serial_no'}  = '';
+                        $$device{'in_service'} = 1;    # default is in service
                     }
 
                     $template->param($device);
