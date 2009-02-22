@@ -32,6 +32,8 @@ use DBI;
 use Time::Local;
 use Spreadsheet::WriteExcel;
 
+use Data::Dumper;
+
 use RackMonkey::CGI;
 use RackMonkey::Engine;
 use RackMonkey::Error;
@@ -200,32 +202,39 @@ eval {
         my ($format, $headers_format, $footerFormat, $url_format) = formatSpreadsheet($workbook);
 
         # create the headers and set the column widths
-        $worksheet->write(0, 0,  "Device",         $headers_format);
-        $worksheet->write(0, 1,  "Domain",         $headers_format);
-        $worksheet->write(0, 2,  "Racking Status", $headers_format);
-        $worksheet->write(0, 3,  "Position",       $headers_format);
-        $worksheet->write(0, 4,  "Rack",           $headers_format);
-        $worksheet->write(0, 5,  "Room",           $headers_format);
-        $worksheet->write(0, 6,  "Building",       $headers_format);
-        $worksheet->write(0, 7,  "Role",           $headers_format);
-        $worksheet->write(0, 8,  "Manufacturer",   $headers_format);
-        $worksheet->write(0, 9,  "Hardware",       $headers_format);
-        $worksheet->write(0, 10, "Size (U)",       $headers_format);
-        $worksheet->write(0, 11, "OS",             $headers_format);
-        $worksheet->write(0, 12, "Serial",         $headers_format);
-        $worksheet->write(0, 13, "Asset",          $headers_format);
-        $worksheet->write(0, 14, "Customer",       $headers_format);
-        $worksheet->write(0, 15, "Service Level",  $headers_format);
+        $worksheet->write(0, 0,  "Device",        $headers_format);
+        $worksheet->write(0, 1,  "Domain",        $headers_format);
+        $worksheet->write(0, 2,  "In Service",    $headers_format);
+        $worksheet->write(0, 3,  "Status",        $headers_format);
+        $worksheet->write(0, 4,  "Position",      $headers_format);
+        $worksheet->write(0, 5,  "Rack",          $headers_format);
+        $worksheet->write(0, 6,  "Room",          $headers_format);
+        $worksheet->write(0, 7,  "Building",      $headers_format);
+        $worksheet->write(0, 8,  "Role",          $headers_format);
+        $worksheet->write(0, 9,  "Manufacturer",  $headers_format);
+        $worksheet->write(0, 10, "Hardware",      $headers_format);
+        $worksheet->write(0, 11, "Size (U)",      $headers_format);
+        $worksheet->write(0, 12, "OS",            $headers_format);
+        $worksheet->write(0, 13, "Serial",        $headers_format);
+        $worksheet->write(0, 14, "Asset",         $headers_format);
+        $worksheet->write(0, 15, "Customer",      $headers_format);
+        $worksheet->write(0, 16, "Service Level", $headers_format);
+        $worksheet->write(0, 17, "Notes",         $headers_format);
 
-        $worksheet->set_column(0, 0, 15);
-        $worksheet->set_column(1, 1, 25);
-        $worksheet->set_column(2, 2, 16);
-        $worksheet->set_column(3, 4, 9);
-        $worksheet->set_column(5, 5, 12);
-        $worksheet->set_column(6, 6, 18);
-        $worksheet->set_column(7, 7, 14);
-        $worksheet->set_column(8, 8, 14);
-        $worksheet->set_column(9, 9, 16);
+        $worksheet->set_column(0,  0,  15);
+        $worksheet->set_column(1,  1,  25);
+        $worksheet->set_column(2,  2,  11);
+        $worksheet->set_column(3,  3,  16);
+        $worksheet->set_column(4,  5,  9);
+        $worksheet->set_column(6,  6,  12);
+        $worksheet->set_column(7,  7,  18);
+        $worksheet->set_column(8,  8,  14);
+        $worksheet->set_column(9,  9,  14);
+        $worksheet->set_column(10, 10, 16);
+        $worksheet->set_column(11, 11, 12);
+        $worksheet->set_column(12, 14, 14);
+        $worksheet->set_column(15, 16, 16);
+        $worksheet->set_column(17, 17, 50);
 
         # start writing data in the first column and below the header
         my $col = 0;
@@ -243,6 +252,15 @@ eval {
             else
             {
                 $worksheet->write($row, $col++, '-', $format);
+            }
+
+            if ($device->{'in_service'})
+            {
+                $worksheet->write($row, $col++, 'Yes', $format);
+            }
+            else
+            {
+                $worksheet->write($row, $col++, 'No', $format);
             }
 
             if ($device->{'building_meta_default_data'})
@@ -266,6 +284,29 @@ eval {
             $worksheet->write($row, $col++, $device->{'hardware_manufacturer_name'}, $format);
             $worksheet->write($row, $col++, $device->{'hardware_name'},              $format);
             $worksheet->write($row, $col++, $device->{'hardware_size'},              $format);
+            $worksheet->write($row, $col++, $device->{'os_name'},                    $format);
+
+            if ($device->{'serial_no'})
+            {
+                $worksheet->write($row, $col++, $device->{'serial_no'}, $format);
+            }
+            else
+            {
+                $worksheet->write($row, $col++, '-', $format);
+            }
+
+            if ($device->{'asset_no'})
+            {
+                $worksheet->write($row, $col++, $device->{'asset_no'}, $format);
+            }
+            else
+            {
+                $worksheet->write($row, $col++, '-', $format);
+            }
+
+            $worksheet->write($row, $col++, $device->{'customer_name'},      $format);
+            $worksheet->write($row, $col++, $device->{'service_name'},       $format);
+            $worksheet->write($row, $col++, formatNotes($device->{'notes'}), $format);
 
             $row++;
             $col = 0;
@@ -297,9 +338,10 @@ sub formatSpreadsheet
     my $grey = $workbook->set_custom_color(40, '#282828');
 
     # Add and define default format
-    my $format = $workbook->addformat();
-    $format->set_font('Verdana');
-    $format->set_size(10);
+    my $format = $workbook->addformat(
+        'font'       => 'Verdana',
+        'size'       => 10
+    );
 
     my $textwrap_format = $workbook->addformat();
     $textwrap_format->copy($format);
@@ -342,4 +384,15 @@ sub formatSpreadsheet
     );
 
     return ($format, $headers_format, $footerFormat, $url_format);
+}
+
+# We can't have multiple formats in once cell so we have to strip formatting from notes
+sub formatNotes
+{
+    my $note = shift;
+
+    $note =~ s/\[(.*?)\|(.*?)\]/$2 ($1)/sg;    # format URLs
+    $note =~ s/\*\*\*(.*?)\*\*\*/$1/sg;        # strip strong using ***
+    $note =~ s/\*\*(.*?)\*\*/$1/sg;            # strip emphasis using **
+    return $note;
 }
