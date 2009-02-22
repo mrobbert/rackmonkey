@@ -151,8 +151,19 @@ eval {
             {
                 my $app = $backend->app($id);
                 $template->param($app);
-                my $devices = $backend->appDevicesUsedList($id);
-                $template->param('devices' => $devices);
+                
+                my $deviceUsed = @{$backend->appDevicesUsedList($id)}[0]; # we only support one device at present
+                my $selectedDevice = $cgi->lastCreatedId || $cgi->id('device');
+                $selectedDevice = $$deviceUsed{'device_id'} if (!$selectedDevice);
+                my $devices = $backend->listBasic('device');
+                unshift @$devices, {'id' => '', 'name' => '-'};
+                $template->param('devices' => $cgi->selectItem($devices, $selectedDevice));
+                
+                my $selectedRelation = $cgi->lastCreatedId || $cgi->id('relation');
+                $selectedRelation = $$deviceUsed{'app_relation_id'} if (!$selectedRelation);
+                my $relations = $backend->listBasic('app_relation', 1);
+                unshift @$relations, {'id' => '', 'name' => '-'};
+                $template->param('relations' => $cgi->selectItem($relations, $selectedRelation));
             }
         }
         elsif ($view eq 'building')
@@ -574,8 +585,7 @@ eval {
                         $$room{'notes'} = formatNotes($$room{'notes'});
                     }
                     $$room{'row_count'} = $backend->rowCountInRoom($id);
-                    $selectedBuilding = $$room{'building'}
-                      if (!$selectedBuilding);    # Use database value for selected if none in CGI - not actually needed in single view
+                    $selectedBuilding = $$room{'building'} if (!$selectedBuilding);    # Use database value for selected if none in CGI - not actually needed in single view
                     if ($viewType =~ /^single/)
                     {
                         $$room{'racks'} = $backend->rackListInRoom($id);    # fix method then use
@@ -585,7 +595,7 @@ eval {
 
                 if (($viewType =~ /^edit/) || ($viewType =~ /^create/))
                 {
-                    $template->param('buildinglist' => $cgi->selectItem($backend->listBasic('building'), $selectedBuilding));
+                    $template->param('buildinglist' => 11);
                 }
             }
         }

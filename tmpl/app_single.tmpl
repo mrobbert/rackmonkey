@@ -48,7 +48,7 @@
 							<TMPL_IF NAME=app_devices>
 							<ul style="margin-top: 0px; padding-left: 1.5em">
 								<TMPL_LOOP NAME=app_devices>
-								<li><TMPL_VAR ESCAPE=HTML NAME=app_relation_name> <TMPL_VAR ESCAPE=HTML NAME=device_name><TMPL_UNLESS NAME=domain_meta_default_data>.<TMPL_VAR ESCAPE=HTML NAME=domain_name></TMPL_UNLESS> <a class="small" title="View details for this device" href="<TMPL_VAR NAME=base_url>?view=device&amp;view_type=single&amp;id=<TMPL_VAR ESCAPE=URL NAME=device_id>">Details&hellip;</a></li>
+								<li><TMPL_VAR ESCAPE=HTML NAME=name> <TMPL_VAR ESCAPE=HTML NAME=app_relation_name> <a title="View details for this device" href="<TMPL_VAR NAME=base_url>?view=device&amp;view_type=single&amp;id=<TMPL_VAR ESCAPE=URL NAME=device_id>"><TMPL_VAR ESCAPE=HTML NAME=device_name><TMPL_UNLESS NAME=domain_meta_default_data>.<TMPL_VAR ESCAPE=HTML NAME=domain_name></TMPL_UNLESS></a></li>
 								</TMPL_LOOP>
 							</ul>
 							<TMPL_ELSE>This app does not use any devices.

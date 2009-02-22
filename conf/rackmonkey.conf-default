@@ -16,9 +16,9 @@ dbpass =
 tmplpath =
 wwwpath =
 
-# Plugins - to enable a plugin set its value to 1
-plugin_xls = 0
-plugin_dns = 0
+# Plugins - to enable a plugin uncomment the appropriate line
+plugin_xls = rack2xls.pl
+plugin_dns = rackdns.pl
 
 # Preference Constants
 defaultview = rack      # View loaded when none is specified

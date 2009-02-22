@@ -113,20 +113,40 @@ sub entryBasic
 
 sub listBasic
 {
-    my ($self, $table) = @_;
+    my ($self, $table, $all) = @_;
+    $all ||= 0;
     croak "RM_ENGINE: Not a valid table." unless $table =~ /^[a-z_]+$/;
-    my $sth = $self->dbh->prepare_cached(
-        qq!
-		SELECT 
-			id, 
-			name,
-			meta_default_data 
-		FROM $table 
-		WHERE meta_default_data = 0
-		ORDER BY 
-			name
-	!
-    );
+    my $sth;
+
+    unless ($all)
+    {
+        $sth = $self->dbh->prepare_cached(
+            qq!
+    		SELECT 
+    			id, 
+    			name,
+    			meta_default_data 
+    		FROM $table 
+    		WHERE meta_default_data = 0
+    		ORDER BY 
+    			name
+    	!
+        );
+    }
+    else
+    {
+        $sth = $self->dbh->prepare_cached(
+            qq!
+    		SELECT 
+    			id, 
+    			name
+    		FROM $table 
+    		ORDER BY 
+    			name
+    	!
+        );
+    }
+
     $sth->execute;
     return $sth->fetchall_arrayref({});
 }
@@ -1820,7 +1840,7 @@ sub _validateDeviceInput
 
     # If role is 'none' (id=2) then always set in service to false - this is a magic number, should find way to remove this
     $$record{'in_service'} = 0 if ($$record{'role'} == 2);
-    
+
     # If location is meta_default then also set in service to false - this is a magic number, should find way to remove this
     $$record{'in_service'} = 0 if ($$record{'rack'} <= 5);
 
@@ -2147,6 +2167,7 @@ sub appDevicesUsedList
 			device.id			AS device_id,
 		 	device.name			AS device_name, 
 			app.name			AS app_name,
+			app_relation.id 	AS app_relation_id,
 			app_relation.name 	AS app_relation_name,
 			domain.name			AS domain_name,
 			domain.meta_default_data	AS domain_meta_default_data
