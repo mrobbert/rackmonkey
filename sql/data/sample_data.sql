@@ -24,7 +24,7 @@ INSERT INTO org (name, account_no, customer, software, hardware, descript, home_
 INSERT INTO org (name, account_no, customer, software, hardware, descript, home_page, notes, meta_update_time, meta_update_user) VALUES('Lantronix', 	NULL, 0, 0, 1, 'Lantronix', 'http://www.lantronix.com', '', '1985-07-24 00:00:00', 'install');
 INSERT INTO org (name, account_no, customer, software, hardware, descript, home_page, notes, meta_update_time, meta_update_user) VALUES('Lenovo', 		NULL, 0, 0, 1, 'Lenovo', 'http://www.lenovo.com', '', '1985-07-24 00:00:00', 'install');
 INSERT INTO org (name, account_no, customer, software, hardware, descript, home_page, notes, meta_update_time, meta_update_user) VALUES('Microsoft', 	NULL, 0, 1, 0, 'Microsoft', 'http://www.microsoft.com', '', '1985-07-24 00:00:00', 'install');
-INSERT INTO org (name, account_no, customer, software, hardware, descript, home_page, notes, meta_update_time, meta_update_user) VALUES('NetApp', 		NULL, 0, 0, 1, 'Network Appliance', 'http://www.netapp.com', '', '1985-07-24 00:00:00', 'install');
+INSERT INTO org (name, account_no, customer, software, hardware, descript, home_page, notes, meta_update_time, meta_update_user) VALUES('NetApp', 		NULL, 0, 0, 1, 'NetApp', 'http://www.netapp.com', '', '1985-07-24 00:00:00', 'install');
 INSERT INTO org (name, account_no, customer, software, hardware, descript, home_page, notes, meta_update_time, meta_update_user) VALUES('NetBSD', 		NULL, 0, 1, 0, 'NetBSD Foundation', 'http://www.netbsd.org', '', '1985-07-24 00:00:00', 'install');
 INSERT INTO org (name, account_no, customer, software, hardware, descript, home_page, notes, meta_update_time, meta_update_user) VALUES('Novell', 		NULL, 0, 1, 0, 'Novell', 'http://www.novell.com', '', '1985-07-24 00:00:00', 'install');
 INSERT INTO org (name, account_no, customer, software, hardware, descript, home_page, notes, meta_update_time, meta_update_user) VALUES('OpenBSD', 		NULL, 0, 1, 0, 'OpenBSD Project', 'http://www.openbsd.org', '', '1985-07-24 00:00:00', 'install');
@@ -37,6 +37,7 @@ INSERT INTO org (name, account_no, customer, software, hardware, descript, home_
 -- sample operating systems
 INSERT INTO os (name, manufacturer, notes, meta_update_time, meta_update_user) VALUES('AIX', 						13, '', '1985-07-24 00:00:00', 'install');
 INSERT INTO os (name, manufacturer, notes, meta_update_time, meta_update_user) VALUES('CentOS', 					5, '', '1985-07-24 00:00:00', 'install');
+INSERT INTO os (name, manufacturer, notes, meta_update_time, meta_update_user) VALUES('Data ONTAP', 				18, '', '1985-07-24 00:00:00', 'install');
 INSERT INTO os (name, manufacturer, notes, meta_update_time, meta_update_user) VALUES('Debian', 					7, '', '1985-07-24 00:00:00', 'install');
 INSERT INTO os (name, manufacturer, notes, meta_update_time, meta_update_user) VALUES('Fedora Core', 				22, '', '1985-07-24 00:00:00', 'install');
 INSERT INTO os (name, manufacturer, notes, meta_update_time, meta_update_user) VALUES('FreeBSD', 					10, '', '1985-07-24 00:00:00', 'install');
