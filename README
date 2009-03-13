@@ -2,13 +2,17 @@
 # RackMonkey - Know Your Racks - http://www.rackmonkey.org                   #
 # Version 1.2.%BUILD%                                                        #
 # (C)2004-2009 Will Green (wgreen at users.sourceforge.net)                  #
-# README for RackMonkey v1.2.5                                               #
+# README for RackMonkey v1.2.5 (Preview 1)                                   #
 ##############################################################################
 
 You can read the latest version of this document in HTML format at:
 http://www.rackmonkey.org/doc/1.2.5
 
-The README for v1.2.5 is still being written.
+WARNING: This is a preview release that has undergone limited testing. The
+author does not recommend using this release for production usage.
+The RackMonkey documentation is still being updated and you should expect to
+find omissions and inaccuracies in it.
+
 
 Contents
 ========
@@ -20,27 +24,45 @@ Contents
 6. Support
 7. Acknowledgements
 8. Legal Notices
+9. RackMonkey Licence
 
 
 1. Introduction
 ===============
 RackMonkey is a web-based tool for managing racks of equipment such as web
 servers, video encoders, routers and storage devices. Using a simple interface 
-you can keep track of what's where, which OS it runs, when it was purchased,
-who it belongs and what it's used for.
+you can keep track of what's where, which OS it runs, when it was purchased, 
+who it belongs and what it's used for. No more searching for spreadsheets or 
+scribbled notes when you need to find a server: RackMonkey can quickly find 
+any device and draw a rack diagram of its location. RackMonkey is free and 
+open source (licensed under GPL).
 
-Thank you for choosing to try RackMonkey v1.2.5, I hope you find it useful in
-bringing (and keeping) order in your data centres.
+This is a preview release of v1.2.5. For production usage you should use the
+latest stable release from: http://www.rackmonkey.org
+
+There isn't yet a documented procedure for moving to v1.2.5 from v1.2.4, the
+next preview will include upgrade instructions.
 
 
 2. New in this Release
 ======================
-v1.2.5 has a number of improvements over v1.2.4. These include:
+v1.2.5 Preview 1 has a number of improvements over v1.2.4. These include:
 
-* Add here...
+* Many UI Improvements
+* Excel spreadsheet export
+* Print CSS for much better quality printouts
+* Official MySQL support
+* Numbering racks from the top as well as bottom
+* Basic support for associating apps with devices
+* Basic formatting of notes fields
+* Operating system licences
+* Device deletion in table and physical rack views
+* Experimental DNS plugin
 
 For a more detailed list of changes in this and prior releases
 see doc/changes.txt.
+
+Final v1.2.5 features are subject to change.
 
 
 3. Obtaining RackMonkey
@@ -51,11 +73,11 @@ current release from http://www.rackmonkey.org.
 
 4. Installation
 ===============
-For installation instructions please see:
+For installation of a new instance see: doc/install-generic.txt.
 
-* New installs: doc/install-generic.txt.
-* Upgrade from v1.2.4: doc/upgrade.txt
-* Upgrade from other releases: doc/upgrade-older.txt
+Upgrades are not documented in this release. There are several database schema 
+changes in this release, so upgrading isn't trivial. The next preview will 
+include instructions for upgrades.
 
 
 5. Documentation
@@ -96,7 +118,7 @@ Code Contributors
 I would like to thank the following for their contribution of code to the
 RackMonkey project:
 
-    * Pierre Larsson - XLS Export Plugin (rack2xls.pl)
+    * Pierre Larsson - Excel Export functionality
     
     
 People
@@ -124,8 +146,8 @@ development:
         Original RackMonkey database engine.
 
     
-Legal Notices
-=============
+8. Legal Notices
+================
 RackMonkey (C)2004-2009 Will Green. RackMonkey is a trademark of Will Green.
 
 The inclusion of a particular company or product in RackMonkey data does
@@ -135,8 +157,8 @@ RackMonkey includes icons licensed from Mark James under the Creative Commons
 Attribution 2.5 License. See http://www.famfamfam.com/lab/icons/silk/.
 
 
-RackMonkey Licence
-==================
+9. RackMonkey Licence
+=====================
 This program is free software; you can redistribute it and/or modify it
 under the terms of the GNU General Public License as published by the Free
 Software Foundation; either version 2 of the License, or (at your option)
