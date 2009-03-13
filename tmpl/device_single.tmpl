@@ -47,12 +47,22 @@
 					<hr />
 					<div>
 						<div style="width: 50%; float:left">
-							<div class="key">Hardware (Size)</div>
-							<div class="value"><TMPL_UNLESS NAME=hardware_meta_default_data><TMPL_UNLESS NAME=hardware_manufacturer_meta_default_data><TMPL_VAR ESCAPE=HTML NAME=hardware_manufacturer_name> </TMPL_UNLESS></TMPL_UNLESS><TMPL_VAR ESCAPE=HTML NAME=hardware_name> (<TMPL_VAR ESCAPE=HTML NAME=hardware_size>U)<TMPL_UNLESS NAME=hardware_meta_default_data> &nbsp; <a class="small" title="View details for this hardware" href="<TMPL_VAR NAME=base_url>?view=hardware&amp;view_type=single&amp;id=<TMPL_VAR ESCAPE=URL NAME=hardware>">Details&hellip;</a></TMPL_UNLESS></div>
+							<div class="key">Manufacturer</div>
+							<div class="value"><TMPL_UNLESS NAME=hardware_meta_default_data><TMPL_UNLESS NAME=hardware_manufacturer_meta_default_data><TMPL_VAR ESCAPE=HTML NAME=hardware_manufacturer_name> </TMPL_UNLESS> &nbsp; <a class="small" title="View details for this manufacturer" href="<TMPL_VAR NAME=base_url>?view=org&amp;view_type=single&amp;id=<TMPL_VAR ESCAPE=URL NAME=hardware_manufacturer_id>">Details&hellip;</a><TMPL_ELSE><TMPL_VAR ESCAPE=HTML NAME=hardware_manufacturer_name></TMPL_UNLESS></div>
 						</div>
 						<div>
+							<div class="key">Hardware Model (Size)</div>
+							<div class="value"><TMPL_VAR ESCAPE=HTML NAME=hardware_name> (<TMPL_VAR ESCAPE=HTML NAME=hardware_size>U)<TMPL_UNLESS NAME=hardware_meta_default_data> &nbsp; <a class="small" title="View details for this hardware" href="<TMPL_VAR NAME=base_url>?view=hardware&amp;view_type=single&amp;id=<TMPL_VAR ESCAPE=URL NAME=hardware>">Details&hellip;</a></TMPL_UNLESS></div>
+						</div>
+					</div>
+					<div style="clear:both">
+						<div style="width: 50%; float:left">
 							<div class="key">Operating System</div>
 							<div class="value"><TMPL_VAR ESCAPE=HTML NAME=os_name><TMPL_IF NAME=os_version> <TMPL_VAR ESCAPE=HTML NAME=os_version></TMPL_IF><TMPL_UNLESS NAME=os_meta_default_data> &nbsp; <a class="small" title="View details for this operating system" href="<TMPL_VAR NAME=base_url>?view=os&amp;view_type=single&amp;id=<TMPL_VAR ESCAPE=URL NAME=os>">Details&hellip;</a></TMPL_UNLESS></div>
+						</div>
+						<div>
+							<div class="key">OS Licence Key</div>
+							<div class="value"><em>Not yet implemented</em></div>
 						</div>
 					</div>
 					<div style="clear:both">
