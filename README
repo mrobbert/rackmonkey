@@ -114,27 +114,29 @@ Organisations
 Apps, code or ideas from the following projects helped or inspired RackMonkey
 development:
 
-	* FamFamFam (Mark James): www.famfamfam.com
+	* FamFamFam (Mark James): http://www.famfamfam.com
 		Icons used in RackMonkey interface.
-    * Homo Habilis Associates: habilis.net/validator-sac
+    * Homo Habilis Associates: http://habilis.net/validator-sac
         Standalone W3C validator used to check RackMonkey templates.
-    * silverorange: labs.silverorange.com
+    * silverorange: http://labs.silverorange.com
         Inspiration for tabbed CSS design.
-    * SQLite project: www.sqlite.org
+    * SQLite project: http://www.sqlite.org
         Original RackMonkey database engine.
-    
+
     
 Legal Notices
 =============
 RackMonkey (C)2004-2009 Will Green. RackMonkey is a trademark of Will Green.
 
-RackMonkey includes example data to demonstrate the software and get you 
-started. The inclusion of a particular company or product does not imply an 
-endorsement by the author.
+The inclusion of a particular company or product in RackMonkey data does
+not imply an endorsement by the author.
 
 RackMonkey includes icons licensed from Mark James under the Creative Commons
 Attribution 2.5 License. See http://www.famfamfam.com/lab/icons/silk/.
 
+
+RackMonkey Licence
+==================
 This program is free software; you can redistribute it and/or modify it
 under the terms of the GNU General Public License as published by the Free
 Software Foundation; either version 2 of the License, or (at your option)
