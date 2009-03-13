@@ -58,6 +58,7 @@ CREATE TABLE rack
 	row_pos INTEGER NOT NULL,
 	hidden_rack INTEGER NOT NULL DEFAULT 0,
 	size INTEGER,
+	numbering_direction INTEGER DEFAULT 0,
 	notes VARCHAR(255),
 	meta_default_data INTEGER DEFAULT 0,
 	meta_update_time VARCHAR(255),
