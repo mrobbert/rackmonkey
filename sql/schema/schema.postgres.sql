@@ -2,7 +2,7 @@
 -- RackMonkey - Know Your Racks - http://www.rackmonkey.org                 --
 -- Version 1.2.%BUILD%                                                      --
 -- (C)2004-2009 Will Green (wgreen at users.sourceforge.net)                --
--- Database schema v2.1 for Postgres                                        --
+-- Database schema v3 for Postgres                                          --
 ------------------------------------------------------------------------------
 
 -- Building the device resides in
@@ -168,7 +168,8 @@ CREATE TABLE device
 	asset_no VARCHAR,
 	purchased CHAR(10),
 	os INTEGER NOT NULL REFERENCES os,
-	os_version VARCHAR, 
+	os_version VARCHAR,
+	os_licence_key VARCHAR, 
 	customer INTEGER NOT NULL REFERENCES org,
 	service INTEGER NOT NULL REFERENCES service,
 	role INTEGER NOT NULL REFERENCES role,

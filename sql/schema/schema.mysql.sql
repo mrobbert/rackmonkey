@@ -2,7 +2,7 @@
 -- RackMonkey - Know Your Racks - http://www.rackmonkey.org                 --
 -- Version 1.2.%BUILD%                                                      --
 -- (C)2004-2009 Will Green (wgreen at users.sourceforge.net)                --
--- Database schema v2.1 for MySQL                                           --
+-- Database schema v3 for MySQL                                             --
 ------------------------------------------------------------------------------
 
 -- Building the device resides in
@@ -174,6 +174,7 @@ CREATE TABLE device
 	purchased CHAR(10),
 	os INTEGER NOT NULL,
 	os_version VARCHAR(255), 
+	os_licence_key VARCHAR(255), 
 	customer INTEGER NOT NULL,
 	service INTEGER NOT NULL,
 	role INTEGER NOT NULL,

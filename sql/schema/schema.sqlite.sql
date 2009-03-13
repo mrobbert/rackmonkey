@@ -179,6 +179,7 @@ CREATE TABLE device
 	os INTEGER NOT NULL
 		CONSTRAINT fk_os_id REFERENCES os(id),	
 	os_version CHAR,
+    os_licence_key CHAR,
 	customer INTEGER NOT NULL
 		CONSTRAINT fk_customer_id REFERENCES org(id),	
 	service INTEGER NOT NULL
