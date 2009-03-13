@@ -1,9 +1,9 @@
-------------------------------------------------------------------------------
+-- ---------------------------------------------------------------------------
 -- RackMonkey - Know Your Racks - http://www.rackmonkey.org                 --
 -- Version 1.2.%BUILD%                                                      --
 -- (C)2004-2009 Will Green (wgreen at users.sourceforge.net)                --
 -- Default data for RackMonkey database                                     --
-------------------------------------------------------------------------------
+-- ---------------------------------------------------------------------------
 
 -- default buildings
 INSERT INTO building (name, name_short, notes, meta_default_data, meta_update_time, meta_update_user) VALUES ('unknown', 'unknown', '', 5, '1970-01-01 00:00:00', 'install');

@@ -1,9 +1,9 @@
-------------------------------------------------------------------------------
+-- ---------------------------------------------------------------------------
 -- RackMonkey - Know Your Racks - http://www.rackmonkey.org                 --
 -- Version 1.2.%BUILD%                                                      --
 -- (C)2004-2009 Will Green (wgreen at users.sourceforge.net)                --
 -- Test content for RackMonkey database                                     --
-------------------------------------------------------------------------------
+-- ---------------------------------------------------------------------------
 
 -- The inclusion of a company or product in this file does not consitute an endorement by the author. 
 -- All trademarks are the property of their respective owners.
