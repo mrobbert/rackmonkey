@@ -328,14 +328,14 @@ For SQLite
 Make a note of the path you specified for DBDCONNECT, then run both of the
 following to set up the database and install the default data (required):
 
-    $ sqlite3 [PATH] < sql/schema.sqlite.sql
-    $ sqlite3 [PATH] < sql/default_data.sql
+    $ sqlite3 [PATH] < sql/schema/schema.sqlite.sql
+    $ sqlite3 [PATH] < sql/data/default_data.sql
 
 You should also install the optional sample data if you want common companies 
 and operating systems etc. set up in RackMonkey (this will save you a lot of 
 work entering data and you can always delete the ones you don't want):
 
-    $ sqlite3 [PATH] < sql/sample_data.sql
+    $ sqlite3 [PATH] < sql/data/sample_data.sql
     
 You should then change the permissions of the database file [PATH] and its
 parent directory to be readable and writable by your web server. For example,
@@ -369,14 +369,14 @@ you run (entering your chosen password when prompted):
 Run both of the following to set up the database and install the 
 default data (assumes your database is called rackmonkey):
 
-    $ psql -U rackmonkey rackmonkey < sql/schema.postgres.sql
-    $ psql -U rackmonkey rackmonkey < sql/default_data.sql
+    $ psql -U rackmonkey rackmonkey < sql/schema/schema.postgres.sql
+    $ psql -U rackmonkey rackmonkey < sql/data/default_data.sql
 
 You should also install the optional sample data if you want common companies 
 and operating systems etc. set up in RackMonkey (this will save you a lot of 
 work entering data and you can always delete the ones you don't want):
 
-    $ psql -U rackmonkey rackmonkey < sql/sample_data.sql
+    $ psql -U rackmonkey rackmonkey < sql/data/sample_data.sql
 
 For further information on administering Postgres see:
 http://www.postgresql.org/docs/.
@@ -392,8 +392,8 @@ rackmonkey database and connect to it:
 
 Next, import the RackMonkey schema and default data (required):
 
-    mysql> \. sql/schema.mysql.sql
-    mysql> \. sql/default_data.sql
+    mysql> \. sql/schema/schema.mysql.sql
+    mysql> \. sql/data/default_data.sql
 
 Check all queries were OK in the output from the schema import. You can check 
 all 19 tables were imported:
@@ -406,7 +406,7 @@ You should also install the optional sample data if you want common companies
 and operating systems etc. set up in RackMonkey (this will save you a lot of 
 work entering data and you can always delete the ones you don't want):
 
-    mysql> \. sql/sample_data.sql
+    mysql> \. sql/data/sample_data.sql
 
 Finally you need to create a user and password to match your configuration 
 file (in section 4, above). For local connections:
