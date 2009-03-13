@@ -17,8 +17,8 @@ tmplpath =
 wwwpath =
 
 # Plugins - to enable/disable a plugin (un)comment the appropriate line
-plugin_xls = rack2xls.pl
-plugin_dns = rackdns.pl
+#plugin_xls = rack2xls.pl
+#plugin_dns = rackdns.pl
 
 # Preference Constants
 defaultview = rack      # View loaded when none is specified
