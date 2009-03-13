@@ -86,8 +86,8 @@
 				<td><TMPL_UNLESS NAME=hardware_meta_default_data><TMPL_UNLESS NAME=hardware_manufacturer_meta_default_data><TMPL_VAR ESCAPE=HTML NAME=hardware_manufacturer_name> </TMPL_UNLESS></TMPL_UNLESS><TMPL_VAR ESCAPE=HTML NAME=hardware_name></td>
 				<td><TMPL_IF NAME=serial_no><TMPL_VAR ESCAPE=HTML NAME=serial_no><TMPL_ELSE>-</TMPL_IF></td>
 				<td><TMPL_IF NAME=asset_no><TMPL_VAR ESCAPE=HTML NAME=asset_no><TMPL_ELSE>-</TMPL_IF></td>
-				<td style="text-align: right"><TMPL_IF NAME=purchased><TMPL_VAR ESCAPE=HTML NAME=purchased><TMPL_ELSE>-</TMPL_IF></td>
-				<td style="text-align: right"><TMPL_IF NAME=age><TMPL_VAR ESCAPE=HTML NAME=age><TMPL_ELSE>-</TMPL_IF></td>
+				<td style="text-align: right"><TMPL_IF NAME=purchased><TMPL_VAR ESCAPE=HTML NAME=purchased><TMPL_ELSE>?</TMPL_IF></td>
+				<td style="text-align: right"><TMPL_IF NAME=age><TMPL_VAR ESCAPE=HTML NAME=age><TMPL_ELSE>?</TMPL_IF></td>
 				<td><TMPL_IF NAME=notes_short><span title="<TMPL_VAR NAME=notes>"><TMPL_VAR NAME=notes_short></span><TMPL_ELSE><TMPL_IF NAME=notes><TMPL_VAR NAME=notes><TMPL_ELSE>-</TMPL_IF></TMPL_IF></td>	
 			</tr>
 			</TMPL_LOOP></TMPL_IF>
