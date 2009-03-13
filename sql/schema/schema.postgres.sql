@@ -206,9 +206,12 @@ CREATE TABLE app_relation
 -- Relates devices to apps
 CREATE TABLE device_app
 (
+    id SERIAL PRIMARY KEY,
 	app INTEGER NOT NULL REFERENCES app,
 	device INTEGER NOT NULL REFERENCES device,
-	relation INTEGER NOT NULL REFERENCES app_relation
+	relation INTEGER NOT NULL REFERENCES app_relation,
+	meta_update_time VARCHAR,
+	meta_update_user VARCHAR
 );
 
 

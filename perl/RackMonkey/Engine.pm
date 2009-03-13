@@ -190,7 +190,7 @@ sub performAct
 {
     my ($self, $type, $act, $updateUser, $record) = @_;
     croak "RM_ENGINE: '$type' is not a recognised type. This error should not occur, did you manually type this URL?"
-      unless $type =~ /^(?:building|room|row|rack|device|hardware|os|service|role|domain|org|app|report)$/;
+      unless $type =~ /^(?:building|room|row|rack|device|hardware|os|service|role|domain|org|app|deviceApp|report)$/;
     my $actStr  = $act;
     my $typeStr = $type;
     $act = 'update' if ($act eq 'insert');
@@ -2168,6 +2168,7 @@ sub appDevicesUsedList
     my $sth = $self->dbh->prepare_cached(
         qq!
 		SELECT
+		    device_app.id       AS device_app_id,
 			device.id			AS device_id,
 		 	device.name			AS device_name, 
 			app.name			AS app_name,
@@ -2252,6 +2253,36 @@ sub _validateAppUpdate
     $self->_checkName($$record{'name'});
     $self->_checkNotes($$record{'notes'});
     return ($$record{'name'}, $$record{'descript'}, $$record{'notes'});
+}
+
+sub updateDeviceApp
+{
+    my ($self, $updateTime, $updateUser, $record) = @_;
+    croak "RM_ENGINE: Unable to update device app relation. No record specified." unless ($record);
+
+    my ($sth, $newId);
+
+    if ($$record{'id'})
+    {
+        $sth = $self->dbh->prepare(qq!UPDATE device_app SET app = ?, device = ?, relation = ?, meta_update_time = ?, meta_update_user = ? WHERE id = ?!);
+        my $ret = $sth->execute($self->_validateDeviceAppUpdate($record), $updateTime, $updateUser, $$record{'id'});
+        croak "RM_ENGINE: Update failed. Objects may have been removed before the update occured." if ($ret eq '0E0');
+    }
+    else
+    {
+        $sth = $self->dbh->prepare(qq!INSERT INTO device_app (app, device, relation, meta_update_time, meta_update_user) VALUES(?, ?, ?, ?, ?)!);
+        $sth->execute($self->_validateDeviceAppUpdate($record), $updateTime, $updateUser);
+        $newId = $self->_lastInsertId('device_app');
+    }
+    return $newId || $$record{'id'};
+}
+
+sub _validateDeviceAppUpdate
+{
+    my ($self, $record) = @_;
+    croak "RM_ENGINE: Unable to validate device app relation. No record specified." unless ($record);
+    # protected by fk, so no validation required
+    return ($$record{'app_id'}, $$record{'device_id'}, $$record{'relation_id'});
 }
 
 1;

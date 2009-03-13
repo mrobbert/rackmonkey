@@ -212,19 +212,25 @@ CREATE TABLE app
 CREATE TABLE app_relation
 (
 	id INTEGER PRIMARY KEY AUTOINCREMENT,
-	name CHAR UNIQUE NOT NULL COLLATE NOCASE
+	name CHAR UNIQUE NOT NULL COLLATE NOCASE,
+	meta_default_data INTEGER NOT NULL DEFAULT 0,
+	meta_update_time CHAR,
+	meta_update_user CHAR
 );
 
 
 -- Relates devices to apps
 CREATE TABLE device_app
 (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
 	app INTEGER NOT NULL
 		CONSTRAINT fk_app_id REFERENCES app(id),
 	device INTEGER NOT NULL
 		CONSTRAINT fk_device_id REFERENCES device(id),
 	relation INTEGER NOT NULL
-		CONSTRAINT fk_app_relation_id REFERENCES app_relation(id)
+		CONSTRAINT fk_app_relation_id REFERENCES app_relation(id),
+    meta_update_time CHAR,
+    meta_update_user CHAR
 );
 
 

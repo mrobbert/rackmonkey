@@ -218,9 +218,12 @@ CREATE TABLE app_relation
 -- Relates devices to apps
 CREATE TABLE device_app
 (
+    id INT AUTO_INCREMENT PRIMARY KEY,
 	app INTEGER NOT NULL,
 	device INTEGER NOT NULL,
 	relation INTEGER NOT NULL,
+	meta_update_time VARCHAR(255),
+	meta_update_user VARCHAR(255),
 	FOREIGN KEY (app) REFERENCES app(id),
 	FOREIGN KEY (device) REFERENCES device(id),
 	FOREIGN KEY (relation) REFERENCES app_relation(id)			

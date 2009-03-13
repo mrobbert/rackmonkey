@@ -153,6 +153,7 @@ eval {
                 $template->param($app);
                 
                 my $deviceUsed = @{$backend->appDevicesUsedList($id)}[0]; # we only support one device at present
+                $template->param('device_app_id' => $$deviceUsed{'device_app_id'});
                 my $selectedDevice = $cgi->lastCreatedId || $cgi->id('device');
                 $selectedDevice = $$deviceUsed{'device_id'} if (!$selectedDevice);
                 my $devices = $backend->listBasic('device');
