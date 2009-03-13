@@ -6,3 +6,4 @@
 ------------------------------------------------------------------------------
 
 ALTER TABLE rack ADD COLUMN numbering_direction INTEGER NOT NULL DEFAULT 0;
+ALTER TABLE device ADD COLUMN os_licence_key CHAR;
