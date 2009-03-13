@@ -24,20 +24,20 @@ To be added.
 Creating Custom Views
 ---------------------
 You can create a custom view in RackMonkey without writing any code. To create
-your new view you need to choose a type of object (device, rack, service) and a
-view type to base your template on. 
+your new view you need to choose a type of object (device, rack, service) and 
+a view type to base your template on. 
 
 The views available are:
 <need_to_fill_in>
 
 The view types available are:
 
-default:	A list view of this sort of object
-create:		A view for creating a new object
-edit:		A view for editing an object
-single:		A view of a single object
-physical:	A specialised view used only with rack objects
-manage:		A view only used with rows
+* default:	A list view of this sort of object
+* create:	A view for creating a new object
+* edit:		A view for editing an object
+* single:	A view of a single object
+* physical:	A specialised view used only with rack objects
+* manage:	A view only used with rows & apps
 
 The view type you choose determines what sort of data is sent to the template.
 
@@ -45,14 +45,15 @@ To make your new template create a file called:
 
 	<view>_<view-type>_<arbitary-name>.tmpl
 	
-For example, to create a new edit view for rooms, you might call your template:
+For example, to create a new edit view for rooms, you might call your 
+template:
 
 	room_edit_foo.tmpl
 	
 You may find it easiest to copy the exiting room_edit.tmpl to get you started.
 
-Provided your template file is in the RackMonkey template directory you can view
-it at once using:
+Provided your template file is in the RackMonkey template directory you can 
+view it at once using:
 
 	rackmonkey.pl?view=<view>&view_type=<view-type>
 
@@ -92,18 +93,18 @@ You can include one template in another like this:
 	
 Where filename is the name of the file to include from the template directory.
 
-A reference to the template variables available is included in Appendix B at the
-end of this guide.
+A reference to the template variables available is included in Appendix B at
+the end of this guide.
 
 
 Running Unit Test
 -----------------
 RackMonkey includes a growing list of unit tests.
 
-To run RackMonkey unit tests create a test database with the schema but no data
-in it. Update t/*.t to point at the test database (a configuration file for test
-databases will be added in due course). Run the tests from the directory
-containing the t directory (usually trunk). e.g.
+To run RackMonkey unit tests create a test database with the schema but no
+data in it. Update t/*.t to point at the test database (a configuration file
+for test databases will be added in due course). Run the tests from the
+directory containing the t directory (usually trunk). e.g.
 
 		$ t/building.t 
 		1..34
@@ -111,9 +112,9 @@ containing the t directory (usually trunk). e.g.
 		ok 2 - no building records stored at the start of the test
 		<snip>
 
-If you want to run the tests from another directory you'll need to edit the use
-lib path in the scripts. A more flexible mechanism for including the correct
-path in @INC will be added soon.
+If you want to run the tests from another directory you'll need to edit the 
+use lib path in the scripts. A more flexible mechanism for including the 
+correct path in @INC will be added soon.
 
 
 Porting RackMonkey to Another Database
@@ -133,11 +134,11 @@ Key database features used by RackMonkey (with example):
    CREATE VIEW customer AS SELECT * FROM org WHERE customer = 1;
    
 If the database you are porting to doesn't have these features you may be able
-to emulate them: for example Foreign key constraints are emulated with triggers
-when RackMonkey is used with SQLite. Not supporting these features will require
-you change the RackMonkey code, which will lead to maintenance problems: what
-do you do when an update to RackMonkey is released, or you need to move to
-another database?
+to emulate them: for example Foreign key constraints are emulated with 
+triggers when RackMonkey is used with SQLite. Not supporting these features 
+will require you change the RackMonkey code, which will lead to maintenance 
+problems: what do you do when an update to RackMonkey is released, or you need 
+to move to another database?
 
 A good port should:
 
@@ -149,15 +150,16 @@ A good port should:
 In order to allow a new database driver to be used you will need to edit the
 checkSupportedDriver sub in rackmonkey.pl.
 
-If you believe specific SQL in RackMonkey would benefit from changes to make it
-more portable, please get in touch.
+If you believe specific SQL in RackMonkey would benefit from changes to make 
+it more portable, please get in touch with the developers.
 
 
 Stylistic Conventions in RackMonkey Code/DB
 -------------------------------------------
 * Brace style is BSD/Allman
 * Table names are in the singular: room not rooms
-* All non-junction tables have a primary key called id 
+* All non-junction tables have a primary key called id
+* Code indentation is 4 column and uses spaces
 
 
 Appendix A: RackMonkey Engine Methods

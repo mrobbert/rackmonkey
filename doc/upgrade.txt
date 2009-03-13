@@ -8,8 +8,8 @@
 You can read the latest version of this document in HTML format at:
 http://www.rackmonkey.org/doc/1.2.5
 
-The upgrade guide for v1.2.5 is still being written. Should separate the file
-into two, one from v1.2.4 and one from earlier releases.
+WARNING: This document is not yet ready for use. Please await the next preview
+release before attempting to upgrade an existing installation.
 
 
 Upgrading RackMonkey

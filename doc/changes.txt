@@ -6,14 +6,21 @@
 ##############################################################################
 
 You can read the latest version of this document in HTML format at:
-http://www.rackmonkey.org/doc/1.2.4
+http://www.rackmonkey.org/doc
 
-v1.2.5 Preview 1 - Released 2009-xx-xx
+v1.2.5 Preview 1 - Released 2009-03-15
 --------------------------------------
-* Improvements to UI
-* Support for deletion in table and physical rack views
-* Support for numbering racks from the top as well as bottom
+* Many UI Improvements
+* Excel spreadsheet export
 * Print CSS for much better quality printouts
+* Official MySQL support
+* Numbering racks from the top as well as bottom
+* Basic support for associating apps with devices
+* Basic formatting of notes fields
+* Operating system licences
+* Device deletion in table and physical rack views
+* Experimental DNS plugin
+* RackMonkey is five years old today :)
 
 v1.2.4 - Released 2008-07-20
 ----------------------------

@@ -8,8 +8,12 @@
 You can read the latest version of this document in HTML format at:
 http://www.rackmonkey.org/doc/1.2.5
 
-The install guide for v1.2.5 is still being written.
+The install guide for v1.2.5 is still being revised.
 
+WARNING: This is a preview release that has undergone limited testing. The
+author does not recommend using this release for production usage.
+The RackMonkey documentation is still being updated and you should expect to
+find omissions and inaccuracies in it.
 
 Contents
 ========
@@ -20,6 +24,7 @@ Contents
 5. Configuring RackMonkey
 6. Database Set Up
 7. Running RackMonkey
+8. RackMonkey Plugins: Excel and DNS
 
 
 1. Introduction  
@@ -44,15 +49,15 @@ You need the following in order to install and use RackMonkey:
 * Web server (Apache recommended)
 
 * One of the following databases (your OS may include packages for these):
-  - SQLite v3.2.2 or higher
+  - SQLite v3.2.2 or higher (3.4.2 or higher recommended)
       SQLite3 can be obtained from http://www.sqlite.org
-  - PostgreSQL v7.4 or higher
+  - PostgreSQL v7.4 or higher (8.0.3 or higher recommended)
       Postgres can be obtained from http://www.postgresql.org
   - MySQL v5.0.21 or higher (5.0.51 or higher recommended)
       MySQL can be obtained from http://dev.mysql.com/downloads/mysql/
 
   NB. SQLite is the simplest database to administer. If you aren't an
-  experienced database administrator I recommend you use SQLite.
+  experienced database administrator we recommend you use SQLite.
     
 * Perl 5.61 or higher (5.84 or higher recommended) with the following modules:
   - DBI (v1.43 or higher if using Postgres)
@@ -198,14 +203,13 @@ find http://wiki.apache.org/httpd/DistrosDefaultLayout helpful.
 
 Configuration Overview
 ----------------------
-This release of RackMonkey (v1.2.4) uses a different configuration format from
-past releases. Configuration is now stored in a text file, which is read from 
+Configuration is stored in a text file, which is read from 
 /etc/rackmonkey.conf by default. If you're happy with this location, simply 
 copy conf/rackmonkey.conf-default to /etc/rackmonkey.conf and proceed to the 
 configuration editing section (below).
 
 NB. If you use Postgres or MySQL this configuration file will contain your
-RackMonkey database username and password. For maximum security I recommend
+RackMonkey database username and password. For maximum security we recommend
 only root (or the RackMonkey admin) and the web server can read this file.
 
 Changing Configuration Path
@@ -256,7 +260,7 @@ SQLite you can leave the DBUSER and DBPASS values blank. Make sure the
 For Postgres
 ------------
 You will create a Postgres database and user in section 5. For now choose a
-database name, username and password. For simplicity I recommend you make the
+database name, username and password. For simplicity we recommend you make the
 database and username both 'rackmonkey'. An example configuration would be:
 
     dbconnect = dbi:Pg:dbname=rackmonkey
@@ -288,7 +292,7 @@ RackMonkey requires features only available in MySQL 5 or higher, v3 or v4
 will not work.
 
 You will create a MySQL database and user in section 5. For now choose a
-database name, username and password. For simplicity I recommend you make the
+database name, username and password. For simplicity we recommend you make the
 database and username both 'rackmonkey'. An example configuration would be:
 
     dbconnect = dbi:mysql:dbname=rackmonkey
@@ -429,3 +433,39 @@ racks. If everything works correctly you probably want to start reading the
 User Guide, which you can find under the [Help] tab in the RackMonkey 
 interface. If you're having trouble getting RackMonkey to run (for example you
 get an Internal Server Error), read doc/troubleshooting.txt.
+
+
+8. RackMonkey Plugins: Excel and DNS
+====================================
+
+Excel Export: rack2xls.pl
+-------------------------
+The current Excel export plugin can produce an Excel 97-2004 format
+spreadsheet that is readable by many applications, including Microsoft Excel 
+for Windows and Mac, Open Office and iWork. At present the plugin can only 
+export a table of all devices, but further functionality will appear in later 
+releases.
+
+To use this plugin you need to install the Spreadsheet::WriteExcel Perl 
+module. If you're not sure how to do this see section 2 of this document.
+
+To enable the plugin, copy rack2xls.pl into the same directory as 
+rackmonkey.pl, make sure it's executable (chmod 755 usually does the trick)
+then uncomment the plugin_xls line in the RackMonkey configuration. You should 
+then find an 'Export XLS' button at the top of the device table views.
+
+
+DNS Queries: rackdns.pl
+-----------------------
+The DNS plugin is currently very basic. It performs a query for different 
+record types against a device name, but doesn't currently report errors.
+
+To use this plugin you need to install the Net::DNS Perl module. If you're not
+sure how to do this see section 2 of this document.
+
+To enable the plugin, copy rackdns.pl into the same directory as 
+rackmonkey.pl, make sure it's executable (chmod 755 usually does the trick)
+then uncomment the plugin_dns line in the RackMonkey configuration. You should 
+then find a 'Query DNS...' link next to the device name in device detail view. 
+To see the detail view simply click on the name of a device in the rack or 
+device table views.
