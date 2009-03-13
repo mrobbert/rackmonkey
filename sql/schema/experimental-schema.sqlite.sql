@@ -1,9 +1,9 @@
-------------------------------------------------------------------------------
+-- ---------------------------------------------------------------------------
 -- RackMonkey - Know Your Racks - http://www.rackmonkey.org                 --
 -- Version 2.0.%BUILD%                                                      --
 -- (C)2004-2009 Will Green (wgreen at users.sourceforge.net)                --
 -- Database schema v3 (RackMonkey v2) for SQLite                            --
-------------------------------------------------------------------------------
+-- ---------------------------------------------------------------------------
 
 -- Need to do FK for new tables
 -- All electrical measurements are in 1/1000th of standard, e.g. 0.001 A
