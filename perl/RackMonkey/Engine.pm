@@ -2281,6 +2281,7 @@ sub _validateDeviceAppUpdate
 {
     my ($self, $record) = @_;
     croak "RM_ENGINE: Unable to validate device app relation. No record specified." unless ($record);
+
     # protected by fk, so no validation required
     return ($$record{'app_id'}, $$record{'device_id'}, $$record{'relation_id'});
 }
