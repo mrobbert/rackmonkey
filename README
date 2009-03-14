@@ -73,7 +73,7 @@ current release from http://www.rackmonkey.org.
 
 4. Installation
 ===============
-For installation of a new instance see: doc/install-generic.txt.
+For installation of a new instance see: doc/install.txt.
 
 Upgrades are not documented in this release. There are several database schema 
 changes in this release, so upgrading isn't trivial. The next preview will 
