@@ -6,7 +6,7 @@ package RackMonkey::CGI;
 # CGI Support for Rackmonkey                                                 #
 ##############################################################################
 
-# This module is due to be phased out in RackMonkey v1.2.6
+# This module is due to be phased out in RackMonkey v1.3.0
 
 use strict;
 use warnings;
