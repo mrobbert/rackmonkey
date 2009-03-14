@@ -48,6 +48,9 @@ You need the following in order to install and use RackMonkey:
 
 * Web server (Apache recommended)
 
+* Supported web browser: Firefox, IE and Safari all work, see:
+  http://flux.org.uk/projects/rackmonkey/faq for details.
+
 * One of the following databases (your OS may include packages for these):
   - SQLite v3.2.2 or higher (3.4.2 or higher recommended)
       SQLite3 can be obtained from http://www.sqlite.org
