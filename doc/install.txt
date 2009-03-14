@@ -35,8 +35,8 @@ In future RackMonkey will be available in package form for common operating
 systems and include more OS specific installation instructions. For this 
 release all installations should follow this document.
 
-If you are upgrading an existing RackMonkey installation, please refer to 
-doc/upgrade.txt. This file is intended for new installations only.
+This document covers the installation of a new instance of RackMonkey. The 
+next preview will include upgrade instructions.
 
 Please note that the $ or # shown at the start of commands represents the 
 shell prompt, you should not type it.
@@ -49,7 +49,7 @@ You need the following in order to install and use RackMonkey:
 * Web server (Apache recommended)
 
 * Supported web browser: Firefox, IE and Safari all work, see:
-  http://flux.org.uk/projects/rackmonkey/faq for details.
+  http://www.rackmonkey.org/faq for details.
 
 * One of the following databases (your OS may include packages for these):
   - SQLite v3.2.2 or higher (3.4.2 or higher recommended)
@@ -76,8 +76,8 @@ to be root in order to do this.
 
     # perl -eshell -MCPAN
     
-On Mac OS X you can use sudo to temporarily become root (enter your usual
-password when prompted):
+On Mac OS X or Ubuntu Linux you can use sudo to temporarily become root (enter 
+your usual administrator password when prompted):
 
     $ sudo perl -eshell -MCPAN
 
@@ -134,16 +134,14 @@ to reflect this in section 3 (below).
 
 4. Configuring the Web Server
 =============================
-RackMonkey includes an Apache configuration snippet that allows you to enable
-the right settings for http://<yourserver>/rackmonkey. If you are happy to
-serve RackMonkey from this location then you can simply include 
-conf/httpd-rackmonkey.conf in your Apache configuration. For other web 
-servers you may need to consult your server documentation on running CGI 
-applications. 
+RackMonkey includes an Apache configuration snippet that enables the correct 
+settings for http://<yourserver>/rackmonkey. If you are happy to serve 
+RackMonkey from this location then you can simply include the configuration 
+snippet in your Apache configuration as follows.
 
 Linux
 -----
-On most Linux distros you can configure Apache by copying
+On most Linux distributions you can configure Apache by copying
 conf/httpd-rackmonkey.conf into /etc/apache2/conf.d and getting Apache to 
 reread its configuration. 
 
@@ -151,7 +149,7 @@ On Debian and Ubuntu:
 
     # /etc/init.d/apache2 force-reload
 
-On Red Hat based Linux systems (including CentOS and RHEL):
+On Red Hat based Linux systems (including CentOS, Fedora and RHEL):
 
     # service httpd reload
     
@@ -199,6 +197,9 @@ apache parent process.
 
 If you're having difficulty locating Apache configuration information you may 
 find http://wiki.apache.org/httpd/DistrosDefaultLayout helpful.
+
+For other web servers you should consult your server documentation on running 
+CGI applications.
 
 
 5. Configuring RackMonkey
