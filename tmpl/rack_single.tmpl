@@ -41,7 +41,9 @@
 					</div>		
 					<div>
 						<div class="key">Layout</div>
-						<div class="value"><a title="View device layout within this rack" href="<TMPL_VAR NAME=base_url>?view=rack&amp;view_type=physical&amp;id=<TMPL_VAR ESCAPE=URL NAME=id>"><TMPL_VAR ESCAPE=HTML NAME=device_count> Devices</a></div>
+						<div class="value">View the <TMPL_VAR ESCAPE=HTML NAME=device_count> devices in 
+						  <a title="View device layout within this rack" href="<TMPL_VAR NAME=base_url>?view=rack&amp;view_type=physical&amp;id=<TMPL_VAR ESCAPE=URL NAME=id>">summary layout</a> or
+						  <a title="View detailed device layout within this rack" href="<TMPL_VAR NAME=base_url>?view=rack&amp;view_type=physical_extended&amp;id=<TMPL_VAR ESCAPE=URL NAME=id>">detailed layout</a>.</div>
 					</div>
 					<div>	
 						<div class="key">Row [Position]</div>
