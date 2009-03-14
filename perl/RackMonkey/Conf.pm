@@ -37,7 +37,7 @@ sub new
     };
     unless (open(CONFIG, "<$$self{'configpath'}"))
     {
-        croak "RMERR: Cannot open configuration file '$$self{'configpath'}': $!. You can override the configuration file path with the RACKMONKEY_CONF environment variable.";
+        croak "RMERR: Cannot open configuration file '$$self{'configpath'}': $!. See the installation document for advice on creating a configuration file. You can override the configuration file location with the RACKMONKEY_CONF variable in httpd-rackmonkey.conf.";
     }
 
     while (<CONFIG>)

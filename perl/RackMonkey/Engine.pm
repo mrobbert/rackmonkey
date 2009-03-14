@@ -30,7 +30,7 @@ sub new
 {
     my ($className) = @_;
     my $conf = RackMonkey::Conf->new;
-    croak "RM_ENGINE: No database specified in configuration file. Check value of 'dbconnect' in rackmonkey.conf." unless ($$conf{'dbconnect'});
+    croak "RM_ENGINE: No database specified in configuration file. Check value of 'dbconnect' in ".$$conf{'configpath'}.'.' unless ($$conf{'dbconnect'});
 
     # The sys hash contains basic system profile information (should be altered to use the DBI DSN parse method?)
     my ($dbDriver, $dbDataSource) = $$conf{'dbconnect'} =~ /dbi:(.*?):(.*)/;
