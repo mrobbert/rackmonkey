@@ -8,12 +8,11 @@
 You can read the latest version of this document in HTML format at:
 http://www.rackmonkey.org/doc/1.2.5
 
-The install guide for v1.2.5 is still being revised.
-
 WARNING: This is a preview release that has undergone limited testing. The
 author does not recommend using this release for production usage.
 The RackMonkey documentation is still being updated and you should expect to
 find omissions and inaccuracies in it.
+
 
 Contents
 ========
@@ -46,7 +45,7 @@ shell prompt, you should not type it.
 ================
 You need the following in order to install and use RackMonkey:
 
-* Web server (Apache recommended)
+* Web server (Apache 2 recommended)
 
 * Supported web browser: Firefox, IE and Safari all work, see:
   http://www.rackmonkey.org/faq for details.
@@ -56,7 +55,7 @@ You need the following in order to install and use RackMonkey:
       SQLite3 can be obtained from http://www.sqlite.org
   - PostgreSQL v7.4 or higher (8.0.3 or higher recommended)
       Postgres can be obtained from http://www.postgresql.org
-  - MySQL v5.0.21 or higher (5.0.51 or higher recommended)
+  - MySQL v5.0.21 or higher (v5.0.51 or higher recommended)
       MySQL can be obtained from http://dev.mysql.com/downloads/mysql/
 
   NB. SQLite is the simplest database to administer. If you aren't an
@@ -66,10 +65,10 @@ You need the following in order to install and use RackMonkey:
   - DBI (v1.43 or higher if using Postgres)
   - CGI
   - HTML::Template  
-  - DBI driver for your choice of database, either:
-    - DBD::SQLite v1.09+ - for SQLite
-    - DBD::Pg - for Postgres
-    - DBD::mysql - for MySQL
+  - THe DBI driver for your chosen database:
+    - For SQLite: DBD::SQLite v1.09+ (v1.14 or higher recommended)
+    - For Postgres: DBD::Pg 
+    - For MySQL DBD::mysql
 
 The easiest way to install modules is with the CPAN shell. You generally need 
 to be root in order to do this. 
@@ -111,12 +110,12 @@ Copy the rackmonkey.pl file and the whole RackMonkey directory from the perl
 directory to a suitable location on your web server (e.g. /rackmonkey) and
 ensure that rackmonkey.pl is executable by the web server user.
 
-NB. Do not install RackMonkey in a path containing spaces as this will cause
-difficulties with configuration and lead to ugly URLs with %20 in them.
-
 For example, to make rackmonkey.pl executable by all users run:
 
     $ chmod 755 rackmonkey.pl
+    
+NB. Do not install RackMonkey in a path containing spaces as this will cause
+    difficulties with configuration and lead to ugly URLs with %20 in them.
 
 The RackMonkey script uses /usr/bin/env to choose the perl revision to run. If
 you want to specify a specific version of perl, or your env command lives in
@@ -129,7 +128,7 @@ Copy the contents of the www directory to somewhere within web space where you
 want to serve web content from, e.g. /rackmonkey within the web root. This
 directory needs to be accessible from a web browser. If you choose to serve 
 RackMonkey from another location you will need to update httpd-rackmonkey.conf 
-to reflect this in section 3 (below).
+and rackmonkey.conf to reflect this, see sections 4 and 5 (below).
 
 
 4. Configuring the Web Server
@@ -149,7 +148,7 @@ On Debian and Ubuntu:
 
     # /etc/init.d/apache2 force-reload
 
-On Red Hat based Linux systems (including CentOS, Fedora and RHEL):
+On Red Hat based Linux systems (including Fedora, RHEL and CentOS):
 
     # service httpd reload
     
@@ -204,17 +203,14 @@ CGI applications.
 
 5. Configuring RackMonkey
 =========================
-
-Configuration Overview
-----------------------
 Configuration is stored in a text file, which is read from 
 /etc/rackmonkey.conf by default. If you're happy with this location, simply 
 copy conf/rackmonkey.conf-default to /etc/rackmonkey.conf and proceed to the 
 configuration editing section (below).
 
-NB. If you use Postgres or MySQL this configuration file will contain your
-RackMonkey database username and password. For maximum security we recommend
-only root (or the RackMonkey admin) and the web server can read this file.
+NB. If you're using Postgres or MySQL, this configuration file may contain 
+your database username and password. For maximum security only root (or the 
+RackMonkey admin) and the web server should be able to read this file.
 
 Changing Configuration Path
 ---------------------------
@@ -445,9 +441,9 @@ get an Internal Server Error), read doc/troubleshooting.txt.
 Excel Export: rack2xls.pl
 -------------------------
 The current Excel export plugin can produce an Excel 97-2004 format
-spreadsheet that is readable by many applications, including Microsoft Excel 
+spreadsheet that is readable by many applications including Microsoft Excel 
 for Windows and Mac, Open Office and iWork. At present the plugin can only 
-export a table of all devices, but further functionality will appear in later 
+export a table of all devices, but further functionality will appear in future 
 releases.
 
 To use this plugin you need to install the Spreadsheet::WriteExcel Perl 
