@@ -16,12 +16,12 @@ DROP TABLE device_app;
 CREATE TABLE device_app
 (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
-	app INTEGER NOT NULL
-		CONSTRAINT fk_app_id REFERENCES app(id),
-	device INTEGER NOT NULL
-		CONSTRAINT fk_device_id REFERENCES device(id),
-	relation INTEGER NOT NULL
-		CONSTRAINT fk_app_relation_id REFERENCES app_relation(id),
+    app INTEGER NOT NULL
+        CONSTRAINT fk_app_id REFERENCES app(id),
+    device INTEGER NOT NULL
+        CONSTRAINT fk_device_id REFERENCES device(id),
+    relation INTEGER NOT NULL
+        CONSTRAINT fk_app_relation_id REFERENCES app_relation(id),
     meta_update_time CHAR,
     meta_update_user CHAR
 );
