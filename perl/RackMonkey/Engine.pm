@@ -2294,18 +2294,91 @@ RackMonkey::Engine - A DBI-based backend for Rackmonkey
 
 =head1 SYNOPSIS
 
-Fresh POD documentation will be included in v1.2.5.
- 
+ use RackMonkey::Engine;
+ my $backend = RackMonkey::Engine->new;
+ my $devices = $backend->deviceList();
+ foreach my $dev (@$devices)
+ {
+     print $$dev{'name'}." is a ".$$dev{'hardware_name'}.".\n";
+ }
+
+This assumes a suitable configuration file and database exist, see Description for details.
+
+=head1 DESCRIPTION
+
+This module abstracts a DBI database for use by RackMonkey applications. Data can be queried and updated without worrying about the underlying structure.The Engine uses neutral SQL that works on SQLite, Postgres and MySQL. 
+
+A database with a suitable schema and a configuration file are required to use the engine. Both of these are supplied with the RackMonkey distribution.Please consult the RackMonkey install document and RackMonkey::Conf module for details.
+
+=head1 DATA STRUCTURES
+
+Data structures are generally references to hashes or lists of hashes. For example an OS record returned by the os method looks like this:
+
+ $VAR1 = {
+           'meta_update_user' => 'install',
+           'name' => 'Red Hat Enterprise Linux',
+           'manufacturer_meta_default_data' => '0',
+           'meta_default_data' => '0',
+           'manufacturer' => '22',
+           'notes' => '',
+           'id' => '17',
+           'meta_update_time' => '1985-07-24 00:00:00',
+           'manufacturer_name' => 'Red Hat'
+         };
+
+And the data returned by listBasic('service') would look like this:
+
+ $VAR1 = [
+           {
+             'name' => '24/7',
+             'id' => '4',
+             'meta_default_data' => '0'
+           },
+           {
+             'name' => 'Basic',
+             'id' => '3',
+             'meta_default_data' => '0'
+           }
+         ];
+
+All data structures contain a unique 'id' field that can used to identify a particular instance of a given item (device, operating system etc.).
+
+There are also three meta fields:
+
+=over 4
+
+=item *
+
+meta_default_data - If true this indicates the item is not real, but represents a special case or concept. For example there is an OS called 'unknown' and a building called 'unracked'. This field allows the engine to treat these special cases differently without hardcoding magic into the code.
+
+=item *
+
+meta_update_time - Is a string representing the time this record was last updated. This time is always GMT. This field is automatically updated by the engine when actions are performed via performAct, but if update methods (such as updateBuilding) are called directly the caller should supply this information. The time is in the format YYYY-MM-DD HH:MM:SS.
+
+=item *
+
+meta_update_user - Is a string representing the user who last updated this record. The caller must supply this data, whether calling performAct or update methods directly. If a username is not available it is usual to store the IP of the client instead.
+
+=back
+
+=head1 METHODS
+
+=head2 GENERAL METHODS
+
+=head3 new
+
+=head3 getConf
+
+=head3 entryBasic
+
+
 =head1 BUGS
 
 You can view and report bugs at http://www.rackmonkey.org
 
 =head1 LICENSE
 
-This program is free software; you can redistribute it and/or modify it under
-the terms of the GNU General Public License as published by the Free Software
-Foundation; either version 2 of the License, or (at your option) any later
-version.
+This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation; either version 2 of the License, or (at your option) any later version.
 
 =head1 AUTHOR
 
