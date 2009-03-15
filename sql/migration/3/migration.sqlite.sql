@@ -5,6 +5,8 @@
 -- Update SQLite database schema to v3                                      --
 -- ---------------------------------------------------------------------------
 
+BEGIN EXCLUSIVE TRANSACTION;
+
 ALTER TABLE rack ADD COLUMN numbering_direction INTEGER NOT NULL DEFAULT 0;
 ALTER TABLE device ADD COLUMN os_licence_key CHAR;
 ALTER TABLE app_relation ADD COLUMN meta_default_data INTEGER NOT NULL DEFAULT 0;
@@ -66,5 +68,7 @@ END;
 
 UPDATE rm_meta SET value='%BUILD%' WHERE id=2;
 UPDATE rm_meta SET value='3' WHERE id=3;
+
+COMMIT;
 
 VACUUM;
