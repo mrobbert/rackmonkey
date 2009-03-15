@@ -678,4 +678,4 @@ END;
 -- install system information
 INSERT INTO rm_meta(id, name, value) VALUES (1, 'system_version', '1.2');
 INSERT INTO rm_meta(id, name, value) VALUES (2, 'system_build', '%BUILD%');
-INSERT INTO rm_meta(id, name, value) VALUES (3, 'schema_version', '2');
+INSERT INTO rm_meta(id, name, value) VALUES (3, 'schema_version', '3');
