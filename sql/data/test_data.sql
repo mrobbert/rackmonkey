@@ -54,8 +54,8 @@ INSERT INTO hardware (name, manufacturer, size, image, support_url, spec_url, no
 
 -- Test Devices
 -- Two switches
-INSERT INTO device (name, domain, rack, rack_pos, hardware, serial_no, asset_no, purchased, os, os_version, customer, service, role, in_service, notes, meta_default_data, meta_update_time, meta_update_user) VALUES ('sw1', 3, 11, 20, 2, 'ABC123', 'CH1001', '2004-02-29', 11, '', 26, 2, 21, 1, 'Test data included with RackMonkey.', 0, '1988-02-15 00:00:00', 'rackmonkey');
-INSERT INTO device (name, domain, rack, rack_pos, hardware, serial_no, asset_no, purchased, os, os_version, customer, service, role, in_service, notes, meta_default_data, meta_update_time, meta_update_user) VALUES ('sw2', 3, 12, 20, 2, 'ABC124', 'CH1002', '2004-02-29', 11, '', 26, 2, 21, 1, 'Test data included with RackMonkey.', 0, '1988-02-15 00:00:00', 'rackmonkey');
+INSERT INTO device (name, domain, rack, rack_pos, hardware, serial_no, asset_no, purchased, os, os_version, customer, service, role, in_service, notes, meta_default_data, meta_update_time, meta_update_user) VALUES ('sw1', 3, 11, 20, 2, 'ABC123', 'CH1001', '2004-02-29', 11, '', 26, 2, 21, 1, '', 0, '1988-02-15 00:00:00', 'rackmonkey');
+INSERT INTO device (name, domain, rack, rack_pos, hardware, serial_no, asset_no, purchased, os, os_version, customer, service, role, in_service, notes, meta_default_data, meta_update_time, meta_update_user) VALUES ('sw2', 3, 12, 20, 2, 'ABC124', 'CH1002', '2004-02-29', 11, '', 26, 2, 21, 1, '', 0, '1988-02-15 00:00:00', 'rackmonkey');
 
 -- Two database servers
 INSERT INTO device (name, domain, rack, rack_pos, hardware, serial_no, asset_no, purchased, os, os_version, customer, service, role, monitored, in_service, notes, meta_default_data, meta_update_time, meta_update_user) VALUES ('db1', 4, 11, 2, 5, 'T1234', '', '2007-09-05', 19, '10', 27, 4, 8, NULL, 1, '', 0, '1988-02-15 00:00:00', 'rackmonkey');
