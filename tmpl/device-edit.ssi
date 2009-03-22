@@ -28,11 +28,20 @@
 								</select>
 							</div>
 							<div>
+							  <em>Separate model dropdown to go here.</em>
+							</div>
+						</div>
+						<div style="clear: both">
+							<div style="width: 50%; float: left">
 								<label for="os">OS / Version</label><br />
 								<select id="os" name="os"><TMPL_LOOP NAME=oslist>
 									<option <TMPL_IF NAME=selected>selected="selected"</TMPL_IF> value="<TMPL_VAR ESCAPE=HTML NAME=id>"><TMPL_VAR ESCAPE=HTML NAME=name></option></TMPL_LOOP>
 								</select>
 								<input type="text" size="8" name="os_version" value="<TMPL_VAR ESCAPE=HTML NAME=os_version>" />
+							</div>
+							<div>
+								<label for="os_licence_key">OS Licence Key</label><br />
+								<input id="os_licence_key" name="os_licence_key" type="text" size="32" value="<TMPL_VAR ESCAPE=HTML NAME=os_licence_key>" />
 							</div>
 						</div>
 						<div style="clear: both">
