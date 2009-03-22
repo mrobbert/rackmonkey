@@ -22,12 +22,13 @@
 						<hr style="clear: both" />
 						<div>
 							<div style="width: 50%; float: left">
-								<label for="hardware">Hardware</label><br />
+								<label for="hardware">Manufacturer</label><br />
 								<select id="hardware" name="hardware"><TMPL_LOOP NAME=hardwarelist>
 									<option <TMPL_IF NAME=selected>selected="selected"</TMPL_IF> value="<TMPL_VAR ESCAPE=HTML NAME=id>"><TMPL_VAR ESCAPE=HTML NAME=name></option></TMPL_LOOP>
 								</select>
 							</div>
 							<div>
+							  <label for="hardware">Hardware Model</label><br />
 							  <em>Separate model dropdown to go here.</em>
 							</div>
 						</div>
