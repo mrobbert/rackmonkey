@@ -228,9 +228,9 @@ eval {
                 unshift @$os, {'id' => '', name => 'All'};
                 $template->param('oslist' => $cgi->selectItem($os, $$filterBy{'device.os'}));
 
-                for my $d (@$devices)    # calculate age of devices
+                for my $d (@$devices)
                 {
-                    $$d{'age'} = calculateAge($$d{'purchased'});
+                    $$d{'age'} = calculateAge($$d{'purchased'}); # determine age in years from purchased date
                     $$d{'notes'} = formatNotes($$d{'notes'}, 1);
                     $$d{'notes_short'} = shortStr($$d{'notes'});
                 }
@@ -246,6 +246,7 @@ eval {
             }
             else
             {
+                my $selectedManufacturer = $cgi->lastCreatedId;
                 my $selectedHardware = $cgi->lastCreatedId;
                 my $selectedOs       = $cgi->lastCreatedId;
                 my $selectedRole     = $cgi->lastCreatedId;
@@ -277,8 +278,8 @@ eval {
 
                     if ($viewType !~ /^single/)
                     {
-
                         # Use database value for selected if none in CGI
+                        $selectedManufacturer = $$device{'manufacturer'} if (!$selectedManufacturer);
                         $selectedHardware = $$device{'hardware'} if (!$selectedHardware);
                         $selectedOs       = $$device{'os'}       if (!$selectedOs);
                         $selectedRole     = $$device{'role'}     if (!$selectedRole);
@@ -302,6 +303,8 @@ eval {
                 }
                 if (($viewType =~ /^edit/) || ($viewType =~ /^create/))
                 {
+                    $template->param('manufacturerlist' => $cgi->selectItem($backend->listBasicMeta('hardware_manufacturer'), $selectedManufacturer));
+                    $template->param('modelList' => $backend->hardwareByManufacturer);
                     $template->param('hardwarelist' => $cgi->selectHardware($backend->hardwareListBasic, $selectedHardware));
                     $template->param('oslist'       => $cgi->selectItem($backend->listBasicMeta('os'),       $selectedOs));
                     $template->param('rolelist'     => $cgi->selectItem($backend->listBasicMeta('role'),     $selectedRole));

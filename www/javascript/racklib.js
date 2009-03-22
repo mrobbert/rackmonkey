@@ -179,3 +179,28 @@ function rackSelect()
 		window.location = '?view=rack&view_type=default'; 
 	}
 }
+
+// Add option to select
+function addOption(selectBoxID, text, value)
+{
+    var selectBox = document.getElementById(selectBoxID);
+	var option = document.createElement("option");
+    option.text = text;
+    option.value = value;
+    selectBox.options.add(option);
+}
+
+function populateHardwareModels()
+{
+    var manuSelectBox = document.getElementById('hardware_manufacturer');
+    var manufacturerID = manuSelectBox.options[manuSelectBox.selectedIndex].value;
+    
+    modelSelectBox = document.getElementById('hardware_model');
+    modelSelectBox.options.length = 0; // clear existing options
+    
+    var modelCount = hardwareModelIDs[manufacturerID].length;
+    for (var i = 0; i < modelCount; ++i)
+    {
+        addOption('hardware_model', hardwareModelNames[manufacturerID][i], hardwareModelIDs[manufacturerID][i]);
+    }
+}

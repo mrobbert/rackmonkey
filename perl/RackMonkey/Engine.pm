@@ -1035,24 +1035,62 @@ sub hardwareList
 {
     my $self = shift;
     my $orderBy = shift || '';
-    $orderBy = 'org.name, hardware.name' unless $orderBy =~ /^[a-z_]+\.[a-z_]+$/;
+    my $manufacturer = shift || 0;
 
-    $orderBy = 'org.meta_default_data, ' . $orderBy if ($orderBy =~ /^org.name/);
+    my $sth;
+    unless ($manufacturer)
+    {
+        $orderBy = 'org.name, hardware.name' unless $orderBy =~ /^[a-z_]+\.[a-z_]+$/;
+        $orderBy = 'org.meta_default_data, ' . $orderBy if ($orderBy =~ /^org.name/);
+        
+        $sth = $self->dbh->prepare(
+            qq!
+    		SELECT
+    			hardware.*,
+    			org.name 				AS manufacturer_name
+    		FROM hardware, org
+    		WHERE
+    			hardware.meta_default_data = 0 AND
+    			hardware.manufacturer = org.id
+    		ORDER BY $orderBy
+    	!
+        );
+    }
+    else
+    {
+        $orderBy = 'hardware.name' unless $orderBy =~ /^[a-z_]+\.[a-z_]+$/;
+        $orderBy = 'hardware.meta_default_data DESC, ' . $orderBy;
+        $sth = $self->dbh->prepare(
+            qq!
+    		SELECT
+    			hardware.*
+    	    FROM hardware
+    		WHERE
+    			hardware.manufacturer = $manufacturer OR
+    			hardware.meta_default_data > 0
+    		ORDER BY $orderBy
+    	!
+        );
+    }
 
-    my $sth = $self->dbh->prepare(
-        qq!
-		SELECT
-			hardware.*,
-			org.name 				AS manufacturer_name
-		FROM hardware, org
-		WHERE
-			hardware.meta_default_data = 0 AND
-			hardware.manufacturer = org.id
-		ORDER BY $orderBy
-	!
-    );
     $sth->execute;
     return $sth->fetchall_arrayref({});
+}
+
+sub hardwareByManufacturer
+{
+    my $self = shift;
+    my $orderBy = 'hardware.name';
+    
+    my @hardwareModels;
+    
+    my $manufacturers = $self->listBasicMeta('hardware_manufacturer');
+    
+    for my $manu (@$manufacturers)
+    {
+        push @hardwareModels, {'maufacturer_id' => $$manu{'id'}, 'maufacturer_name' => $$manu{'name'}, 'models' => $self->hardwareList('name', $$manu{'id'})};
+    }
+    return \@hardwareModels;
 }
 
 sub hardwareListBasic
@@ -1861,7 +1899,7 @@ sub _validateDeviceInput
         croak "RM_ENGINE: You need to specify a Rack Position." unless (length($$record{'rack_pos'}) > 0);
 
         # get the size of this hardware
-        my $hardware     = $self->hardware($$record{'hardware'});
+        my $hardware     = $self->hardware($$record{'hardware_model'});
         my $hardwareSize = $$hardware{'size'};
 
         unless ($$record{'rack_pos'} > 0 and $$record{'rack_pos'} + $$hardware{'size'} - 1 <= $$rack{'size'})
@@ -1895,7 +1933,7 @@ sub _validateDeviceInput
         $$record{'os_version'} = '';
     }
 
-    return ($$record{'name'}, $$record{'domain'}, $$record{'rack'}, $$record{'rack_pos'}, $$record{'hardware'}, $$record{'serial_no'}, $$record{'asset_no'}, $$record{'purchased'}, $$record{'os'}, $$record{'os_version'}, $$record{'os_licence_key'}, $$record{'customer'}, $$record{'service'}, $$record{'role'}, $$record{'in_service'}, $$record{'notes'});
+    return ($$record{'name'}, $$record{'domain'}, $$record{'rack'}, $$record{'rack_pos'}, $$record{'hardware_model'}, $$record{'serial_no'}, $$record{'asset_no'}, $$record{'purchased'}, $$record{'os'}, $$record{'os_version'}, $$record{'os_licence_key'}, $$record{'customer'}, $$record{'service'}, $$record{'role'}, $$record{'in_service'}, $$record{'notes'});
 }
 
 sub totalSizeDevice

@@ -1,4 +1,16 @@
 <!-- device edit include: Version 1.2.%BUILD% -->
+            <script type="text/javascript">
+              // create an array of hardware model IDs and names for each manufacturer: this will likely use ajax in a later release
+              var hardwareModelIDs = new Array;
+              var hardwareModelNames = new Array;
+
+              <TMPL_LOOP NAME=modelList>
+                hardwareModelIDs[<TMPL_VAR ESCAPE=HTML NAME=maufacturer_id>] = new Array;
+                hardwareModelNames[<TMPL_VAR ESCAPE=HTML NAME=maufacturer_id>] = new Array; <TMPL_LOOP NAME=models>
+                  hardwareModelIDs[<TMPL_VAR ESCAPE=HTML NAME=maufacturer_id>].push(<TMPL_VAR ESCAPE=HTML NAME=id>);
+                  hardwareModelNames[<TMPL_VAR ESCAPE=HTML NAME=maufacturer_id>].push('<TMPL_VAR ESCAPE=HTML NAME=name>');</TMPL_LOOP>
+              </TMPL_LOOP>
+            </script>
 						<div>
 							<div style="width: 50%; float: left">
 								<label for="name">Name</label><br />
@@ -16,21 +28,22 @@
 							<label for="rack">Location</label><br />
 							Rack Position &nbsp; <input type="text" size="4" name="rack_pos" value="<TMPL_VAR ESCAPE=HTML NAME=rack_pos>" /> &nbsp; in &nbsp; 
 							<select id="rack" name="rack"><TMPL_LOOP NAME=racklist>
-								<option <TMPL_IF NAME=selected>selected="selected"</TMPL_IF> value="<TMPL_VAR ESCAPE=HTML NAME=id>"><TMPL_VAR ESCAPE=HTML NAME=name></option></TMPL_LOOP>
+								<option <TMPL_IF NAME=selected>selected="selected" </TMPL_IF>value="<TMPL_VAR ESCAPE=HTML NAME=id>"><TMPL_VAR ESCAPE=HTML NAME=name></option></TMPL_LOOP>
 							</select>
 						</div>
 						<hr style="clear: both" />
 						<div>
 							<div style="width: 50%; float: left">
-								<label for="hardware">Manufacturer</label><br />
-								<select id="hardware" name="hardware"><TMPL_LOOP NAME=hardwarelist>
+								<label for="hardware_manufacturer">Manufacturer</label><br />
+								<select id="hardware_manufacturer" name="hardware_manufacturer" onChange="populateHardwareModels()"><TMPL_LOOP NAME=manufacturerlist>
 									<option <TMPL_IF NAME=selected>selected="selected"</TMPL_IF> value="<TMPL_VAR ESCAPE=HTML NAME=id>"><TMPL_VAR ESCAPE=HTML NAME=name></option></TMPL_LOOP>
 								</select>
 							</div>
 							<div>
-							  <label for="hardware">Hardware Model</label><br />
-							  <em>Separate model dropdown to go here.</em>
-							</div>
+							  <label for="hardware_model">Hardware Model</label><br />
+								<select id="hardware_model" name="hardware_model">
+								</select>
+						  </div>
 						</div>
 						<div style="clear: both">
 							<div style="width: 50%; float: left">
