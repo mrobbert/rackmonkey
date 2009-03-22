@@ -202,24 +202,26 @@ eval {
         my ($format, $headers_format, $footerFormat, $url_format) = formatSpreadsheet($workbook);
 
         # create the headers and set the column widths
-        $worksheet->write(0, 0,  "Device",        $headers_format);
-        $worksheet->write(0, 1,  "Domain",        $headers_format);
-        $worksheet->write(0, 2,  "In Service",    $headers_format);
-        $worksheet->write(0, 3,  "Status",        $headers_format);
-        $worksheet->write(0, 4,  "Position",      $headers_format);
-        $worksheet->write(0, 5,  "Rack",          $headers_format);
-        $worksheet->write(0, 6,  "Room",          $headers_format);
-        $worksheet->write(0, 7,  "Building",      $headers_format);
-        $worksheet->write(0, 8,  "Role",          $headers_format);
-        $worksheet->write(0, 9,  "Manufacturer",  $headers_format);
-        $worksheet->write(0, 10, "Hardware",      $headers_format);
-        $worksheet->write(0, 11, "Size (U)",      $headers_format);
-        $worksheet->write(0, 12, "OS",            $headers_format);
-        $worksheet->write(0, 13, "Serial",        $headers_format);
-        $worksheet->write(0, 14, "Asset",         $headers_format);
-        $worksheet->write(0, 15, "Customer",      $headers_format);
-        $worksheet->write(0, 16, "Service Level", $headers_format);
-        $worksheet->write(0, 17, "Notes",         $headers_format);
+        $worksheet->write(0, 0,  "Device",         $headers_format);
+        $worksheet->write(0, 1,  "Domain",         $headers_format);
+        $worksheet->write(0, 2,  "In Service",     $headers_format);
+        $worksheet->write(0, 3,  "Status",         $headers_format);
+        $worksheet->write(0, 4,  "Position",       $headers_format);
+        $worksheet->write(0, 5,  "Rack",           $headers_format);
+        $worksheet->write(0, 6,  "Room",           $headers_format);
+        $worksheet->write(0, 7,  "Building",       $headers_format);
+        $worksheet->write(0, 8,  "Role",           $headers_format);
+        $worksheet->write(0, 9,  "Manufacturer",   $headers_format);
+        $worksheet->write(0, 10, "Hardware",       $headers_format);
+        $worksheet->write(0, 11, "Size (U)",       $headers_format);
+        $worksheet->write(0, 12, "OS",             $headers_format);
+        $worksheet->write(0, 13, "OS Version",     $headers_format);
+        $worksheet->write(0, 14, "OS Licence Key", $headers_format);
+        $worksheet->write(0, 15, "Serial",         $headers_format);
+        $worksheet->write(0, 16, "Asset",          $headers_format);
+        $worksheet->write(0, 17, "Customer",       $headers_format);
+        $worksheet->write(0, 18, "Service Level",  $headers_format);
+        $worksheet->write(0, 19, "Notes",          $headers_format);
 
         $worksheet->set_column(0,  0,  18);
         $worksheet->set_column(1,  1,  30);
@@ -232,10 +234,11 @@ eval {
         $worksheet->set_column(9,  9,  16);
         $worksheet->set_column(10, 10, 20);
         $worksheet->set_column(11, 11, 12);
-        $worksheet->set_column(12, 14, 16);
-        $worksheet->set_column(15, 15, 20);
-        $worksheet->set_column(16, 16, 22);
-        $worksheet->set_column(17, 17, 50);
+        $worksheet->set_column(12, 12, 22);
+        $worksheet->set_column(13, 13, 13);
+        $worksheet->set_column(14, 14, 34);
+        $worksheet->set_column(15, 18, 22);
+        $worksheet->set_column(19, 19, 50);
 
         # start writing data in the first column and below the header
         my $col = 0;
@@ -286,6 +289,8 @@ eval {
             $worksheet->write($row, $col++, $device->{'hardware_name'},              $format);
             $worksheet->write($row, $col++, $device->{'hardware_size'},              $format);
             $worksheet->write($row, $col++, $device->{'os_name'},                    $format);
+            $worksheet->write($row, $col++, $device->{'os_version'},                 $format);
+            $worksheet->write($row, $col++, $device->{'os_licence_key'},             $format);
 
             if ($device->{'serial_no'})
             {
