@@ -66,8 +66,8 @@ FOR EACH ROW BEGIN
       WHERE (SELECT id FROM app_relation WHERE id = NEW.relation) IS NULL;
 END;
 
-UPDATE rm_meta SET value='%BUILD%' WHERE id=2;
-UPDATE rm_meta SET value='3' WHERE id=3;
+UPDATE rm_meta SET value='%BUILD%' WHERE name='system_build';
+UPDATE rm_meta SET value='3' WHERE name='schema_version';
 
 COMMIT;
 
