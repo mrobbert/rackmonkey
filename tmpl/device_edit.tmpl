@@ -21,7 +21,7 @@
 	<script type="text/javascript" src="<TMPL_VAR NAME=web_root>/javascript/racklib.js"></script>
 	<link rel="icon" href="<TMPL_VAR NAME=web_root>/graphics/favicon.ico" />
 </head>
-<body onload="populateHardwareModels();">
+<body onload="setManufacturer(<TMPL_VAR ESCAPE=HTML NAME=selected_manufacturer>); populateHardwareModels(<TMPL_VAR ESCAPE=HTML NAME=selected_hardware_model>);">
 	<TMPL_INCLUDE NAME="nav-device.ssi">
 	<div id="main">
 		<form method="post" action="<TMPL_VAR NAME=base_url>">

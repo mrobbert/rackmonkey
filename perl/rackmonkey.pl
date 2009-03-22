@@ -151,15 +151,15 @@ eval {
             {
                 my $app = $backend->app($id);
                 $template->param($app);
-                
-                my $deviceUsed = @{$backend->appDevicesUsedList($id)}[0]; # we only support one device at present
+
+                my $deviceUsed = @{$backend->appDevicesUsedList($id)}[0];    # we only support one device at present
                 $template->param('device_app_id' => $$deviceUsed{'device_app_id'});
                 my $selectedDevice = $cgi->lastCreatedId || $cgi->id('device');
                 $selectedDevice = $$deviceUsed{'device_id'} if (!$selectedDevice);
                 my $devices = $backend->listBasic('device');
                 unshift @$devices, {'id' => '', 'name' => '-'};
                 $template->param('devices' => $cgi->selectItem($devices, $selectedDevice));
-                
+
                 my $selectedRelation = $cgi->lastCreatedId || $cgi->id('relation');
                 $selectedRelation = $$deviceUsed{'app_relation_id'} if (!$selectedRelation);
                 my $relations = $backend->listBasic('app_relation', 1);
@@ -230,8 +230,8 @@ eval {
 
                 for my $d (@$devices)
                 {
-                    $$d{'age'} = calculateAge($$d{'purchased'}); # determine age in years from purchased date
-                    $$d{'notes'} = formatNotes($$d{'notes'}, 1);
+                    $$d{'age'}         = calculateAge($$d{'purchased'});    # determine age in years from purchased date
+                    $$d{'notes'}       = formatNotes($$d{'notes'}, 1);
                     $$d{'notes_short'} = shortStr($$d{'notes'});
                 }
 
@@ -246,14 +246,14 @@ eval {
             }
             else
             {
-                my $selectedManufacturer = $cgi->lastCreatedId;
-                my $selectedHardware = $cgi->lastCreatedId;
-                my $selectedOs       = $cgi->lastCreatedId;
-                my $selectedRole     = $cgi->lastCreatedId;
-                my $selectedCustomer = $cgi->lastCreatedId;
-                my $selectedService  = $cgi->lastCreatedId;
-                my $selectedRack     = $cgi->selectProperty('rack') || $cgi->lastCreatedId;
-                my $selectedDomain   = $cgi->lastCreatedId;
+                my $selectedManufacturer  = $cgi->lastCreatedId;
+                my $selectedHardwareModel = $cgi->lastCreatedId;
+                my $selectedOs            = $cgi->lastCreatedId;
+                my $selectedRole          = $cgi->lastCreatedId;
+                my $selectedCustomer      = $cgi->lastCreatedId;
+                my $selectedService       = $cgi->lastCreatedId;
+                my $selectedRack          = $cgi->selectProperty('rack') || $cgi->lastCreatedId;
+                my $selectedDomain        = $cgi->lastCreatedId;
 
                 if (($viewType =~ /^edit/) || ($viewType =~ /^single/) || ($viewType =~ /^create/))
                 {
@@ -278,15 +278,16 @@ eval {
 
                     if ($viewType !~ /^single/)
                     {
+
                         # Use database value for selected if none in CGI
-                        $selectedManufacturer = $$device{'manufacturer'} if (!$selectedManufacturer);
-                        $selectedHardware = $$device{'hardware'} if (!$selectedHardware);
-                        $selectedOs       = $$device{'os'}       if (!$selectedOs);
-                        $selectedRole     = $$device{'role'}     if (!$selectedRole);
-                        $selectedCustomer = $$device{'customer'} if (!$selectedCustomer);
-                        $selectedService  = $$device{'service'}  if (!$selectedService);
-                        $selectedRack     = $$device{'rack'}     if (!$selectedRack);
-                        $selectedDomain   = $$device{'domain'}   if (!$selectedDomain);
+                        $selectedManufacturer  = $$device{'hardware_manufacturer_id'} if (!$selectedManufacturer);
+                        $selectedHardwareModel = $$device{'hardware'}                 if (!$selectedHardwareModel);
+                        $selectedOs            = $$device{'os'}                       if (!$selectedOs);
+                        $selectedRole          = $$device{'role'}                     if (!$selectedRole);
+                        $selectedCustomer      = $$device{'customer'}                 if (!$selectedCustomer);
+                        $selectedService       = $$device{'service'}                  if (!$selectedService);
+                        $selectedRack          = $$device{'rack'}                     if (!$selectedRack);
+                        $selectedDomain        = $$device{'domain'}                   if (!$selectedDomain);
                     }
 
                     # clear values unique to a device if we're copying an existing device
@@ -303,16 +304,17 @@ eval {
                 }
                 if (($viewType =~ /^edit/) || ($viewType =~ /^create/))
                 {
-                    $template->param('manufacturerlist' => $cgi->selectItem($backend->listBasicMeta('hardware_manufacturer'), $selectedManufacturer));
-                    $template->param('modelList' => $backend->hardwareByManufacturer);
-                    $template->param('hardwarelist' => $cgi->selectHardware($backend->hardwareListBasic, $selectedHardware));
-                    $template->param('oslist'       => $cgi->selectItem($backend->listBasicMeta('os'),       $selectedOs));
-                    $template->param('rolelist'     => $cgi->selectItem($backend->listBasicMeta('role'),     $selectedRole));
-                    $template->param('customerlist' => $cgi->selectItem($backend->listBasicMeta('customer'), $selectedCustomer));
-                    $template->param('servicelist'  => $cgi->selectItem($backend->listBasicMeta('service'),  $selectedService));
-                    $template->param('racklist' => $cgi->selectRack($backend->rackListBasic, $selectedRack));
-                    $template->param('domainlist' => $cgi->selectItem($backend->listBasicMeta('domain'), $selectedDomain));
-                    $template->param('rack_pos' => $cgi->selectProperty('position'));
+                    $template->param('selected_manufacturer'   => $selectedManufacturer);
+                    $template->param('selected_hardware_model' => $selectedHardwareModel);
+                    $template->param('manufacturerlist'        => $backend->manufacturerWithHardwareList);
+                    $template->param('modelList'               => $backend->hardwareByManufacturer);
+                    $template->param('oslist'                  => $cgi->selectItem($backend->listBasicMeta('os'), $selectedOs));
+                    $template->param('rolelist'                => $cgi->selectItem($backend->listBasicMeta('role'), $selectedRole));
+                    $template->param('customerlist'            => $cgi->selectItem($backend->listBasicMeta('customer'), $selectedCustomer));
+                    $template->param('servicelist'             => $cgi->selectItem($backend->listBasicMeta('service'), $selectedService));
+                    $template->param('racklist'                => $cgi->selectRack($backend->rackListBasic, $selectedRack));
+                    $template->param('domainlist'              => $cgi->selectItem($backend->listBasicMeta('domain'), $selectedDomain));
+                    $template->param('rack_pos'                => $cgi->selectProperty('position'));
                 }
             }
         }
@@ -323,8 +325,8 @@ eval {
                 my $domains = $backend->domainList($orderBy);
                 for my $d (@$domains)
                 {
-                    $$d{'notes'} = formatNotes($$d{'notes'}, 1);
-                    $$d{'notes_short'} = shortStr($$d{'notes'});
+                    $$d{'notes'}          = formatNotes($$d{'notes'}, 1);
+                    $$d{'notes_short'}    = shortStr($$d{'notes'});
                     $$d{'descript_short'} = shortStr($$d{'descript'});
                 }
                 my $totalDomainCount  = $backend->itemCount('domain');
@@ -398,8 +400,8 @@ eval {
 
                 for my $o (@$orgs)
                 {
-                    $$o{'notes'} = formatNotes($$o{'notes'}, 1);
-                    $$o{'notes_short'} = shortStr($$o{'notes'});
+                    $$o{'notes'}          = formatNotes($$o{'notes'}, 1);
+                    $$o{'notes_short'}    = shortStr($$o{'notes'});
                     $$o{'descript_short'} = shortStr($$o{'descript'});
                 }
                 $template->param('orgs' => $orgs);
@@ -553,8 +555,8 @@ eval {
 
                 for my $r (@$roles)
                 {
-                    $$r{'notes'} = formatNotes($$r{'notes'}, 1);
-                    $$r{'notes_short'} = shortStr($$r{'notes'});    
+                    $$r{'notes'}          = formatNotes($$r{'notes'}, 1);
+                    $$r{'notes_short'}    = shortStr($$r{'notes'});
                     $$r{'descript_short'} = shortStr($$r{'descript'});
                 }
                 $template->param('roles' => $roles);
@@ -601,7 +603,7 @@ eval {
                     $selectedBuilding = $$room{'building'} if (!$selectedBuilding);    # Use database value for selected if none in CGI - not actually needed in single view
                     if ($viewType =~ /^single/)
                     {
-                        $$room{'racks'} = $backend->rackListInRoom($id);    # fix method then use
+                        $$room{'racks'} = $backend->rackListInRoom($id);               # fix method then use
                     }
                     $template->param($room);
                 }
@@ -631,8 +633,8 @@ eval {
 
                 for my $s (@$serviceLevels)
                 {
-                    $$s{'notes'} = formatNotes($$s{'notes'}, 1);
-                    $$s{'notes_short'} = shortStr($$s{'notes'});
+                    $$s{'notes'}          = formatNotes($$s{'notes'}, 1);
+                    $$s{'notes_short'}    = shortStr($$s{'notes'});
                     $$s{'descript_short'} = shortStr($$s{'descript'});
                 }
                 $template->param('services' => $serviceLevels);
@@ -688,7 +690,7 @@ eval {
         $rack2XLSURL =~ s/\/(.*?)\.pl/rack2xls.pl/;
         $template->param('rack2xls_url' => $rack2XLSURL);
     }
-    
+
     # DNS Plugin
     my $rackDNSURL = '';
     if ($$conf{'plugin_dns'})

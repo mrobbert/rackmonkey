@@ -1066,8 +1066,7 @@ sub hardwareList
     			hardware.*
     	    FROM hardware
     		WHERE
-    			hardware.manufacturer = $manufacturer OR
-    			hardware.meta_default_data > 0
+    			hardware.manufacturer = $manufacturer
     		ORDER BY $orderBy
     	!
         );
@@ -1393,6 +1392,26 @@ sub orgList
 		FROM org
 		WHERE org.meta_default_data = 0
 		ORDER BY $orderBy
+	!
+    );
+    $sth->execute;
+    return $sth->fetchall_arrayref({});
+}
+
+sub manufacturerWithHardwareList
+{
+    my $self = shift;
+    my $sth = $self->dbh->prepare(
+        qq!
+		SELECT DISTINCT 
+		    hardware.manufacturer AS id,
+		    hardware_manufacturer.name AS name
+		FROM hardware, hardware_manufacturer
+		WHERE 
+		    hardware.manufacturer = hardware_manufacturer.id
+		ORDER BY 
+		    hardware.meta_default_data DESC,
+		    hardware_manufacturer.name
 	!
     );
     $sth->execute;
@@ -1885,7 +1904,7 @@ sub _validateDeviceInput
 
     # If location is meta_default then also set in service to false - this is a magic number, should find way to remove this
     $$record{'in_service'} = 0 if ($$record{'rack'} <= 5);
-
+    
     # check if we have a meta default location if so set rack position to zero, otherwise check we have a valid rack position
     my $rack = $self->rack($$record{'rack'});
     if ($$rack{'meta_default_data'})
@@ -1897,7 +1916,7 @@ sub _validateDeviceInput
 
         # check we have a position
         croak "RM_ENGINE: You need to specify a Rack Position." unless (length($$record{'rack_pos'}) > 0);
-
+        
         # get the size of this hardware
         my $hardware     = $self->hardware($$record{'hardware_model'});
         my $hardwareSize = $$hardware{'size'};
