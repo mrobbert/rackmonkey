@@ -190,17 +190,39 @@ function addOption(selectBoxID, text, value)
     selectBox.options.add(option);
 }
 
-function populateHardwareModels()
+function setManufacturer(selectedManufacturer)
 {
     var manuSelectBox = document.getElementById('hardware_manufacturer');
-    var manufacturerID = manuSelectBox.options[manuSelectBox.selectedIndex].value;
     
-    modelSelectBox = document.getElementById('hardware_model');
-    modelSelectBox.options.length = 0; // clear existing options
+    if (selectedManufacturer) 
+    {
+        var manuCount = manuSelectBox.options.length;
+        for (var i = 0; i < manuCount; ++i)
+        {
+            if (manuSelectBox.options[i].value == selectedManufacturer)
+            {
+                manuSelectBox.selectedIndex = i;
+            }
+        }
+    }
+}
+
+function populateHardwareModels(selectedModel)
+{
+    var manuSelectBox = document.getElementById('hardware_manufacturer');
+    var modelSelectBox = document.getElementById('hardware_model');
+    
+    var manufacturerID = manuSelectBox.options[manuSelectBox.selectedIndex].value;
+    modelSelectBox.options.length = 0; // clear existing options 
     
     var modelCount = hardwareModelIDs[manufacturerID].length;
     for (var i = 0; i < modelCount; ++i)
     {
         addOption('hardware_model', hardwareModelNames[manufacturerID][i], hardwareModelIDs[manufacturerID][i]);
+        if (selectedModel)
+        {
+            if (hardwareModelIDs[manufacturerID][i] == selectedModel)
+                modelSelectBox.selectedIndex = i;
+        }
     }
 }
