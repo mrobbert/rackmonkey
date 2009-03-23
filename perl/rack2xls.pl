@@ -223,7 +223,7 @@ eval {
         $worksheet->write(0, 18, "Service Level",  $headers_format);
         $worksheet->write(0, 19, "Notes",          $headers_format);
 
-        $worksheet->set_column(0,  0,  18);
+        $worksheet->set_column(0,  0,  20);
         $worksheet->set_column(1,  1,  30);
         $worksheet->set_column(2,  2,  12);
         $worksheet->set_column(3,  3,  16);
@@ -236,9 +236,9 @@ eval {
         $worksheet->set_column(11, 11, 12);
         $worksheet->set_column(12, 12, 22);
         $worksheet->set_column(13, 13, 13);
-        $worksheet->set_column(14, 14, 34);
+        $worksheet->set_column(14, 14, 38);
         $worksheet->set_column(15, 18, 22);
-        $worksheet->set_column(19, 19, 50);
+        $worksheet->set_column(19, 19, 100);
 
         # start writing data in the first column and below the header
         my $col = 0;
