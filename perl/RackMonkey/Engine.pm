@@ -1405,7 +1405,8 @@ sub manufacturerWithHardwareList
         qq!
 		SELECT DISTINCT 
 		    hardware.manufacturer AS id,
-		    hardware_manufacturer.name AS name
+		    hardware_manufacturer.name AS name,
+		    hardware.meta_default_data
 		FROM hardware, hardware_manufacturer
 		WHERE 
 		    hardware.manufacturer = hardware_manufacturer.id
