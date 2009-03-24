@@ -1406,12 +1406,12 @@ sub manufacturerWithHardwareList
 		SELECT DISTINCT 
 		    hardware.manufacturer AS id,
 		    hardware_manufacturer.name AS name,
-		    hardware.meta_default_data
+		    hardware_manufacturer.meta_default_data 
 		FROM hardware, hardware_manufacturer
 		WHERE 
 		    hardware.manufacturer = hardware_manufacturer.id
 		ORDER BY 
-		    hardware.meta_default_data DESC,
+		    hardware_manufacturer.meta_default_data DESC,
 		    hardware_manufacturer.name
 	!
     );
