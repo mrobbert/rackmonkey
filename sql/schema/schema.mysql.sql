@@ -214,7 +214,10 @@ CREATE TABLE app
 CREATE TABLE app_relation
 (
 	id INT AUTO_INCREMENT PRIMARY KEY,
-	name VARCHAR(255) UNIQUE NOT NULL
+	name VARCHAR(255) UNIQUE NOT NULL,
+	meta_default_data INTEGER NOT NULL DEFAULT 0,
+	meta_update_time VARCHAR(255),
+	meta_update_user VARCHAR(255)
 ) ENGINE = InnoDB;
 
 
@@ -225,6 +228,7 @@ CREATE TABLE device_app
 	app INTEGER NOT NULL,
 	device INTEGER NOT NULL,
 	relation INTEGER NOT NULL,
+	meta_default_data INTEGER NOT NULL DEFAULT 0,
 	meta_update_time VARCHAR(255),
 	meta_update_user VARCHAR(255),
 	FOREIGN KEY (app) REFERENCES app(id),
