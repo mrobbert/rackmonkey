@@ -21,15 +21,11 @@ use RackMonkey::Error;
 our $VERSION = '1.2.%BUILD%';
 our $AUTHOR = 'Will Green (wgreen at users.sourceforge.net)';
 
-use constant META_DEFAULT_BUILDINGS => 5;
+use constant META_DEFAULT => 5;
 
 $ENV{'RACKMONKEY_CONF'} = 't/_rackmonkey-test.conf';
 
 my $backend; 
-
-eval { $backend = RackMonkey::Engine->new; };
-ok(!$@, "creating engine instance $@");
-
 my $count;
 my $buildingList;
 my ($bdA, $bdIdA, $bdDataA);
@@ -40,11 +36,14 @@ $bdDataA = {'name' => 'Telehouse', 'name_short' => 'THDO', 'notes' => 'foo'};
 $bdDataB = {'name' => 'Aardvark House', 'name_short' => 'AH', 'notes' => 'bar'};
 $bdDataC = {'name' => '8A&B_ .a-0', 'notes' => 'qux'};
 
+eval { $backend = RackMonkey::Engine->new; };
+ok(!$@, "creating engine instance $@");
+
 eval { $count = $backend->itemCount('building'); };
 ok(!$@, "calling itemcCount('building') $@");
 ok(($count == 0), "no building records stored at the start of the test");
 
-eval { $backend->building(META_DEFAULT_BUILDINGS + 1); };
+eval { $backend->building(META_DEFAULT + 1); };
 print $@;
 ok(($@ =~ /No such building id/), "retrieving non-existent building");
 
