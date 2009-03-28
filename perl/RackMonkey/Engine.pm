@@ -149,7 +149,7 @@ sub listBasic
     	!
         );
     }
-
+    
     $sth->execute;
     return $sth->fetchall_arrayref({});
 }
@@ -2434,6 +2434,10 @@ Returns a list of items of a given type, optionally including meta default items
  
  # with meta default items
  my $buildings = $backend->listBasic('building', 1);
+ 
+=head3 itemCount($type)
+
+=head3 performAct($type, $act, $updateUser, $record)
  
 =head1 BUGS
 
