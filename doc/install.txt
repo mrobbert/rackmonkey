@@ -45,10 +45,11 @@ shell prompt, you should not type it.
 ================
 You need the following in order to install and use RackMonkey:
 
-* Web server (Apache 2 recommended)
+* Modern web browser
+For Windows/Linux users Firefox 3 currently provides the best results, for Mac 
+users we recommend Safari 3. For details see: http://www.rackmonkey.org/faq
 
-* Supported web browser: Firefox, IE and Safari all work, see:
-  http://www.rackmonkey.org/faq for details.
+* Web server (Apache 2 recommended)
 
 * One of the following databases (your OS may include packages for these):
   - SQLite v3.2.2 or higher (3.4.2 or higher recommended)
@@ -64,14 +65,14 @@ You need the following in order to install and use RackMonkey:
 * Perl 5.61 or higher (5.84 or higher recommended) with the following modules:
   - DBI (v1.43 or higher if using Postgres)
   - CGI
-  - HTML::Template  
+  - HTML::Template and HTML::Entities  
   - THe DBI driver for your chosen database:
     - For SQLite: DBD::SQLite v1.09+ (v1.14 or higher recommended)
     - For Postgres: DBD::Pg 
     - For MySQL DBD::mysql
 
-The easiest way to install modules is with the CPAN shell. You generally need 
-to be root in order to do this. 
+The easiest way to install modules is usually with the CPAN shell. You
+generally need to be root in order to do this. 
 
     # perl -eshell -MCPAN
     
@@ -85,6 +86,7 @@ Once the shell has started (you may be prompted to configure it):
     install DBI
     install CGI
     install HTML::Template
+    install HTML::Entities
 
 Then install the database driver for the database you're using:
 
@@ -103,6 +105,7 @@ directory with the following layout:
   README      Read this before you start
   perl        Contains the perl scripts and modules
   sql         SQL to create the RackMonkey database
+  t           Test scripts
   tmpl        HTML::Template files for the web interface
   www         Web space files, e.g. help, images, CSS files
 
