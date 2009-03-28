@@ -610,7 +610,7 @@ eval {
 
                 if (($viewType =~ /^edit/) || ($viewType =~ /^create/))
                 {
-                    $template->param('buildinglist' => 11);
+                    $template->param('buildinglist' => $cgi->selectItem($backend->listBasic('building'), $selectedBuilding));
                 }
             }
         }
