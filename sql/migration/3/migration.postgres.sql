@@ -26,7 +26,11 @@ ALTER TABLE device ALTER COLUMN role SET NOT NULL;
 -- Add additional columns
 ALTER TABLE rack ADD COLUMN numbering_direction INTEGER DEFAULT 0;
 ALTER TABLE device ADD COLUMN os_licence_key VARCHAR;
+ALTER TABLE app_relation ADD COLUMN meta_default_data INTEGER NOT NULL DEFAULT 0;
+ALTER TABLE app_relation ADD COLUMN meta_update_time VARCHAR;
+ALTER TABLE app_relation ADD COLUMN meta_update_user VARCHAR;
 
+-- Replace device_app table: it's not been used yet so we can safely drop
 DROP TABLE device_app;
 CREATE TABLE device_app
 (

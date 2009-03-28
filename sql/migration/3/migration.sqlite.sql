@@ -13,7 +13,7 @@ ALTER TABLE app_relation ADD COLUMN meta_default_data INTEGER NOT NULL DEFAULT 0
 ALTER TABLE app_relation ADD COLUMN meta_update_time CHAR;
 ALTER TABLE app_relation ADD COLUMN meta_update_user CHAR;
 
--- Need to drop device_app so we can add primary key id
+-- Need to drop device_app so we can add primary key id: it's not been used yet so we can safely drop
 DROP TABLE device_app;
 CREATE TABLE device_app
 (
