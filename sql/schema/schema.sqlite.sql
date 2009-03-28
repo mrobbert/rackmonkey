@@ -5,6 +5,8 @@
 -- Database schema v3 for SQLite                                            --
 -- ---------------------------------------------------------------------------
 
+BEGIN EXCLUSIVE TRANSACTION;
+
 -- Building the device resides in
 CREATE TABLE building
 (
@@ -679,3 +681,5 @@ END;
 INSERT INTO rm_meta(id, name, value) VALUES (1, 'system_version', '1.2');
 INSERT INTO rm_meta(id, name, value) VALUES (2, 'system_build', '%BUILD%');
 INSERT INTO rm_meta(id, name, value) VALUES (3, 'schema_version', '3');
+
+COMMIT;

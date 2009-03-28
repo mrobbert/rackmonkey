@@ -5,6 +5,8 @@
 -- Database schema v3 for MySQL                                             --
 -- ---------------------------------------------------------------------------
 
+BEGIN;
+
 -- Building the device resides in
 CREATE TABLE building
 (
@@ -265,3 +267,5 @@ CREATE UNIQUE INDEX room_building_unique ON room (name, building); -- ensure bui
 INSERT INTO rm_meta(id, name, value) VALUES (1, 'system_version', '1.2');
 INSERT INTO rm_meta(id, name, value) VALUES (2, 'system_build', '%BUILD%');
 INSERT INTO rm_meta(id, name, value) VALUES (3, 'schema_version', '3');
+
+COMMIT;
