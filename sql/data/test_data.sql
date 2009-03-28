@@ -65,3 +65,11 @@ INSERT INTO device (name, domain, rack, rack_pos, hardware, serial_no, asset_no,
 INSERT INTO device (name, domain, rack, rack_pos, hardware, serial_no, asset_no, purchased, os, os_version, customer, service, role, monitored, in_service, notes, meta_default_data, meta_update_time, meta_update_user) VALUES ('app1', 4, 7, 10, 7, 'T9909', '', '2007-09-24', 19, '10', 27, 4, 3, NULL, 1, 'Test data', 0, '1988-02-15 00:00:00', 'rackmonkey');
 INSERT INTO device (name, domain, rack, rack_pos, hardware, serial_no, asset_no, purchased, os, os_version, customer, service, role, monitored, in_service, notes, meta_default_data, meta_update_time, meta_update_user) VALUES ('app2', 4, 8, 10, 7, 'T9910', '', '2007-10-24', 19, '10', 27, 4, 3, NULL, 1, 'Test data', 0, '1988-02-15 00:00:00', 'rackmonkey');
 INSERT INTO device (name, domain, rack, rack_pos, hardware, serial_no, asset_no, purchased, os, os_version, customer, service, role, monitored, in_service, notes, meta_default_data, meta_update_time, meta_update_user) VALUES ('appdev', 4, 8, 12, 7, 'T9998', '', '2007-04-24', 16, '2008.11', 27, 4, 3, NULL, 1, 'Test data', 0, '1988-02-15 00:00:00', 'rackmonkey');
+
+-- Test Apps
+INSERT INTO app (name, descript, notes, meta_default_data, meta_update_time, meta_update_user) VALUES ('Acme CDB', 'Acme Customer Database', 'Test data', 0, '1988-02-15 00:00:00', 'rackmonkey');
+INSERT INTO app (name, descript, notes, meta_default_data, meta_update_time, meta_update_user) VALUES ('Roadrunner Route', 'Roadrunner Mapping Software', 'Test data', 0, '1988-02-15 00:00:00', 'rackmonkey');
+
+-- Associate apps with a device
+INSERT INTO device_app (app, device, relation, meta_update_time, meta_update_user) VALUES (1, 11, 1, '1988-02-15 00:00:00', 'rackmonkey');
+INSERT INTO device_app (app, device, relation, meta_update_time, meta_update_user) VALUES (2, 11, 1, '1988-02-15 00:00:00', 'rackmonkey');
