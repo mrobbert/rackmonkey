@@ -335,7 +335,12 @@ sub _validateBuildingUpdate
     croak "RM_ENGINE: Unable to validate building. No building record specified." unless ($record);
     $self->_checkName($$record{'name'});
 
-    # need to add validation for short name
+    # check short name isn't too long - should be moved to a more general _checkName
+    unless (length($$record{'name_short'}) <= $self->getConf('maxstring'))
+    {
+        croak "RM_ENGINE: Names cannot exceed " . $self->getConf('maxstring') . " characters.";
+    }
+
     $self->_checkNotes($$record{'notes'});
     return ($$record{'name'}, $$record{'name_short'}, $$record{'notes'});
 }
