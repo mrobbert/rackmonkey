@@ -44,7 +44,6 @@ ok(!$@, "calling itemcCount('building') $@");
 ok(($count == 0), "no building records stored at the start of the test");
 
 eval { $backend->building(META_DEFAULT + 1); };
-print $@;
 ok(($@ =~ /No such building id/), "retrieving non-existent building");
 
 eval { $bdIdA = $backend->updateBuilding(time, 'EngineTest', $bdDataA); };
