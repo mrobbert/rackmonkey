@@ -13,7 +13,7 @@ use 5.006_001;
 
 use Data::Dumper;
 use Time::Local;
-use Test::Simple tests => 41;
+use Test::Simple tests => 44;
 
 use RackMonkey::Engine;
 use RackMonkey::Error;
@@ -31,10 +31,16 @@ my $buildingList;
 my ($bdA, $bdIdA, $bdDataA);
 my ($bdB, $bdIdB, $bdDataB);
 my ($bdC, $bdIdC, $bdDataC);
+my ($bdDataD, $bdDataE, $bdDataF);
 
 $bdDataA = {'name' => 'Telehouse', 'name_short' => 'THDO', 'notes' => 'foo'};
 $bdDataB = {'name' => 'Aardvark House', 'name_short' => 'AH', 'notes' => 'bar'};
 $bdDataC = {'name' => '8A&B_ .a-0', 'notes' => 'qux'};
+$bdDataD = {'name' => 'ABCD' x 64, 'name_short' => 'abcd', 'notes' => '1234'};
+$bdDataE = {'name' => 'ABCD', 'name_short' => 'abcd' x 64, 'notes' => '1234'};
+$bdDataF = {'name' => 'ABCD', 'name_short' => 'abcd', 'notes' => '1234' x 1024};
+
+print Dumper $bdDataC;
 
 eval { $backend = RackMonkey::Engine->new; };
 ok(!$@, "creating engine instance $@");
@@ -54,6 +60,13 @@ ok ((($$bdA{'name'} eq $$bdDataA{'name'}) && ($$bdA{'name_short'} eq $$bdDataA{'
 
 eval { $backend->updateBuilding(time, 'EngineTest', $bdDataA); };
 ok($@, "duplicate building name forbidden");
+
+eval { $backend->updateBuilding(time, 'EngineTest', $bdDataD); };
+ok($@, "long building name forbidden");
+eval { $backend->updateBuilding(time, 'EngineTest', $bdDataE); };
+ok($@, "long building name_short forbidden");
+eval { $backend->updateBuilding(time, 'EngineTest', $bdDataF); };
+ok($@, "long building notes forbidden");
 
 eval { $backend->updateBuilding(time, 'EngineTest', {'name' => '', 'notes' => 'foo'}); };
 ok($@, "empty building name forbidden");
