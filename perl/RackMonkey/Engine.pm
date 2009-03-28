@@ -129,6 +129,7 @@ sub listBasic
     		FROM $table 
     		WHERE meta_default_data = 0
     		ORDER BY 
+    		    meta_default_data DESC,
     			name
     	!
         );
@@ -142,32 +143,13 @@ sub listBasic
     			name,
     			meta_default_data
     		FROM $table 
-    		ORDER BY 
+    		ORDER BY
+    		    meta_default_data DESC,
     			name
     	!
         );
     }
 
-    $sth->execute;
-    return $sth->fetchall_arrayref({});
-}
-
-sub listBasicMeta
-{
-    my ($self, $table) = @_;
-    croak "RM_ENGINE: Not a valid table" unless $table =~ /^[a-z_]+$/;
-    my $sth = $self->dbh->prepare_cached(
-        qq!
-		SELECT 
-			id, 
-			name,
-			meta_default_data 
-		FROM $table 
-		ORDER BY 
-			meta_default_data DESC,
-			name
-	!
-    );
     $sth->execute;
     return $sth->fetchall_arrayref({});
 }
@@ -1084,7 +1066,7 @@ sub hardwareByManufacturer
     
     my @hardwareModels;
     
-    my $manufacturers = $self->listBasicMeta('hardware_manufacturer');
+    my $manufacturers = $self->listBasic('hardware_manufacturer', 1);
     
     for my $manu (@$manufacturers)
     {
@@ -2365,7 +2347,7 @@ This assumes a suitable configuration file and database exist, see Description f
 
 =head1 DESCRIPTION
 
-This module abstracts a DBI database for use by RackMonkey applications. Data can be queried and updated without worrying about the underlying structure.The Engine uses neutral SQL that works on SQLite, Postgres and MySQL. 
+This module abstracts a DBI database for use by RackMonkey applications. Data can be queried and updated without worrying about the underlying structure. The Engine uses neutral SQL that works on SQLite, Postgres and MySQL. 
 
 A database with a suitable schema and a configuration file are required to use the engine. Both of these are supplied with the RackMonkey distribution.Please consult the RackMonkey install document and RackMonkey::Conf module for details.
 

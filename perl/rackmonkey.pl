@@ -308,12 +308,12 @@ eval {
                     $template->param('selected_hardware_model' => $selectedHardwareModel);
                     $template->param('manufacturerlist'        => $cgi->selectItem($backend->manufacturerWithHardwareList, 0)); # run selectItem to prefix - on meta_default items, should be separate sub from selectItem
                     $template->param('modelList'               => $backend->hardwareByManufacturer); # Need to work out how to prefix meta default items with - for this dropdown
-                    $template->param('oslist'                  => $cgi->selectItem($backend->listBasicMeta('os'), $selectedOs));
-                    $template->param('rolelist'                => $cgi->selectItem($backend->listBasicMeta('role'), $selectedRole));
-                    $template->param('customerlist'            => $cgi->selectItem($backend->listBasicMeta('customer'), $selectedCustomer));
-                    $template->param('servicelist'             => $cgi->selectItem($backend->listBasicMeta('service'), $selectedService));
+                    $template->param('oslist'                  => $cgi->selectItem($backend->listBasic('os', 1), $selectedOs));
+                    $template->param('rolelist'                => $cgi->selectItem($backend->listBasic('role', 1), $selectedRole));
+                    $template->param('customerlist'            => $cgi->selectItem($backend->listBasic('customer', 1), $selectedCustomer));
+                    $template->param('servicelist'             => $cgi->selectItem($backend->listBasic('service', 1), $selectedService));
                     $template->param('racklist'                => $cgi->selectRack($backend->rackListBasic, $selectedRack));
-                    $template->param('domainlist'              => $cgi->selectItem($backend->listBasicMeta('domain'), $selectedDomain));
+                    $template->param('domainlist'              => $cgi->selectItem($backend->listBasic('domain', 1), $selectedDomain));
                     $template->param('rack_pos'                => $cgi->selectProperty('position'));
                 }
             }
@@ -382,7 +382,7 @@ eval {
 
                 if (($viewType =~ /^edit/) || ($viewType =~ /^create/))
                 {
-                    $template->param('manufacturerlist' => $cgi->selectItem($backend->listBasicMeta('hardware_manufacturer'), $selectedManufacturer));
+                    $template->param('manufacturerlist' => $cgi->selectItem($backend->listBasic('hardware_manufacturer', 1), $selectedManufacturer));
                 }
             }
         }
@@ -454,7 +454,7 @@ eval {
 
                 if (($viewType =~ /^edit/) || ($viewType =~ /^create/))
                 {
-                    $template->param('manufacturerlist' => $cgi->selectItem($backend->listBasicMeta('software_manufacturer'), $selectedManufacturer));
+                    $template->param('manufacturerlist' => $cgi->selectItem($backend->listBasic('software_manufacturer', 1), $selectedManufacturer));
                 }
             }
         }
