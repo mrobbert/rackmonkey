@@ -24,6 +24,7 @@ CREATE TABLE device_app
         CONSTRAINT fk_device_id REFERENCES device(id),
     relation INTEGER NOT NULL
         CONSTRAINT fk_app_relation_id REFERENCES app_relation(id),
+    meta_default_data INTEGER NOT NULL DEFAULT 0,	
     meta_update_time CHAR,
     meta_update_user CHAR
 );

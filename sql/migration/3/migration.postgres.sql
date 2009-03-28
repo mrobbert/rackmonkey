@@ -38,6 +38,7 @@ CREATE TABLE device_app
 	app INTEGER NOT NULL REFERENCES app,
 	device INTEGER NOT NULL REFERENCES device,
 	relation INTEGER NOT NULL REFERENCES app_relation,
+	meta_default_data INTEGER NOT NULL DEFAULT 0,
 	meta_update_time VARCHAR,
 	meta_update_user VARCHAR
 );
