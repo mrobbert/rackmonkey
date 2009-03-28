@@ -2,36 +2,33 @@
 ##############################################################################
 # RackMonkey - Know Your Racks - http://www.rackmonkey.org                   #
 # Version 1.2.%BUILD%                                                        #
-# (C)2004-2007 Will Green (wgreen at users.sourceforge.net)                  #
-# RackMonkey Engine building unit test script                                #
+# (C)2004-2009 Will Green (wgreen at users.sourceforge.net)                  #
+# RackMonkey Engine building methods test script                             #
 ##############################################################################
-
-# Need to add tests for excluding meta buildings from buildingCount
 
 use strict;
 use warnings;
 
 use 5.006_001;
 
-use DBI;
+use Data::Dumper;
+use Time::Local;
+use Test::Simple tests => 41;
 
-use Test::Simple tests => 40;
-
-use lib 'perl';
 use RackMonkey::Engine;
 use RackMonkey::Error;
-use RackMonkey::Helper;
 
 our $VERSION = '1.2.%BUILD%';
 our $AUTHOR = 'Will Green (wgreen at users.sourceforge.net)';
 
-# Database Connection Settings - should make external
-use constant DBDCONNECT => 'dbi:SQLite:dbname=/tmp/rackmonkey/test.db';
-use constant DBUSER => '';
-use constant DBPASS => '';
+use constant META_DEFAULT_BUILDINGS => 5;
 
-my $dbh = DBI->connect(DBDCONNECT,DBUSER,DBPASS, {AutoCommit => 1, RaiseError => 1, PrintError => 0});
-my $backend = new RackMonkey::Engine($dbh);
+$ENV{'RACKMONKEY_CONF'} = 't/_rackmonkey-test.conf';
+
+my $backend; 
+
+eval { $backend = RackMonkey::Engine->new; };
+ok(!$@, "creating engine instance $@");
 
 my $count;
 my $buildingList;
@@ -43,12 +40,12 @@ $bdDataA = {'name' => 'Telehouse', 'name_short' => 'THDO', 'notes' => 'foo'};
 $bdDataB = {'name' => 'Aardvark House', 'name_short' => 'AH', 'notes' => 'bar'};
 $bdDataC = {'name' => '8A&B_ .a-0', 'notes' => 'qux'};
 
-
-eval { $count = $backend->buildingCount(); };
-ok(!$@, "calling buildingCount $@");
+eval { $count = $backend->itemCount('building'); };
+ok(!$@, "calling itemcCount('building') $@");
 ok(($count == 0), "no building records stored at the start of the test");
 
-eval { $backend->building(1); };
+eval { $backend->building(META_DEFAULT_BUILDINGS + 1); };
+print $@;
 ok(($@ =~ /No such building id/), "retrieving non-existent building");
 
 eval { $bdIdA = $backend->updateBuilding(time, 'EngineTest', $bdDataA); };
@@ -72,8 +69,8 @@ eval
 	$bdIdC = $backend->updateBuilding(time, 'EngineTest', $bdDataC); 
 };
 ok(!$@, "creation of two further buildings");
-eval { $count = $backend->buildingCount(); };
-ok(!$@, "calling buildingCount $@");
+eval { $count = $backend->itemCount('building'); };
+ok(!$@, "calling itemCount('building') $@");
 ok(($count == 3), "building record count is three");
 
 eval
@@ -120,6 +117,6 @@ eval { $buildingList = $backend->buildingList(); };
 ok(!$@, "calling buildingList() with no buildings recorded $@");
 ok((scalar(@$buildingList) == 0), "no buildings in retrieved list");
 
-eval { $count = $backend->buildingCount(); };
-ok(!$@, "calling buildingCount $@");
+eval { $count = $backend->itemCount('building'); };
+ok(!$@, "calling itemCount('building') $@");
 ok(($count == 0), "no building records stored at the end of the test");
