@@ -139,7 +139,8 @@ sub listBasic
             qq!
     		SELECT 
     			id, 
-    			name
+    			name,
+    			meta_default_data
     		FROM $table 
     		ORDER BY 
     			name
@@ -2425,11 +2426,33 @@ meta_update_user - Is a string representing the user who last updated this recor
 
 =head3 new
 
-=head3 getConf
+Creates a new instance of the engine and tries to load configuration using RackMonkey::Conf.
 
-=head3 entryBasic
+ our $backend = RackMonkey::Engine->new;
 
+=head3 getConf($key)
 
+Returns a config value given its key. Check RackMonkey::Conf for the available configuration options.
+
+ print $backend->getConf('defaultview');
+
+=head3 entryBasic($id, $table)
+
+Returns the name and id of an item given its id and table.
+
+ my $device = $backend->entryBasic(1, 'device');
+ print "device id=".$$device{'id'}." is called: ".$$device{'name'};
+
+=head3 listBasic($table, $all)
+
+Returns a list of items of a given type, optionally including meta default items if $all is true. Only the name, id and the meta_default_data value of the items is returned. To get more information use the item specific methods (deviceList, orgList etc.).
+ 
+ # without meta default items
+ my $buildings = $backend->listBasic('building');
+ 
+ # with meta default items
+ my $buildings = $backend->listBasic('building', 1);
+ 
 =head1 BUGS
 
 You can view and report bugs at http://www.rackmonkey.org
