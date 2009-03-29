@@ -41,17 +41,8 @@ sub new
         'rackmonkey_engine_version' => $VERSION
     };
     $$conf{'db_data_source'} = $dbDataSource;
-
-    # If using SQLite only connect if database file exists, don't create it
-    if ($$sys{'db_driver'} eq 'DBD::SQLite')
-    {
-        my ($databasePath) = $$conf{'db_data_source'} =~ /dbname=(.*)/;
-        croak "RM_ENGINE: SQLite database '$databasePath' does not exist. Check the 'dbconnect' path in rackmonkey.conf and that you have created a RackMonkey database as per the install guide."
-          unless (-e $databasePath);
-    }
     
     my $currentDriver = $$sys{'db_driver'};
-    
     unless ($$conf{'bypass_db_driver_checks'})
     {
         # Check we're using SQLite, Postgres or MySQL
@@ -59,6 +50,14 @@ sub new
         {
             croak "RM_ENGINE: You tried to use an unsupported database driver '$currentDriver'. RackMonkey supports SQLite (DBD::SQLite), Postgres (DBD::Pg) or MySQL (DBD::mysql). Please consult the troubleshooting document.";
         }
+    }
+    
+    # If using SQLite only connect if database file exists, don't create it
+    if ($$sys{'db_driver'} eq 'DBD::SQLite')
+    {
+        my ($databasePath) = $$conf{'db_data_source'} =~ /dbname=(.*)/;
+        croak "RM_ENGINE: SQLite database '$databasePath' does not exist. Check the 'dbconnect' path in rackmonkey.conf and that you have created a RackMonkey database as per the install guide."
+          unless (-e $databasePath);
     }
 
     # To do remaining driver checks we need to load the driver
