@@ -33,3 +33,5 @@ UPDATE rm_meta SET value='%BUILD%' WHERE name='system_build';
 UPDATE rm_meta SET value='3' WHERE name='schema_version';
 
 COMMIT;
+
+SELECT name,value from rm_meta where name = 'schema_version';

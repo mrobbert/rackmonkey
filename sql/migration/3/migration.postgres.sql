@@ -49,3 +49,5 @@ UPDATE rm_meta SET value='3' WHERE name='schema_version';
 COMMIT;
 
 VACUUM;
+
+SELECT name,value from rm_meta where name = 'schema_version';
