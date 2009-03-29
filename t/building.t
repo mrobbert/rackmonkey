@@ -40,8 +40,6 @@ $bdDataD = {'name' => 'ABCD' x 64, 'name_short' => 'abcd', 'notes' => '1234'};
 $bdDataE = {'name' => 'ABCD', 'name_short' => 'abcd' x 64, 'notes' => '1234'};
 $bdDataF = {'name' => 'ABCD', 'name_short' => 'abcd', 'notes' => '1234' x 1024};
 
-print Dumper $bdDataC;
-
 eval { $backend = RackMonkey::Engine->new; };
 ok(!$@, "creating engine instance $@");
 
