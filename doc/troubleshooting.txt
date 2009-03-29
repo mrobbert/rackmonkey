@@ -8,7 +8,6 @@
 You can read the latest version of this document in HTML format at:
 http://www.rackmonkey.org/doc/1.2.5
 
-The troubleshooting guide for v1.2.5 is still being written.
 
 Troubleshooting
 ===============
@@ -50,6 +49,23 @@ Common reasons for RackMonkey failing to run are:
   You can download a newer perl from: http://www.perl.com/download.csp 
 
 
+Unsupported Database Driver
+----------------------------
+RackMonkey checks for a supported database driver when intializing the engine. 
+If this check fails you will get an error of the form "You tried to use an 
+unsupported database driver" with advice on the minimum supported version. 
+
+To correct this issue you should update the affected driver to a more recent 
+version. See the installation instructions for details on installing Perl 
+modules.
+
+Alternatively you can choose to disable the database driver checks. THIS IS 
+NOT RECOMMENDED AND MAY RESULT IN MALFUNCTION OR DATA LOSS. To disable the 
+checks add the following line to your rackmonkey.conf:
+
+ bypass_db_driver_checks=1
+ 
+ 
 Missing Graphics and Stylesheet
 -------------------------------
 If the RackMonkey script runs, but the graphics and stylesheet are missing,

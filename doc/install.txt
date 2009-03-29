@@ -69,7 +69,7 @@ users we recommend Safari 3. For details see: http://www.rackmonkey.org/faq
   - THe DBI driver for your chosen database:
     - For SQLite: DBD::SQLite v1.09+ (v1.14 or higher recommended)
     - For Postgres: DBD::Pg 
-    - For MySQL DBD::mysql
+    - For MySQL DBD::mysql v3.0002+
 
 The easiest way to install modules is usually with the CPAN shell. You
 generally need to be root in order to do this. 

@@ -52,29 +52,38 @@ sub new
 
     my $dbh = DBI->connect($$conf{'dbconnect'}, $$conf{'dbuser'}, $$conf{'dbpass'}, {AutoCommit => 1, RaiseError => 1, PrintError => 0, ShowErrorStatement => 1});
 
-    # Checks that the DBD driver is compatible with RackMonkey
-    my $currentDriver = $$sys{'db_driver'};
-    my $driverVersion = eval("\$${currentDriver}::VERSION");
-    my $DBIVersion    = eval("\$DBI::VERSION");
-    $$sys{'db_driver_version'} = $driverVersion;
-    $$sys{'dbi_version'}       = $DBIVersion;
-
-    # Check we're using SQLite, Postgres or MySQL
-    unless (($currentDriver eq 'DBD::SQLite') || ($currentDriver eq 'DBD::Pg') || ($currentDriver eq 'DBD::mysql'))
+    unless ($$conf{'bypass_db_driver_checks'})
     {
-        croak "RM_ENGINE: You tried to use an unsupported database driver '$currentDriver'. RackMonkey supports SQLite (DBD::SQLite), Postgres (DBD::Pg) or MySQL (DBD::mysql).";
-    }
+        # Checks that the DBD driver is compatible with RackMonkey
+        my $currentDriver = $$sys{'db_driver'};
+        my $driverVersion = eval("\$${currentDriver}::VERSION");
+        my $DBIVersion    = eval("\$DBI::VERSION");
+        $$sys{'db_driver_version'} = $driverVersion;
+        $$sys{'dbi_version'}       = $DBIVersion;
 
-    # If using SQLite, version v1.09 or higher is required in order to support ADD COLUMN
-    if (($currentDriver eq 'DBD::SQLite') && ($driverVersion < 1.09))
-    {
-        croak "RM_ENGINE: RackMonkey requires DBD::SQLite v1.09 or higher. You are using DBD::SQLite v$driverVersion. Please consult the installation instructions.";
-    }
+        # Check we're using SQLite, Postgres or MySQL
+        unless (($currentDriver eq 'DBD::SQLite') || ($currentDriver eq 'DBD::Pg') || ($currentDriver eq 'DBD::mysql'))
+        {
+            croak "RM_ENGINE: You tried to use an unsupported database driver '$currentDriver'. RackMonkey supports SQLite (DBD::SQLite), Postgres (DBD::Pg) or MySQL (DBD::mysql). Please consult the troubleshooting document.";
+        }
 
-    # Postgres only works properly with DBI v1.43 or higher (due to last insert ID issues)
-    if (($currentDriver eq 'DBD::Pg') && ($DBIVersion < 1.43))
-    {
-        croak "RM_ENGINE: You need to use DBI version v1.43 or higher with Postgres. You are using DBI v$DBIVersion. Please consult the installation instructions.";
+        # If using SQLite, version v1.09 or higher is required in order to support ADD COLUMN
+        if (($currentDriver eq 'DBD::SQLite') && ($driverVersion < 1.09))
+        {
+            croak "RM_ENGINE: You tried to use an unsupported database driver. RackMonkey requires DBD::SQLite v1.09 or higher. You are using DBD::SQLite v$driverVersion. Please consult the troubleshooting document.";
+        }
+
+        # Postgres only works properly with DBI v1.43 or higher (due to last insert ID issues)
+        if (($currentDriver eq 'DBD::Pg') && ($DBIVersion < 1.43))
+        {
+            croak "RM_ENGINE: You tried to use an unsupported database driver. You need to use DBI version v1.43 or higher with Postgres. You are using DBI v$DBIVersion. Please consult the troubleshooting document.";
+        }
+
+        # If using MySQL, version v3.0002 or higher is required, this is the first solid release of v3. Earlier releases are untested and at least some have issues with autocommit
+        if (($currentDriver eq 'DBD::mysql') && ($driverVersion < 3.0002))
+        {
+            croak "RM_ENGINE: You tried to use an unsupported database driver. RackMonkey requires DBD::mysql v3.0002 or higher. You are using DBD::mysql v$driverVersion. Please consult the troubleshooting document.";
+        }
     }
 
     my $self = {'dbh' => $dbh, 'conf' => $conf, 'sys' => $sys};

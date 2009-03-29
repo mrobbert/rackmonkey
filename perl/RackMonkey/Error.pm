@@ -133,9 +133,13 @@ sub enlighten
     }
 
     # DBI errors
-    elsif ($errStr =~ /install_driver\((.*?)\)\s*failed/)
+    elsif ($errStr =~ /install_driver\((.*?)\)\s*failed.*?Available drivers:(.*?)\./s) # Unable to load DBI driver with avaliable drivers list
     {
-        $newErrStr = "Couldn't load perl database driver DBD::$1.\nMake sure you've correctly installed DBD::$1. See the installation instructions for more details.";
+        $newErrStr = "Couldn't load perl database driver DBD::$1.\nThis error is usually caused by mistyping the driver name in the configuration file (driver names are case sensitive) or failing to have the required driver module installed. See the installation instructions for more details.\n\nYour system appears to have the following DBI drivers available: $2.";
+    }
+    elsif ($errStr =~ /install_driver\((.*?)\)\s*failed/) # Unable to load DBI driver without avaliable drivers list
+    {
+        $newErrStr = "Couldn't load perl database driver DBD::$1.\nThis error is usually caused by mistyping the driver name in the configuration file (driver names are case sensitive) or failing to have the required driver module installed. See the installation instructions for more details.";
     }
     elsif ($errStr =~ /Can't locate object method "driver" via package "DBD::(.*?)"/)
     {
