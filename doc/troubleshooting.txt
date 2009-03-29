@@ -8,14 +8,29 @@
 You can read the latest version of this document in HTML format at:
 http://www.rackmonkey.org/doc/1.2.5
 
+WARNING: This is a preview release that has undergone limited testing. The
+author does not recommend using this release for production usage.
+The RackMonkey documentation is still being updated and you should expect to
+find omissions and inaccuracies in it.
 
-Troubleshooting
+
+Contents
+========
+1. Introduction
+2. Internal Server Error
+3. Unsupported Database Driver
+4. Database Related Errors
+5. Missing Graphics and Stylesheet
+
+
+1. Introduction
 ===============
 This document deals with system issues which prevent RackMonkey running or
-using its database.
+using its database. For further support information see the README file.
 
-RackMonkey Won't Run
---------------------
+
+2. Internal Server Error
+========================
 If you get an 'Internal Server Error' or the web server displays the text of
 rackmonkey.pl (rather than executing it), check your web server error log.
 
@@ -49,36 +64,25 @@ Common reasons for RackMonkey failing to run are:
   You can download a newer perl from: http://www.perl.com/download.csp 
 
 
-Unsupported Database Driver
-----------------------------
+3. Unsupported Database Driver
+==============================
 RackMonkey checks for a supported database driver when intializing the engine. 
 If this check fails you will get an error of the form "You tried to use an 
-unsupported database driver" with advice on the minimum supported version. 
+unsupported database driver" with advice on the minimum supported version if 
+appropriate. 
 
-To correct this issue you should update the affected driver to a more recent 
-version. See the installation instructions for details on installing Perl 
-modules.
+To correct this issue you should install a supported driver. See the 
+installation instructions for details on installing Perl modules.
 
 Alternatively you can choose to disable the database driver checks. THIS IS 
 NOT RECOMMENDED AND MAY RESULT IN MALFUNCTION OR DATA LOSS. To disable the 
-checks add the following line to your rackmonkey.conf:
+checks add the following line to rackmonkey.conf:
 
  bypass_db_driver_checks=1
- 
- 
-Missing Graphics and Stylesheet
--------------------------------
-If the RackMonkey script runs, but the graphics and stylesheet are missing,
-you should check the wwwpath setting in rackmonkey.conf.
 
-Missing Database
-----------------
-If you get an error of the form:
 
-  DBI connect('dbname=/data/rack.db','',...) failed: unable to open
-  database file(1) at dbdimp.c line 94 at /content/rackmonkey.pl line 45 
-
-Check your config to ensure you have the right database path in DBDCONNECT.
+4. Database Related Errors
+==========================
     
 Unable to Edit/Create Entries
 -----------------------------
@@ -92,6 +96,7 @@ You should check the permission on the SQLite database file and the directory
 in which it resides. The web servers needs to be able to write to the file and
 the directory. This error can only occur when using SQLite, as other databases
 engines don't make direct use of files in the same way.
+
 
 Permission Denied for Relation <table>
 --------------------------------------
@@ -107,3 +112,10 @@ form in psql:
 
 Where <role> is the role you're using to connect from RackMonkey, and <table>
 is the relation mentioned in the error message.
+
+
+5. Missing Graphics and Stylesheet
+==================================
+If the RackMonkey script runs, but the graphics and stylesheet are missing,
+you should check the wwwpath setting in rackmonkey.conf. This path is within 
+URL (web) space NOT filesystem space.
