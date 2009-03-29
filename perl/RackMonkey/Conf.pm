@@ -33,7 +33,8 @@ sub new
         'maxnote'      => 4095,
         'maxstring'    => 255,
         'maxracksize'  => 255,
-        'dellquery'    => ''
+        'dellquery'    => '',
+        'bypass_db_driver_checks' => 0
     };
     unless (open(CONFIG, "<$$self{'configpath'}"))
     {
