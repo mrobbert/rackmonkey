@@ -24,9 +24,9 @@ INSERT INTO row (name, room, room_pos, hidden_row, notes, meta_update_time, meta
 INSERT INTO row (name, room, room_pos, hidden_row, notes, meta_update_time, meta_update_user) VALUES('-', 8, 0, 1, 'Test data', '1988-02-15 00:00:00', 'rackmonkey');
 
 -- Test Racks
-INSERT INTO rack (name, row, row_pos, hidden_rack, size, notes, meta_update_time, meta_update_user) VALUES('A1', 7, 0, 0, 20, 'Test data', '1988-02-15 00:00:00', 'rackmonkey');
-INSERT INTO rack (name, row, row_pos, hidden_rack, size, notes, meta_update_time, meta_update_user) VALUES('A2', 7, 0, 0, 20, 'Test data', '1988-02-15 00:00:00', 'rackmonkey');
-INSERT INTO rack (name, row, row_pos, hidden_rack, size, notes, meta_update_time, meta_update_user) VALUES('R100', 8, 0, 0, 20, 'Test data', '1988-02-15 00:00:00', 'rackmonkey');
+INSERT INTO rack (name, row, row_pos, hidden_rack, size, numbering_direction, notes, meta_update_time, meta_update_user) VALUES('A1', 7, 0, 0, 20, 0, 'Test data', '1988-02-15 00:00:00', 'rackmonkey');
+INSERT INTO rack (name, row, row_pos, hidden_rack, size, numbering_direction, notes, meta_update_time, meta_update_user) VALUES('A2', 7, 0, 0, 20, 0, 'Test data', '1988-02-15 00:00:00', 'rackmonkey');
+INSERT INTO rack (name, row, row_pos, hidden_rack, size, numbering_direction, notes, meta_update_time, meta_update_user) VALUES('R100', 8, 0, 0, 20, 1, 'Test data', '1988-02-15 00:00:00', 'rackmonkey');
 
 -- Test Domains
 INSERT INTO domain (name, descript, notes, meta_default_data, meta_update_time, meta_update_user) VALUES('coyote.example.com', '', 'Test data', 0, '1988-02-15 00:00:00', 'rackmonkey');
