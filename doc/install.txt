@@ -37,8 +37,8 @@ release all installations should follow this document.
 This document covers the installation of a new instance of RackMonkey. The 
 next preview will include upgrade instructions.
 
-Please note that the $ or # shown at the start of commands represents the 
-shell prompt, you should not type it.
+Please note that the $ and # shown at the start of commands represent the 
+shell prompt, you should not type them.
 
 
 2. System Set Up
@@ -441,13 +441,13 @@ get an Internal Server Error), read doc/troubleshooting.txt.
 8. RackMonkey Plugins: Excel and DNS
 ====================================
 
-Excel Export: rack2xls.pl
--------------------------
-The current Excel export plugin can produce an Excel 97-2004 format
-spreadsheet that is readable by many applications including Microsoft Excel 
-for Windows and Mac, Open Office and iWork. At present the plugin can only 
-export a table of all devices, but further functionality will appear in future 
-releases.
+Excel Spreadsheet Export: rack2xls.pl
+-------------------------------------
+The current Excel spreadsheet export plugin can produce an Excel 97-2004 
+format spreadsheet that is readable by many applications including Microsoft 
+Excel for Windows and Mac, Open Office and iWork. At present the plugin can 
+only export a table of all devices, but further functionality will appear in 
+future releases.
 
 To use this plugin you need to install the Spreadsheet::WriteExcel Perl 
 module. If you're not sure how to do this see section 2 of this document.
