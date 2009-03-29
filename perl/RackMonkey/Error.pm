@@ -148,7 +148,11 @@ sub enlighten
 
     elsif ($errStr =~ /attempt to write a readonly database/)
     {
-        $newErrStr = "Couldn't write to the RackMonkey database.\nCheck the permissions on the database file and directory it resides in.";
+        $newErrStr = "Couldn't write to the RackMonkey database.\nThe database file needs to be writable by the user running RackMonkey (for example: httpd or www-data if running as a web application).";
+    }
+    elsif ($errStr =~ /execute failed: unable to open database file/)
+    {
+        $newErrStr = "Couldn't write to the RackMonkey database.\nThe directory containing the database file needs to be writable by the user running RackMonkey (for example: httpd or www-data if running as a web application).";
     }
 
     # Errors users should never see
