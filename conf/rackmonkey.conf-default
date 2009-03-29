@@ -16,20 +16,12 @@ dbpass =
 tmplpath =
 wwwpath =
 
-# Plugins - to enable/disable a plugin (un)comment the appropriate line
+# Plugins - to enable/disable a plugin uncomment/comment the appropriate line
 #plugin_xls = rack2xls.pl
 #plugin_dns = rackdns.pl
 
 # Preference Constants
-defaultview = rack      # View loaded when none is specified
+defaultview = rack      # Default view loaded when none is specified
 dateformat = %Y-%m-%d   # Format used to display dates (not currently used)
-shorttextlen = 32       # Shorten long text for table views
-shorturllen = 64        # Shorten long URLs for display
-
-# Validation Constants
-maxnote = 4095          # Max length of note fields
-maxstring = 255         # Max length of simple strings
-maxracksize = 255       # Max rack size in rack units (U)
-
-# Remote site queries
-dellquery = http://support.euro.dell.com/support/topics/topic.aspx/emea/shared/support/my_systems_info/en/details?c=uk&cs=ukbsdt1&l=en&s=bsd&~ck=ln&lnki=2&ServiceTag=
+shorttextlen = 32       # Shorten text longer than this for table views
+shorturllen = 64        # Shorten URLs longer than this for display
