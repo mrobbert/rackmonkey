@@ -49,23 +49,29 @@ sub new
         croak "RM_ENGINE: SQLite database '$databasePath' does not exist. Check the 'dbconnect' path in rackmonkey.conf and that you have created a RackMonkey database as per the install guide."
           unless (-e $databasePath);
     }
-
-    my $dbh = DBI->connect($$conf{'dbconnect'}, $$conf{'dbuser'}, $$conf{'dbpass'}, {AutoCommit => 1, RaiseError => 1, PrintError => 0, ShowErrorStatement => 1});
-
+    
+    my $currentDriver = $$sys{'db_driver'};
+    
     unless ($$conf{'bypass_db_driver_checks'})
     {
-        # Checks that the DBD driver is compatible with RackMonkey
-        my $currentDriver = $$sys{'db_driver'};
-        my $driverVersion = eval("\$${currentDriver}::VERSION");
-        my $DBIVersion    = eval("\$DBI::VERSION");
-        $$sys{'db_driver_version'} = $driverVersion;
-        $$sys{'dbi_version'}       = $DBIVersion;
-
         # Check we're using SQLite, Postgres or MySQL
         unless (($currentDriver eq 'DBD::SQLite') || ($currentDriver eq 'DBD::Pg') || ($currentDriver eq 'DBD::mysql'))
         {
             croak "RM_ENGINE: You tried to use an unsupported database driver '$currentDriver'. RackMonkey supports SQLite (DBD::SQLite), Postgres (DBD::Pg) or MySQL (DBD::mysql). Please consult the troubleshooting document.";
         }
+    }
+
+    # To do remaining driver checks we need to load the driver
+    my $dbh = DBI->connect($$conf{'dbconnect'}, $$conf{'dbuser'}, $$conf{'dbpass'}, {AutoCommit => 1, RaiseError => 1, PrintError => 0, ShowErrorStatement => 1});
+
+    unless ($$conf{'bypass_db_driver_checks'})
+    {
+        # Checks that the DBI version and DBD driver is compatible with RackMonkey
+        my $currentDriver = $$sys{'db_driver'};
+        my $driverVersion = eval("\$${currentDriver}::VERSION");
+        my $DBIVersion    = eval("\$DBI::VERSION");
+        $$sys{'db_driver_version'} = $driverVersion;
+        $$sys{'dbi_version'}       = $DBIVersion;
 
         # If using SQLite, version v1.09 or higher is required in order to support ADD COLUMN
         if (($currentDriver eq 'DBD::SQLite') && ($driverVersion < 1.09))
