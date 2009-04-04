@@ -253,3 +253,46 @@ END
 }
 
 1;
+
+=head1 NAME
+
+RackMonkey::Error - Creates User-Friendly Error Messages
+
+=head1 SYNOPSIS
+
+ use RackMonkey::Engine;
+ use RackMonkey::Error;
+
+ my $backend;
+ eval
+ {
+     $backend = RackMonkey::Engine->new;
+     # run RackMonkey scripts/modules here
+ };
+ if ($@)
+ {
+     my $errMsg = $@;
+     print $cgi->header;
+     my $friendErr = RackMonkey::Error::enlighten($errMsg);
+     RackMonkey::Error::display($errMsg, $friendErr, $backend->{'sys'});
+ }
+
+=head1 DESCRIPTION
+
+This is draft documentation for RackMonkey::Error. More details will be added in future.
+
+=head1 BUGS
+
+You can view and report bugs at http://www.rackmonkey.org
+
+=head1 LICENSE
+
+This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation; either version 2 of the License, or (at your option) any later version.
+
+=head1 AUTHOR
+
+Will Green - http://flux.org.uk
+
+=head1 SEE ALSO
+
+http://www.rackmonkey.org

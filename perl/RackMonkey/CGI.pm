@@ -292,3 +292,33 @@ sub selectHardware
     }
     return $items;
 }
+
+1;
+
+=head1 NAME
+
+RackMonkey::CGI - Encapsulate CGI and other misc functionality
+
+=head1 SYNOPSIS
+
+This module is due to be replaced in RackMonkey v1.3.
+
+=head1 DESCRIPTION
+
+This module is due to be replaced in RackMonkey v1.3.
+
+=head1 BUGS
+
+You can view and report bugs at http://www.rackmonkey.org
+
+=head1 LICENSE
+
+This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation; either version 2 of the License, or (at your option) any later version.
+
+=head1 AUTHOR
+
+Will Green - http://flux.org.uk
+
+=head1 SEE ALSO
+
+http://www.rackmonkey.org

@@ -64,3 +64,33 @@ sub getConf
     confess "RM_ENGINE: '$key' is not a valid configuration parameter." unless exists $self->{"$key"};
     return $self->{"$key"};
 }
+
+1;
+
+=head1 NAME
+
+RackMonkey::Conf - RackMonkey configuration information
+
+=head1 SYNOPSIS
+
+Documentation is still being written.
+
+=head1 DESCRIPTION
+
+Documentation is still being written.
+
+=head1 BUGS
+
+You can view and report bugs at http://www.rackmonkey.org
+
+=head1 LICENSE
+
+This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation; either version 2 of the License, or (at your option) any later version.
+
+=head1 AUTHOR
+
+Will Green - http://flux.org.uk
+
+=head1 SEE ALSO
+
+http://www.rackmonkey.org
