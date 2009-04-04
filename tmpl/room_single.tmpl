@@ -43,7 +43,7 @@
 						<div class="value"><TMPL_VAR ESCAPE=HTML NAME=building_name> &nbsp; <a class="small" title="View details for this building" href="<TMPL_VAR NAME=base_url>?view=building&amp;view_type=single&amp;id=<TMPL_VAR ESCAPE=URL NAME=building>">Details&hellip;</a></div>
 					</div>						
 					<div>
-						<div class="key">Rows [<a href="<TMPL_VAR NAME=base_url>?view=row&amp;view_type=manage&amp;room_id=<TMPL_VAR ESCAPE=URL NAME=id>&amp;return_view=room&amp;return_view_type=single&amp;return_view_id=<TMPL_VAR ESCAPE=URL NAME=id>">manage</a>]</div>
+						<div class="key">Rows</div>
 						<div class="value">
 							<TMPL_IF NAME=has_rows>
 							This room has <TMPL_VAR ESCAPE=HTML NAME=row_count> rows.
