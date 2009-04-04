@@ -2371,11 +2371,11 @@ This assumes a suitable configuration file and database exist, see Description f
 
 This module abstracts a DBI database for use by RackMonkey applications. Data can be queried and updated without worrying about the underlying structure. The Engine uses neutral SQL that works on SQLite, Postgres and MySQL. 
 
-A database with a suitable schema and a configuration file are required to use the engine. Both of these are supplied with the RackMonkey distribution.Please consult the RackMonkey install document and RackMonkey::Conf module for details.
+A database with a suitable schema and a configuration file are required to use the engine. Both of these are supplied with the RackMonkey distribution. Please consult the RackMonkey install document and RackMonkey::Conf module for details.
 
 =head1 DATA STRUCTURES
 
-Data structures are generally references to hashes or lists of hashes. For example an OS record returned by the os method looks like this:
+Data structures are generally references to hashes or lists of hashes. For example an operating system record returned by the os method looks like this:
 
  $VAR1 = {
            'meta_update_user' => 'install',
@@ -2459,8 +2459,14 @@ Returns a list of items of a given type, optionally including meta default items
  
 =head3 itemCount($type)
 
+Returns the count of the given type without meta default items.
+
+ my $roomCount = $backend->itemCount('room');
+
 =head3 performAct($type, $act, $updateUser, $record)
- 
+
+This method adds, updates or deletes item records. Further documentation on this method is still being written.
+
 =head1 BUGS
 
 You can view and report bugs at http://www.rackmonkey.org
