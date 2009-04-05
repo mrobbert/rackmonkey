@@ -66,7 +66,7 @@ sub new
     # Get information on the database server
     if ($currentDriver eq 'DBD::SQLite')
     {
-        $$sys{'db_server_version'} = 'Not applicable';
+        $$sys{'db_server_version'} = 'not applicable';
         $$sys{'db_driver_lib_version'} = $dbh->{'sqlite_version'};
     }
     elsif ($currentDriver eq 'DBD::Pg')
@@ -77,7 +77,7 @@ sub new
     elsif ($currentDriver eq 'DBD::mysql')
     {
         $$sys{'db_server_version'} = $dbh->{'mysql_serverinfo'};
-        $$sys{'db_driver_lib_version'} = 'Not available';
+        $$sys{'db_driver_lib_version'} = 'not available';
     }
     
     unless ($$conf{'bypass_db_driver_checks'})
@@ -104,6 +104,12 @@ sub new
         if (($currentDriver eq 'DBD::mysql') && ($driverVersion < 3.0002))
         {
             croak "RM_ENGINE: You tried to use an unsupported database driver. RackMonkey requires DBD::mysql v3.0002 or higher. You are using DBD::mysql v$driverVersion. Please consult the troubleshooting document.";
+        }
+        
+        # Check MySQL server version is at least 5
+        if (($currentDriver eq 'DBD::mysql') && ($$sys{'db_server_version'} < 5))
+        {
+            croak "RM_ENGINE: You tried to use an unsupported MySQL server version. RackMonkey requires MySQL v5 or higher. You are using MySQL v".$$sys{'db_server_version'}.". Please consult the installation document.";
         }
     }
 
