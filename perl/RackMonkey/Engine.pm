@@ -15,8 +15,6 @@ use Carp;
 use DBI;
 use Time::Local;
 
-use Data::Dumper;
-
 use RackMonkey::Conf;
 
 our $VERSION = '1.2.%BUILD%';

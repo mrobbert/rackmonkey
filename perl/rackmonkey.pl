@@ -33,8 +33,6 @@ use RackMonkey::CGI;
 use RackMonkey::Engine;
 use RackMonkey::Error;
 
-use Data::Dumper;
-
 our $VERSION = '1.2.%BUILD%';
 our $AUTHOR  = 'Will Green (wgreen at users.sourceforge.net)';
 
