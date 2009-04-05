@@ -8,6 +8,16 @@
 You can read the latest version of this document in HTML format at:
 http://www.rackmonkey.org/doc
 
+v1.2.5 Preview 2 - Released 2009-04-05
+--------------------------------------
+* Added ability to record OS licence key
+* Separated manufacturer and hardware model in device creation/editing
+* Improved database driver checks and reporting
+* Added instructions for upgrading from prior releases
+* Pod added to perl modules (still work in progress)
+* Fixed a bug with creating/editing rooms
+* Fixed handling of notes fields when truncated
+
 v1.2.5 Preview 1 - Released 2009-03-15
 --------------------------------------
 * Many UI Improvements

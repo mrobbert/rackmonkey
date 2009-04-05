@@ -70,11 +70,8 @@ current release from http://www.rackmonkey.org.
 
 4. Installation
 ===============
-For installation instructions refer to: doc/install.txt.
-
-Upgrades are not documented in this release. There are several database schema 
-changes in this release, so upgrading isn't trivial. The next preview will 
-include instructions for upgrades.
+For new installation refer to: doc/install.txt.
+For upgrades from prior releases refer to: doc/upgrade.txt
 
 
 5. Documentation
@@ -84,8 +81,7 @@ You can find RackMonkey documentation:
 * In the doc directory included in the RackMonkey distribution
 * Within the application itself by selecting the help tab
 * Online at http://www.rackmonkey.org/doc
-* Perl pod documentation is included in the perl modules. This can be viewed 
-  with: perldoc <FILE>
+* Perl pod is included in the perl modules. This can be viewed with perldoc.
 
 
 6. Support
