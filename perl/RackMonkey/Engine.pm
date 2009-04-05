@@ -107,7 +107,7 @@ sub new
         }
         
         # Check MySQL server version is at least 5
-        if (($currentDriver eq 'DBD::mysql') && ($$sys{'db_server_version'} < 5))
+        if (($currentDriver eq 'DBD::mysql') && (substr($$sys{'db_server_version'}, 0, 1) < 5))
         {
             croak "RM_ENGINE: You tried to use an unsupported MySQL server version. RackMonkey requires MySQL v5 or higher. You are using MySQL v".$$sys{'db_server_version'}.". Please consult the installation document.";
         }
