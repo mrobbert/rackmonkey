@@ -34,8 +34,8 @@ In future RackMonkey will be available in package form for common operating
 systems and include more OS specific installation instructions. For this 
 release all installations should follow this document.
 
-This document covers the installation of a new instance of RackMonkey. The 
-next preview will include upgrade instructions.
+This document covers the installation of a new instance of RackMonkey. For
+upgrades you should follow doc/upgrade.txt.
 
 Please note that the $ and # shown at the start of commands represent the 
 shell prompt, you should not type them.
@@ -46,7 +46,7 @@ shell prompt, you should not type them.
 You need the following in order to install and use RackMonkey:
 
 * Modern web browser
-For Windows/Linux users Firefox 3 currently provides the best results, for Mac 
+For Windows/Unix users Firefox 3 currently provides the best results, for Mac 
 users we recommend Safari 3. For details see: http://www.rackmonkey.org/faq
 
 * Web server (Apache 2 recommended)
@@ -290,8 +290,7 @@ You can also connect to a local database on another port:
 
 For MySQL
 ---------
-NB. MySQL support is still experimental. It will be fully supported in v1.2.5. 
-RackMonkey requires features only available in MySQL 5 or higher, v3 or v4 
+NB. RackMonkey requires features only available in MySQL 5 or higher, v3 or v4 
 will not work.
 
 You will create a MySQL database and user in section 5. For now choose a
@@ -322,14 +321,16 @@ You can also connect to a local database on another port:
 
 6. Database Set Up
 ==================
-Before you can run RackMonkey you need to set up the database. You must run
-the schema and default_data SQL files against the database or else it won't
-work. Once they have run you can optionally install the sample data.
+Before you can run RackMonkey you need to set up the database. You must 
+import the the schema and default data files in the database before 
+RackMonkey will run. The sample data is optional, but useful, especially for 
+new users.
 
 For SQLite
 ----------
-Make a note of the path you specified for DBDCONNECT, then run both of the
-following to set up the database and install the default data (required):
+Make a note of the path you specified for 'dbconnect' in section 5, then run 
+both of the following to set up the database and import the required default 
+data:
 
     $ sqlite3 [PATH] < sql/schema/schema.sqlite.sql
     $ sqlite3 [PATH] < sql/data/default_data.sql
@@ -340,9 +341,9 @@ work entering data and you can always delete the ones you don't want):
 
     $ sqlite3 [PATH] < sql/data/sample_data.sql
     
-You should then change the permissions of the database file [PATH] and its
-parent directory to be readable and writable by your web server. For example,
-you might change the owner to 'www' if that is the user your web server runs
+You should then change the permissions of the database file and its parent
+directory to be readable and writable by your web server. For example, you
+might change the owner to 'www' if that is the user your web server runs 
 under.
 
 For further information on administering SQLite see:
@@ -351,7 +352,7 @@ http://www.sqlite.org/docs.html
 
 For Postgres
 ------------
-Using the values you set in section 4 you can create your RackMonkey user
+Using the values you set in section 5 you can create your RackMonkey user
 and database. Assuming you called both your user and database 'rackmonkey'
 you run (entering your chosen password when prompted):
 
@@ -370,7 +371,7 @@ you run (entering your chosen password when prompted):
     CREATE DATABASE
 
 Run both of the following to set up the database and install the 
-default data (assumes your database is called rackmonkey):
+default data (assumes your database and user are called rackmonkey):
 
     $ psql -U rackmonkey rackmonkey < sql/schema/schema.postgres.sql
     $ psql -U rackmonkey rackmonkey < sql/data/default_data.sql
@@ -435,7 +436,7 @@ rackmonkey.pl script. You should be presented with a screen showing a list of
 racks. If everything works correctly you probably want to start reading the 
 User Guide, which you can find under the [Help] tab in the RackMonkey 
 interface. If you're having trouble getting RackMonkey to run (for example you
-get an Internal Server Error), read doc/troubleshooting.txt.
+get an Internal Server Error) read doc/troubleshooting.txt.
 
 
 8. RackMonkey Plugins: Excel and DNS
@@ -461,7 +462,7 @@ then find an 'Export XLS' button at the top of the device table views.
 DNS Queries: rackdns.pl
 -----------------------
 The DNS plugin is currently very basic. It performs a query for different 
-record types against a device name, but doesn't currently report errors.
+record types against a device name, but doesn't report errors.
 
 To use this plugin you need to install the Net::DNS Perl module. If you're not
 sure how to do this see section 2 of this document.
