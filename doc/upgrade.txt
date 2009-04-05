@@ -27,7 +27,7 @@ Contents
 1. Introduction
 ===============
 This document explains how to upgrade RackMonkey to v1.2.5. If you're doing a 
-fresh install, please see install.txt instead. Upgrading is supported from 
+fresh install, please see doc/install.txt instead. Upgrading is supported from 
 v1.2 releases only.
 
 Upgrading is straightforward: but there is a schema change. Ensure you take a 
@@ -161,10 +161,10 @@ Creating a Text File Configuration
 ----------------------------------
 RackMonkey v1.2.4 and later use a text file to store configuration 
 information, such as the database to use. Before continuing with the upgrade 
-process you should take a backup of RackMonkey/Conf.pm as this file is totally 
-replaced with a new module. You should now copy conf/rackmonkey.conf-default 
-to conf/rackmonkey.conf then use your existing RackMonky/Conf.pm module to 
-fill in the values. 
+process you should take a backup of RackMonkey/Conf.pm as this file is 
+completely replaced with a new module. You should now copy 
+conf/rackmonkey.conf-default to conf/rackmonkey.conf then use your existing 
+RackMonky/Conf.pm module to fill in the values. 
 
 Comments in the configuration file are included with the a #. Comments must
 either start a line or be preceded by whitespace. Values in the configuration
@@ -240,7 +240,7 @@ only export a table of all devices, but further functionality will appear in
 future releases.
 
 To use this plugin you need to install the Spreadsheet::WriteExcel Perl 
-module. If you're not sure how to do this see section 2 of this document.
+module. If you're not sure how to do this see section 3 of this document.
 
 To enable the plugin, copy rack2xls.pl into the same directory as 
 rackmonkey.pl, make sure it's executable (chmod 755 usually does the trick)
@@ -251,10 +251,10 @@ then find an 'Export XLS' button at the top of the device table views.
 DNS Queries: rackdns.pl
 -----------------------
 The DNS plugin is currently very basic. It performs a query for different 
-record types against a device name, but doesn't currently report errors.
+record types against a device name, but doesn't report errors.
 
 To use this plugin you need to install the Net::DNS Perl module. If you're not
-sure how to do this see section 2 of this document.
+sure how to do this see section 3 of this document.
 
 To enable the plugin, copy rackdns.pl into the same directory as 
 rackmonkey.pl, make sure it's executable (chmod 755 usually does the trick)
