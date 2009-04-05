@@ -48,7 +48,7 @@ sub new
         # Check we're using SQLite, Postgres or MySQL
         unless (($currentDriver eq 'DBD::SQLite') || ($currentDriver eq 'DBD::Pg') || ($currentDriver eq 'DBD::mysql'))
         {
-            croak "RM_ENGINE: You tried to use an unsupported database driver '$currentDriver'. RackMonkey supports SQLite (DBD::SQLite), Postgres (DBD::Pg) or MySQL (DBD::mysql). Please consult the troubleshooting document.";
+            croak "RM_ENGINE: You tried to use an unsupported database driver '$currentDriver'. RackMonkey supports SQLite (DBD::SQLite), Postgres (DBD::Pg) or MySQL (DBD::mysql). Please check you typed the driver name correctly (names are case sensitive). Consult the installation and troubleshooting documents for more information.";
         }
     }
     
@@ -60,13 +60,29 @@ sub new
           unless (-e $databasePath);
     }
 
-    # To do remaining driver checks we need to load the driver
+    # To get DB server information and do remaining driver checks we need to load the driver
     my $dbh = DBI->connect($$conf{'dbconnect'}, $$conf{'dbuser'}, $$conf{'dbpass'}, {AutoCommit => 1, RaiseError => 1, PrintError => 0, ShowErrorStatement => 1});
 
+    # Get information on the database server
+    if ($currentDriver eq 'DBD::SQLite')
+    {
+        $$sys{'db_server_version'} = 'Not applicable';
+        $$sys{'db_driver_lib_version'} = $dbh->{'sqlite_version'};
+    }
+    elsif ($currentDriver eq 'DBD::Pg')
+    {
+        $$sys{'db_server_version'} = $dbh->{'pg_server_version'};
+        $$sys{'db_driver_lib_version'} = $dbh->{'pg_lib_version'};
+    }
+    elsif ($currentDriver eq 'DBD::mysql')
+    {
+        $$sys{'db_server_version'} = $dbh->{'mysql_serverinfo'};
+        $$sys{'db_driver_lib_version'} = 'Not available';
+    }
+    
     unless ($$conf{'bypass_db_driver_checks'})
     {
         # Checks that the DBI version and DBD driver is compatible with RackMonkey
-        my $currentDriver = $$sys{'db_driver'};
         my $driverVersion = eval("\$${currentDriver}::VERSION");
         my $DBIVersion    = eval("\$DBI::VERSION");
         $$sys{'db_driver_version'} = $driverVersion;
