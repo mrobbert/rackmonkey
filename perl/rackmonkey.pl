@@ -113,7 +113,6 @@ eval {
 
         if (($view eq 'config') || ($view eq 'help') || ($view eq 'network') || ($view eq 'power'))
         {
-
             # do nothing - pages are static content
         }
         elsif ($view eq 'app')
@@ -756,19 +755,21 @@ sub formatNotes
 {
     my $note = shift;
     my $inline = shift || 0;
-    $note = encode_entities($note);                          # we don't use HTML::Template escape so have to encode here
+    $note = encode_entities($note);                             # we don't use HTML::Template escape so have to encode here
 
     unless ($inline)
     {
         $note =~ s/\n/<br>/sg;                                  # turn newlines into break tags
         $note =~ s/\[(.*?)\|(.*?)\]/<a href="$1">$2<\/a>/sg;    # create hyperlinks
+        $note =~ s/\*\*\*(.*?)\*\*\*/<strong>$1<\/strong>/sg;   # strong using ***
+        $note =~ s/\*\*(.*?)\*\*/<em>$1<\/em>/sg;               # emphasis using **
     }
     else
     {
         $note =~ s/\[(.*?)\|(.*?)\]/$2 ($1)/sg;                 # can't make proper hyperlinks inline as they may be truncated
+        $note =~ s/\*\*\*(.*?)\*\*\*/$1/sg;                     # remove ***
+        $note =~ s/\*\*(.*?)\*\*/$1/sg;                         # remove **
     }
 
-    $note =~ s/\*\*\*(.*?)\*\*\*/<strong>$1<\/strong>/sg;       # strong using ***
-    $note =~ s/\*\*(.*?)\*\*/<em>$1<\/em>/sg;                   # emphasis using **
     return $note;
 }
