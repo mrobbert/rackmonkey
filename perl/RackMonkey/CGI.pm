@@ -46,7 +46,7 @@ sub view
     my ($self, $defaultView) = @_;
     $defaultView ||= 'rack';
     my $view = $self->cgi->param('view') || '';
-    $view = $defaultView unless $view =~ /^[a-z_]+$/;
+    $view = $defaultView unless $view =~ /^[a-zA-Z_]+$/;
     return $view;
 }
 

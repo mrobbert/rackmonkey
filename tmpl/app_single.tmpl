@@ -43,12 +43,15 @@
 						<div class="value"><TMPL_IF NAME=descript><TMPL_VAR ESCAPE=HTML NAME=descript><TMPL_ELSE>&nbsp;-</TMPL_IF></div>
 					</div>
 					<div>
-						<div class="key">Devices Used [<a href="<TMPL_VAR NAME=base_url>?view=app&amp;view_type=manage&amp;id=<TMPL_VAR ESCAPE=URL NAME=id>&amp;return_view=app&amp;return_view_type=single&amp;return_view_id=<TMPL_VAR ESCAPE=URL NAME=id>">manage</a>]</div>
+						<div class="key">Devices Used <a title="Create a new association between this app and a device" onclick="window.location = '<TMPL_VAR NAME=base_url>?view=deviceApp&amp;view_type=create&amp;id=<TMPL_VAR ESCAPE=HTML NAME=id>'; return false;"><img class="create" src="<TMPL_VAR NAME=web_root>/graphics/icons/add.png" width="14" height="14" alt=""/></a></div>
 						<div class="value">
 							<TMPL_IF NAME=app_devices>
 							<ul style="margin-top: 0px; padding-left: 1.5em">
 								<TMPL_LOOP NAME=app_devices>
-								<li><TMPL_VAR ESCAPE=HTML NAME=name> <TMPL_VAR ESCAPE=HTML NAME=app_relation_name> <a title="View details for this device" href="<TMPL_VAR NAME=base_url>?view=device&amp;view_type=single&amp;id=<TMPL_VAR ESCAPE=URL NAME=device_id>"><TMPL_VAR ESCAPE=HTML NAME=device_name><TMPL_UNLESS NAME=domain_meta_default_data>.<TMPL_VAR ESCAPE=HTML NAME=domain_name></TMPL_UNLESS></a></li>
+								<li>
+								  <TMPL_VAR ESCAPE=HTML NAME=name> <TMPL_VAR ESCAPE=HTML NAME=app_relation_name> <a title="View details for this device" href="<TMPL_VAR NAME=base_url>?view=device&amp;view_type=single&amp;id=<TMPL_VAR ESCAPE=URL NAME=device_id>"><TMPL_VAR ESCAPE=HTML NAME=device_name><TMPL_UNLESS NAME=domain_meta_default_data>.<TMPL_VAR ESCAPE=HTML NAME=domain_name></TMPL_UNLESS></a> 
+								  <a onclick="return confirmDel('the association between <TMPL_VAR ESCAPE=HTML NAME=name> and <TMPL_VAR ESCAPE=HTML NAME=device_name>')" title="Delete association between <TMPL_VAR ESCAPE=HTML NAME=name> and <TMPL_VAR ESCAPE=HTML NAME=device_name>" href="<TMPL_VAR NAME=base_url>?view=app&amp;view_type=single&amp;id=<TMPL_VAR ESCAPE=URL NAME=id>&amp;act=delete&amp;act_on=deviceApp&amp;act_id=<TMPL_VAR ESCAPE=HTML NAME=device_app_id>"><img style="border: none" src="<TMPL_VAR NAME=web_root>/graphics/icons/delete.png" width="14" height="14" alt=""/></a>
+								</li>
 								</TMPL_LOOP>
 							</ul>
 							<TMPL_ELSE>This app does not use any devices.

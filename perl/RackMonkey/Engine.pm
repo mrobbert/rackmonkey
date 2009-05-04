@@ -2337,7 +2337,7 @@ sub _validateAppUpdate
     $self->_checkNotes($$record{'notes'});
     return ($$record{'name'}, $$record{'descript'}, $$record{'notes'});
 }
-
+    
 sub updateDeviceApp
 {
     my ($self, $updateTime, $updateUser, $record) = @_;
@@ -2358,6 +2358,17 @@ sub updateDeviceApp
         $newId = $self->_lastInsertId('device_app');
     }
     return $newId || $$record{'id'};
+}
+
+sub deleteDeviceApp
+{
+    my ($self, $updateTime, $updateUser, $record) = @_;
+    my $deleteId = (ref $record eq 'HASH') ? $$record{'id'} : $record;
+    croak "RM_ENGINE: Delete failed. No device_app id specified." unless ($deleteId);
+    my $sth = $self->dbh->prepare(qq!DELETE FROM device_app WHERE id = ?!);
+    my $ret = $sth->execute($deleteId);
+    croak "RM_ENGINE: Delete failed. This device_app does not currently exist, it may have been removed already." if ($ret eq '0E0');
+    return $deleteId;
 }
 
 sub _validateDeviceAppUpdate

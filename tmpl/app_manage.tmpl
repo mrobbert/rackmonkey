@@ -29,8 +29,8 @@
 				<tr>
 					<th>Manage <TMPL_VAR ESCAPE=HTML NAME=name></th>
 				</tr>
-				<tr>
-					<td>
+				<TMPL_LOOP NAME=device_app><tr>
+					<td><TMPL_VAR ESCAPE=HTML NAME=device_app_id>: <TMPL_VAR ESCAPE=HTML NAME=app_name> <TMPL_VAR ESCAPE=HTML NAME=app_relation_name> <TMPL_VAR ESCAPE=HTML NAME=device_name> -
 						<strong><TMPL_VAR ESCAPE=HTML NAME=name></strong>
 						<select name="relation_id"><TMPL_LOOP NAME=relations>
 							<option <TMPL_IF NAME=selected>selected="selected"</TMPL_IF> value="<TMPL_VAR ESCAPE=HTML NAME=id>"><TMPL_VAR ESCAPE=HTML NAME=name></option></TMPL_LOOP>
@@ -39,9 +39,8 @@
 						<select name="device_id"><TMPL_LOOP NAME=devices>
 							<option <TMPL_IF NAME=selected>selected="selected"</TMPL_IF> value="<TMPL_VAR ESCAPE=HTML NAME=id>"><TMPL_VAR ESCAPE=HTML NAME=name></option></TMPL_LOOP>
 						</select>
-						<p><em>In this build only one device can be associated with each app.</em></p>
 					</td>
-				</tr>
+				</tr></TMPL_LOOP>
 				<tr>
 					<td class="footer">
 						<input type="hidden" name="view" value="app" />

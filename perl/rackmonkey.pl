@@ -33,6 +33,8 @@ use RackMonkey::CGI;
 use RackMonkey::Engine;
 use RackMonkey::Error;
 
+use Data::Dumper;
+
 our $VERSION = '1.2.%BUILD%';
 our $AUTHOR  = 'Will Green (wgreen at users.sourceforge.net)';
 
@@ -93,7 +95,7 @@ eval {
     {
 
         # check the view is valid
-        unless ($view =~ /^(?:config|help|app|building|device|domain|hardware|network|power|org|os|rack|report|role|room|row|service|system)$/)
+        unless ($view =~ /^(?:config|help|app|building|device|deviceApp|domain|hardware|network|power|org|os|rack|report|role|room|row|service|system)$/)
         {
             die "RMERR: '$view' is not a valid view. Did you type the URL manually? Note that view names are singular, for example device NOT devices.";
         }
@@ -144,25 +146,6 @@ eval {
                 $$app{'app_devices'} = $devices;
                 $template->param($app);
             }
-            elsif ($viewType =~ /^manage/)
-            {
-                my $app = $backend->app($id);
-                $template->param($app);
-
-                my $deviceUsed = @{$backend->appDevicesUsedList($id)}[0];    # we only support one device at present
-                $template->param('device_app_id' => $$deviceUsed{'device_app_id'});
-                my $selectedDevice = $cgi->lastCreatedId || $cgi->id('device');
-                $selectedDevice = $$deviceUsed{'device_id'} if (!$selectedDevice);
-                my $devices = $backend->listBasic('device');
-                unshift @$devices, {'id' => '', 'name' => '-'};
-                $template->param('devices' => $cgi->selectItem($devices, $selectedDevice));
-
-                my $selectedRelation = $cgi->lastCreatedId || $cgi->id('relation');
-                $selectedRelation = $$deviceUsed{'app_relation_id'} if (!$selectedRelation);
-                my $relations = $backend->listBasic('app_relation', 1);
-                unshift @$relations, {'id' => '', 'name' => '-'};
-                $template->param('relations' => $cgi->selectItem($relations, $selectedRelation));
-            }
         }
         elsif ($view eq 'building')
         {
@@ -190,6 +173,26 @@ eval {
                     $$building{'notes'} = formatNotes($$building{'notes'});
                 }
                 $template->param($building);
+            }
+        }
+        elsif ($view eq 'deviceApp')
+        {
+            if ($viewType =~ /^create/)
+            {
+                my $app = $backend->app($id);
+                $template->param($app);
+            
+                my $devices = $backend->listBasic('device');
+                unshift @$devices, {'id' => '', 'name' => '-'};
+                $template->param('devices' => $devices);
+            
+                my $relations = $backend->listBasic('app_relation', 1);
+                unshift @$relations, {'id' => '', 'name' => '-'};
+                $template->param('relations' => $relations);   
+            }
+            else
+            {
+                die "View 'deviceApp' only supports creation. Use 'app' view for other functions.";
             }
         }
         elsif ($view eq 'device')
