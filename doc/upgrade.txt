@@ -80,18 +80,20 @@ Once the shell has started (you may be prompted to configure it):
 
 4. Schema Update
 ================
-RackMonkey v1.2.5 is the first release of the 1.2 series to include a schema 
-change. The schema update is handled by an SQL script for each database 
-engine. While the scripts have been tested this is the first time they've been 
-included in a public release, feedback on any issues is appreciated.
+RackMonkey v1.2.5 is the first release of the 1.2 series to include schema 
+changes. The schema updates are handled by separate SQL script for each
+database engine. Together the updates take the schema from v2 to v4. To check
+which schema you are on you can run the following on your database:
 
-The schema change drops the device_app table and recreates it. This table 
+    SELECT name,value from rm_meta where name = 'schema_version';
+
+The v3 schema change drops the device_app table and recreates it. This table 
 wasn't used in prior releases, but if you manually added data to it you will 
 need to restore it from backup after the schema change.
 
-The schema change is wrapped in a transaction, so if some statements fail then 
-the database will roll back and you can continue using your existing release 
-while you investigate the problem.
+Each schema change is wrapped in a transaction, so if some statements fail 
+then the database will roll back and you can continue using your existing 
+release while you investigate the problem.
 
 BEFORE UPDATING THE SCHEMA BE SURE TO TAKE A FULL DATABASE BACKUP.
 
@@ -100,19 +102,29 @@ Updating SQLite
 ---------------
 Locate your SQLite database file (its location is specified in the RackMonkey 
 configuration). Run the following (replacing DATABASE_FILE with path to your 
-database):
+database) to move to schema v3:
 
  $ sqlite3 DATABASE_FILE < sql/migration/3/migration.sqlite.sql
 
-If the migration is successful you should see one line of output confirming you are on schema version 3:
+If the migration is successful you should see one line of output confirming
+you are on schema version 3:
 
  schema_version|3
 
+If the move to schema v3 was successful you should then move to schema v4:
+
+ $ sqlite3 DATABASE_FILE < sql/migration/4/migration.sqlite.sql
+
+If the migration is successful you should see one line of output confirming
+you are on schema version 3:
+
+ schema_version|4
+ 
 
 Updating Postgres
 -----------------
 Assuming your Postgres database and Postgres users are both called 
-'rackmonkey' you need to run:
+'rackmonkey' you need to run the following to move to schema v3:
 
  $ psql -U rackmonkey rackmonkey < sql/migration/3/migration.postgres.sql
 
@@ -130,6 +142,19 @@ You can safely ignore warnings of the form:
 This warning just indicates the rackmonkey user doesn't have permissions to 
 vacuum system tables. 
 
+If the move to schema v3 was successful you should then move to schema v4:
+
+$ psql -U rackmonkey rackmonkey < sql/migration/4/migration.postgres.sql
+
+If the update was successful the output should finish with:
+
+        name      | value 
+  ----------------+-------
+   schema_version | 4
+  (1 row)
+  
+As before you can ignore the vacuum warnings. 
+
 
 Updating MySQL
 --------------
@@ -139,7 +164,7 @@ Make sure you're connected to the RackMonkey database. Assuming you called it 'r
 
  mysql> use rackmonkey;
  
-You can then run the schema update with:
+You can then run the v3 schema update with:
 
  mysql> \. sql/migration/3/schema.mysql.sql
 
@@ -149,6 +174,21 @@ If the update was successful the output should finish with:
   | name           | value |
   +----------------+-------+
   | schema_version | 3     | 
+  +----------------+-------+
+  1 row in set (0.00 sec)
+
+If the move to schema v3 was successful you should then move to schema v4:
+
+You can then run the v4 schema update with:
+
+ mysql> \. sql/migration/4/schema.mysql.sql
+
+If the update was successful the output should finish with:
+
+  +----------------+-------+
+  | name           | value |
+  +----------------+-------+
+  | schema_version | 4     | 
   +----------------+-------+
   1 row in set (0.00 sec)
 

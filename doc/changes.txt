@@ -8,6 +8,12 @@
 You can read the latest version of this document in HTML format at:
 http://www.rackmonkey.org/doc
 
+v1.2.5 Preview 3 - Released 2009-xx-xx
+--------------------------------------
+* Full support for associating apps with devices
+* Additional columns in the device table to aid with network installs
+* Changed notes fields in MySQL schema to be of type TEXT
+
 v1.2.5 Preview 2 - Released 2009-04-05
 --------------------------------------
 * Added ability to record OS licence key
