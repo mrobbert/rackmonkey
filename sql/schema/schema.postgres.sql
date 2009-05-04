@@ -2,7 +2,7 @@
 -- RackMonkey - Know Your Racks - http://www.rackmonkey.org                 --
 -- Version 1.2.%BUILD%                                                      --
 -- (C)2004-2009 Will Green (wgreen at users.sourceforge.net)                --
--- Database schema v3 for Postgres                                          --
+-- Database schema v4 for Postgres                                          --
 -- ---------------------------------------------------------------------------
 
 BEGIN;
@@ -178,6 +178,9 @@ CREATE TABLE device
 	role INTEGER NOT NULL REFERENCES role,
 	monitored INTEGER,
 	in_service INTEGER,
+	pxe_mac VARCHAR,
+	net_install_build VARCHAR,
+	custom_info VARCHAR,
 	notes VARCHAR,
 	meta_default_data INTEGER NOT NULL DEFAULT 0,
 	meta_update_time VARCHAR,
@@ -250,11 +253,12 @@ CREATE UNIQUE INDEX device_name_unique ON device (name, domain); -- ensure name 
 CREATE UNIQUE INDEX rack_row_unique ON rack (name, row); -- ensure row and rack name are together unique
 CREATE UNIQUE INDEX row_room_unique ON row (name, room); -- ensure room and row name are together unique
 CREATE UNIQUE INDEX room_building_unique ON room (name, building); -- ensure building and room name are together unique
+CREATE UNIQUE INDEX device_app_unique ON device_app (app, device, relation); -- ensure we don't create identical device/app relationships
 
 
 -- install system information
 INSERT INTO rm_meta(id, name, value) VALUES (1, 'system_version', '1.2');
 INSERT INTO rm_meta(id, name, value) VALUES (2, 'system_build', '%BUILD%');
-INSERT INTO rm_meta(id, name, value) VALUES (3, 'schema_version', '3');
+INSERT INTO rm_meta(id, name, value) VALUES (3, 'schema_version', '4');
 
 COMMIT;

@@ -2,7 +2,7 @@
 -- RackMonkey - Know Your Racks - http://www.rackmonkey.org                 --
 -- Version 1.2.%BUILD%                                                      --
 -- (C)2004-2009 Will Green (wgreen at users.sourceforge.net)                --
--- Database schema v3 for MySQL                                             --
+-- Database schema v4 for MySQL                                             --
 -- ---------------------------------------------------------------------------
 
 BEGIN;
@@ -13,7 +13,7 @@ CREATE TABLE building
 	id INTEGER AUTO_INCREMENT PRIMARY KEY,
 	name VARCHAR(255) UNIQUE NOT NULL,
 	name_short VARCHAR(255),
-	notes VARCHAR(255),
+	notes TEXT,
 	meta_default_data INTEGER NOT NULL DEFAULT 0,
 	meta_update_time VARCHAR(255),
 	meta_update_user VARCHAR(255)
@@ -27,7 +27,7 @@ CREATE TABLE room
 	name VARCHAR(255) NOT NULL,
 	building INTEGER NOT NULL,
 	has_rows INTEGER,
-	notes VARCHAR(255),
+	notes TEXT,
 	meta_default_data INTEGER NOT NULL DEFAULT 0,
 	meta_update_time VARCHAR(255),
 	meta_update_user VARCHAR(255),
@@ -43,7 +43,7 @@ CREATE TABLE row
 	room INTEGER NOT NULL,
 	room_pos INTEGER NOT NULL,
 	hidden_row INTEGER NOT NULL DEFAULT 0,
-	notes VARCHAR(255),
+	notes TEXT,
 	meta_default_data INTEGER NOT NULL DEFAULT 0,
 	meta_update_time VARCHAR(255),
 	meta_update_user VARCHAR(255),
@@ -61,7 +61,7 @@ CREATE TABLE rack
 	hidden_rack INTEGER NOT NULL DEFAULT 0,
 	size INTEGER,
 	numbering_direction INTEGER DEFAULT 0,
-	notes VARCHAR(255),
+	notes TEXT,
 	meta_default_data INTEGER DEFAULT 0,
 	meta_update_time VARCHAR(255),
 	meta_update_user VARCHAR(255),
@@ -80,7 +80,7 @@ CREATE TABLE org
 	hardware INTEGER NOT NULL,
 	descript VARCHAR(255),
 	home_page VARCHAR(255),
-	notes VARCHAR(255),
+	notes TEXT,
 	meta_default_data INTEGER NOT NULL DEFAULT 0,
 	meta_update_time VARCHAR(255),
 	meta_update_user VARCHAR(255)
@@ -98,7 +98,7 @@ CREATE TABLE service
 	id INT AUTO_INCREMENT PRIMARY KEY,
 	name VARCHAR(255) UNIQUE NOT NULL,
 	descript VARCHAR(255),
-	notes VARCHAR(255),
+	notes TEXT,
 	meta_default_data INTEGER NOT NULL DEFAULT 0,
 	meta_update_time VARCHAR(255),
 	meta_update_user VARCHAR(255)	
@@ -111,7 +111,7 @@ CREATE TABLE domain
 	id INT AUTO_INCREMENT PRIMARY KEY,
 	name VARCHAR(255) UNIQUE NOT NULL,
 	descript VARCHAR(255),
-	notes VARCHAR(255),
+	notes TEXT,
 	meta_default_data INTEGER NOT NULL DEFAULT 0,
 	meta_update_time VARCHAR(255),
 	meta_update_user VARCHAR(255)	
@@ -124,7 +124,7 @@ CREATE TABLE os
 	id INT AUTO_INCREMENT PRIMARY KEY,
 	name VARCHAR(255) UNIQUE NOT NULL,
 	manufacturer INTEGER NOT NULL,
-	notes VARCHAR(255),
+	notes TEXT,
 	meta_default_data INTEGER NOT NULL DEFAULT 0,
 	meta_update_time VARCHAR(255),
 	meta_update_user VARCHAR(255),
@@ -142,7 +142,7 @@ CREATE TABLE hardware
 	image VARCHAR(255),
 	support_url VARCHAR(255),
 	spec_url VARCHAR(255),
-	notes VARCHAR(255),
+	notes TEXT,
 	meta_default_data INTEGER NOT NULL DEFAULT 0,
 	meta_update_time VARCHAR(255),
 	meta_update_user VARCHAR(255),
@@ -156,7 +156,7 @@ CREATE TABLE role
 	id INT AUTO_INCREMENT PRIMARY KEY,
 	name VARCHAR(255) UNIQUE NOT NULL,
 	descript VARCHAR(255),
-	notes VARCHAR(255),
+	notes TEXT,
 	meta_default_data INTEGER NOT NULL DEFAULT 0,
 	meta_update_time VARCHAR(255),
 	meta_update_user VARCHAR(255)	
@@ -183,7 +183,10 @@ CREATE TABLE device
 	role INTEGER NOT NULL,
 	monitored INTEGER,
 	in_service INTEGER,
-	notes VARCHAR(255),
+	pxe_mac VARCHAR(255),
+	net_install_build VARCHAR(255),
+	custom_info TEXT,
+	notes TEXT,
 	meta_default_data INTEGER NOT NULL DEFAULT 0,
 	meta_update_time VARCHAR(255),
 	meta_update_user VARCHAR(255),
@@ -203,7 +206,7 @@ CREATE TABLE app
 	id INT AUTO_INCREMENT PRIMARY KEY,
 	name VARCHAR(255) UNIQUE NOT NULL,
 	descript VARCHAR(255),
-	notes VARCHAR(255),
+	notes TEXT,
 	meta_default_data INTEGER NOT NULL DEFAULT 0,
 	meta_update_time VARCHAR(255),
 	meta_update_user VARCHAR(255)	
@@ -265,11 +268,12 @@ CREATE UNIQUE INDEX device_name_unique ON device (name, domain); -- ensure name 
 CREATE UNIQUE INDEX rack_row_unique ON rack (name, row); -- ensure row and rack name are together unique
 CREATE UNIQUE INDEX row_room_unique ON row (name, room); -- ensure room and row name are together unique
 CREATE UNIQUE INDEX room_building_unique ON room (name, building); -- ensure building and room name are together unique
+CREATE UNIQUE INDEX device_app_unique ON device_app (app, device, relation); -- ensure we don't create identical device/app relationships
 
 
 -- install system information
 INSERT INTO rm_meta(id, name, value) VALUES (1, 'system_version', '1.2');
 INSERT INTO rm_meta(id, name, value) VALUES (2, 'system_build', '%BUILD%');
-INSERT INTO rm_meta(id, name, value) VALUES (3, 'schema_version', '3');
+INSERT INTO rm_meta(id, name, value) VALUES (3, 'schema_version', '4');
 
 COMMIT;
