@@ -2001,6 +2001,72 @@ sub totalSizeDevice
     return ($sth->fetchrow_array)[0];
 }
 
+sub duplicateSerials
+{
+    my $self = shift;
+    my $sth  = $self->dbh->prepare(
+        qq!    
+        SELECT 
+            device.name, 
+            device.id, 
+            device.serial_no
+        FROM device 
+        WHERE
+            length(device.serial_no) > 0 AND
+            device.serial_no IN (SELECT device.serial_no FROM device GROUP BY device.serial_no HAVING count(*) > 1)
+        ORDER BY
+            device.serial_no,
+            device.name
+    !
+    );
+    $sth->execute;
+    return $sth->fetchall_arrayref({});
+}
+
+sub duplicateAssets
+{
+    my $self = shift;
+    my $sth  = $self->dbh->prepare(
+        qq!    
+        SELECT 
+            device.name, 
+            device.id, 
+            device.asset_no
+        FROM device 
+        WHERE 
+            length(device.asset_no) > 0 AND
+            device.asset_no IN (SELECT device.asset_no FROM device GROUP BY device.asset_no HAVING count(*) > 1)
+        ORDER BY
+            device.asset_no,
+            device.name
+    !
+    );
+    $sth->execute;
+    return $sth->fetchall_arrayref({});    
+}
+
+sub duplicateOSLicenceKey
+{
+    my $self = shift;
+    my $sth  = $self->dbh->prepare(
+        qq!    
+        SELECT 
+            device.name, 
+            device.id, 
+            device.os_licence_key
+        FROM device 
+        WHERE 
+            length(device.os_licence_key) > 0 AND
+            device.os_licence_key IN (SELECT device.os_licence_key FROM device GROUP BY device.os_licence_key HAVING count(*) > 1)
+        ORDER BY
+            device.os_licence_key,
+            device.name
+    !
+    );
+    $sth->execute;
+    return $sth->fetchall_arrayref({});    
+}
+
 ##############################################################################
 # Role Methods                                                               #
 ##############################################################################

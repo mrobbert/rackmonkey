@@ -525,21 +525,30 @@ eval {
         }
         elsif ($view eq 'report')
         {
-            my $totalDevices    = $backend->itemCount('device');
-            my $unrackedDevices = $backend->deviceCountUnracked;
-            $template->param('device_count'          => $totalDevices);
-            $template->param('unracked_device_count' => $unrackedDevices);
-            $template->param('racked_device_count'   => $totalDevices - $unrackedDevices);
-            $template->param('rack_count'            => $backend->itemCount('rack'));
-            my $rackSize   = $backend->totalSizeRack;
-            my $deviceSize = $backend->totalSizeDevice;
-            $template->param('total_rack_space'      => $rackSize);
-            $template->param('used_rack_space'       => $deviceSize);
-            $template->param('free_rack_space'       => $rackSize - $deviceSize);
-            $template->param('customer_device_count' => $backend->customerDeviceCount);
-            $template->param('role_device_count'     => $backend->roleDeviceCount);
-            $template->param('hardware_device_count' => $backend->hardwareDeviceCount);
-            $template->param('os_device_count'       => $backend->osDeviceCount);
+            if ($viewType =~ /^default/)
+            {
+                my $totalDevices    = $backend->itemCount('device');
+                my $unrackedDevices = $backend->deviceCountUnracked;
+                $template->param('device_count'          => $totalDevices);
+                $template->param('unracked_device_count' => $unrackedDevices);
+                $template->param('racked_device_count'   => $totalDevices - $unrackedDevices);
+                $template->param('rack_count'            => $backend->itemCount('rack'));
+                my $rackSize   = $backend->totalSizeRack;
+                my $deviceSize = $backend->totalSizeDevice;
+                $template->param('total_rack_space'      => $rackSize);
+                $template->param('used_rack_space'       => $deviceSize);
+                $template->param('free_rack_space'       => $rackSize - $deviceSize);
+                $template->param('customer_device_count' => $backend->customerDeviceCount);
+                $template->param('role_device_count'     => $backend->roleDeviceCount);
+                $template->param('hardware_device_count' => $backend->hardwareDeviceCount);
+                $template->param('os_device_count'       => $backend->osDeviceCount);
+            }
+            elsif ($viewType =~ /^duplicates/)
+            {
+                $template->param('serials' => $backend->duplicateSerials);
+                $template->param('assets' => $backend->duplicateAssets);
+                $template->param('oslicence' => $backend->duplicateOSLicenceKey);
+            }
         }
         elsif ($view eq 'role')
         {
