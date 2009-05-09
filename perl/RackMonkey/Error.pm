@@ -23,6 +23,16 @@ sub enlighten
         $newErrStr = "Couldn't open template $1.\nCheck that the template path (tmplpath) in rackmonkey.conf is correct.";
     }
 
+    # SQLite foreign key constraint: delete table names with underscores (this will be fixed in RackMonkey v1.3)
+    elsif ($errStr =~ /violates foreign key constraint "fkd_(.*?_.*?)_(.*?)_id"/)
+    {
+        my $refItem = $1;
+        my $delItem = $2;
+
+        $refItem = 'app' if ($refItem eq 'device_app');
+        $newErrStr = "Delete violates data integrity check.\nRackMonkey cannot delete that $delItem, it is connected to one or more $refItem(s). Delete the connection to the $refItem(s) and try again.";
+    }
+
     # SQLite foreign key constraint: delete
     elsif ($errStr =~ /violates foreign key constraint "fkd_(.*?)_(.*?)_id"/)
     {
@@ -41,11 +51,20 @@ sub enlighten
     # SQLite unqiueness constraints
     elsif ($errStr =~ /columns? (.*?) (?:is|are) not unique/)
     {
-
         # hack to message to account for the fact that some racks are in the hidden rows (no row management)
         my $clash = ($1 eq 'name, row') ? 'name and row or room' : $1;
 
-        $newErrStr = "Couldn't create entry: '$clash' is not unique.\nAn entry of that type with that '$clash' already exists, please choose another '$clash'.";
+        $clash = 'combination of device name and domain' if ($clash eq 'name, domain');
+
+        # device/app relationship gets its own message
+        if ($clash eq 'app, device, relation')
+        {
+            $newErrStr = "This app is already connected to that device with that relationship.";
+        }
+        else
+        {
+            $newErrStr = "Couldn't create entry: $clash is not unique.\nAn entry of that type with that $clash already exists, please choose another $clash.";
+        }
     }
 
     # Postgres foreign key constraint: delete
@@ -54,6 +73,11 @@ sub enlighten
         my $refItem = $1;
         my $delItem = $2;
         $delItem = 'row/room' if ($delItem eq 'row');
+        if ($delItem eq 'app_device')
+        {
+            $delItem = $refItem;
+            $refItem = 'app';
+        }
         $newErrStr = "Delete violates data integrity check.\nRackMonkey cannot delete that $delItem, it is listed as a $delItem for one or more $refItem(s).";
     }
 
@@ -87,15 +111,21 @@ sub enlighten
         {
             $property = 'name and building';
         }
+        elsif ($constraint eq 'device_app_unique')
+        {
+            $type     = 'app/device relationship';
+            $property = 'app/device relationship';
+        }
         $newErrStr = "Couldn't create $type.\nAn entry of that type with that $property already exists, please choose another $property.";
     }
 
     # MySQL foreign key constraint: delete
-    elsif ($errStr =~ /Cannot delete or update a parent row: a foreign key constraint fails.*?CONSTRAINT.*?`(.*?)_.*?FOREIGN KEY \(`(.*?)`\) /)
+    elsif ($errStr =~ /Cannot delete or update a parent row: a foreign key constraint fails.*?CONSTRAINT.*?`(.*?)_ibfk.*?FOREIGN KEY \(`(.*?)`\) /)
     {
         my $refItem = $1;
         my $delItem = $2;
         $delItem = 'row/room' if ($delItem eq 'row');
+        $refItem = 'app'      if ($refItem eq 'device_app');
         $newErrStr = "Delete violates data integrity check.\nRackMonkey cannot delete that $delItem, it is listed as a $delItem for one or more $refItem(s).";
     }
 
@@ -129,15 +159,19 @@ sub enlighten
         {
             $property = 'name and building';
         }
+        elsif ($constraint eq 'device_app')
+        {
+            $property = $constraint = 'app/device relationship';
+        }
         $newErrStr = "Couldn't $actType $constraint.\nAn entry of that type with that $property already exists, please choose another $property.";
     }
 
     # DBI errors
-    elsif ($errStr =~ /install_driver\((.*?)\)\s*failed.*?Available drivers:(.*?)\./s) # Unable to load DBI driver with avaliable drivers list
+    elsif ($errStr =~ /install_driver\((.*?)\)\s*failed.*?Available drivers:(.*?)\./s)    # Unable to load DBI driver with avaliable drivers list
     {
         $newErrStr = "Couldn't load perl database driver DBD::$1.\nThis error is usually caused by mistyping the driver name in the configuration file (driver names are case sensitive) or failing to have the required driver module installed. See the installation instructions for more details.\n\nYour system appears to have the following DBI drivers available: $2.";
     }
-    elsif ($errStr =~ /install_driver\((.*?)\)\s*failed/) # Unable to load DBI driver without avaliable drivers list
+    elsif ($errStr =~ /install_driver\((.*?)\)\s*failed/)                                 # Unable to load DBI driver without avaliable drivers list
     {
         $newErrStr = "Couldn't load perl database driver DBD::$1.\nThis error is usually caused by mistyping the driver name in the configuration file (driver names are case sensitive) or failing to have the required driver module installed. See the installation instructions for more details.";
     }
