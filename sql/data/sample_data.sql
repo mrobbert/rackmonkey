@@ -39,7 +39,7 @@ INSERT INTO os (name, manufacturer, notes, meta_update_time, meta_update_user) V
 INSERT INTO os (name, manufacturer, notes, meta_update_time, meta_update_user) VALUES('CentOS', 					5, '', '1985-07-24 00:00:00', 'install');
 INSERT INTO os (name, manufacturer, notes, meta_update_time, meta_update_user) VALUES('Data ONTAP', 				18, '', '1985-07-24 00:00:00', 'install');
 INSERT INTO os (name, manufacturer, notes, meta_update_time, meta_update_user) VALUES('Debian', 					7, '', '1985-07-24 00:00:00', 'install');
-INSERT INTO os (name, manufacturer, notes, meta_update_time, meta_update_user) VALUES('Fedora Core', 				22, '', '1985-07-24 00:00:00', 'install');
+INSERT INTO os (name, manufacturer, notes, meta_update_time, meta_update_user) VALUES('Fedora',      				22, '', '1985-07-24 00:00:00', 'install');
 INSERT INTO os (name, manufacturer, notes, meta_update_time, meta_update_user) VALUES('FreeBSD', 					10, '', '1985-07-24 00:00:00', 'install');
 INSERT INTO os (name, manufacturer, notes, meta_update_time, meta_update_user) VALUES('Gentoo Linux', 				11, '', '1985-07-24 00:00:00', 'install');
 INSERT INTO os (name, manufacturer, notes, meta_update_time, meta_update_user) VALUES('HP-UX', 						12, '', '1985-07-24 00:00:00', 'install');
