@@ -18,23 +18,24 @@ sub new
 {
     my ($className) = @_;
     my $self = {
-        'configpath' => $ENV{'RACKMONKEY_CONF'} || '/etc/rackmonkey.conf',
-        'dbconnect'  => '',
-        'dbuser'     => '',
-        'dbpass'     => '',
-        'tmplpath'   => '',
-        'wwwpath'    => '',
-        'plugin_pdf' => 0,
-        'plugin_xls' => 0,
-        'defaultview'  => 'rack',
-        'dateformat'   => '%Y-%m-%d',
-        'shorttextlen' => 32,
-        'shorturllen'  => 64,
-        'maxnote'      => 4095,
-        'maxstring'    => 255,
-        'maxracksize'  => 255,
-        'dellquery'    => '',
-        'bypass_db_driver_checks' => 0
+        'configpath'                => $ENV{'RACKMONKEY_CONF'} || '/etc/rackmonkey.conf',
+        'dbconnect'                 => '',
+        'dbuser'                    => '',
+        'dbpass'                    => '',
+        'tmplpath'                  => '',
+        'wwwpath'                   => '',
+        'plugin_pdf'                => 0,
+        'plugin_xls'                => 0,
+        'defaultview'               => 'rack',
+        'dateformat'                => '%Y-%m-%d',
+        'shorttextlen'              => 32,
+        'shorturllen'               => 64,
+        'maxnote'                   => 4095,
+        'maxstring'                 => 255,
+        'maxracksize'               => 255,
+        'dellquery'                 => '',
+        'number_from_top'           => 0,
+        'bypass_db_driver_checks'   => 0
     };
     unless (open(CONFIG, "<$$self{'configpath'}"))
     {
