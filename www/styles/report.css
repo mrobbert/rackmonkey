@@ -34,6 +34,19 @@ table.report td.numerical
 	text-align: right;
 }
 
+table.report td.item_name
+{
+	font-weight: bold;
+	border-right: none;
+	min-width: 4em;
+}
+
+table.report td.item_edit
+{
+	border-left: none;
+	padding-right: 4px;
+}
+
 h3
 {
 	margin-top: 1.25em;
