@@ -25,9 +25,8 @@ CREATE TABLE room
 (
 	id INTEGER PRIMARY KEY AUTOINCREMENT,
 	name CHAR NOT NULL COLLATE NOCASE,
-	building INTEGER NOT NULL
-		CONSTRAINT fk_room_building_id REFERENCES building(id),
-	has_rows INTEGER,
+	building INTEGER NOT NULL CONSTRAINT fk_room_building_id REFERENCES building(id),
+	has_rows INTEGER NOT NULL DEFAULT 0,
 	notes CHAR,
 	meta_default_data INTEGER NOT NULL DEFAULT 0,
 	meta_update_time CHAR,
@@ -40,8 +39,7 @@ CREATE TABLE row
 (
 	id INTEGER PRIMARY KEY AUTOINCREMENT,
 	name CHAR NOT NULL COLLATE NOCASE,
-	room INTEGER NOT NULL
-		CONSTRAINT fk_room_id REFERENCES room(id),
+	room INTEGER NOT NULL CONSTRAINT fk_room_id REFERENCES room(id),
 	room_pos INTEGER NOT NULL,
 	hidden_row INTEGER NOT NULL DEFAULT 0,
 	notes CHAR,
@@ -56,11 +54,10 @@ CREATE TABLE rack
 (
 	id INTEGER PRIMARY KEY AUTOINCREMENT,
 	name CHAR NOT NULL COLLATE NOCASE,
-	row INTEGER NOT NULL
-		CONSTRAINT fk_row_id REFERENCES row(id),	
+	row INTEGER NOT NULL CONSTRAINT fk_row_id REFERENCES row(id),	
 	row_pos INTEGER NOT NULL,
 	hidden_rack INTEGER NOT NULL DEFAULT 0,
-	size INTEGER,
+	size INTEGER NOT NULL DEFAULT 0,
 	numbering_direction INTEGER NOT NULL DEFAULT 0,
 	notes CHAR,
 	meta_default_data INTEGER NOT NULL DEFAULT 0,
@@ -123,8 +120,7 @@ CREATE TABLE os
 (
 	id INTEGER PRIMARY KEY AUTOINCREMENT,
 	name CHAR UNIQUE NOT NULL COLLATE NOCASE,
-	manufacturer INTEGER NOT NULL
-		CONSTRAINT fk_manufacturer_id REFERENCES org(id),	
+	manufacturer INTEGER NOT NULL CONSTRAINT fk_manufacturer_id REFERENCES org(id),	
 	notes CHAR,
 	meta_default_data INTEGER NOT NULL DEFAULT 0,
 	meta_update_time CHAR,
@@ -137,8 +133,7 @@ CREATE TABLE hardware
 (
 	id INTEGER PRIMARY KEY AUTOINCREMENT,
 	name CHAR UNIQUE NOT NULL COLLATE NOCASE,
-	manufacturer INTEGER NOT NULL
-		CONSTRAINT fk_manufacturer_id REFERENCES org(id),	
+	manufacturer INTEGER NOT NULL CONSTRAINT fk_manufacturer_id REFERENCES org(id),	
 	size INTEGER NOT NULL,
 	image CHAR,
 	support_url CHAR,
@@ -168,30 +163,23 @@ CREATE TABLE device
 (
 	id INTEGER PRIMARY KEY AUTOINCREMENT,
 	name CHAR NOT NULL COLLATE NOCASE,
-	domain INTEGER NOT NULL
-		CONSTRAINT fk_domain_id REFERENCES domain(id),
-	rack INTEGER NOT NULL
-		CONSTRAINT fk_rack_id REFERENCES rack(id),	
-	rack_pos INTEGER,
-	hardware INTEGER NOT NULL
-		CONSTRAINT fk_hardware_id REFERENCES hardware(id),	
+	domain INTEGER NOT NULL CONSTRAINT fk_domain_id REFERENCES domain(id),
+	rack INTEGER NOT NULL CONSTRAINT fk_rack_id REFERENCES rack(id),	
+	rack_pos INTEGER NOT NULL,
+	hardware INTEGER NOT NULL CONSTRAINT fk_hardware_id REFERENCES hardware(id),	
 	serial_no CHAR,
 	asset_no CHAR,
 	purchased CHAR,
-	os INTEGER NOT NULL
-		CONSTRAINT fk_os_id REFERENCES os(id),	
+	os INTEGER NOT NULL CONSTRAINT fk_os_id REFERENCES os(id),	
 	os_version CHAR,
     os_licence_key CHAR,
-	customer INTEGER NOT NULL
-		CONSTRAINT fk_customer_id REFERENCES org(id),	
-	service INTEGER NOT NULL
-		CONSTRAINT fk_service_id REFERENCES service(id),	
-	role INTEGER NOT NULL
-		CONSTRAINT fk_role_id REFERENCES role(id),	
-	monitored INTEGER,
-	in_service INTEGER,
-	pxe_mac CHAR,
-	net_install_build CHAR,
+	customer INTEGER NOT NULL CONSTRAINT fk_customer_id REFERENCES org(id),	
+	service INTEGER NOT NULL CONSTRAINT fk_service_id REFERENCES service(id),	
+	role INTEGER NOT NULL CONSTRAINT fk_role_id REFERENCES role(id),	
+	monitored INTEGER NOT NULL DEFAULT 0,
+	in_service INTEGER NOT NULL DEFAULT 0,
+	primary_mac CHAR,
+	install_build CHAR,
 	custom_info CHAR,
 	notes CHAR,
 	meta_default_data INTEGER NOT NULL DEFAULT 0,
@@ -228,12 +216,9 @@ CREATE TABLE app_relation
 CREATE TABLE device_app
 (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
-	app INTEGER NOT NULL
-		CONSTRAINT fk_app_id REFERENCES app(id),
-	device INTEGER NOT NULL
-		CONSTRAINT fk_device_id REFERENCES device(id),
-	relation INTEGER NOT NULL
-		CONSTRAINT fk_app_relation_id REFERENCES app_relation(id),
+	app INTEGER NOT NULL CONSTRAINT fk_app_id REFERENCES app(id),
+	device INTEGER NOT NULL CONSTRAINT fk_device_id REFERENCES device(id),
+	relation INTEGER NOT NULL CONSTRAINT fk_app_relation_id REFERENCES app_relation(id),
 	meta_default_data INTEGER NOT NULL DEFAULT 0,	
     meta_update_time CHAR,
     meta_update_user CHAR
@@ -608,76 +593,76 @@ END;
 --
 
 -- Prevent inserts into device_app table unless application exists
-CREATE TRIGGER fki_app_id
+CREATE TRIGGER fki_device_app_app_id
 BEFORE INSERT ON device_app
 FOR EACH ROW BEGIN
-  SELECT RAISE(ROLLBACK, 'insert on table "device_app" violates foreign key constraint "fki_app_id"')
+  SELECT RAISE(ROLLBACK, 'insert on table "device_app" violates foreign key constraint "fki_device_app_app_id"')
   WHERE (SELECT id FROM app WHERE id = NEW.app) IS NULL;
 END;
 
 -- Prevent updates on device_app table unless application exists
-CREATE TRIGGER fku_app_id
+CREATE TRIGGER fku_device_app_app_id
 BEFORE UPDATE ON device_app 
 FOR EACH ROW BEGIN
-    SELECT RAISE(ROLLBACK, 'update on table "device_app" violates foreign key constraint "fku_app_id"')
+    SELECT RAISE(ROLLBACK, 'update on table "device_app" violates foreign key constraint "fku_device_app_app_id"')
       WHERE (SELECT id FROM app WHERE id = NEW.app) IS NULL;
 END;
 
 -- Prevent deletions of apps used by the device_app table
-CREATE TRIGGER fkd_app_id
+CREATE TRIGGER fkd_device_app_app_id
 BEFORE DELETE ON app
 FOR EACH ROW BEGIN
-  SELECT RAISE(ROLLBACK, 'delete on table "app" violates foreign key constraint "fkd_app_id"')
+  SELECT RAISE(ROLLBACK, 'delete on table "app" violates foreign key constraint "fkd_device_app_app_id"')
   WHERE (SELECT app FROM device_app WHERE app = OLD.id) IS NOT NULL;
 END;
 
 
 -- Prevent inserts into device_app table unless device exists
-CREATE TRIGGER fki_device_id
+CREATE TRIGGER fki_device_app_device_id
 BEFORE INSERT ON device_app
 FOR EACH ROW BEGIN
-  SELECT RAISE(ROLLBACK, 'insert on table "device_app" violates foreign key constraint "fki_device_id"')
+  SELECT RAISE(ROLLBACK, 'insert on table "device_app" violates foreign key constraint "fki_device_app_device_id"')
   WHERE (SELECT id FROM device WHERE id = NEW.device) IS NULL;
 END;
 
 -- Prevent updates on device_app table unless device exists
-CREATE TRIGGER fku_device_id
+CREATE TRIGGER fku_device_app_device_id
 BEFORE UPDATE ON device_app 
 FOR EACH ROW BEGIN
-    SELECT RAISE(ROLLBACK, 'update on table "device_app" violates foreign key constraint "fku_device_id"')
+    SELECT RAISE(ROLLBACK, 'update on table "device_app" violates foreign key constraint "fku_device_app_device_id"')
       WHERE (SELECT id FROM device WHERE id = NEW.device) IS NULL;
 END;
 
 -- Prevent deletions of devices used by the device_app table
-CREATE TRIGGER fkd_device_id
+CREATE TRIGGER fkd_device_app_device_id
 BEFORE DELETE ON device
 FOR EACH ROW BEGIN
-  SELECT RAISE(ROLLBACK, 'delete on table "device" violates foreign key constraint "fkd_device_id"')
+  SELECT RAISE(ROLLBACK, 'delete on table "device" violates foreign key constraint "fkd_device_app_device_id"')
   WHERE (SELECT device FROM device_app WHERE device = OLD.id) IS NOT NULL;
 END;
 
 
 -- Prevent inserts into device_app table unless relation exists
-CREATE TRIGGER fki_relation_id
+CREATE TRIGGER fki_device_app_relation_id
 BEFORE INSERT ON device_app
 FOR EACH ROW BEGIN
-  SELECT RAISE(ROLLBACK, 'insert on table "device_app" violates foreign key constraint "fki_relation_id"')
+  SELECT RAISE(ROLLBACK, 'insert on table "device_app" violates foreign key constraint "fki_device_app_relation_id"')
   WHERE (SELECT id FROM app_relation WHERE id = NEW.relation) IS NULL;
 END;
 
 -- Prevent updates on device_app table unless relation exists
-CREATE TRIGGER fku_relation_id
+CREATE TRIGGER fku_device_app_relation_id
 BEFORE UPDATE ON device_app 
 FOR EACH ROW BEGIN
-    SELECT RAISE(ROLLBACK, 'update on table "device_app" violates foreign key constraint "fku_relation_id"')
+    SELECT RAISE(ROLLBACK, 'update on table "device_app" violates foreign key constraint "fku_device_app_relation_id"')
       WHERE (SELECT id FROM app_relation WHERE id = NEW.relation) IS NULL;
 END;
 
 -- Prevent deletions of relations used by the device_app table
-CREATE TRIGGER fkd_relation_id
+CREATE TRIGGER fkd_device_app_relation_id
 BEFORE DELETE ON app_relation
 FOR EACH ROW BEGIN
-  SELECT RAISE(ROLLBACK, 'delete on table "app_relation" violates foreign key constraint "fkd_relation_id"')
+  SELECT RAISE(ROLLBACK, 'delete on table "app_relation" violates foreign key constraint "fkd_device_app_relation_id"')
   WHERE (SELECT relation FROM device_app WHERE relation = OLD.id) IS NOT NULL;
 END;
 
