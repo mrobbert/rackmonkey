@@ -24,7 +24,12 @@
 <body>
 	<TMPL_INCLUDE NAME="nav-report.ssi">
 	<div id="main">
-		<h2>RackMonkey Report</h2>
+	  <p id="report_nav">
+			<strong>Reports Index</strong> |
+			<a href="<TMPL_VAR NAME=base_url>?view=report&amp;view_type=counts">Device Counts</a> |
+			<a href="<TMPL_VAR NAME=base_url>?view=report&amp;view_type=duplicates">Duplicates</a>
+		</p>
+		<h2>RackMonkey Reports</h2>
 		<h3>Rack &amp; Device Summary</h3>
 		<ul>
 			<li>There are <TMPL_VAR ESCAPE=HTML NAME=rack_count> <a href="<TMPL_VAR NAME=base_url>?view=rack">racks</a> with a total size of <TMPL_VAR NAME=total_rack_space> U</li>
@@ -34,57 +39,11 @@
 			<li>There is <TMPL_VAR ESCAPE=HTML NAME=free_rack_space> U of free space in the racks</li>
 		</ul>
 		
-		<h3>Device Counts</h3>
-		<p>The following four tables show the top customers, roles, hardware and operating systems.<br/>
-			The <strong>Size (U)</strong> column shows the <em>total</em> space the devices of this type occupy, irrespective of whether they are racked or not.</p>
-		<h3>Customers</h3>
-		<TMPL_IF NAME=customer_device_count>
-		<p>Top ten <a href="<TMPL_VAR NAME=base_url>?view=org">customers</a> by devices hosted.</p>
-		<table class="report">
-			<tr><th>Count</th><th>Customer</th><th>Size (U)</th><th class="no_print">Devices</th></tr>
-			<TMPL_LOOP NAME=customer_device_count>
-			<tr><td class="numerical"><TMPL_VAR ESCAPE=HTML NAME=num_devices></td><td class="item_name"><a href="<TMPL_VAR NAME=base_url>?view=org&amp;view_type=single&amp;id=<TMPL_VAR ESCAPE=HTML NAME=id>"><TMPL_VAR ESCAPE=HTML NAME=customer></a></td><td class="numerical"><TMPL_VAR ESCAPE=HTML NAME=space_used></td><td class="no_print" style="text-align: center"><a class="small" title="View this customer's devices" href="<TMPL_VAR NAME=base_url>?view=device&amp;filter_device_customer=<TMPL_VAR ESCAPE=URL NAME=id>">&gt;&gt;</a></td></tr>
-			</TMPL_LOOP>
-		</table>
-		<TMPL_ELSE>
-		<p>There are no devices listed in RackMonkey.</p>
-		</TMPL_IF>
-		<h3>Roles</h3>
-		<TMPL_IF NAME=role_device_count>
-		<p>Top ten <a href="<TMPL_VAR NAME=base_url>?view=role">roles</a> of devices hosted.</p>
-		<table class="report">
-			<tr><th>Count</th><th>Role</th><th>Size (U)</th><th class="no_print">Devices</th></tr>
-			<TMPL_LOOP NAME=role_device_count>
-			<tr><td class="numerical"><TMPL_VAR ESCAPE=HTML NAME=num_devices></td><td class="item_name"><a href="<TMPL_VAR NAME=base_url>?view=role&amp;view_type=single&amp;id=<TMPL_VAR ESCAPE=HTML NAME=id>"><TMPL_VAR ESCAPE=HTML NAME=role></a></td><td class="numerical"><TMPL_VAR ESCAPE=HTML NAME=space_used></td><td class="no_print" style="text-align: center"><a class="small" title="View devices in this role" href="<TMPL_VAR NAME=base_url>?view=device&amp;filter_device_role=<TMPL_VAR ESCAPE=URL NAME=id>">&gt;&gt;</a></td></tr>
-			</TMPL_LOOP>
-		</table>
-		<TMPL_ELSE>
-		<p>There are no devices listed in RackMonkey.</p>
-		</TMPL_IF>
-		<h3>Hardware</h3>
-		<TMPL_IF NAME=hardware_device_count>
-		<p>Top ten <a href="<TMPL_VAR NAME=base_url>?view=hardware">hardware</a> models hosted.</p>
-		<table class="report">
-			<tr><th>Count</th><th>Hardware</th><th>Size (U)</th><th class="no_print">Devices</th></tr>
-			<TMPL_LOOP NAME=hardware_device_count>
-			<tr><td class="numerical"><TMPL_VAR ESCAPE=HTML NAME=num_devices></td><td class="item_name"><a href="<TMPL_VAR NAME=base_url>?view=hardware&amp;view_type=single&amp;id=<TMPL_VAR ESCAPE=HTML NAME=id>"><TMPL_UNLESS NAME=hardware_meta_default_data><TMPL_UNLESS NAME=hardware_manufacturer_meta_default_data><TMPL_VAR ESCAPE=HTML NAME=manufacturer> </TMPL_UNLESS></TMPL_UNLESS><TMPL_VAR ESCAPE=HTML NAME=hardware></a></td><td class="numerical"><TMPL_VAR ESCAPE=HTML NAME=space_used></td><td class="no_print" style="text-align: center"><a class="small" title="View devices of this hardware model" href="<TMPL_VAR NAME=base_url>?view=device&amp;filter_device_hardware=<TMPL_VAR ESCAPE=URL NAME=id>">&gt;&gt;</a></td></tr>
-			</TMPL_LOOP>
-		</table>
-		<TMPL_ELSE>
-		<p>There are no devices listed in RackMonkey.</p>
-		</TMPL_IF>
-		<h3>Operating Systems</h3>
-		<TMPL_IF NAME=os_device_count>
-		<p>Top ten <a href="<TMPL_VAR NAME=base_url>?view=os">operating systems</a> hosted.</p>
-		<table class="report">
-			<tr><th>Count</th><th>OS</th><th>Size (U)</th><th class="no_print">Devices</th></tr>
-			<TMPL_LOOP NAME=os_device_count>
-			<tr><td class="numerical"><TMPL_VAR ESCAPE=HTML NAME=num_devices></td><td class="item_name"><a href="<TMPL_VAR NAME=base_url>?view=os&amp;view_type=single&amp;id=<TMPL_VAR ESCAPE=HTML NAME=id>"><TMPL_VAR ESCAPE=HTML NAME=os><TMPL_UNLESS NAME=os_meta_default_data> <TMPL_VAR ESCAPE=HTML NAME=version></TMPL_UNLESS></a></td><td class="numerical"><TMPL_VAR ESCAPE=HTML NAME=space_used></td><td class="no_print" style="text-align: center"><a class="small" title="View devices with this operating system installed" href="<TMPL_VAR NAME=base_url>?view=device&amp;filter_device_os=<TMPL_VAR ESCAPE=URL NAME=id>">&gt;&gt;</a></td></tr>
-			</TMPL_LOOP>
-		</table>
-		<TMPL_ELSE>
-		<p>There are no devices listed in RackMonkey.</p>
-		</TMPL_IF>
+		<h3>Detailed Reports</h3>
+		<ul>
+		  <li><a href="<TMPL_VAR NAME=base_url>?view=report&amp;view_type=counts">Device Counts by Customer, Role, Hardware and OS</a></li>
+		  <li><a href="<TMPL_VAR NAME=base_url>?view=report&amp;view_type=duplicates">Duplicate Serials, Assets and OS Licence Keys</a></li>
+		</ul>
 	</div>
 	<TMPL_INCLUDE NAME="footer.ssi">
 </body>

@@ -24,31 +24,47 @@
 <body>
 	<TMPL_INCLUDE NAME="nav-report.ssi">
 	<div id="main">
+	  <p id="report_nav">
+			<a href="<TMPL_VAR NAME=base_url>?view=report">Reports Index</a> |
+			<a href="<TMPL_VAR NAME=base_url>?view=report&amp;view_type=counts">Device Counts</a> |
+			<strong>Duplicates</strong>
+		</p>
 		<h2>Duplicates Report</h2>
 		<p>This page helps you track down duplicate OS licence keys, asset and serial numbers. 
+		  To fix duplicates, edit devices by clicking on the pencil icon, when you save your changes you'll come back to this
+		  view so you can quickly fix all problem entries.
 		  To see a full list of devices and their serial, asset and OS licence information
-		  use the <a href="<TMPL_VAR NAME=base_url>?view=device&amp;view_type=default_asset">device asset view</a>.</p>
+		  use the <a href="<TMPL_VAR NAME=base_url>?view=device&amp;view_type=default_asset">device asset view</a>.
+		</p>
 	  <h3>Serial Numbers</h3>
 	  <TMPL_IF NAME=serials>
 		<p>Devices having identical serial numbers.</p>
 		<table class="report">
-			<tr><th>Serial</th><th>Device</th></tr>
+			<tr><th>Serial</th><th>Hardware</th><th colspan="2">Device</th></tr>
 			<TMPL_LOOP NAME=serials>
-      <tr><td><TMPL_VAR ESCAPE=HTML NAME=serial_no></td><td><TMPL_VAR ESCAPE=HTML NAME=name></td></tr>
-			</TMPL_LOOP>
+      <tr>
+        <td><TMPL_VAR ESCAPE=HTML NAME=serial_no></td>
+        <td><TMPL_UNLESS NAME=hardware_meta_default_data><TMPL_UNLESS NAME=hardware_manufacturer_meta_default_data><TMPL_VAR ESCAPE=HTML NAME=hardware_manufacturer_name> </TMPL_UNLESS></TMPL_UNLESS><TMPL_VAR ESCAPE=HTML NAME=hardware_name></td>
+        <td class="item_name"><a title="View details for this device" href="<TMPL_VAR NAME=base_url>?view=device&amp;view_type=single&amp;id=<TMPL_VAR ESCAPE=URL NAME=id>"><TMPL_VAR ESCAPE=HTML NAME=name></a></td>
+				<td class="item_edit"><a title="Edit device '<TMPL_VAR ESCAPE=HTML NAME=name>'" href="<TMPL_VAR NAME=base_url>?view=device&amp;view_type=edit&amp;id=<TMPL_VAR ESCAPE=URL NAME=id>&amp;return_view=<TMPL_VAR ESCAPE=HTML NAME=view>&amp;return_view_type=<TMPL_VAR ESCAPE=HTML NAME=view_type>"><img style="float: left; border: none" src="<TMPL_VAR NAME=web_root>/graphics/icons/pencil.png" width="14" height="14" alt=""/></a></td>				
+      </tr></TMPL_LOOP>
 		</table>
 		<TMPL_ELSE>
-		<p>All devices have unique serial numbers.</p>
+		<p><em>All devices have unique serial numbers.</em></p>
 		</TMPL_IF>
 		
 		<h3>Asset Numbers</h3>
 	  <TMPL_IF NAME=assets>
 		<p>Devices having identical asset numbers.</p>
 		<table class="report">
-			<tr><th>Asset</th><th>Device</th></tr>
+			<tr><th>Asset</th><th>Hardware</th><th colspan="2">Device</th></tr>
 			<TMPL_LOOP NAME=assets>
-      <tr><td><TMPL_VAR ESCAPE=HTML NAME=asset_no></td><td><TMPL_VAR ESCAPE=HTML NAME=name></td></tr>
-			</TMPL_LOOP>
+      <tr>
+        <td><TMPL_VAR ESCAPE=HTML NAME=asset_no></td>
+        <td><TMPL_UNLESS NAME=hardware_meta_default_data><TMPL_UNLESS NAME=hardware_manufacturer_meta_default_data><TMPL_VAR ESCAPE=HTML NAME=hardware_manufacturer_name> </TMPL_UNLESS></TMPL_UNLESS><TMPL_VAR ESCAPE=HTML NAME=hardware_name></td>
+        <td class="item_name"><a title="View details for this device" href="<TMPL_VAR NAME=base_url>?view=device&amp;view_type=single&amp;id=<TMPL_VAR ESCAPE=URL NAME=id>"><TMPL_VAR ESCAPE=HTML NAME=name></a></td>
+				<td class="item_edit"><a title="Edit device '<TMPL_VAR ESCAPE=HTML NAME=name>'" href="<TMPL_VAR NAME=base_url>?view=device&amp;view_type=edit&amp;id=<TMPL_VAR ESCAPE=URL NAME=id>&amp;return_view=<TMPL_VAR ESCAPE=HTML NAME=view>&amp;return_view_type=<TMPL_VAR ESCAPE=HTML NAME=view_type>"><img style="float: left; border: none" src="<TMPL_VAR NAME=web_root>/graphics/icons/pencil.png" width="14" height="14" alt=""/></a></td>				
+      </tr></TMPL_LOOP>
 		</table>
 		<TMPL_ELSE>
 		<p><em>All devices have unique asset numbers.</em></p>
@@ -58,10 +74,14 @@
 	  <TMPL_IF NAME=oslicence>
 		<p>Devices having identical operating system licence keys.</p>
 		<table class="report">
-			<tr><th>OS Licence Key</th><th>Device</th></tr>
+			<tr><th>Licence Key</th><th>OS</th><th colspan="2">Device</th></tr>
 			<TMPL_LOOP NAME=oslicence>
-      <tr><td><TMPL_VAR ESCAPE=HTML NAME=os_licence_key></td><td><TMPL_VAR ESCAPE=HTML NAME=name></td></tr>
-			</TMPL_LOOP>
+      <tr>
+        <td><TMPL_VAR ESCAPE=HTML NAME=os_licence_key></td>
+        <td><TMPL_VAR ESCAPE=HTML NAME=os_name></td>
+        <td class="item_name"><a title="View details for this device" href="<TMPL_VAR NAME=base_url>?view=device&amp;view_type=single&amp;id=<TMPL_VAR ESCAPE=URL NAME=id>"><TMPL_VAR ESCAPE=HTML NAME=name></a></td>
+				<td class="item_edit"><a title="Edit device '<TMPL_VAR ESCAPE=HTML NAME=name>'" href="<TMPL_VAR NAME=base_url>?view=device&amp;view_type=edit&amp;id=<TMPL_VAR ESCAPE=URL NAME=id>&amp;return_view=<TMPL_VAR ESCAPE=HTML NAME=view>&amp;return_view_type=<TMPL_VAR ESCAPE=HTML NAME=view_type>"><img style="float: left; border: none" src="<TMPL_VAR NAME=web_root>/graphics/icons/pencil.png" width="14" height="14" alt=""/></a></td>				
+      </tr></TMPL_LOOP>
 		</table>
 		<TMPL_ELSE>
 		<p><em>All devices have unique asset numbers.</em></p>
