@@ -11,15 +11,28 @@ http://www.rackmonkey.org/doc
 v1.2.5 Preview 3 - Released 2009-xx-xx
 --------------------------------------
 * Full support for associating apps with devices
-* Additional columns in the device table to aid with network installs
-* Changed notes fields in MySQL schema to be of type TEXT
+* Additional columns in the device table to aid with installs and
+  identification by MAC (e.g. for PXE+Kickstart)
+* New report showing duplicate OS licence keys, serial and asset numbers
+* Changed notes fields in MySQL schema to be of type TEXT (allows more than
+  255 characters)
+* All updates now completed as one transaction for improved data integrity
+  For example, an update will only occur if the log table is updated correctly
+* The default rack numbering direction is now configurable
+* All delete requests now have a confirmation pop-up
+* Requires DBI v1.45 or higher for all database engines
+* Requires DBD::Pg v1.48 or higher for Postgres
+  All database engines now have a tested minimum driver version
+* IE 8 now supported
+* Improved validation of submitted device information
+
 
 v1.2.5 Preview 2 - Released 2009-04-05
 --------------------------------------
 * Added ability to record OS licence key
 * Separated manufacturer and hardware model in device creation/editing
 * Improved database driver checks and reporting
-* Added instructions for upgrading from prior releases
+* Added instructions for upgrading to v1.2.5 from prior releases
 * Pod added to perl modules (still work in progress)
 * Fixed a bug with creating/editing rooms
 * Fixed handling of notes fields when truncated
@@ -71,7 +84,8 @@ v1.2.4 Preview 2 - Released 2008-05-18
 * System information is now included in error reports and config view.
 * Made configuration system more robust
 * Extensive testing of MySQL support on MySQL 5.0.51b
-* Tightened up foreign key constraints in Postgres/MySQL to prevent NULL values
+* Tightened up foreign key constraints in Postgres/MySQL to prevent NULL
+  values
 * Fixed two bugs with validation which prevented the creation of racks
 * Fixed a bug when creating a room during a rack creation
 * Fixed a bug when creating a room when no buildings exist

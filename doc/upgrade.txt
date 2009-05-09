@@ -82,8 +82,11 @@ Once the shell has started (you may be prompted to configure it):
 ================
 RackMonkey v1.2.5 is the first release of the 1.2 series to include schema 
 changes. The schema updates are handled by separate SQL script for each
-database engine. Together the updates take the schema from v2 to v4. To check
-which schema you are on you can run the following on your database:
+database engine. Together the updates take the schema from v2 to v4. If you 
+are updating from a prior v1.2.5 preview you only need to apply the
+schema v4 update (you will already be on schema v3).
+
+To check which schema you are on you can run the following on your database:
 
     SELECT name,value from rm_meta where name = 'schema_version';
 
@@ -133,7 +136,6 @@ If the update was successful the output should finish with:
         name      | value 
   ----------------+-------
    schema_version | 3
-  (1 row)
 
 You can safely ignore warnings of the form:
  
@@ -151,7 +153,6 @@ If the update was successful the output should finish with:
         name      | value 
   ----------------+-------
    schema_version | 4
-  (1 row)
   
 As before you can ignore the vacuum warnings. 
 
@@ -175,7 +176,6 @@ If the update was successful the output should finish with:
   +----------------+-------+
   | schema_version | 3     | 
   +----------------+-------+
-  1 row in set (0.00 sec)
 
 If the move to schema v3 was successful you should then move to schema v4:
 
@@ -190,12 +190,13 @@ If the update was successful the output should finish with:
   +----------------+-------+
   | schema_version | 4     | 
   +----------------+-------+
-  1 row in set (0.00 sec)
 
 
 5. Configuring RackMonkey
 =========================
-If you're upgrading from v1.2.3 or earlier you need to follow this section. v1.2.4 users can skip on to section 6.
+If you're upgrading from v1.2.3 or earlier you need to follow this section. 
+v1.2.4 users can skip on to the rack numbering heading towards the end of this 
+section.
 
 Creating a Text File Configuration
 ----------------------------------
@@ -237,6 +238,13 @@ On NetBSD:
 	# /etc/rc.d/apache reload
 	
 On other systems kill -HUP <apache_pid> will do the trick.
+
+Rack Numbering Direction
+------------------------
+RackMonkey now supports setting a default numbering direction for racks.
+If your racks are mostly numbered from the top, so unit 1 is highest in the
+rack, you should set the value of 'number_from_top' to 1 in rackmonkey.conf.
+Don't worry, you can still override this on a rack-by-rack basis.
 
 
 6. Upgrading the Application

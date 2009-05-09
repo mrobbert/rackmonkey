@@ -43,7 +43,9 @@ shell prompt, you should not type them.
 
 2. System Set Up
 ================
-You need the following in order to install and use RackMonkey:
+You need the following in order to install and use RackMonkey. NB. Some of 
+these requirements have been revised since both v1.2.4 and the last preview 
+release.
 
 * Modern web browser
 For Windows/Unix users Firefox 3 currently provides the best results, for Mac 
@@ -52,24 +54,24 @@ users we recommend Safari 3. For details see: http://www.rackmonkey.org/faq
 * Web server (Apache 2 recommended)
 
 * One of the following databases (your OS may include packages for these):
-  - SQLite v3.2.2 or higher (3.4.2 or higher recommended)
+  - SQLite v3.3.6 or higher
       SQLite3 can be obtained from http://www.sqlite.org
-  - PostgreSQL v7.4 or higher (8.0.3 or higher recommended)
+  - PostgreSQL v7.4 or higher (8.0.3 or higher strongly recommended)
       Postgres can be obtained from http://www.postgresql.org
-  - MySQL v5.0.21 or higher (v5.0.51 or higher recommended)
+  - MySQL v5.0.22 or higher
       MySQL can be obtained from http://dev.mysql.com/downloads/mysql/
 
   NB. SQLite is the simplest database to administer. If you aren't an
   experienced database administrator we recommend you use SQLite.
     
 * Perl 5.61 or higher (5.84 or higher recommended) with the following modules:
-  - DBI (v1.43 or higher if using Postgres)
+  - DBI v1.45 or higher
   - CGI
   - HTML::Template and HTML::Entities  
   - THe DBI driver for your chosen database:
-    - For SQLite: DBD::SQLite v1.09+ (v1.14 or higher recommended)
-    - For Postgres: DBD::Pg 
-    - For MySQL DBD::mysql v3.0002+
+    - For SQLite: DBD::SQLite v1.09 or higher
+    - For Postgres: DBD::Pg v1.48 or higher
+    - For MySQL DBD::mysql v3.0002 or higher
 
 The easiest way to install modules is usually with the CPAN shell. You
 generally need to be root in order to do this. 
@@ -241,11 +243,13 @@ section 2, above), something like:
     tmplpath = /home/rackmonkey/tmpl
 
 wwwpath sets the path within web space that your web content resides (that is
-relative to the DocumentRoot in Apache), for example:
+relative to the DocumentRoot in Apache). For example if your web pages reside 
+in /var/www/html/rackmonkey and your web root is /var/www/html you would use:
 
-    wwwpath = /rackmonkey/www
+    wwwpath = /rackmonkey
 
 You now need to configure RackMonkey to connect to your database.
+
 
 For SQLite
 ----------
@@ -317,6 +321,13 @@ on db1.example.com port 9000:
 You can also connect to a local database on another port:
 
     dbconnect = dbi:mysql:dbname=rackmonkey;port=9000
+
+
+Rack Numbering Direction
+------------------------
+If your racks are mostly numbered from the top, so unit 1 is highest in the 
+rack, you should set the value of 'number_from_top' to 1. Don't worry, you can 
+still override this on a rack-by-rack basis.
 
 
 6. Database Set Up
