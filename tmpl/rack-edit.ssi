@@ -5,7 +5,7 @@
 						</div>
 						<div>
 							<label>Row</label><br />
-							<span style="font-size: smaller">Not yet supported.</span>
+							<span style="font-size: smaller"><em>Not yet supported.</em></span>
 						</div>
 						<div>
 							<label for="room">Room [<a href="<TMPL_VAR NAME=base_url>?view=room&amp;view_type=create&amp;return_view=rack&amp;return_view_type=<TMPL_VAR ESCAPE=HTML NAME=view_type>&amp;return_view_id=<TMPL_VAR ESCAPE=HTML NAME=id>">add</a>]</label><br />
