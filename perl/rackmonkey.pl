@@ -93,7 +93,6 @@ eval {
     }
     else                                   # display a view
     {
-
         # check the view is valid
         unless ($view =~ /^(?:config|help|app|building|device|deviceApp|domain|hardware|network|power|org|os|rack|report|role|room|row|service|system)$/)
         {
@@ -181,14 +180,14 @@ eval {
             {
                 my $app = $backend->app($id);
                 $template->param($app);
-            
+
                 my $devices = $backend->listBasic('device');
                 unshift @$devices, {'id' => '', 'name' => '-'};
                 $template->param('devices' => $devices);
-            
+
                 my $relations = $backend->listBasic('app_relation', 1);
                 unshift @$relations, {'id' => '', 'name' => '-'};
-                $template->param('relations' => $relations);   
+                $template->param('relations' => $relations);
             }
             else
             {
@@ -278,7 +277,6 @@ eval {
 
                     if ($viewType !~ /^single/)
                     {
-
                         # Use database value for selected if none in CGI
                         $selectedManufacturer  = $$device{'hardware_manufacturer_id'} if (!$selectedManufacturer);
                         $selectedHardwareModel = $$device{'hardware'}                 if (!$selectedHardwareModel);
@@ -306,15 +304,15 @@ eval {
                 {
                     $template->param('selected_manufacturer'   => $selectedManufacturer);
                     $template->param('selected_hardware_model' => $selectedHardwareModel);
-                    $template->param('manufacturerlist'        => $cgi->selectItem($backend->manufacturerWithHardwareList, 0)); # run selectItem to prefix - on meta_default items, should be separate sub from selectItem
-                    $template->param('modelList'               => $backend->hardwareByManufacturer); # Need to work out how to prefix meta default items with - for this dropdown
+                    $template->param('manufacturerlist'        => $cgi->selectItem($backend->manufacturerWithHardwareList, 0));               # run selectItem to prefix - on meta_default items, should be separate sub from selectItem
+                    $template->param('modelList'               => $backend->hardwareByManufacturer);                                          # Need to work out how to prefix meta default items with - for this dropdown
                     $template->param('oslist'                  => $cgi->selectItem($backend->listBasic('os', 1), $selectedOs));
                     $template->param('rolelist'                => $cgi->selectItem($backend->listBasic('role', 1), $selectedRole));
                     $template->param('customerlist'            => $cgi->selectItem($backend->listBasic('customer', 1), $selectedCustomer));
                     $template->param('servicelist'             => $cgi->selectItem($backend->listBasic('service', 1), $selectedService));
-                    $template->param('racklist'                => $cgi->selectRack($backend->rackListBasic, $selectedRack));
-                    $template->param('domainlist'              => $cgi->selectItem($backend->listBasic('domain', 1), $selectedDomain));
-                    $template->param('rack_pos'                => $cgi->selectProperty('position'));
+                    $template->param('racklist' => $cgi->selectRack($backend->rackListBasic, $selectedRack));
+                    $template->param('domainlist' => $cgi->selectItem($backend->listBasic('domain', 1), $selectedDomain));
+                    $template->param('rack_pos' => $cgi->selectProperty('position'));
                 }
             }
         }
@@ -499,7 +497,14 @@ eval {
                 if (($viewType =~ /^edit/) || ($viewType =~ /^single/) || ($viewType =~ /^create/))
                 {
                     my $rack = {};
-                    $rack = $backend->rack($id) if ($id);    # used if copying, editing or displaying single view, but not for a plain create
+                    if ($id)    # used if copying, editing or displaying single view, but not for a plain create
+                    {
+                        $rack = $backend->rack($id);
+                    }
+                    else
+                    {
+                        $$rack{'numbering_direction'} = $$conf{'number_from_top'};
+                    }
 
                     $selectedRoom = $$rack{'room'} if (!$selectedRoom);    # Use database value for selected if none in CGI - not actually needed in single view
 
@@ -535,9 +540,12 @@ eval {
                 $template->param('rack_count'            => $backend->itemCount('rack'));
                 my $rackSize   = $backend->totalSizeRack;
                 my $deviceSize = $backend->totalSizeDevice;
-                $template->param('total_rack_space'      => $rackSize);
-                $template->param('used_rack_space'       => $deviceSize);
-                $template->param('free_rack_space'       => $rackSize - $deviceSize);
+                $template->param('total_rack_space' => $rackSize);
+                $template->param('used_rack_space'  => $deviceSize);
+                $template->param('free_rack_space'  => $rackSize - $deviceSize);
+            }
+            elsif ($viewType =~ /^counts/)
+            {
                 $template->param('customer_device_count' => $backend->customerDeviceCount);
                 $template->param('role_device_count'     => $backend->roleDeviceCount);
                 $template->param('hardware_device_count' => $backend->hardwareDeviceCount);
@@ -545,8 +553,8 @@ eval {
             }
             elsif ($viewType =~ /^duplicates/)
             {
-                $template->param('serials' => $backend->duplicateSerials);
-                $template->param('assets' => $backend->duplicateAssets);
+                $template->param('serials'   => $backend->duplicateSerials);
+                $template->param('assets'    => $backend->duplicateAssets);
                 $template->param('oslicence' => $backend->duplicateOSLicenceKey);
             }
         }
@@ -667,7 +675,6 @@ eval {
     # create rack dropdown
     my $selectedRack = 0;
     $selectedRack = $id if (($viewType =~ /^physical/) && ($view eq 'rack'));
-
     $template->param('racknavlist' => $cgi->selectRack($backend->rackListBasic(1), $selectedRack));
 
     # Get version, date and user for page footer

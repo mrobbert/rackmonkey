@@ -28,7 +28,7 @@ sub new
 {
     my ($className) = @_;
     my $conf = RackMonkey::Conf->new;
-    croak "RM_ENGINE: No database specified in configuration file. Check value of 'dbconnect' in ".$$conf{'configpath'}.'.' unless ($$conf{'dbconnect'});
+    croak "RM_ENGINE: No database specified in configuration file. Check value of 'dbconnect' in " . $$conf{'configpath'} . '.' unless ($$conf{'dbconnect'});
 
     # The sys hash contains basic system profile information (should be altered to use the DBI DSN parse method?)
     my ($dbDriver, $dbDataSource) = $$conf{'dbconnect'} =~ /dbi:(.*?):(.*)/;
@@ -39,7 +39,7 @@ sub new
         'rackmonkey_engine_version' => $VERSION
     };
     $$conf{'db_data_source'} = $dbDataSource;
-    
+
     my $currentDriver = $$sys{'db_driver'};
     unless ($$conf{'bypass_db_driver_checks'})
     {
@@ -49,7 +49,7 @@ sub new
             croak "RM_ENGINE: You tried to use an unsupported database driver '$currentDriver'. RackMonkey supports SQLite (DBD::SQLite), Postgres (DBD::Pg) or MySQL (DBD::mysql). Please check you typed the driver name correctly (names are case sensitive). Consult the installation and troubleshooting documents for more information.";
         }
     }
-    
+
     # If using SQLite only connect if database file exists, don't create it
     if ($$sys{'db_driver'} eq 'DBD::SQLite')
     {
@@ -59,25 +59,25 @@ sub new
     }
 
     # To get DB server information and do remaining driver checks we need to load the driver
-    my $dbh = DBI->connect($$conf{'dbconnect'}, $$conf{'dbuser'}, $$conf{'dbpass'}, {AutoCommit => 1, RaiseError => 1, PrintError => 0, ShowErrorStatement => 1});
+    my $dbh = DBI->connect($$conf{'dbconnect'}, $$conf{'dbuser'}, $$conf{'dbpass'}, {AutoCommit => 0, RaiseError => 1, PrintError => 0, ShowErrorStatement => 1});
 
     # Get information on the database server
     if ($currentDriver eq 'DBD::SQLite')
     {
-        $$sys{'db_server_version'} = 'not applicable';
+        $$sys{'db_server_version'}     = 'not applicable';
         $$sys{'db_driver_lib_version'} = $dbh->{'sqlite_version'};
     }
     elsif ($currentDriver eq 'DBD::Pg')
     {
-        $$sys{'db_server_version'} = $dbh->{'pg_server_version'};
+        $$sys{'db_server_version'}     = $dbh->{'pg_server_version'};
         $$sys{'db_driver_lib_version'} = $dbh->{'pg_lib_version'};
     }
     elsif ($currentDriver eq 'DBD::mysql')
     {
-        $$sys{'db_server_version'} = $dbh->{'mysql_serverinfo'};
+        $$sys{'db_server_version'}     = $dbh->{'mysql_serverinfo'};
         $$sys{'db_driver_lib_version'} = 'not available';
     }
-    
+
     unless ($$conf{'bypass_db_driver_checks'})
     {
         # Checks that the DBI version and DBD driver is compatible with RackMonkey
@@ -86,28 +86,34 @@ sub new
         $$sys{'db_driver_version'} = $driverVersion;
         $$sys{'dbi_version'}       = $DBIVersion;
 
-        # If using SQLite, version v1.09 or higher is required in order to support ADD COLUMN
+        # Require DBI v1.45 or higher for all database engines (due to last insert ID issues and issues with v1.44 breaking some DB drivers)
+        if ($DBIVersion < 1.45)
+        {
+            croak "RM_ENGINE: You tried to use an unsupported version of the DBI database interface. You need to use DBI version v1.45 or higher. You are using DBI v$DBIVersion. Please consult the installation and troubleshooting documents.";
+        }
+
+        # If using SQLite version v1.09 or higher is required in order to support ADD COLUMN
         if (($currentDriver eq 'DBD::SQLite') && ($driverVersion < 1.09))
         {
-            croak "RM_ENGINE: You tried to use an unsupported database driver. RackMonkey requires DBD::SQLite v1.09 or higher. You are using DBD::SQLite v$driverVersion. Please consult the troubleshooting document.";
+            croak "RM_ENGINE: You tried to use an unsupported database driver. RackMonkey requires DBD::SQLite v1.09 or higher. You are using DBD::SQLite v$driverVersion. Please consult the installation and troubleshooting documents.";
         }
 
-        # Postgres only works properly with DBI v1.43 or higher (due to last insert ID issues)
-        if (($currentDriver eq 'DBD::Pg') && ($DBIVersion < 1.43))
+        # If using Postgres version v1.48 or higher is required
+        if (($currentDriver eq 'DBD::Pg') && ($driverVersion < 1.48))
         {
-            croak "RM_ENGINE: You tried to use an unsupported database driver. You need to use DBI version v1.43 or higher with Postgres. You are using DBI v$DBIVersion. Please consult the troubleshooting document.";
+            croak "RM_ENGINE: You tried to use an unsupported database driver. RackMonkey requires DBD::Pg v1.48 or higher. You are using DBD::Pg v$driverVersion. Please consult the installation and troubleshooting documents.";
         }
 
-        # If using MySQL, version v3.0002 or higher is required, this is the first solid release of v3. Earlier releases are untested and at least some have issues with autocommit
+        # If using MySQL version v3.0002 or higher is required, this is the first solid release of v3. Earlier releases are untested and at least some have issues with autocommit
         if (($currentDriver eq 'DBD::mysql') && ($driverVersion < 3.0002))
         {
-            croak "RM_ENGINE: You tried to use an unsupported database driver. RackMonkey requires DBD::mysql v3.0002 or higher. You are using DBD::mysql v$driverVersion. Please consult the troubleshooting document.";
+            croak "RM_ENGINE: You tried to use an unsupported database driver. RackMonkey requires DBD::mysql v3.0002 or higher. You are using DBD::mysql v$driverVersion. Please consult the installation and troubleshooting documents.";
         }
-        
+
         # Check MySQL server version is at least 5
         if (($currentDriver eq 'DBD::mysql') && (substr($$sys{'db_server_version'}, 0, 1) < 5))
         {
-            croak "RM_ENGINE: You tried to use an unsupported MySQL server version. RackMonkey requires MySQL v5 or higher. You are using MySQL v".$$sys{'db_server_version'}.". Please consult the installation document.";
+            croak "RM_ENGINE: You tried to use an unsupported MySQL server version. RackMonkey requires MySQL v5 or higher. You are using MySQL v" . $$sys{'db_server_version'} . ". Please consult the installation and troubleshooting documents.";
         }
     }
 
@@ -183,7 +189,7 @@ sub listBasic
     	!
         );
     }
-    
+
     $sth->execute;
     return $sth->fetchall_arrayref({});
 }
@@ -206,8 +212,10 @@ sub itemCount
 sub performAct
 {
     my ($self, $type, $act, $updateUser, $record) = @_;
-    croak "RM_ENGINE: '$type' is not a recognised type. This error should not occur, did you manually type this URL?"
-      unless $type =~ /^(?:building|room|row|rack|device|hardware|os|service|role|domain|org|app|deviceApp|report)$/;
+    unless ($type =~ /^(?:building|room|row|rack|device|hardware|os|service|role|domain|org|app|deviceApp|report)$/)
+    {
+        croak "RM_ENGINE: '$type' is not a recognised type. This error should not occur, did you manually type this URL?";
+    }
     my $actStr  = $act;
     my $typeStr = $type;
     $act = 'update' if ($act eq 'insert');
@@ -232,11 +240,10 @@ sub performAct
     my $sth = $self->dbh->prepare(qq!INSERT INTO logging (table_changed, id_changed, name_changed, change_type, descript, update_time, update_user) VALUES(?, ?, ?, ?, ?, ?, ?)!);
     $sth->execute($typeStr, $lastId, $$record{'name'}, $actStr, '', $updateTime, $updateUser);
 
+    $self->dbh->commit();    # if everything was successful we commit
     return $lastId;
 }
 
-# _lastInsertId is a private method
-# works with Postgres, SQLite and MySQL but may need altering for other DB,
 sub _lastInsertId
 {
     my ($self, $table) = @_;
@@ -495,14 +502,12 @@ sub updateRoom
     }
     else
     {
-        $self->dbh->{AutoCommit} = 0;    # need to update room and row table together
         eval {
             $sth = $self->dbh->prepare(qq!INSERT INTO room (name, building, notes, meta_update_time, meta_update_user) VALUES(?, ?, ?, ?, ?)!);
             $sth->execute($self->_validateRoomUpdate($record), $updateTime, $updateUser);
             $newId = $self->_lastInsertId('room');
-            my $hiddenRow = {'name' => '-', room => "$newId", 'room_pos' => 0, 'hidden_row' => 1, 'notes' => ''};
+            my $hiddenRow = {'name' => '-', 'room' => "$newId", 'room_pos' => 0, 'hidden_row' => 1, 'notes' => ''};
             $self->updateRow($updateTime, $updateUser, $hiddenRow);
-            $self->dbh->commit();
         };
         if ($@)
         {
@@ -514,7 +519,6 @@ sub updateRoom
             }
             croak "RM_ENGINE: Room creation failed - $errorMsg";
         }
-        $self->dbh->{AutoCommit} = 1;
     }
     return $newId || $$record{'id'};
 }
@@ -526,13 +530,11 @@ sub deleteRoom
     croak "RM_ENGINE: Delete failed. No room id specified." unless ($deleteId);
 
     my ($ret, $sth);
-    $self->dbh->{AutoCommit} = 0;    # need to delete room and hidden rows together
     eval {
         $sth = $self->dbh->prepare(qq!DELETE FROM row WHERE hidden_row = 1 AND room = ?!);
         $sth->execute($deleteId);
         $sth = $self->dbh->prepare(qq!DELETE FROM room WHERE id = ?!);
         $ret = $sth->execute($deleteId);
-        $self->dbh->commit();
     };
     if ($@)
     {
@@ -544,7 +546,6 @@ sub deleteRoom
         }
         croak "RM_ENGINE: Room deletion failed - $errorMsg.";
     }
-    $self->dbh->{AutoCommit} = 1;
     croak "RM_ENGINE: This room does not currently exist, it may have been removed already." if ($ret eq '0E0');
     return $deleteId;
 }
@@ -882,7 +883,6 @@ sub rackPhysical
 
         while ($sizeCount > 0)
         {
-
             # make a copy of the device so we can adjust it independently of it's other appearances
             my %devEntry = %$dev;
             $devEntry{'rack_location'} = $rackLayout[$position - 1];
@@ -894,7 +894,6 @@ sub rackPhysical
 
     if ($tableFormat)
     {
-
         # unless numbering from the top of the rack we need to reverse the rack positions
         @rackLayout = reverse @rackLayout unless ($$rack{'numbering_direction'});
 
@@ -1058,8 +1057,8 @@ sub hardware
 
 sub hardwareList
 {
-    my $self = shift;
-    my $orderBy = shift || '';
+    my $self         = shift;
+    my $orderBy      = shift || '';
     my $manufacturer = shift || 0;
 
     my $sth;
@@ -1067,7 +1066,7 @@ sub hardwareList
     {
         $orderBy = 'org.name, hardware.name' unless $orderBy =~ /^[a-z_]+\.[a-z_]+$/;
         $orderBy = 'org.meta_default_data, ' . $orderBy if ($orderBy =~ /^org.name/);
-        
+
         $sth = $self->dbh->prepare(
             qq!
     		SELECT
@@ -1085,7 +1084,7 @@ sub hardwareList
     {
         $orderBy = 'hardware.name' unless $orderBy =~ /^[a-z_]+\.[a-z_]+$/;
         $orderBy = 'hardware.meta_default_data DESC, ' . $orderBy;
-        $sth = $self->dbh->prepare(
+        $sth     = $self->dbh->prepare(
             qq!
     		SELECT
     			hardware.*
@@ -1103,13 +1102,13 @@ sub hardwareList
 
 sub hardwareByManufacturer
 {
-    my $self = shift;
+    my $self    = shift;
     my $orderBy = 'hardware.name';
-    
+
     my @hardwareModels;
-    
+
     my $manufacturers = $self->listBasic('hardware_manufacturer', 1);
-    
+
     for my $manu (@$manufacturers)
     {
         push @hardwareModels, {'maufacturer_id' => $$manu{'id'}, 'maufacturer_name' => $$manu{'name'}, 'models' => $self->hardwareList('name', $$manu{'id'})};
@@ -1426,7 +1425,7 @@ sub orgList
 sub manufacturerWithHardwareList
 {
     my $self = shift;
-    my $sth = $self->dbh->prepare(
+    my $sth  = $self->dbh->prepare(
         qq!
 		SELECT DISTINCT 
 		    hardware.manufacturer AS id,
@@ -1930,7 +1929,29 @@ sub _validateDeviceInput
 
     # If location is meta_default then also set in service to false - this is a magic number, should find way to remove this
     $$record{'in_service'} = 0 if ($$record{'rack'} <= 5);
-    
+
+    # Check strings are valid
+    unless (length($$record{'serial_no'}) <= $self->getConf('maxstring'))
+    {
+        croak "RM_ENGINE: Serial numbers cannot exceed " . $self->getConf('maxstring') . " characters.";
+    }
+    unless (length($$record{'asset_no'}) <= $self->getConf('maxstring'))
+    {
+        croak "RM_ENGINE: Asset numbers cannot exceed " . $self->getConf('maxstring') . " characters.";
+    }
+    unless (length($$record{'os_licence_key'}) <= $self->getConf('maxstring'))
+    {
+        croak "RM_ENGINE: OS licence keys cannot exceed " . $self->getConf('maxstring') . " characters.";
+    }
+    unless (length($$record{'primary_mac'}) <= $self->getConf('maxstring'))
+    {
+        croak "RM_ENGINE: Primary MACs cannot exceed " . $self->getConf('maxstring') . " characters.";
+    }
+    unless (length($$record{'install_build'}) <= $self->getConf('maxstring'))
+    {
+        croak "RM_ENGINE: Install build names cannot exceed " . $self->getConf('maxstring') . " characters.";
+    }
+
     # check if we have a meta default location if so set rack position to zero, otherwise check we have a valid rack position
     my $rack = $self->rack($$record{'rack'});
     if ($$rack{'meta_default_data'})
@@ -1939,10 +1960,9 @@ sub _validateDeviceInput
     }
     else    # location is in a real rack
     {
-
         # check we have a position
         croak "RM_ENGINE: You need to specify a Rack Position." unless (length($$record{'rack_pos'}) > 0);
-        
+
         # get the size of this hardware
         my $hardware     = $self->hardware($$record{'hardware_model'});
         my $hardwareSize = $$hardware{'size'};
@@ -1953,7 +1973,6 @@ sub _validateDeviceInput
         }
 
         # ensure the location doesn't overlap any other devices in this rack
-
         # get the layout of this rack
         my $rackLayout = $self->rackPhysical($$record{'rack'}, undef, 1);
 
@@ -1971,7 +1990,7 @@ sub _validateDeviceInput
         }
     }
 
-    # Check if OS is meta_default, if so, set version to empty string
+    # Check if OS is meta_default, if so set version to empty string
     my $os = $self->os($$record{'os'});
     if ($$os{'meta_default_data'})
     {
@@ -2009,9 +2028,15 @@ sub duplicateSerials
         SELECT 
             device.name, 
             device.id, 
-            device.serial_no
-        FROM device 
+            device.serial_no,
+            device.hardware,
+            hardware.name AS hardware_name,
+			hardware_manufacturer.name AS hardware_manufacturer_name,
+			hardware_manufacturer.meta_default_data	AS hardware_manufacturer_meta_default_data
+        FROM device, hardware, org hardware_manufacturer
         WHERE
+            device.hardware = hardware.id AND
+            hardware.manufacturer = hardware_manufacturer.id AND        
             length(device.serial_no) > 0 AND
             device.serial_no IN (SELECT device.serial_no FROM device GROUP BY device.serial_no HAVING count(*) > 1)
         ORDER BY
@@ -2031,9 +2056,15 @@ sub duplicateAssets
         SELECT 
             device.name, 
             device.id, 
-            device.asset_no
-        FROM device 
-        WHERE 
+            device.asset_no,
+            device.hardware,
+            hardware.name AS hardware_name,
+			hardware_manufacturer.name AS hardware_manufacturer_name,
+			hardware_manufacturer.meta_default_data	AS hardware_manufacturer_meta_default_data
+        FROM device, hardware, org hardware_manufacturer
+        WHERE
+            device.hardware = hardware.id AND
+            hardware.manufacturer = hardware_manufacturer.id AND
             length(device.asset_no) > 0 AND
             device.asset_no IN (SELECT device.asset_no FROM device GROUP BY device.asset_no HAVING count(*) > 1)
         ORDER BY
@@ -2042,7 +2073,7 @@ sub duplicateAssets
     !
     );
     $sth->execute;
-    return $sth->fetchall_arrayref({});    
+    return $sth->fetchall_arrayref({});
 }
 
 sub duplicateOSLicenceKey
@@ -2053,9 +2084,12 @@ sub duplicateOSLicenceKey
         SELECT 
             device.name, 
             device.id, 
-            device.os_licence_key
-        FROM device 
+            device.os_licence_key,
+            device.os,
+            os.name AS os_name
+        FROM device, os 
         WHERE 
+            device.os = os.id AND
             length(device.os_licence_key) > 0 AND
             device.os_licence_key IN (SELECT device.os_licence_key FROM device GROUP BY device.os_licence_key HAVING count(*) > 1)
         ORDER BY
@@ -2064,7 +2098,7 @@ sub duplicateOSLicenceKey
     !
     );
     $sth->execute;
-    return $sth->fetchall_arrayref({});    
+    return $sth->fetchall_arrayref({});
 }
 
 ##############################################################################
@@ -2317,13 +2351,13 @@ sub appDevicesUsedList
     my $sth = $self->dbh->prepare_cached(
         qq!
 		SELECT
-		    device_app.id       AS device_app_id,
-			device.id			AS device_id,
-		 	device.name			AS device_name, 
-			app.name			AS app_name,
-			app_relation.id 	AS app_relation_id,
-			app_relation.name 	AS app_relation_name,
-			domain.name			AS domain_name,
+		    device_app.id               AS device_app_id,
+			device.id			        AS device_id,
+		 	device.name			        AS device_name, 
+			app.name			        AS app_name,
+			app_relation.id 	        AS app_relation_id,
+			app_relation.name 	        AS app_relation_name,
+			domain.name			        AS domain_name,
 			domain.meta_default_data	AS domain_meta_default_data
 		FROM
 			device, app_relation, device_app, app, domain 
@@ -2344,7 +2378,9 @@ sub appOnDeviceList
     my ($self, $id) = @_;
     my $sth = $self->dbh->prepare_cached(
         qq!
-		SELECT DISTINCT
+		SELECT
+		    device_app.id       AS device_app_id,
+		    app_relation.name   AS app_relation_name,
 			app.id				AS app_id,
 			app.name			AS app_name
 		FROM
@@ -2389,9 +2425,15 @@ sub deleteApp
     my ($self, $updateTime, $updateUser, $record) = @_;
     my $deleteId = (ref $record eq 'HASH') ? $$record{'id'} : $record;
     croak "RM_ENGINE: Delete failed. No app id specified." unless ($deleteId);
-    my $sth = $self->dbh->prepare(qq!DELETE FROM app WHERE id = ?!);
-    my $ret = $sth->execute($deleteId);
+
+    # delete app with associated device relationships
+    my $sth = $self->dbh->prepare(qq!DELETE FROM device_app WHERE app = ?!);
+    my $ret = $sth->execute($deleteId);                                        # this return value isn't currently used
+    $sth = $self->dbh->prepare(qq!DELETE FROM app WHERE id = ?!);
+    $ret = $sth->execute($deleteId);
+
     croak "RM_ENGINE: Delete failed. This app does not currently exist, it may have been removed already." if ($ret eq '0E0');
+
     return $deleteId;
 }
 
@@ -2403,7 +2445,7 @@ sub _validateAppUpdate
     $self->_checkNotes($$record{'notes'});
     return ($$record{'name'}, $$record{'descript'}, $$record{'notes'});
 }
-    
+
 sub updateDeviceApp
 {
     my ($self, $updateTime, $updateUser, $record) = @_;
