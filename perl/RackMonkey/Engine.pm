@@ -86,34 +86,34 @@ sub new
         $$sys{'db_driver_version'} = $driverVersion;
         $$sys{'dbi_version'}       = $DBIVersion;
 
-        # Require DBI v1.45 or higher for all database engines (due to last insert ID issues and issues with v1.44 breaking some DB drivers)
+        # All users now tequire DBI v1.45 or higher (due to last insert ID issues)
         if ($DBIVersion < 1.45)
         {
             croak "RM_ENGINE: You tried to use an unsupported version of the DBI database interface. You need to use DBI version v1.45 or higher. You are using DBI v$DBIVersion. Please consult the installation and troubleshooting documents.";
         }
 
-        # If using SQLite version v1.12 or higher is required in order to support ADD COLUMN
+        # SQLite users require DBD::SQLite 1.12 or higher (this equates to SQLite 3.3.5)
         if (($currentDriver eq 'DBD::SQLite') && ($driverVersion < 1.12))
         {
-            croak "RM_ENGINE: You tried to use an unsupported database driver. RackMonkey requires DBD::SQLite v1.12 or higher. You are using DBD::SQLite v$driverVersion. Please consult the installation and troubleshooting documents.";
+            croak "RM_ENGINE: You tried to use an unsupported database driver. RackMonkey requires DBD::SQLite 1.12 or higher. You are using DBD::SQLite $driverVersion. Please consult the installation and troubleshooting documents.";
         }
 
-        # If using Postgres version v1.48 or higher is required
+        # Postgres users require DBD::Pg 1.48 or higher
         if (($currentDriver eq 'DBD::Pg') && ($driverVersion < 1.48))
         {
-            croak "RM_ENGINE: You tried to use an unsupported database driver. RackMonkey requires DBD::Pg v1.48 or higher. You are using DBD::Pg v$driverVersion. Please consult the installation and troubleshooting documents.";
+            croak "RM_ENGINE: You tried to use an unsupported database driver. RackMonkey requires DBD::Pg 1.48 or higher. You are using DBD::Pg $driverVersion. Please consult the installation and troubleshooting documents.";
         }
 
-        # If using MySQL version v3.0002 or higher is required, this is the first solid release of v3. Earlier releases are untested and at least some have issues with autocommit
+        # MySQL users require DBD::mysql 3.0002 or higher
         if (($currentDriver eq 'DBD::mysql') && ($driverVersion < 3.0002))
         {
-            croak "RM_ENGINE: You tried to use an unsupported database driver. RackMonkey requires DBD::mysql v3.0002 or higher. You are using DBD::mysql v$driverVersion. Please consult the installation and troubleshooting documents.";
+            croak "RM_ENGINE: You tried to use an unsupported database driver. RackMonkey requires DBD::mysql 3.0002 or higher. You are using DBD::mysql $driverVersion. Please consult the installation and troubleshooting documents.";
         }
 
-        # Check MySQL server version is at least 5
+        # MySQL users require server version 5 or higher (5.0.22 is earliest tested release, but we allow any release 5.0 or above here)
         if (($currentDriver eq 'DBD::mysql') && (substr($$sys{'db_server_version'}, 0, 1) < 5))
         {
-            croak "RM_ENGINE: You tried to use an unsupported MySQL server version. RackMonkey requires MySQL v5 or higher. You are using MySQL v" . $$sys{'db_server_version'} . ". Please consult the installation and troubleshooting documents.";
+            croak "RM_ENGINE: You tried to use an unsupported MySQL server version. RackMonkey requires MySQL 5 or higher. You are using MySQL " . $$sys{'db_server_version'} . ". Please consult the installation and troubleshooting documents.";
         }
     }
 
