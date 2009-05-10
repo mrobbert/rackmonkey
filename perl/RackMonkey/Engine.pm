@@ -93,9 +93,9 @@ sub new
         }
 
         # If using SQLite version v1.09 or higher is required in order to support ADD COLUMN
-        if (($currentDriver eq 'DBD::SQLite') && ($driverVersion < 1.09))
+        if (($currentDriver eq 'DBD::SQLite') && ($driverVersion < 1.12))
         {
-            croak "RM_ENGINE: You tried to use an unsupported database driver. RackMonkey requires DBD::SQLite v1.09 or higher. You are using DBD::SQLite v$driverVersion. Please consult the installation and troubleshooting documents.";
+            croak "RM_ENGINE: You tried to use an unsupported database driver. RackMonkey requires DBD::SQLite v1.12 or higher. You are using DBD::SQLite v$driverVersion. Please consult the installation and troubleshooting documents.";
         }
 
         # If using Postgres version v1.48 or higher is required
