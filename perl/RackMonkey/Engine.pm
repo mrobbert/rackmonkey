@@ -92,7 +92,7 @@ sub new
             croak "RM_ENGINE: You tried to use an unsupported version of the DBI database interface. You need to use DBI version v1.45 or higher. You are using DBI v$DBIVersion. Please consult the installation and troubleshooting documents.";
         }
 
-        # If using SQLite version v1.09 or higher is required in order to support ADD COLUMN
+        # If using SQLite version v1.12 or higher is required in order to support ADD COLUMN
         if (($currentDriver eq 'DBD::SQLite') && ($driverVersion < 1.12))
         {
             croak "RM_ENGINE: You tried to use an unsupported database driver. RackMonkey requires DBD::SQLite v1.12 or higher. You are using DBD::SQLite v$driverVersion. Please consult the installation and troubleshooting documents.";
