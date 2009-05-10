@@ -25,7 +25,7 @@ v1.2.5 Preview 3 - Released 2009-xx-xx
   All database engines now have a tested minimum driver version
 * IE 8 now supported
 * Improved validation of submitted device information
-
+* Renamed methods entryBasic and listBasic to simpleItem and simpleList
 
 v1.2.5 Preview 2 - Released 2009-04-05
 --------------------------------------
