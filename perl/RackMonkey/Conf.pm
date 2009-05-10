@@ -59,13 +59,6 @@ sub new
     bless $self, $className;
 }
 
-sub getConf
-{
-    my ($self, $key) = @_;
-    confess "RM_ENGINE: '$key' is not a valid configuration parameter." unless exists $self->{"$key"};
-    return $self->{"$key"};
-}
-
 1;
 
 =head1 NAME

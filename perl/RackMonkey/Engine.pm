@@ -124,11 +124,10 @@ sub new
 sub getConf
 {
     my ($self, $key) = @_;
-    my $conf = $self->{'conf'};
-    return $conf->getConf($key);
+    return $self->{'conf'}{$key};
 }
 
-sub dbh    # should this be a private method?
+sub dbh
 {
     my $self = shift;
     return $self->{'dbh'};
