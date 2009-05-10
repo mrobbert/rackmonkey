@@ -127,6 +127,12 @@ sub getConf
     return $self->{'conf'}{$key};
 }
 
+sub getConfHash
+{
+    my $self = shift;
+    return $self->{'conf'}
+}
+
 sub dbh
 {
     my $self = shift;

@@ -44,7 +44,7 @@ $cgi = new RackMonkey::CGI;
 
 eval {
     $backend = RackMonkey::Engine->new;
-    $conf    = $$backend{'conf'};
+    $conf    = $backend->getConfHash;
 
     my $fullURL      = $cgi->url;
     my $baseURL      = $cgi->baseUrl;
