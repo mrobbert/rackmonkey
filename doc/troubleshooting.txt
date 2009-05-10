@@ -114,6 +114,15 @@ Where <role> is the role you're using to connect from RackMonkey, and <table>
 is the relation mentioned in the error message.
 
 
+DBD::SQLite::db prepare failed: unsupported file format(1)
+----------------------------------------------------------
+This error occurs when you use a newer version of the sqlite binary to create 
+your database than your DBD::SQLite perl module is compiled against. The best 
+way to solve this problem is to update your copy of DBD::SQLite. Alternatively 
+you can recreate your database with PRAGMA legacy_file_format=ON, see 
+http://www.sqlite.org/pragma.html.
+ 
+
 5. Missing Graphics and Stylesheet
 ==================================
 If the RackMonkey script runs, but the graphics and stylesheet are missing,
