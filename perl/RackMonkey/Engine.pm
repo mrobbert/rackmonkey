@@ -507,23 +507,11 @@ sub updateRoom
     }
     else
     {
-        eval {
-            $sth = $self->dbh->prepare(qq!INSERT INTO room (name, building, notes, meta_update_time, meta_update_user) VALUES(?, ?, ?, ?, ?)!);
-            $sth->execute($self->_validateRoomUpdate($record), $updateTime, $updateUser);
-            $newId = $self->_lastInsertId('room');
-            my $hiddenRow = {'name' => '-', 'room' => "$newId", 'room_pos' => 0, 'hidden_row' => 1, 'notes' => ''};
-            $self->updateRow($updateTime, $updateUser, $hiddenRow);
-        };
-        if ($@)
-        {
-            my $errorMsg = $@;
-            eval { $self->dbh->rollback(); };
-            if ($@)
-            {
-                croak "RM_ENGINE: Room creation failed - $errorMsg. In addition transaction roll back failed - $@.";
-            }
-            croak "RM_ENGINE: Room creation failed - $errorMsg";
-        }
+        $sth = $self->dbh->prepare(qq!INSERT INTO room (name, building, notes, meta_update_time, meta_update_user) VALUES(?, ?, ?, ?, ?)!);
+        $sth->execute($self->_validateRoomUpdate($record), $updateTime, $updateUser);
+        $newId = $self->_lastInsertId('room');
+        my $hiddenRow = {'name' => '-', 'room' => "$newId", 'room_pos' => 0, 'hidden_row' => 1, 'notes' => ''};
+        $self->updateRow($updateTime, $updateUser, $hiddenRow);
     }
     return $newId || $$record{'id'};
 }
@@ -535,22 +523,10 @@ sub deleteRoom
     croak "RM_ENGINE: Delete failed. No room id specified." unless ($deleteId);
 
     my ($ret, $sth);
-    eval {
-        $sth = $self->dbh->prepare(qq!DELETE FROM row WHERE hidden_row = 1 AND room = ?!);
-        $sth->execute($deleteId);
-        $sth = $self->dbh->prepare(qq!DELETE FROM room WHERE id = ?!);
-        $ret = $sth->execute($deleteId);
-    };
-    if ($@)
-    {
-        my $errorMsg = $@;
-        eval { $self->dbh->rollback(); };
-        if ($@)
-        {
-            croak "RM_ENGINE: Room deletion failed - $errorMsg. In addition transaction roll back failed - $@.";
-        }
-        croak "RM_ENGINE: Room deletion failed - $errorMsg.";
-    }
+    $sth = $self->dbh->prepare(qq!DELETE FROM row WHERE hidden_row = 1 AND room = ?!);
+    $sth->execute($deleteId);
+    $sth = $self->dbh->prepare(qq!DELETE FROM room WHERE id = ?!);
+    $ret = $sth->execute($deleteId);
     croak "RM_ENGINE: This room does not currently exist, it may have been removed already." if ($ret eq '0E0');
     return $deleteId;
 }
