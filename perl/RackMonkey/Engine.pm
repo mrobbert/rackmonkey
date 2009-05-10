@@ -139,7 +139,7 @@ sub dbh
     return $self->{'dbh'};
 }
 
-sub entryBasic
+sub simpleItem
 {
     my ($self, $id, $table) = @_;
     croak 'RM_ENGINE: Not a valid table.' unless $table =~ /^[a-z_]+$/;
@@ -156,7 +156,7 @@ sub entryBasic
     return $entry;
 }
 
-sub listBasic
+sub simpleList
 {
     my ($self, $table, $all) = @_;
     $all ||= 0;
@@ -1112,7 +1112,7 @@ sub hardwareByManufacturer
 
     my @hardwareModels;
 
-    my $manufacturers = $self->listBasic('hardware_manufacturer', 1);
+    my $manufacturers = $self->simpleList('hardware_manufacturer', 1);
 
     for my $manu (@$manufacturers)
     {
@@ -2533,7 +2533,7 @@ Data structures are generally references to hashes or lists of hashes. For examp
            'manufacturer_name' => 'Red Hat'
          };
 
-And the data returned by listBasic('service') would look like this:
+And the data returned by simpleList('service') would look like this:
 
  $VAR1 = [
            {
@@ -2584,22 +2584,22 @@ Returns a config value given its key. Check RackMonkey::Conf for the available c
 
  print $backend->getConf('defaultview');
 
-=head3 entryBasic($id, $table)
+=head3 simpleItem($id, $table)
 
 Returns the name and id of an item given its id and table.
 
- my $device = $backend->entryBasic(1, 'device');
+ my $device = $backend->simpleItem(1, 'device');
  print "device id=".$$device{'id'}." is called: ".$$device{'name'};
 
-=head3 listBasic($table, $all)
+=head3 simpleList($table, $all)
 
 Returns a list of items of a given type, optionally including meta default items if $all is true. Only the name, id and the meta_default_data value of the items is returned. To get more information use the item specific methods (deviceList, orgList etc.).
  
  # without meta default items
- my $buildings = $backend->listBasic('building');
+ my $buildings = $backend->simpleList('building');
  
  # with meta default items
- my $buildings = $backend->listBasic('building', 1);
+ my $buildings = $backend->simpleList('building', 1);
  
 =head3 itemCount($type)
 

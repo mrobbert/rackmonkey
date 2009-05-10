@@ -181,11 +181,11 @@ eval {
                 my $app = $backend->app($id);
                 $template->param($app);
 
-                my $devices = $backend->listBasic('device');
+                my $devices = $backend->simpleList('device');
                 unshift @$devices, {'id' => '', 'name' => '-'};
                 $template->param('devices' => $devices);
 
-                my $relations = $backend->listBasic('app_relation', 1);
+                my $relations = $backend->simpleList('app_relation', 1);
                 unshift @$relations, {'id' => '', 'name' => '-'};
                 $template->param('relations' => $relations);
             }
@@ -306,12 +306,12 @@ eval {
                     $template->param('selected_hardware_model' => $selectedHardwareModel);
                     $template->param('manufacturerlist'        => $cgi->selectItem($backend->manufacturerWithHardwareList, 0));               # run selectItem to prefix - on meta_default items, should be separate sub from selectItem
                     $template->param('modelList'               => $backend->hardwareByManufacturer);                                          # Need to work out how to prefix meta default items with - for this dropdown
-                    $template->param('oslist'                  => $cgi->selectItem($backend->listBasic('os', 1), $selectedOs));
-                    $template->param('rolelist'                => $cgi->selectItem($backend->listBasic('role', 1), $selectedRole));
-                    $template->param('customerlist'            => $cgi->selectItem($backend->listBasic('customer', 1), $selectedCustomer));
-                    $template->param('servicelist'             => $cgi->selectItem($backend->listBasic('service', 1), $selectedService));
+                    $template->param('oslist'                  => $cgi->selectItem($backend->simpleList('os', 1), $selectedOs));
+                    $template->param('rolelist'                => $cgi->selectItem($backend->simpleList('role', 1), $selectedRole));
+                    $template->param('customerlist'            => $cgi->selectItem($backend->simpleList('customer', 1), $selectedCustomer));
+                    $template->param('servicelist'             => $cgi->selectItem($backend->simpleList('service', 1), $selectedService));
                     $template->param('racklist' => $cgi->selectRack($backend->rackListBasic, $selectedRack));
-                    $template->param('domainlist' => $cgi->selectItem($backend->listBasic('domain', 1), $selectedDomain));
+                    $template->param('domainlist' => $cgi->selectItem($backend->simpleList('domain', 1), $selectedDomain));
                     $template->param('rack_pos' => $cgi->selectProperty('position'));
                 }
             }
@@ -380,7 +380,7 @@ eval {
 
                 if (($viewType =~ /^edit/) || ($viewType =~ /^create/))
                 {
-                    $template->param('manufacturerlist' => $cgi->selectItem($backend->listBasic('hardware_manufacturer', 1), $selectedManufacturer));
+                    $template->param('manufacturerlist' => $cgi->selectItem($backend->simpleList('hardware_manufacturer', 1), $selectedManufacturer));
                 }
             }
         }
@@ -452,7 +452,7 @@ eval {
 
                 if (($viewType =~ /^edit/) || ($viewType =~ /^create/))
                 {
-                    $template->param('manufacturerlist' => $cgi->selectItem($backend->listBasic('software_manufacturer', 1), $selectedManufacturer));
+                    $template->param('manufacturerlist' => $cgi->selectItem($backend->simpleList('software_manufacturer', 1), $selectedManufacturer));
                 }
             }
         }
@@ -627,7 +627,7 @@ eval {
 
                 if (($viewType =~ /^edit/) || ($viewType =~ /^create/))
                 {
-                    $template->param('buildinglist' => $cgi->selectItem($backend->listBasic('building'), $selectedBuilding));
+                    $template->param('buildinglist' => $cgi->selectItem($backend->simpleList('building'), $selectedBuilding));
                 }
             }
         }
