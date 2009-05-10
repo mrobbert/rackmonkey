@@ -59,7 +59,7 @@ sub new
     }
 
     # To get DB server information and do remaining driver checks we need to load the driver
-    my $dbh = DBI->connect($$conf{'dbconnect'}, $$conf{'dbuser'}, $$conf{'dbpass'}, {AutoCommit => 0, RaiseError => 1, PrintError => 0, ShowErrorStatement => 1});
+    my $dbh = DBI->connect($$conf{'dbconnect'}, $$conf{'dbuser'}, $$conf{'dbpass'}, {'AutoCommit' => 0, 'RaiseError' => 1, 'PrintError' => 0, 'ShowErrorStatement' => 1});
 
     # Get information on the database server
     if ($currentDriver eq 'DBD::SQLite')
