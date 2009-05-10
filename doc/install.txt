@@ -56,7 +56,7 @@ users we recommend Safari 3. For details see: http://www.rackmonkey.org/faq
 * One of the following databases (your OS may include packages for these):
   - SQLite v3.3.6 or higher
       SQLite3 can be obtained from http://www.sqlite.org
-  - PostgreSQL v7.4 or higher (8.0.3 or higher strongly recommended)
+  - PostgreSQL v7.4.19 or higher (8.0.3 or higher strongly recommended)
       Postgres can be obtained from http://www.postgresql.org
   - MySQL v5.0.22 or higher
       MySQL can be obtained from http://dev.mysql.com/downloads/mysql/
@@ -69,7 +69,7 @@ users we recommend Safari 3. For details see: http://www.rackmonkey.org/faq
   - CGI
   - HTML::Template and HTML::Entities  
   - THe DBI driver for your chosen database:
-    - For SQLite: DBD::SQLite v1.09 or higher
+    - For SQLite: DBD::SQLite v1.12 or higher
     - For Postgres: DBD::Pg v1.48 or higher
     - For MySQL DBD::mysql v3.0002 or higher
 
