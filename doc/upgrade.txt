@@ -61,10 +61,23 @@ directory with the following layout:
 
 3. Install Dependancies
 =======================
-RackMonkey v1.2.5 now requires HTML::Entities.
+RackMonkey v1.2.5 is the first release to officially support MySQL 5. The 
+minimum tested server version is 5.0.22.
 
-The easiest way to install modules is usually with the CPAN shell. You
-generally need to be root in order to do this. 
+RackMonkey v1.2.5 has revised the versions of some required software. 
+
+- DBI v1.45 or higher
+- For SQLite: DBD::SQLite v1.12 or higher
+- For Postgres: DBD::Pg v1.48 or higher
+- For MySQL DBD::mysql v3.0002 or higher
+
+RackMonkey tests for the presence of a supported perl modules when run, so you 
+will receive an error if you don't meet these requirements.
+
+RackMonkey now also requires the HTML::Entities perl module.
+
+The easiest way to install or upgrade modules is usually with the CPAN shell. 
+You generally need to be root in order to do this. 
 
     # perl -eshell -MCPAN
     
@@ -77,13 +90,15 @@ Once the shell has started (you may be prompted to configure it):
 
     install HTML::Entities
     
+And similarly for any other modules you need to upgrade.
+    
 
 4. Schema Update
 ================
 RackMonkey v1.2.5 is the first release of the 1.2 series to include schema 
 changes. The schema updates are handled by separate SQL script for each
 database engine. Together the updates take the schema from v2 to v4. If you 
-are updating from a prior v1.2.5 preview you only need to apply the
+are updating from an earlier v1.2.5 preview you only need to apply the
 schema v4 update (you will already be on schema v3).
 
 To check which schema you are on you can run the following on your database:
