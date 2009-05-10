@@ -851,7 +851,7 @@ sub rackPhysical
     $sth->execute($rackid);
     my $rack = $sth->fetchrow_hashref('NAME_lc');
 
-    my @rackLayout = ('1' .. $$rack{'size'});    # populate the rack positions
+    my @rackLayout = (1 .. $$rack{'size'});    # populate the rack positions
 
     # insert each device into the rack layout
     for my $dev (@$devices)
