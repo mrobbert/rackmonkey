@@ -23,7 +23,7 @@ eval {
     my $backend = RackMonkey::Engine->new;
 
     my $dbh = $backend->dbh;
-    my $sth = $dbh->prepare_cached(
+    my $sth = $dbh->prepare(
         qq!
 		SELECT logging.* 
 		FROM logging

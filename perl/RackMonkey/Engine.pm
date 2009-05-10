@@ -80,7 +80,7 @@ sub new
 
     unless ($$conf{'bypass_db_driver_checks'})
     {
-        # Checks that the DBI version and DBD driver is compatible with RackMonkey
+        # Checks that the DBI version and DBD driver are supported
         my $driverVersion = eval("\$${currentDriver}::VERSION");
         my $DBIVersion    = eval("\$DBI::VERSION");
         $$sys{'db_driver_version'} = $driverVersion;
@@ -143,7 +143,7 @@ sub simpleItem
 {
     my ($self, $id, $table) = @_;
     croak 'RM_ENGINE: Not a valid table.' unless $table =~ /^[a-z_]+$/;
-    my $sth = $self->dbh->prepare_cached(
+    my $sth = $self->dbh->prepare(
         qq!
 		SELECT id, name 
 		FROM $table 
@@ -165,7 +165,7 @@ sub simpleList
 
     unless ($all)
     {
-        $sth = $self->dbh->prepare_cached(
+        $sth = $self->dbh->prepare(
             qq!
     		SELECT 
     			id, 
@@ -181,7 +181,7 @@ sub simpleList
     }
     else
     {
-        $sth = $self->dbh->prepare_cached(
+        $sth = $self->dbh->prepare(
             qq!
     		SELECT 
     			id, 
@@ -330,7 +330,7 @@ sub buildingList
     my $orderBy = shift || '';
     $orderBy = 'building.name' unless $orderBy =~ /^[a-z_]+\.[a-z_]+$/;
     $orderBy = $orderBy . ', building.name' unless $orderBy eq 'building.name';    # default second ordering is name
-    my $sth = $self->dbh->prepare_cached(
+    my $sth = $self->dbh->prepare(
         qq!
 		SELECT building.* 
 		FROM building
@@ -2314,7 +2314,7 @@ sub appList
     my $orderBy = shift || '';
     $orderBy = 'app.name' unless $orderBy =~ /^[a-z_]+\.[a-z_]+$/;
     $orderBy = $orderBy . ', app.name' unless $orderBy eq 'app.name';    # default second ordering is name
-    my $sth = $self->dbh->prepare_cached(
+    my $sth = $self->dbh->prepare(
         qq!
 		SELECT app.* 
 		FROM app
@@ -2329,7 +2329,7 @@ sub appList
 sub appDevicesUsedList
 {
     my ($self, $id) = @_;
-    my $sth = $self->dbh->prepare_cached(
+    my $sth = $self->dbh->prepare(
         qq!
 		SELECT
 		    device_app.id               AS device_app_id,
@@ -2357,7 +2357,7 @@ sub appDevicesUsedList
 sub appOnDeviceList
 {
     my ($self, $id) = @_;
-    my $sth = $self->dbh->prepare_cached(
+    my $sth = $self->dbh->prepare(
         qq!
 		SELECT
 		    device_app.id       AS device_app_id,
