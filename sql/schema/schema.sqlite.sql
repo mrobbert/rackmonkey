@@ -57,7 +57,7 @@ CREATE TABLE rack
 	row INTEGER NOT NULL CONSTRAINT fk_row_id REFERENCES row(id),	
 	row_pos INTEGER NOT NULL,
 	hidden_rack INTEGER NOT NULL DEFAULT 0,
-	size INTEGER NOT NULL DEFAULT 0,
+	size INTEGER NOT NULL,
 	numbering_direction INTEGER NOT NULL DEFAULT 0,
 	notes CHAR,
 	meta_default_data INTEGER NOT NULL DEFAULT 0,

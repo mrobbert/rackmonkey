@@ -59,7 +59,7 @@ CREATE TABLE rack
 	row INTEGER NOT NULL,
 	row_pos INTEGER NOT NULL,
 	hidden_rack INTEGER NOT NULL DEFAULT 0,
-	size INTEGER NOT NULL DEFAULT 0,
+	size INTEGER NOT NULL,
 	numbering_direction INTEGER NOT NULL DEFAULT 0,
 	notes TEXT,
 	meta_default_data INTEGER DEFAULT 0,
