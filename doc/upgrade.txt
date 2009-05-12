@@ -28,7 +28,8 @@ Contents
 ===============
 This document explains how to upgrade RackMonkey to v1.2.5. If you're doing a 
 fresh install, please see doc/install.txt instead. Upgrading is supported from 
-v1.2 releases only.
+v1.2.3 or higher. If you need to migrate from v1.2.2 or earlier, please
+upgrade to v1.2.3 first before performing this upgrade.
 
 Upgrading is straightforward: but there is a schema change. Ensure you take a 
 full backup of the RackMonkey database before upgrading.
