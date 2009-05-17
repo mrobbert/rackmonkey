@@ -28,11 +28,14 @@ ALTER TABLE rack ADD COLUMN numbering_direction INTEGER;
 UPDATE rack SET numbering_direction = 0 WHERE numbering_direction IS NULL;
 ALTER TABLE rack ALTER COLUMN numbering_direction SET DEFAULT 0;
 ALTER TABLE rack ALTER COLUMN numbering_direction SET NOT NULL;
+
 ALTER TABLE device ADD COLUMN os_licence_key VARCHAR;
+
 ALTER TABLE app_relation ADD COLUMN meta_default_data INTEGER;
 UPDATE app_relation SET meta_default_data = 0 WHERE meta_default_data IS NULL;
 ALTER TABLE app_relation ALTER COLUMN meta_default_data SET DEFAULT 0;
 ALTER TABLE app_relation ALTER COLUMN meta_default_data SET NOT NULL;
+
 ALTER TABLE app_relation ADD COLUMN meta_update_time VARCHAR;
 ALTER TABLE app_relation ADD COLUMN meta_update_user VARCHAR;
 
