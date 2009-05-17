@@ -272,7 +272,7 @@ END;
 
 -- END of recreating tables
 
--- ensure we don't create identical device/app relationships
+-- Ensure we don't create identical device/app relationships
 CREATE UNIQUE INDEX device_app_unique ON device_app (app, device, relation); 
 
 -- Table: device_app - recreate all triggers with clearer naming

@@ -30,7 +30,8 @@ UPDATE device SET in_service = 0 WHERE in_service IS NULL;
 ALTER TABLE device ALTER COLUMN in_service SET DEFAULT 0;
 ALTER TABLE device ALTER COLUMN in_service SET NOT NULL;
 
-CREATE UNIQUE INDEX device_app_unique ON device_app (app, device, relation); -- ensure we don't create identical device/app relationships
+-- Ensure we don't create identical device/app relationships
+CREATE UNIQUE INDEX device_app_unique ON device_app (app, device, relation);
 
 UPDATE rm_meta SET value='%BUILD%' WHERE name='system_build';
 UPDATE rm_meta SET value='4' WHERE name='schema_version';
