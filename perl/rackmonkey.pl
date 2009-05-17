@@ -699,20 +699,36 @@ eval {
     $template->param('filter_string' => $cgi->filterString);
 
     # XLS Plugin
-    my $rack2XLSURL = '';
     if ($$conf{'plugin_xls'})
     {
-        $rack2XLSURL = $baseURL;
-        $rack2XLSURL =~ s/\/(.*?)\.pl/rack2xls.pl/;
+        my $rack2XLSURL = $baseURL;
+        my $rackXLSName = $$conf{'plugin_xls'};
+        
+        if ($rack2XLSURL =~ /rackmonkey\.pl/)
+        {
+            $rack2XLSURL =~ s/\/(.*?)\.pl/$rackXLSName/;
+        }
+        else
+        {
+            $rack2XLSURL .= $rackXLSName;
+        }
         $template->param('rack2xls_url' => $rack2XLSURL);
     }
 
     # DNS Plugin
-    my $rackDNSURL = '';
     if ($$conf{'plugin_dns'})
     {
-        $rackDNSURL = $baseURL;
-        $rackDNSURL =~ s/\/(.*?)\.pl/rackdns.pl/;
+        my $rackDNSURL = $baseURL;
+        my $rackDNSName = $$conf{'plugin_dns'};
+        
+        if ($rackDNSURL =~ /rackmonkey\.pl/)
+        {
+            $rackDNSURL =~ s/\/(.*?)\.pl/$rackDNSName/;
+        }
+        else
+        {
+            $rackDNSURL .= $rackDNSName;
+        }
         $template->param('rackdns_url' => $rackDNSURL);
     }
 

@@ -1085,7 +1085,6 @@ sub hardwareByManufacturer
 {
     my $self    = shift;
     my $orderBy = 'hardware.name';
-
     my @hardwareModels;
 
     my $manufacturers = $self->simpleList('hardware_manufacturer', 1);

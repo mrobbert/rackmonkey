@@ -37,7 +37,7 @@
 				<td>
 					<div>
 						<div class="key">Name</div>
-						<div class="value"><TMPL_VAR ESCAPE=HTML NAME=name><TMPL_UNLESS NAME=domain_meta_default_data>.<TMPL_VAR ESCAPE=HTML NAME=domain_name></TMPL_UNLESS><TMPL_IF NAME=rackdns_url>&nbsp; <a class="small" title="Query DNS records for this name" href="<TMPL_VAR NAME=rackdns_url ESCAPE=URL>?query_on=<TMPL_VAR ESCAPE=URL NAME=name><TMPL_UNLESS NAME=domain_meta_default_data>.<TMPL_VAR ESCAPE=URL NAME=domain_name></TMPL_UNLESS>">Query DNS&hellip;</a></TMPL_IF></div>
+						<div class="value"><TMPL_VAR ESCAPE=HTML NAME=name><TMPL_UNLESS NAME=domain_meta_default_data>.<TMPL_VAR ESCAPE=HTML NAME=domain_name></TMPL_UNLESS><TMPL_IF NAME=rackdns_url>&nbsp; <a class="small" title="Query DNS records for this name" href="<TMPL_VAR NAME=rackdns_url>?query_on=<TMPL_VAR ESCAPE=URL NAME=name><TMPL_UNLESS NAME=domain_meta_default_data>.<TMPL_VAR ESCAPE=URL NAME=domain_name></TMPL_UNLESS>">Query DNS&hellip;</a></TMPL_IF></div>
 					</div>
 					<hr />
 					<div>
