@@ -2,7 +2,7 @@
 -- RackMonkey - Know Your Racks - http://www.rackmonkey.org                 --
 -- Version 1.2.%BUILD%                                                      --
 -- (C)2004-2009 Will Green (wgreen at users.sourceforge.net)                --
--- Test content for RackMonkey database                                     --
+-- Test content for RackMonkey database schema v4                           --
 -- ---------------------------------------------------------------------------
 
 -- The inclusion of a company or product in this file does not consitute an endorement by the author. 
@@ -14,6 +14,7 @@
 -- Test Buildings (there is already one building in the sample data set)
 INSERT INTO building (name, name_short, notes, meta_update_time, meta_update_user) VALUES('Telehouse Docklands', 'THDO', 'Test data', '1988-02-15 00:00:00', 'rackmonkey');
 INSERT INTO building (name, name_short, notes, meta_update_time, meta_update_user) VALUES('Telehouse New York', 'THNY', 'Test data', '1988-02-15 00:00:00', 'rackmonkey');
+INSERT INTO building (name, name_short, notes, meta_update_time, meta_update_user) VALUES('Telecity Sovereign House', 'SOV', 'Test data', '1988-02-15 00:00:00', 'rackmonkey');
 
 -- Test Rooms (there is already one room in the sample data set)
 INSERT INTO room (name, building, has_rows, notes, meta_update_time, meta_update_user) VALUES('TFM4', 7, 0, 'Test data', '1988-02-15 00:00:00', 'rackmonkey');
@@ -26,7 +27,8 @@ INSERT INTO row (name, room, room_pos, hidden_row, notes, meta_update_time, meta
 -- Test Racks
 INSERT INTO rack (name, row, row_pos, hidden_rack, size, numbering_direction, notes, meta_update_time, meta_update_user) VALUES('A1', 7, 0, 0, 20, 0, 'Test data', '1988-02-15 00:00:00', 'rackmonkey');
 INSERT INTO rack (name, row, row_pos, hidden_rack, size, numbering_direction, notes, meta_update_time, meta_update_user) VALUES('A2', 7, 0, 0, 20, 0, 'Test data', '1988-02-15 00:00:00', 'rackmonkey');
-INSERT INTO rack (name, row, row_pos, hidden_rack, size, numbering_direction, notes, meta_update_time, meta_update_user) VALUES('R100', 8, 0, 0, 20, 1, 'Test data', '1988-02-15 00:00:00', 'rackmonkey');
+INSERT INTO rack (name, row, row_pos, hidden_rack, size, numbering_direction, notes, meta_update_time, meta_update_user) VALUES('R100', 8, 0, 0, 42, 1, 'Test data', '1988-02-15 00:00:00', 'rackmonkey');
+INSERT INTO rack (name, row, row_pos, hidden_rack, size, numbering_direction, notes, meta_update_time, meta_update_user) VALUES('R101', 8, 0, 0, 42, 1, 'Test data', '1988-02-15 00:00:00', 'rackmonkey');
 
 -- Test Domains
 INSERT INTO domain (name, descript, notes, meta_default_data, meta_update_time, meta_update_user) VALUES('coyote.example.com', '', 'Test data', 0, '1988-02-15 00:00:00', 'rackmonkey');
@@ -66,10 +68,19 @@ INSERT INTO device (name, domain, rack, rack_pos, hardware, serial_no, asset_no,
 INSERT INTO device (name, domain, rack, rack_pos, hardware, serial_no, asset_no, purchased, os, os_version, customer, service, role, in_service, notes, meta_default_data, meta_update_time, meta_update_user) VALUES ('app2', 4, 8, 10, 7, 'T9910', '', '2007-10-24', 19, '10', 27, 4, 3, 1, 'Test data', 0, '1988-02-15 00:00:00', 'rackmonkey');
 INSERT INTO device (name, domain, rack, rack_pos, hardware, serial_no, asset_no, purchased, os, os_version, customer, service, role, in_service, notes, meta_default_data, meta_update_time, meta_update_user) VALUES ('appdev', 4, 8, 12, 7, 'T9998', '', '2007-04-24', 16, '2008.11', 27, 4, 3, 1, 'Test data', 0, '1988-02-15 00:00:00', 'rackmonkey');
 
+-- Windows fileserver, includes OS licence key
+INSERT INTO device (name, domain, rack, rack_pos, hardware, serial_no, asset_no, purchased, os, os_version, os_licence_key, customer, service, role, in_service, notes, meta_default_data, meta_update_time, meta_update_user) VALUES ('winfs', 5, 7, 12, 4, 'T9909', '', '2007-09-24', 24, '2003', 'AAAAA-BBBBB-CCCCC-DDDDD-EEEEE', 27, 4, 12, 1, 'Test data', 0, '1988-02-15 00:00:00', 'rackmonkey');
+
+-- A couple of devices for racks numbered from top, includes primary_mac and install_build fields (not exposed in GUI in v1.2.5)
+INSERT INTO device (name, domain, rack, rack_pos, hardware, serial_no, asset_no, purchased, os, os_version, customer, service, role, in_service, primary_mac, install_build, notes, meta_default_data, meta_update_time, meta_update_user) VALUES ('www10', 5, 9, 10, 4, 'T9909', '', '2009-01-02', 21, '10', 27, 4, 3, 1, '00:1e:c2:04:63:94', 'ubuntu_8_04_web', 'Test data', 0, '1988-02-15 00:00:00', 'rackmonkey');
+INSERT INTO device (name, domain, rack, rack_pos, hardware, serial_no, asset_no, purchased, os, os_version, customer, service, role, in_service, primary_mac, install_build, notes, meta_default_data, meta_update_time, meta_update_user) VALUES ('www11', 5, 9, 11, 4, 'T9910', '', '2009-01-02', 21, '10', 27, 4, 3, 1, '00:1e:c2:04:63:95', 'ubuntu_8_04_web', 'Test data', 0, '1988-02-15 00:00:00', 'rackmonkey');
+
 -- Test Apps
 INSERT INTO app (name, descript, notes, meta_default_data, meta_update_time, meta_update_user) VALUES ('Acme CDB', 'Acme Customer Database', 'Test data', 0, '1988-02-15 00:00:00', 'rackmonkey');
 INSERT INTO app (name, descript, notes, meta_default_data, meta_update_time, meta_update_user) VALUES ('Roadrunner Route', 'Roadrunner Mapping Software', 'Test data', 0, '1988-02-15 00:00:00', 'rackmonkey');
 
 -- Associate apps with a device
-INSERT INTO device_app (app, device, relation, meta_update_time, meta_update_user) VALUES (1, 11, 1, '1988-02-15 00:00:00', 'rackmonkey');
+INSERT INTO device_app (app, device, relation, meta_update_time, meta_update_user) VALUES (1, 3, 6, '1988-02-15 00:00:00', 'rackmonkey');
+INSERT INTO device_app (app, device, relation, meta_update_time, meta_update_user) VALUES (1, 4, 6, '1988-02-15 00:00:00', 'rackmonkey');
+INSERT INTO device_app (app, device, relation, meta_update_time, meta_update_user) VALUES (1, 12, 1, '1988-02-15 00:00:00', 'rackmonkey');
 INSERT INTO device_app (app, device, relation, meta_update_time, meta_update_user) VALUES (2, 11, 1, '1988-02-15 00:00:00', 'rackmonkey');

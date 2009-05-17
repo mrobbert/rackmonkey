@@ -27,11 +27,11 @@ INSERT INTO row (name, room, room_pos, hidden_row, notes, meta_default_data, met
 INSERT INTO row (name, room, room_pos, hidden_row, notes, meta_default_data, meta_update_time, meta_update_user) VALUES ('decommissioned', 5, 1, 1, '', 1, '1970-01-01 00:00:00', 'install');
 
 -- default racks
-INSERT INTO rack (name, row, row_pos, notes, meta_default_data, meta_update_time, meta_update_user) VALUES ('unknown', 1, 1, '', 5, '1970-01-01 00:00:00', 'install');
-INSERT INTO rack (name, row, row_pos, notes, meta_default_data, meta_update_time, meta_update_user) VALUES ('planned', 2, 1, '', 4, '1970-01-01 00:00:00', 'install');
-INSERT INTO rack (name, row, row_pos, notes, meta_default_data, meta_update_time, meta_update_user) VALUES ('on order', 3, 1, '', 3, '1970-01-01 00:00:00', 'install');
-INSERT INTO rack (name, row, row_pos, notes, meta_default_data, meta_update_time, meta_update_user) VALUES ('being repaired', 4, 1, '', 2, '1970-01-01 00:00:00', 'install');
-INSERT INTO rack (name, row, row_pos, notes, meta_default_data, meta_update_time, meta_update_user) VALUES ('decommissioned', 5, 1, '', 1, '1970-01-01 00:00:00', 'install');
+INSERT INTO rack (name, row, row_pos, hidden_rack, size, notes, meta_default_data, meta_update_time, meta_update_user) VALUES ('unknown', 1, 1, 1, 0, '', 5, '1970-01-01 00:00:00', 'install');
+INSERT INTO rack (name, row, row_pos, hidden_rack, size, notes, meta_default_data, meta_update_time, meta_update_user) VALUES ('planned', 2, 1, 1, 0, '', 4, '1970-01-01 00:00:00', 'install');
+INSERT INTO rack (name, row, row_pos, hidden_rack, size, notes, meta_default_data, meta_update_time, meta_update_user) VALUES ('on order', 3, 1, 1, 0, '', 3, '1970-01-01 00:00:00', 'install');
+INSERT INTO rack (name, row, row_pos, hidden_rack, size, notes, meta_default_data, meta_update_time, meta_update_user) VALUES ('being repaired', 4, 1, 1, 0, '', 2, '1970-01-01 00:00:00', 'install');
+INSERT INTO rack (name, row, row_pos, hidden_rack, size, notes, meta_default_data, meta_update_time, meta_update_user) VALUES ('decommissioned', 5, 1, 1, 0, '', 1, '1970-01-01 00:00:00', 'install');
 
 -- default organisation
 INSERT INTO org (name, account_no, customer, software, hardware, descript, home_page, notes, meta_default_data, meta_update_time, meta_update_user) VALUES('unknown', NULL, 1, 1, 1, 'Organisation not known.', NULL, '', 2, '1970-01-01 00:00:00', 'install');
