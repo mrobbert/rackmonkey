@@ -31,7 +31,7 @@ v1.2.5 Preview 3 - Released 2009-05-23
 * Renamed methods entryBasic and listBasic to simpleItem and simpleList
 * SQL schemata migrations now work in Postgres 7.4
 * Size of 1U in rack diagrams can now be adjusted in rackmonkey.conf
-* Fixed a bug which prevented plugin URLs in some circumstances
+* Fixed a bug which prevented plugin URLs appearing in some circumstances
 
 v1.2.5 Preview 2 - Released 2009-04-05
 --------------------------------------
