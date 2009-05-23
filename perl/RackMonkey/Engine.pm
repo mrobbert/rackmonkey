@@ -217,9 +217,9 @@ sub itemCount
 sub performAct
 {
     my ($self, $type, $act, $updateUser, $record) = @_;
-    unless ($type =~ /^(?:building|room|row|rack|device|hardware|os|service|role|domain|org|app|deviceApp|report)$/)
+    unless ($type =~ /^(?:app|building|device|deviceApp|domain|hardware|org|os|rack|report|role|room|row|service)$/)
     {
-        croak "RM_ENGINE: '$type' is not a recognised type. This error should not occur, did you manually type this URL?";
+        croak "RM_ENGINE: '$type' is not a recognised type. Recognised types are app, building, device, deviceApp, domain, hardware, org, os, rack, report, role, room, row and service";
     }
     my $actStr  = $act;
     my $typeStr = $type;
