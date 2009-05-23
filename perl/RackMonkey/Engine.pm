@@ -303,6 +303,148 @@ sub _httpFixer
     return $url;
 }
 
+
+##############################################################################
+# Application Methods                                                        #
+##############################################################################
+
+sub app
+{
+    my ($self, $id) = @_;
+    croak "RM_ENGINE: Unable to retrieve app. No app id specified." unless ($id);
+    my $sth = $self->dbh->prepare(
+        qq!
+		SELECT app.* 
+		FROM app 
+		WHERE id = ?
+	!
+    );
+    $sth->execute($id);
+    my $app = $sth->fetchrow_hashref('NAME_lc');
+    croak "RM_ENGINE: No such app id." unless defined($$app{'id'});
+    return $app;
+}
+
+sub appList
+{
+    my $self = shift;
+    my $orderBy = shift || '';
+    $orderBy = 'app.name' unless $orderBy =~ /^[a-z_]+\.[a-z_]+$/;
+    $orderBy = $orderBy . ', app.name' unless $orderBy eq 'app.name';    # default second ordering is name
+    my $sth = $self->dbh->prepare(
+        qq!
+		SELECT app.* 
+		FROM app
+		WHERE meta_default_data = 0
+		ORDER BY $orderBy
+	!
+    );
+    $sth->execute;
+    return $sth->fetchall_arrayref({});
+}
+
+sub appDevicesUsedList
+{
+    my ($self, $id) = @_;
+    my $sth = $self->dbh->prepare(
+        qq!
+		SELECT
+		    device_app.id               AS device_app_id,
+			device.id			        AS device_id,
+		 	device.name			        AS device_name, 
+			app.name			        AS app_name,
+			app_relation.id 	        AS app_relation_id,
+			app_relation.name 	        AS app_relation_name,
+			domain.name			        AS domain_name,
+			domain.meta_default_data	AS domain_meta_default_data
+		FROM
+			device, app_relation, device_app, app, domain 
+		WHERE
+		 	device_app.app = app.id AND 
+			device_app.device = device.id AND 
+			device_app.relation = app_relation.id AND
+			device.domain = domain.id AND 
+			app.id = ?
+	!
+    );
+    $sth->execute($id);
+    return $sth->fetchall_arrayref({});
+}
+
+sub appOnDeviceList
+{
+    my ($self, $id) = @_;
+    my $sth = $self->dbh->prepare(
+        qq!
+		SELECT
+		    device_app.id       AS device_app_id,
+		    app_relation.name   AS app_relation_name,
+			app.id				AS app_id,
+			app.name			AS app_name
+		FROM
+			device, app_relation, device_app, app 
+		WHERE
+		 	device_app.app = app.id AND 
+			device_app.device = device.id AND 
+			device_app.relation = app_relation.id AND
+			device.id = ?
+		ORDER BY
+			app.name
+	!
+    );
+    $sth->execute($id);
+    return $sth->fetchall_arrayref({});
+}
+
+sub updateApp
+{
+    my ($self, $updateTime, $updateUser, $record) = @_;
+    croak "RM_ENGINE: Unable to update app. No app record specified." unless ($record);
+
+    my ($sth, $newId);
+
+    if ($$record{'id'})
+    {
+        $sth = $self->dbh->prepare(qq!UPDATE app SET name = ?, descript = ?, notes = ?, meta_update_time = ?, meta_update_user = ? WHERE id = ?!);
+        my $ret = $sth->execute($self->_validateAppUpdate($record), $updateTime, $updateUser, $$record{'id'});
+        croak "RM_ENGINE: Update failed. This app may have been removed before the update occured." if ($ret eq '0E0');
+    }
+    else
+    {
+        $sth = $self->dbh->prepare(qq!INSERT INTO app (name, descript, notes, meta_update_time, meta_update_user) VALUES(?, ?, ?, ?, ?)!);
+        $sth->execute($self->_validateAppUpdate($record), $updateTime, $updateUser);
+        $newId = $self->_lastInsertId('app');
+    }
+    return $newId || $$record{'id'};
+}
+
+sub deleteApp
+{
+    my ($self, $updateTime, $updateUser, $record) = @_;
+    my $deleteId = (ref $record eq 'HASH') ? $$record{'id'} : $record;
+    croak "RM_ENGINE: Delete failed. No app id specified." unless ($deleteId);
+
+    # delete app with associated device relationships
+    my $sth = $self->dbh->prepare(qq!DELETE FROM device_app WHERE app = ?!);
+    my $ret = $sth->execute($deleteId);                                        # this return value isn't currently used
+    $sth = $self->dbh->prepare(qq!DELETE FROM app WHERE id = ?!);
+    $ret = $sth->execute($deleteId);
+
+    croak "RM_ENGINE: Delete failed. This app does not currently exist, it may have been removed already." if ($ret eq '0E0');
+
+    return $deleteId;
+}
+
+sub _validateAppUpdate
+{
+    my ($self, $record) = @_;
+    croak "RM_ENGINE: Unable to validate app. No app record specified." unless ($record);
+    $self->_checkName($$record{'name'});
+    $self->_checkNotes($$record{'notes'});
+    return ($$record{'name'}, $$record{'descript'}, $$record{'notes'});
+}
+
+
 ##############################################################################
 # Building Methods                                                           #
 ##############################################################################
@@ -394,1216 +536,6 @@ sub _validateBuildingUpdate
     return ($$record{'name'}, $$record{'name_short'}, $$record{'notes'});
 }
 
-##############################################################################
-# Room Methods                                                               #
-##############################################################################
-
-sub room
-{
-    my ($self, $id) = @_;
-    croak "RM_ENGINE: Unable to retrieve room. No room id specified." unless ($id);
-    my $sth = $self->dbh->prepare(
-        qq!
-		SELECT 
-			room.*, 
-			building.name		AS building_name,
-			building.name_short	AS building_name_short
-		FROM room, building 
-		WHERE
-			room.building = building.id AND
-			room.id = ?
-	!
-    );
-    $sth->execute($id);
-    my $room = $sth->fetchrow_hashref('NAME_lc');
-    croak "RM_ENGINE: No such room id." unless defined($$room{'id'});
-    return $room;
-}
-
-sub roomList
-{
-    my $self = shift;
-    my $orderBy = shift || '';
-    $orderBy = 'building.name' unless $orderBy =~ /^[a-z_]+\.[a-z_]+$/;    # by default, order by building name first
-    $orderBy = $orderBy . ', room.name' unless $orderBy eq 'room.name';    # default second ordering is room name
-    my $sth = $self->dbh->prepare(
-        qq!
-		SELECT
-			room.*,
-			building.name		AS building_name,
-			building.name_short	AS building_name_short
-		FROM room, building
-		WHERE
-			room.meta_default_data = 0 AND
-			room.building = building.id
-		ORDER BY $orderBy
-	!
-    );
-    $sth->execute;
-    return $sth->fetchall_arrayref({});
-}
-
-sub roomListInBuilding
-{
-    my $self     = shift;
-    my $building = shift;
-    $building += 0;    # force building to be numeric
-    my $orderBy = shift || '';
-    $orderBy = 'building.name' unless $orderBy =~ /^[a-z_]+\.[a-z_]+$/;
-    my $sth = $self->dbh->prepare(
-        qq!
-		SELECT
-			room.*,
-			building.name		AS building_name,
-			building.name_short	AS building_name_short
-		FROM room, building
-		WHERE
-			room.meta_default_data = 0 AND
-			room.building = building.id AND
-			room.building = ?
-		ORDER BY $orderBy
-	!
-    );
-    $sth->execute($building);
-    return $sth->fetchall_arrayref({});
-}
-
-sub roomListBasic
-{
-    my $self = shift;
-    my $sth  = $self->dbh->prepare(
-        q!
-		SELECT 
-			room.id, 
-			room.name, 
-			building.name AS building_name,
-			building.name_short	AS building_name_short
-		FROM room, building 
-		WHERE 
-			room.meta_default_data = 0 AND
-			room.building = building.id 
-		ORDER BY 
-			room.meta_default_data DESC,
-			building.name,
-			room.name
-	!
-    );
-    $sth->execute;
-    return $sth->fetchall_arrayref({});
-}
-
-sub updateRoom
-{
-    my ($self, $updateTime, $updateUser, $record) = @_;
-    croak "RM_ENGINE: Unable to update room. No room record specified." unless ($record);
-
-    my ($sth, $newId);
-
-    if ($$record{'id'})
-    {
-        $sth = $self->dbh->prepare(qq!UPDATE room SET name = ?, building =?, notes = ?, meta_update_time = ?, meta_update_user = ? WHERE id = ?!);
-        my $ret = $sth->execute($self->_validateRoomUpdate($record), $updateTime, $updateUser, $$record{'id'});
-        croak "RM_ENGINE: Update failed. This room may have been removed before the update occured." if ($ret eq '0E0');
-    }
-    else
-    {
-        $sth = $self->dbh->prepare(qq!INSERT INTO room (name, building, notes, meta_update_time, meta_update_user) VALUES(?, ?, ?, ?, ?)!);
-        $sth->execute($self->_validateRoomUpdate($record), $updateTime, $updateUser);
-        $newId = $self->_lastInsertId('room');
-        my $hiddenRow = {'name' => '-', 'room' => "$newId", 'room_pos' => 0, 'hidden_row' => 1, 'notes' => ''};
-        $self->updateRow($updateTime, $updateUser, $hiddenRow);
-    }
-    return $newId || $$record{'id'};
-}
-
-sub deleteRoom
-{
-    my ($self, $updateTime, $updateUser, $record) = @_;
-    my $deleteId = (ref $record eq 'HASH') ? $$record{'id'} : $record;
-    croak "RM_ENGINE: Delete failed. No room id specified." unless ($deleteId);
-
-    my ($ret, $sth);
-    $sth = $self->dbh->prepare(qq!DELETE FROM row WHERE hidden_row = 1 AND room = ?!);
-    $sth->execute($deleteId);
-    $sth = $self->dbh->prepare(qq!DELETE FROM room WHERE id = ?!);
-    $ret = $sth->execute($deleteId);
-    croak "RM_ENGINE: This room does not currently exist, it may have been removed already." if ($ret eq '0E0');
-    return $deleteId;
-}
-
-sub _validateRoomUpdate
-{
-    my ($self, $record) = @_;
-    croak "RM_ENGINE: Unable to validate room. No room record specified." unless ($record);
-    $self->_checkName($$record{'name'});
-    $self->_checkNotes($$record{'notes'});
-    return ($$record{'name'}, $$record{'building_id'}, $$record{'notes'});
-}
-
-##############################################################################
-# Row Methods                                                                #
-##############################################################################
-
-sub row
-{
-    my ($self, $id) = @_;
-    my $sth = $self->dbh->prepare(
-        qq!
-		SELECT 
-			row.*,
-			room.name			AS room_name,
-			building.name		AS building_name,
-			building.name_short	AS building_name_short
-		FROM row, room, building 
-		WHERE
-			row.room = room.id AND
-			room.building = building.id AND
-			row.id = ?
-	!
-    );
-    $sth->execute($id);
-    my $row = $sth->fetchrow_hashref('NAME_lc');
-    croak "RM_ENGINE: No such row id." unless defined($$row{'id'});
-    return $row;
-}
-
-sub rowList
-{
-    my $self = shift;
-    my $orderBy = shift || '';
-    $orderBy = 'building.name, room.name' unless $orderBy =~ /^[a-z_]+\.[a-z_]+$/;    # by default, order by building name and room name first
-    $orderBy = $orderBy . ', row.name' unless $orderBy eq 'row.name';                 # default third ordering is row name
-    my $sth = $self->dbh->prepare(
-        qq!
-		SELECT 
-			row.*,
-			room.name			AS room_name,
-			building.name		AS building_name,
-			building.name_short	AS building_name_short
-		FROM row, room, building 
-		WHERE
-			row.meta_default_data = 0 AND
-			row.room = room.id AND
-			room.building = building.id
-		ORDER BY $orderBy
-	!
-    );
-    $sth->execute;
-    return $sth->fetchall_arrayref({});
-}
-
-sub rowListInRoom
-{
-    my ($self, $room) = @_;
-    $room += 0;    # force room to be numeric
-    my $sth = $self->dbh->prepare(
-        qq!
-		SELECT 
-			row.*,
-			room.name			AS room_name,
-			building.name		AS building_name,
-			building.name_short	AS building_name_short
-		FROM row, room, building 
-		WHERE
-			row.meta_default_data = 0 AND
-			row.room = room.id AND
-			room.building = building.id AND
-			row.room = ?
-		ORDER BY row.room_pos
-	!
-    );
-    $sth->execute($room);
-    return $sth->fetchall_arrayref({});
-}
-
-sub rowListInRoomBasic
-{
-    my ($self, $room) = @_;
-    $room += 0;    # force room to be numeric
-    my $sth = $self->dbh->prepare(
-        qq!
-		SELECT
-			row.id,
-			row.name
-		FROM row
-		WHERE
-			row.meta_default_data = 0 AND
-			row.room = ?
-		ORDER BY row.name
-	!
-    );
-    $sth->execute($room);
-    return $sth->fetchall_arrayref({});
-}
-
-sub rowCountInRoom
-{
-    my ($self, $room) = @_;
-    $room += 0;    # force room to be numeric
-    my $sth = $self->dbh->prepare(
-        qq!
-		SELECT
-			count(*)
-		FROM row
-		WHERE
-			row.meta_default_data = 0 AND
-			row.room = ?
-	!
-    );
-    $sth->execute($room);
-    my $countRef = $sth->fetch;
-    return $$countRef[0];
-}
-
-sub deleteRow
-{
-    my ($self, $updateTime, $updateUser, $record) = @_;
-    my $deleteId = (ref $record eq 'HASH') ? $$record{'id'} : $record;
-    croak "RM_ENGINE: Delete failed. No row id specified." unless ($deleteId);
-    croak "RM_ENGINE: This method is not yet supported.";
-    return $deleteId;
-}
-
-sub updateRow
-{
-    my ($self, $updateTime, $updateUser, $record) = @_;
-    croak "RM_ENGINE: Unable to update row. No row record specified." unless ($record);
-
-    my ($sth, $newId);
-
-    if ($$record{'id'})
-    {
-        $sth = $self->dbh->prepare(qq!UPDATE row SET name = ?, room = ?, room_pos = ?, hidden_row = ?, notes = ?, meta_update_time = ?, meta_update_user = ? WHERE id = ?!);
-        my $ret = $sth->execute($self->_validateRowUpdate($record), $updateTime, $updateUser, $$record{'id'});
-        croak "RM_ENGINE: Update failed. This row may have been removed before the update occured." if ($ret eq '0E0');
-    }
-    else
-    {
-        $sth = $self->dbh->prepare(qq!INSERT INTO row (name, room, room_pos, hidden_row, notes, meta_update_time, meta_update_user) VALUES(?, ?, ?, ?, ?, ?, ?)!);
-        $sth->execute($self->_validateRowUpdate($record), $updateTime, $updateUser);
-        $newId = $self->_lastInsertId('row');
-    }
-    return $newId || $$record{'id'};
-}
-
-sub _validateRowUpdate
-{
-    my ($self, $record) = @_;
-    croak "RM_ENGINE: Unable to validate row. No row record specified." unless ($record);
-    $self->_checkName($$record{'name'});
-    $self->_checkNotes($$record{'notes'});
-    return ($$record{'name'}, $$record{'room'}, $$record{'room_pos'}, $$record{'hidden_row'}, $$record{'notes'});
-}
-
-##############################################################################
-# Rack Methods                                                               #
-##############################################################################
-
-sub rack
-{
-    my ($self, $id) = @_;
-    my $sth = $self->dbh->prepare(
-        qq!
-		SELECT 
-			rack.*,
-			row.name			AS row_name,
-			row.hidden_row		AS row_hidden,
-			room.id				AS room,
-			room.name			AS room_name,
-			building.name		AS building_name,
-			building.name_short	AS building_name_short,
-			count(device.id)	AS device_count,
-			rack.size - COALESCE(SUM(hardware.size), 0)	AS free_space
-		FROM row, room, building, rack
-		LEFT OUTER JOIN device ON
-			(rack.id = device.rack)
-		LEFT OUTER JOIN hardware ON
-			(device.hardware = hardware.id)
-		WHERE
-			rack.row = row.id AND
-			row.room = room.id AND
-			room.building = building.id AND
-			rack.id = ?
-		GROUP BY rack.id, rack.name, rack.row, rack.row_pos, rack.hidden_rack, rack.numbering_direction, rack.size, rack.notes, rack.meta_default_data, rack.meta_update_time, rack.meta_update_user, row.name, row.hidden_row, room.id, room.name, building.name, building.name_short
-	!
-    );
-    $sth->execute($id);
-    my $rack = $sth->fetchrow_hashref('NAME_lc');
-    croak "RM_ENGINE: No such rack id." unless defined($$rack{'id'});
-    return $rack;
-}
-
-sub rackList
-{
-    my $self = shift;
-    my $orderBy = shift || '';
-    $orderBy = 'building.name, room.name, row.name, rack.row_pos'
-      unless $orderBy =~ /^[a-z_]+[\._][a-z_]+$/;    # by default, order by building name and room name first
-    $orderBy = $orderBy . ', rack.row_pos, rack.name'
-      unless ($orderBy eq 'rack.row_pos, rack.name' or $orderBy eq 'rack.name');    # default third ordering is rack name
-    my $sth = $self->dbh->prepare(
-        qq!
-		SELECT 
-			rack.*,
-			row.name			AS row_name,
-			row.hidden_row		AS row_hidden,
-			room.id				AS room,
-			room.name			AS room_name,
-			building.name		AS building_name,
-			building.name_short	AS building_name_short,
-			count(device.id)	AS device_count,
-			rack.size - COALESCE(SUM(hardware.size), 0)	AS free_space
-		FROM row, room, building, rack
-		LEFT OUTER JOIN device ON
-			(rack.id = device.rack)
-		LEFT OUTER JOIN hardware ON
-			(device.hardware = hardware.id)
-		WHERE
-			rack.meta_default_data = 0 AND
-			rack.row = row.id AND
-			row.room = room.id AND
-			room.building = building.id
-		GROUP BY rack.id, rack.name, rack.row, rack.row_pos, rack.hidden_rack, rack.size, rack.numbering_direction, rack.notes, rack.meta_default_data, rack.meta_update_time, rack.meta_update_user, row.name, row.hidden_row, room.id, room.name, building.name, building.name_short
-		ORDER BY $orderBy
-	!
-    );
-    $sth->execute;
-    return $sth->fetchall_arrayref({});
-}
-
-sub rackListInRoom
-{
-    my ($self, $room) = @_;
-    $room += 0;    # force room to be numeric
-    my $sth = $self->dbh->prepare(
-        qq!
-		SELECT 
-			rack.*,
-			row.name			AS row_name,
-			row.hidden_row		AS row_hidden,
-			room.id				AS room,
-			room.name			AS room_name,
-			building.name		AS building_name,
-			building.name_short	AS building_name_short
-		FROM rack, row, room, building 
-		WHERE
-			rack.meta_default_data = 0 AND
-			rack.row = row.id AND
-			row.room = room.id AND
-			room.building = building.id AND
-			row.room = ?
-		ORDER BY rack.row, rack.row_pos
-	!
-    );
-    $sth->execute($room);
-    return $sth->fetchall_arrayref({});
-}
-
-sub rackListBasic
-{
-    my ($self, $noMeta) = @_;
-
-    my $meta = '';
-    $meta = 'AND  rack.meta_default_data = 0' if ($noMeta);
-
-    my $sth = $self->dbh->prepare(
-        qq!
-		SELECT
-			rack.id,
-			rack.name,
-			rack.meta_default_data,
-			room.name		AS room_name, 
-			building.name	AS building_name,
-			building.name_short	AS building_name_short
-		FROM rack, row, room, building 
-		WHERE
-			rack.row = row.id AND
-			row.room = room.id AND
-			room.building = building.id
-			$meta
-		ORDER BY 
-			rack.meta_default_data DESC,
-			building.name,
-			room.name,
-			row.room_pos,
-			rack.row_pos
-	!
-    );
-    $sth->execute;
-    return $sth->fetchall_arrayref({});
-}
-
-sub rackPhysical
-{
-    my ($self, $rackid, $selectDev, $tableFormat) = @_;
-    my $devices = $self->deviceListInRack($rackid);
-    $selectDev   ||= -1;    # not zero so we don't select empty positions
-    $tableFormat ||= 0;
-
-    my $sth = $self->dbh->prepare(
-        qq!
-		SELECT 
-			rack.*
-		FROM rack
-		WHERE rack.id = ?
-	!
-    );
-    $sth->execute($rackid);
-    my $rack = $sth->fetchrow_hashref('NAME_lc');
-
-    my @rackLayout = (1 .. $$rack{'size'});    # populate the rack positions
-
-    # insert each device into the rack layout
-    for my $dev (@$devices)
-    {
-        my $sizeCount = $$dev{'hardware_size'};
-        my $position  = $$dev{'rack_pos'};
-
-        # select (highlight) device if requested
-        $$dev{'is_selected'} = ($$dev{'id'} == $selectDev);
-
-        while ($sizeCount > 0)
-        {
-            # make a copy of the device so we can adjust it independently of it's other appearances
-            my %devEntry = %$dev;
-            $devEntry{'rack_location'} = $rackLayout[$position - 1];
-            $rackLayout[$position - 1] = \%devEntry;
-            $sizeCount--;
-            $position++;
-        }
-    }
-
-    if ($tableFormat)
-    {
-        # unless numbering from the top of the rack we need to reverse the rack positions
-        @rackLayout = reverse @rackLayout unless ($$rack{'numbering_direction'});
-
-        # iterate over every position and replace multiple unit sized entries with one entry and placeholders
-        my $position = 0;
-        my %seenIds;
-
-        while ($position < $$rack{'size'})
-        {
-            if (ref $rackLayout[$position] eq 'HASH')
-            {
-                my $dev = $rackLayout[$position];
-                if (defined($seenIds{$$dev{'id'}})
-                    and $seenIds{$$dev{'id'}} == 1)    # if we've seen this device before put in a placeholder entry for this position
-                {
-                    $rackLayout[$position] = {
-                        'rack_pos'      => $position,
-                        'rack_location' => $$dev{'rack_location'},
-                        'id'            => $$dev{'id'},
-                        'name'          => $$dev{'name'},
-                        'hardware_size' => 0
-                    };
-                }
-                $seenIds{$$dev{'id'}} = 1;
-            }
-            else                                       # an empty position
-            {
-                $rackLayout[$position] = {'rack_id' => $$rack{'id'}, 'rack_location' => $rackLayout[$position], 'id' => 0, 'name' => '', 'hardware_size' => '1',};
-            }
-            $position++;
-        }
-    }
-    return \@rackLayout;
-}
-
-sub updateRack
-{
-    my ($self, $updateTime, $updateUser, $record) = @_;
-    croak "RM_ENGINE: Unable to update rack. No rack record specified." unless ($record);
-
-    my ($sth, $newId);
-
-    # if no row is specified we need to use the default one for the room (lowest id)
-    unless (defined $$record{'row'})
-    {
-        $sth = $self->dbh->prepare(qq!SELECT id FROM row WHERE room = ? ORDER BY id LIMIT 1!);
-        $sth->execute($$record{'room'});
-        $$record{'row'} = ($sth->fetchrow_array)[0];
-        croak "RM_ENGINE: Unable to update rack. Couldn't determine room or row for rack. Did you specify a row or room? If you did choose a row or room it may have been deleted by another user."
-          unless $$record{'row'};
-    }
-
-    # force row_pos to 0 until rows are supported
-    $$record{'row_pos'} = 0 unless (defined $$record{'row_pos'});
-
-    # hidden racks can't be created directly
-    $$record{'hidden_rack'} = 0;
-
-    if ($$record{'id'})
-    {
-        $sth = $self->dbh->prepare(qq!UPDATE rack SET name = ?, row = ?, row_pos = ?, hidden_rack = ?, size = ?, numbering_direction = ?, notes = ?, meta_update_time = ?, meta_update_user = ? WHERE id = ?!);
-        my $ret = $sth->execute($self->_validateRackUpdate($record), $updateTime, $updateUser, $$record{'id'});
-        croak "RM_ENGINE: Update failed. This rack may have been removed before the update occured." if ($ret eq '0E0');
-    }
-    else
-    {
-        $sth = $self->dbh->prepare(qq!INSERT INTO rack (name, row, row_pos, hidden_rack, size, numbering_direction, notes, meta_update_time, meta_update_user) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?)!);
-        $sth->execute($self->_validateRackUpdate($record), $updateTime, $updateUser);
-        $newId = $self->_lastInsertId('rack');
-    }
-    return $newId || $$record{'id'};
-}
-
-sub deleteRack
-{
-    my ($self, $updateTime, $updateUser, $record) = @_;
-    my $deleteId = (ref $record eq 'HASH') ? $$record{'id'} : $record;
-    croak "RM_ENGINE: Delete failed. No rack id specified." unless ($deleteId);
-    my $sth = $self->dbh->prepare(qq!DELETE FROM rack WHERE id = ?!);
-    my $ret = $sth->execute($deleteId);
-    croak "RM_ENGINE: Delete failed. This rack does not currently exist, it may have been removed already." if ($ret eq '0E0');
-    return $deleteId;
-}
-
-sub _validateRackUpdate
-{
-    my ($self, $record) = @_;
-    croak "RM_ENGINE: Unable to validate rack. No rack record specified." unless ($record);
-    $self->_checkName($$record{'name'});
-    $self->_checkNotes($$record{'notes'});
-    croak "RM_ENGINE: You must specify a size for your rack." unless $$record{'size'};
-    $$record{'size'} += 0;    # Force to numeric for comparison
-    croak "RM_ENGINE: Rack sizes must be between 1 and " . $self->getConf('maxracksize') . " units."
-      unless (($$record{'size'} > 0) && ($$record{'size'} < $self->getConf('maxracksize')));
-    $$record{'numbering_direction'} = $$record{'numbering_direction'} ? 1 : 0;
-    my $highestPos = $self->_highestUsedInRack($$record{'id'}) || 0;
-
-    if ($highestPos > $$record{'size'})
-    {
-        croak "RM_ENGINE: You cannot reduce the rack size to $$record{'size'} U as there is a device at position $highestPos.";
-    }
-    return ($$record{'name'}, $$record{'row'}, $$record{'row_pos'}, $$record{'hidden_rack'}, $$record{'size'}, $$record{'numbering_direction'}, $$record{'notes'});
-}
-
-sub _highestUsedInRack
-{
-    my ($self, $id) = @_;
-    my $sth = $self->dbh->prepare(
-        qq!
-		SELECT 
-			MAX(device.rack_pos + hardware.size - 1)
-		FROM device, rack, hardware
-		WHERE 
-			device.rack = rack.id AND
-			device.hardware = hardware.id AND
-			rack.id = ?
-	!
-    );
-    $sth->execute($id);
-    return ($sth->fetchrow_array)[0];
-}
-
-sub totalSizeRack
-{
-    my $self = shift;
-    my $sth  = $self->dbh->prepare(
-        qq!
-		SELECT COALESCE(SUM(size), 0) 
-		FROM rack; 
-	!
-    );
-    $sth->execute;
-    return ($sth->fetchrow_array)[0];
-}
-
-##############################################################################
-# Hardware Methods                                                           #
-##############################################################################
-
-sub hardware
-{
-    my ($self, $id) = @_;
-    my $sth = $self->dbh->prepare(
-        qq!
-		SELECT
-			hardware.*,
-			org.name 				AS manufacturer_name,
-			org.meta_default_data	As manufacturer_meta_default_data
-		FROM hardware, org
-		WHERE 
-			hardware.manufacturer = org.id AND
-			hardware.id = ?
-	!
-    );
-
-    $sth->execute($id);
-    my $hardware = $sth->fetchrow_hashref();
-    croak "RM_ENGINE: No such hardware id. This item of hardware may have been deleted.\nError at" unless defined($$hardware{'id'});
-    return $hardware;
-}
-
-sub hardwareList
-{
-    my $self         = shift;
-    my $orderBy      = shift || '';
-    my $manufacturer = shift || 0;
-
-    my $sth;
-    unless ($manufacturer)
-    {
-        $orderBy = 'org.name, hardware.name' unless $orderBy =~ /^[a-z_]+\.[a-z_]+$/;
-        $orderBy = 'org.meta_default_data, ' . $orderBy if ($orderBy =~ /^org.name/);
-
-        $sth = $self->dbh->prepare(
-            qq!
-    		SELECT
-    			hardware.*,
-    			org.name 				AS manufacturer_name
-    		FROM hardware, org
-    		WHERE
-    			hardware.meta_default_data = 0 AND
-    			hardware.manufacturer = org.id
-    		ORDER BY $orderBy
-    	!
-        );
-    }
-    else
-    {
-        $orderBy = 'hardware.name' unless $orderBy =~ /^[a-z_]+\.[a-z_]+$/;
-        $orderBy = 'hardware.meta_default_data DESC, ' . $orderBy;
-        $sth     = $self->dbh->prepare(
-            qq!
-    		SELECT
-    			hardware.*
-    	    FROM hardware
-    		WHERE
-    			hardware.manufacturer = $manufacturer
-    		ORDER BY $orderBy
-    	!
-        );
-    }
-
-    $sth->execute;
-    return $sth->fetchall_arrayref({});
-}
-
-sub hardwareByManufacturer
-{
-    my $self    = shift;
-    my $orderBy = 'hardware.name';
-    my @hardwareModels;
-
-    my $manufacturers = $self->simpleList('hardware_manufacturer', 1);
-
-    for my $manu (@$manufacturers)
-    {
-        push @hardwareModels, {'maufacturer_id' => $$manu{'id'}, 'maufacturer_name' => $$manu{'name'}, 'models' => $self->hardwareList('name', $$manu{'id'})};
-    }
-    return \@hardwareModels;
-}
-
-sub hardwareListBasic
-{
-    my $self = shift;
-    my $sth  = $self->dbh->prepare(
-        qq!
-		SELECT
-			hardware.id,
-			hardware.name,
-			hardware.meta_default_data,
-			org.name 				AS manufacturer_name,
-			org.meta_default_data	As manufacturer_meta_default_data
-		FROM hardware, org
-		WHERE hardware.manufacturer = org.id
-		ORDER BY 
-			hardware.meta_default_data DESC,
-			manufacturer_name,
-			hardware.name
-	!
-    );
-    $sth->execute;
-    return $sth->fetchall_arrayref({});
-}
-
-sub updateHardware
-{
-    my ($self, $updateTime, $updateUser, $record) = @_;
-    croak "RM_ENGINE: Unable to update hardware. No hardware record specified." unless ($record);
-
-    my ($sth, $newId);
-
-    if ($$record{'id'})
-    {
-        $sth = $self->dbh->prepare(qq!UPDATE hardware SET name = ?, manufacturer =?, size = ?, image = ?, support_url = ?, spec_url = ?, notes = ?, meta_update_time = ?, meta_update_user = ? WHERE id = ?!);
-        my $ret = $sth->execute($self->_validateHardwareUpdate($record), $updateTime, $updateUser, $$record{'id'});
-        croak "RM_ENGINE: Update failed. This hardware may have been removed before the update occured." if ($ret eq '0E0');
-    }
-    else
-    {
-        $sth = $self->dbh->prepare(qq!INSERT INTO hardware (name, manufacturer, size, image, support_url, spec_url, notes, meta_update_time, meta_update_user) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?)!);
-        $sth->execute($self->_validateHardwareUpdate($record), $updateTime, $updateUser);
-        $newId = $self->_lastInsertId('hardware');
-    }
-    return $newId || $$record{'id'};
-}
-
-sub deleteHardware
-{
-    my ($self, $updateTime, $updateUser, $record) = @_;
-    my $deleteId = (ref $record eq 'HASH') ? $$record{'id'} : $record;
-    croak "RM_ENGINE: Delete failed. No hardware id specified." unless ($deleteId);
-    my $sth = $self->dbh->prepare(qq!DELETE FROM hardware WHERE id = ?!);
-    my $ret = $sth->execute($deleteId);
-    croak "RM_ENGINE: Delete failed. This hardware does not currently exist, it may have been removed already." if ($ret eq '0E0');
-    return $deleteId;
-}
-
-sub _validateHardwareUpdate
-{
-    my ($self, $record) = @_;
-    croak "RM_ENGINE: Unable to validate hardware. No hardware record specified." unless ($record);
-
-    $$record{'support_url'} = $self->_httpFixer($$record{'support_url'});
-    $$record{'spec_url'}    = $self->_httpFixer($$record{'spec_url'});
-
-    croak "RM_ENGINE: You must specify a name for the hardware." unless (length($$record{'name'}) > 1);
-    croak "RM_ENGINE: Names must be less than " . $self->getConf('maxstring') . " characters." unless (length($$record{'name'}) <= $self->getConf('maxstring'));
-
-    # no validation for $$record{'manufacturer_id'} - foreign key constraints will catch
-    croak "RM_ENGINE: You must specify a size for your hardware model." unless $$record{'size'};
-    $$record{'size'} += 0;    # Force to numeric for comparison
-    croak "RM_ENGINE: Size must be between 1 and " . $self->getConf('maxracksize') . " units."
-      unless (($$record{'size'} > 0) && ($$record{'size'} <= $self->getConf('maxracksize')));
-    croak "RM_ENGINE: Image filenames must be between 0 and " . $self->getConf('maxstring') . " characters."
-      unless ((length($$record{'image'}) >= 0) && (length($$record{'image'}) <= $self->getConf('maxstring')));
-    croak "RM_ENGINE: Support URLs must be between 0 and " . $self->getConf('maxstring') . " characters."
-      unless ((length($$record{'support_url'}) >= 0) && (length($$record{'support_url'}) <= $self->getConf('maxstring')));
-    croak "RM_ENGINE: Specification URLs must be between 0 and " . $self->getConf('maxstring') . " characters."
-      unless ((length($$record{'spec_url'}) >= 0) && (length($$record{'spec_url'}) <= $self->getConf('maxstring')));
-    croak "RM_ENGINE: Notes cannot exceed " . $self->getConf('maxnote') . " characters." unless (length($$record{'notes'}) <= $self->getConf('maxnote'));
-
-    return ($$record{'name'}, $$record{'manufacturer_id'}, $$record{'size'}, $$record{'image'}, $$record{'support_url'}, $$record{'spec_url'}, $$record{'notes'});
-}
-
-sub hardwareDeviceCount
-{
-    my $self = shift;
-    my $sth  = $self->dbh->prepare(
-        qq!
-		SELECT
-			hardware.id AS id, 
-			hardware.name AS hardware, 
-			org.name AS manufacturer,
-			COUNT(device.id) AS num_devices,
-			hardware.meta_default_data AS hardware_meta_default_data,
-			org.meta_default_data AS hardware_manufacturer_meta_default_data,
-			SUM(hardware.size) AS space_used			
-		FROM device, hardware, org 
-		WHERE 
-			device.hardware = hardware.id AND
-			hardware.manufacturer = org.id 
-		GROUP BY hardware.id, hardware.name, org.name, hardware.meta_default_data, org.meta_default_data
-		ORDER BY num_devices DESC
-		LIMIT 10;
-	!
-    );
-    $sth->execute;
-    return $sth->fetchall_arrayref({});
-}
-
-sub hardwareWithDevice
-{
-    my $self = shift;
-    my $sth  = $self->dbh->prepare(
-        qq!
-		SELECT
-			DISTINCT hardware.id, hardware.name, hardware.meta_default_data
-		FROM 
-			device, hardware
-		WHERE 
-			device.hardware = hardware.id
-		ORDER BY
-		 	hardware.meta_default_data DESC,
-			hardware.name
-	!
-    );
-    $sth->execute;
-    return $sth->fetchall_arrayref({});
-}
-
-##############################################################################
-# Operating System Methods                                                   #
-##############################################################################
-
-sub os
-{
-    my ($self, $id) = @_;
-    my $sth = $self->dbh->prepare(
-        qq!
-		SELECT 
-			os.*,
-			org.name 				AS manufacturer_name,
-			org.meta_default_data	As manufacturer_meta_default_data
-		FROM os, org 
-		WHERE 
-			os.manufacturer = org.id AND
-			os.id = ?
-	!
-    );
-
-    $sth->execute($id);
-    my $os = $sth->fetchrow_hashref('NAME_lc');
-    croak "RM_ENGINE: No such operating system id. This operating system may have been deleted." unless defined($$os{'id'});
-    return $os;
-}
-
-sub osList
-{
-    my $self = shift;
-    my $orderBy = shift || '';
-    $orderBy = 'os.name' unless $orderBy =~ /^[a-z_]+\.[a-z_]+$/;
-    $orderBy = 'org.meta_default_data, ' . $orderBy if ($orderBy =~ /^org.name/);
-
-    my $sth = $self->dbh->prepare(
-        qq!
-		SELECT 
-			os.*,
-			org.name 				AS manufacturer_name
-		FROM os, org 
-		WHERE 
-			os.meta_default_data = 0 AND
-			os.manufacturer = org.id
-		ORDER BY $orderBy
-	!
-    );
-    $sth->execute;
-    return $sth->fetchall_arrayref({});
-}
-
-sub updateOs
-{
-    my ($self, $updateTime, $updateUser, $record) = @_;
-    croak "RM_ENGINE: Unable to update OS. No OS record specified." unless ($record);
-
-    my ($sth, $newId);
-
-    if ($$record{'id'})
-    {
-        $sth = $self->dbh->prepare(qq!UPDATE os SET name = ?, manufacturer = ?, notes = ?, meta_update_time = ?, meta_update_user = ? WHERE id = ?!);
-        my $ret = $sth->execute($self->_validateOsUpdate($record), $updateTime, $updateUser, $$record{'id'});
-        croak "RM_ENGINE: Update failed. This OS may have been removed before the update occured." if ($ret eq '0E0');
-    }
-    else
-    {
-        $sth = $self->dbh->prepare(qq!INSERT INTO os (name, manufacturer, notes, meta_update_time, meta_update_user) VALUES(?, ?, ?, ?, ?)!);
-        $sth->execute($self->_validateOsUpdate($record), $updateTime, $updateUser);
-        $newId = $self->_lastInsertId('os');
-    }
-    return $newId || $$record{'id'};
-}
-
-sub deleteOs
-{
-    my ($self, $updateTime, $updateUser, $record) = @_;
-    my $deleteId = (ref $record eq 'HASH') ? $$record{'id'} : $record;
-    croak "RM_ENGINE: Delete failed. No OS id specified." unless ($deleteId);
-    my $sth = $self->dbh->prepare(qq!DELETE FROM os WHERE id = ?!);
-    my $ret = $sth->execute($deleteId);
-    croak "RM_ENGINE: Delete failed. This OS does not currently exist, it may have been removed already." if ($ret eq '0E0');
-    return $deleteId;
-}
-
-sub _validateOsUpdate
-{
-    my ($self, $record) = @_;
-    croak "RM_ENGINE: You must specify a name for the operating system." unless (length($$record{'name'}) > 1);
-    croak "RM_ENGINE: Names must be less than " . $self->getConf('maxstring') . " characters." unless (length($$record{'name'}) <= $self->getConf('maxstring'));
-
-    # no validation for $$record{'manufacturer_id'} - foreign key constraints will catch
-    croak "RM_ENGINE: Notes cannot exceed '.$self->getConf('maxnote').' characters." unless (length($$record{'notes'}) <= $self->getConf('maxnote'));
-    return ($$record{'name'}, $$record{'manufacturer_id'}, $$record{'notes'});
-}
-
-sub osDeviceCount
-{
-    my $self = shift;
-    my $sth  = $self->dbh->prepare(
-        qq!
-		SELECT 
-			os.id AS id,
-			os.name AS os, 
-			device.os_version AS version,
-			COUNT(device.id) AS num_devices,
-			os.meta_default_data AS os_meta_default_data,
-			SUM(hardware.size) AS space_used
-		FROM device, os, org, hardware
-		WHERE 
-			device.os = os.id AND
-			os.manufacturer = org.id AND
-			device.hardware = hardware.id
-		GROUP BY os.id, os.name, device.os_version, os.meta_default_data
-		ORDER BY num_devices DESC
-		LIMIT 10;
-	!
-    );
-    $sth->execute;
-    return $sth->fetchall_arrayref({});
-}
-
-sub osWithDevice
-{
-    my $self = shift;
-    my $sth  = $self->dbh->prepare(
-        qq!
-		SELECT
-			DISTINCT os.id, os.name, os.meta_default_data
-		FROM 
-			os, device
-		WHERE 
-			device.os = os.id
-		ORDER BY 
-			os.meta_default_data DESC,
-			os.name
-	!
-    );
-    $sth->execute;
-    return $sth->fetchall_arrayref({});
-}
-
-##############################################################################
-# Organisation Methods                                                       #
-##############################################################################
-
-sub org
-{
-    my ($self, $id) = @_;
-    my $sth = $self->dbh->prepare(
-        qq!
-		SELECT org.*
-		FROM org 
-		WHERE id = ?
-	!
-    );
-    $sth->execute($id);
-    my $org = $sth->fetchrow_hashref('NAME_lc');
-    croak 'RM_ENGINE: No such organisation id.' unless defined($$org{'id'});
-    return $org;
-}
-
-sub orgList
-{
-    my $self = shift;
-    my $orderBy = shift || '';
-    $orderBy = 'org.name' unless $orderBy =~ /^[a-z_]+\.[a-z_]+$/;
-    $orderBy .= ' DESC' if ($orderBy eq 'org.customer' or $orderBy eq 'org.hardware' or $orderBy eq 'org.software');    # yeses appear first
-    my $sth = $self->dbh->prepare(
-        qq!
-		SELECT org.*
-		FROM org
-		WHERE org.meta_default_data = 0
-		ORDER BY $orderBy
-	!
-    );
-    $sth->execute;
-    return $sth->fetchall_arrayref({});
-}
-
-sub manufacturerWithHardwareList
-{
-    my $self = shift;
-    my $sth  = $self->dbh->prepare(
-        qq!
-		SELECT DISTINCT 
-		    hardware.manufacturer AS id,
-		    hardware_manufacturer.name AS name,
-		    hardware_manufacturer.meta_default_data 
-		FROM hardware, hardware_manufacturer
-		WHERE 
-		    hardware.manufacturer = hardware_manufacturer.id
-		ORDER BY 
-		    hardware_manufacturer.meta_default_data DESC,
-		    hardware_manufacturer.name
-	!
-    );
-    $sth->execute;
-    return $sth->fetchall_arrayref({});
-}
-
-sub updateOrg
-{
-    my ($self, $updateTime, $updateUser, $record) = @_;
-    croak "RM_ENGINE: Unable to update org. No org record specified." unless ($record);
-
-    my ($sth, $newId);
-
-    if ($$record{'id'})
-    {
-        $sth = $self->dbh->prepare(qq!UPDATE org SET name = ?, account_no = ?, customer = ?, software = ?, hardware = ?, descript = ?, home_page = ?, notes = ?, meta_update_time = ?, meta_update_user = ? WHERE id = ?!);
-        my $ret = $sth->execute($self->_validateOrgUpdate($record), $updateTime, $updateUser, $$record{'id'});
-        croak "RM_ENGINE: Update failed. This org may have been removed before the update occured." if ($ret eq '0E0');
-    }
-    else
-    {
-        $sth = $self->dbh->prepare(qq!INSERT INTO org (name, account_no, customer, software, hardware, descript, home_page, notes, meta_update_time, meta_update_user) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?)!);
-        $sth->execute($self->_validateOrgUpdate($record), $updateTime, $updateUser);
-        $newId = $self->_lastInsertId('org');
-    }
-    return $newId || $$record{'id'};
-}
-
-sub deleteOrg
-{
-    my ($self, $updateTime, $updateUser, $record) = @_;
-    my $deleteId = (ref $record eq 'HASH') ? $$record{'id'} : $record;
-    croak "RM_ENGINE: Delete failed. No org id specified." unless ($deleteId);
-    my $sth = $self->dbh->prepare(qq!DELETE FROM org WHERE id = ?!);
-    my $ret = $sth->execute($deleteId);
-    croak "RM_ENGINE: Delete failed. This org does not currently exist, it may have been removed already." if ($ret eq '0E0');
-    return $deleteId;
-}
-
-sub _validateOrgUpdate
-{
-    my ($self, $record) = @_;
-
-    $$record{'home_page'} = $self->_httpFixer($$record{'home_page'});
-
-    croak "RM_ENGINE: You must specify a name for the organisation." unless (length($$record{'name'}) > 1);
-    croak "RM_ENGINE: Names must be less than " . $self->getConf('maxstring') . " characters." unless (length($$record{'name'}) <= $self->getConf('maxstring'));
-    croak "RM_ENGINE: Account numbers must be less than " . $self->getConf('maxstring') . " characters."
-      unless (length($$record{'account_no'}) <= $self->getConf('maxstring'));
-    croak "RM_ENGINE: Descriptions cannot exceed " . $self->getConf('maxnote') . " characters."
-      unless (length($$record{'descript'}) <= $self->getConf('maxnote'));
-    croak "RM_ENGINE: Home page URLs cannot exceed " . $self->getConf('maxstring') . " characters."
-      unless (length($$record{'home_page'}) <= $self->getConf('maxstring'));
-    croak "RM_ENGINE: Notes cannot exceed " . $self->getConf('maxnote') . " characters." unless (length($$record{'notes'}) <= $self->getConf('maxnote'));
-
-    # normalise input for boolean values
-    $$record{'customer'} = $$record{'customer'} ? 1 : 0;
-    $$record{'software'} = $$record{'software'} ? 1 : 0;
-    $$record{'hardware'} = $$record{'hardware'} ? 1 : 0;
-
-    return ($$record{'name'}, $$record{'account_no'}, $$record{'customer'}, $$record{'software'}, $$record{'hardware'}, $$record{'descript'}, $$record{'home_page'}, $$record{'notes'});
-}
-
-sub customerDeviceCount
-{
-    my $self = shift;
-    my $sth  = $self->dbh->prepare(
-        qq!
-		SELECT
-			org.id AS id, 
-			org.name AS customer,
-			COUNT(device.id) AS num_devices,
-			SUM(hardware.size) AS space_used
-		FROM device, org, hardware 
-		WHERE 
-			device.customer = org.id AND
-			device.hardware = hardware.id
-		GROUP BY org.id, org.name 
-		ORDER BY num_devices DESC
-		LIMIT 10;
-	!
-    );
-    $sth->execute;
-    return $sth->fetchall_arrayref({});
-}
-
-sub customerWithDevice
-{
-    my $self = shift;
-    my $sth  = $self->dbh->prepare(
-        qq!
-		SELECT
-			DISTINCT org.id, org.name, org.meta_default_data
-		FROM 
-			org, device
-		WHERE 
-			device.customer = org.id
-		ORDER BY 
-			org.meta_default_data DESC,
-			org.name
-	!
-    );
-    $sth->execute;
-    return $sth->fetchall_arrayref({});
-}
-
-##############################################################################
-# Domain Methods                                                             #
-##############################################################################
-
-sub domain
-{
-    my ($self, $id) = @_;
-    my $sth = $self->dbh->prepare(
-        qq!
-		SELECT domain.*
-		FROM domain
-		WHERE id = ?
-	!
-    );
-    $sth->execute($id);
-    my $domain = $sth->fetchrow_hashref('NAME_lc');
-    croak "RM_ENGINE: No such domain id." unless defined($$domain{'id'});
-    return $domain;
-}
-
-sub domainList
-{
-    my $self = shift;
-    my $orderBy = shift || '';
-    $orderBy = 'domain.name' unless $orderBy =~ /^[a-z_]+\.[a-z_]+$/;
-
-    my $sth = $self->dbh->prepare(
-        qq!
-		SELECT domain.*
-		FROM domain 
-		WHERE domain.meta_default_data = 0
-		ORDER BY $orderBy
-	!
-    );
-    $sth->execute;
-    return $sth->fetchall_arrayref({});
-}
-
-sub updateDomain
-{
-    my ($self, $updateTime, $updateUser, $record) = @_;
-    croak "RM_ENGINE: Unable to update domain. No domain record specified." unless ($record);
-
-    my ($sth, $newId);
-
-    if ($$record{'id'})
-    {
-        $sth = $self->dbh->prepare(qq!UPDATE domain SET name = ?, descript = ?, notes = ?, meta_update_time = ?, meta_update_user = ? WHERE id = ?!);
-        my $ret = $sth->execute($self->_validateDomainUpdate($record), $updateTime, $updateUser, $$record{'id'});
-        croak "RM_ENGINE: Update failed. This domain may have been removed before the update occured." if ($ret eq '0E0');
-    }
-    else
-    {
-        $sth = $self->dbh->prepare(qq!INSERT INTO domain (name, descript, notes, meta_update_time, meta_update_user) VALUES(?, ?, ?, ?, ?)!);
-        $sth->execute($self->_validateDomainUpdate($record), $updateTime, $updateUser);
-        $newId = $self->_lastInsertId('domain');
-    }
-    return $newId || $$record{'id'};
-}
-
-sub deleteDomain
-{
-    my ($self, $updateTime, $updateUser, $record) = @_;
-    my $deleteId = (ref $record eq 'HASH') ? $$record{'id'} : $record;
-    croak "RM_ENGINE: Delete failed. No domain id specified." unless ($deleteId);
-    my $sth = $self->dbh->prepare(qq!DELETE FROM domain WHERE id = ?!);
-    my $ret = $sth->execute($deleteId);
-    croak "RM_ENGINE: Delete failed. This domain does not currently exist, it may have been removed already." if ($ret eq '0E0');
-    return $deleteId;
-}
-
-sub _validateDomainUpdate    # Should we remove or warn on domains beginning with . ?
-{
-    my ($self, $record) = @_;
-    croak "RM_ENGINE: You must specify a name for the domain." unless (length($$record{'name'}) > 1);
-    croak "RM_ENGINE: Names must be less than " . $self->getConf('maxstring') . " characters." unless (length($$record{'name'}) <= $self->getConf('maxstring'));
-    croak "RM_ENGINE: Descriptions cannot exceed " . $self->getConf('maxstring') . " characters."
-      unless (length($$record{'descript'}) <= $self->getConf('maxstring'));
-    croak "RM_ENGINE: Notes cannot exceed " . $self->getConf('maxnote') . " characters." unless (length($$record{'notes'}) <= $self->getConf('maxnote'));
-    return ($$record{'name'}, $$record{'descript'}, $$record{'notes'});
-}
 
 ##############################################################################
 # Device Methods                                                             #
@@ -2081,6 +1013,969 @@ sub duplicateOSLicenceKey
     return $sth->fetchall_arrayref({});
 }
 
+
+##############################################################################
+# Device/Application Methods                                                 #
+##############################################################################
+
+sub updateDeviceApp
+{
+    my ($self, $updateTime, $updateUser, $record) = @_;
+    croak "RM_ENGINE: Unable to update device app relation. No record specified." unless ($record);
+
+    my ($sth, $newId);
+
+    if ($$record{'id'})
+    {
+        $sth = $self->dbh->prepare(qq!UPDATE device_app SET app = ?, device = ?, relation = ?, meta_update_time = ?, meta_update_user = ? WHERE id = ?!);
+        my $ret = $sth->execute($self->_validateDeviceAppUpdate($record), $updateTime, $updateUser, $$record{'id'});
+        croak "RM_ENGINE: Update failed. Objects may have been removed before the update occured." if ($ret eq '0E0');
+    }
+    else
+    {
+        $sth = $self->dbh->prepare(qq!INSERT INTO device_app (app, device, relation, meta_update_time, meta_update_user) VALUES(?, ?, ?, ?, ?)!);
+        $sth->execute($self->_validateDeviceAppUpdate($record), $updateTime, $updateUser);
+        $newId = $self->_lastInsertId('device_app');
+    }
+    return $newId || $$record{'id'};
+}
+
+sub deleteDeviceApp
+{
+    my ($self, $updateTime, $updateUser, $record) = @_;
+    my $deleteId = (ref $record eq 'HASH') ? $$record{'id'} : $record;
+    croak "RM_ENGINE: Delete failed. No device_app id specified." unless ($deleteId);
+    my $sth = $self->dbh->prepare(qq!DELETE FROM device_app WHERE id = ?!);
+    my $ret = $sth->execute($deleteId);
+    croak "RM_ENGINE: Delete failed. This device_app does not currently exist, it may have been removed already." if ($ret eq '0E0');
+    return $deleteId;
+}
+
+sub _validateDeviceAppUpdate
+{
+    my ($self, $record) = @_;
+    croak "RM_ENGINE: Unable to validate device app relation. No record specified." unless ($record);
+
+    # protected by fk, so no validation required
+    return ($$record{'app_id'}, $$record{'device_id'}, $$record{'relation_id'});
+}
+
+
+##############################################################################
+# Domain Methods                                                             #
+##############################################################################
+
+sub domain
+{
+    my ($self, $id) = @_;
+    my $sth = $self->dbh->prepare(
+        qq!
+		SELECT domain.*
+		FROM domain
+		WHERE id = ?
+	!
+    );
+    $sth->execute($id);
+    my $domain = $sth->fetchrow_hashref('NAME_lc');
+    croak "RM_ENGINE: No such domain id." unless defined($$domain{'id'});
+    return $domain;
+}
+
+sub domainList
+{
+    my $self = shift;
+    my $orderBy = shift || '';
+    $orderBy = 'domain.name' unless $orderBy =~ /^[a-z_]+\.[a-z_]+$/;
+
+    my $sth = $self->dbh->prepare(
+        qq!
+		SELECT domain.*
+		FROM domain 
+		WHERE domain.meta_default_data = 0
+		ORDER BY $orderBy
+	!
+    );
+    $sth->execute;
+    return $sth->fetchall_arrayref({});
+}
+
+sub updateDomain
+{
+    my ($self, $updateTime, $updateUser, $record) = @_;
+    croak "RM_ENGINE: Unable to update domain. No domain record specified." unless ($record);
+
+    my ($sth, $newId);
+
+    if ($$record{'id'})
+    {
+        $sth = $self->dbh->prepare(qq!UPDATE domain SET name = ?, descript = ?, notes = ?, meta_update_time = ?, meta_update_user = ? WHERE id = ?!);
+        my $ret = $sth->execute($self->_validateDomainUpdate($record), $updateTime, $updateUser, $$record{'id'});
+        croak "RM_ENGINE: Update failed. This domain may have been removed before the update occured." if ($ret eq '0E0');
+    }
+    else
+    {
+        $sth = $self->dbh->prepare(qq!INSERT INTO domain (name, descript, notes, meta_update_time, meta_update_user) VALUES(?, ?, ?, ?, ?)!);
+        $sth->execute($self->_validateDomainUpdate($record), $updateTime, $updateUser);
+        $newId = $self->_lastInsertId('domain');
+    }
+    return $newId || $$record{'id'};
+}
+
+sub deleteDomain
+{
+    my ($self, $updateTime, $updateUser, $record) = @_;
+    my $deleteId = (ref $record eq 'HASH') ? $$record{'id'} : $record;
+    croak "RM_ENGINE: Delete failed. No domain id specified." unless ($deleteId);
+    my $sth = $self->dbh->prepare(qq!DELETE FROM domain WHERE id = ?!);
+    my $ret = $sth->execute($deleteId);
+    croak "RM_ENGINE: Delete failed. This domain does not currently exist, it may have been removed already." if ($ret eq '0E0');
+    return $deleteId;
+}
+
+sub _validateDomainUpdate    # Should we remove or warn on domains beginning with . ?
+{
+    my ($self, $record) = @_;
+    croak "RM_ENGINE: You must specify a name for the domain." unless (length($$record{'name'}) > 1);
+    croak "RM_ENGINE: Names must be less than " . $self->getConf('maxstring') . " characters." unless (length($$record{'name'}) <= $self->getConf('maxstring'));
+    croak "RM_ENGINE: Descriptions cannot exceed " . $self->getConf('maxstring') . " characters."
+      unless (length($$record{'descript'}) <= $self->getConf('maxstring'));
+    croak "RM_ENGINE: Notes cannot exceed " . $self->getConf('maxnote') . " characters." unless (length($$record{'notes'}) <= $self->getConf('maxnote'));
+    return ($$record{'name'}, $$record{'descript'}, $$record{'notes'});
+}
+
+
+##############################################################################
+# Hardware Methods                                                           #
+##############################################################################
+
+sub hardware
+{
+    my ($self, $id) = @_;
+    my $sth = $self->dbh->prepare(
+        qq!
+		SELECT
+			hardware.*,
+			org.name 				AS manufacturer_name,
+			org.meta_default_data	As manufacturer_meta_default_data
+		FROM hardware, org
+		WHERE 
+			hardware.manufacturer = org.id AND
+			hardware.id = ?
+	!
+    );
+
+    $sth->execute($id);
+    my $hardware = $sth->fetchrow_hashref();
+    croak "RM_ENGINE: No such hardware id. This item of hardware may have been deleted.\nError at" unless defined($$hardware{'id'});
+    return $hardware;
+}
+
+sub hardwareList
+{
+    my $self         = shift;
+    my $orderBy      = shift || '';
+    my $manufacturer = shift || 0;
+
+    my $sth;
+    unless ($manufacturer)
+    {
+        $orderBy = 'org.name, hardware.name' unless $orderBy =~ /^[a-z_]+\.[a-z_]+$/;
+        $orderBy = 'org.meta_default_data, ' . $orderBy if ($orderBy =~ /^org.name/);
+
+        $sth = $self->dbh->prepare(
+            qq!
+    		SELECT
+    			hardware.*,
+    			org.name 				AS manufacturer_name
+    		FROM hardware, org
+    		WHERE
+    			hardware.meta_default_data = 0 AND
+    			hardware.manufacturer = org.id
+    		ORDER BY $orderBy
+    	!
+        );
+    }
+    else
+    {
+        $orderBy = 'hardware.name' unless $orderBy =~ /^[a-z_]+\.[a-z_]+$/;
+        $orderBy = 'hardware.meta_default_data DESC, ' . $orderBy;
+        $sth     = $self->dbh->prepare(
+            qq!
+    		SELECT
+    			hardware.*
+    	    FROM hardware
+    		WHERE
+    			hardware.manufacturer = $manufacturer
+    		ORDER BY $orderBy
+    	!
+        );
+    }
+
+    $sth->execute;
+    return $sth->fetchall_arrayref({});
+}
+
+sub hardwareByManufacturer
+{
+    my $self    = shift;
+    my $orderBy = 'hardware.name';
+    my @hardwareModels;
+
+    my $manufacturers = $self->simpleList('hardware_manufacturer', 1);
+
+    for my $manu (@$manufacturers)
+    {
+        push @hardwareModels, {'maufacturer_id' => $$manu{'id'}, 'maufacturer_name' => $$manu{'name'}, 'models' => $self->hardwareList('name', $$manu{'id'})};
+    }
+    return \@hardwareModels;
+}
+
+sub hardwareListBasic
+{
+    my $self = shift;
+    my $sth  = $self->dbh->prepare(
+        qq!
+		SELECT
+			hardware.id,
+			hardware.name,
+			hardware.meta_default_data,
+			org.name 				AS manufacturer_name,
+			org.meta_default_data	As manufacturer_meta_default_data
+		FROM hardware, org
+		WHERE hardware.manufacturer = org.id
+		ORDER BY 
+			hardware.meta_default_data DESC,
+			manufacturer_name,
+			hardware.name
+	!
+    );
+    $sth->execute;
+    return $sth->fetchall_arrayref({});
+}
+
+sub updateHardware
+{
+    my ($self, $updateTime, $updateUser, $record) = @_;
+    croak "RM_ENGINE: Unable to update hardware. No hardware record specified." unless ($record);
+
+    my ($sth, $newId);
+
+    if ($$record{'id'})
+    {
+        $sth = $self->dbh->prepare(qq!UPDATE hardware SET name = ?, manufacturer =?, size = ?, image = ?, support_url = ?, spec_url = ?, notes = ?, meta_update_time = ?, meta_update_user = ? WHERE id = ?!);
+        my $ret = $sth->execute($self->_validateHardwareUpdate($record), $updateTime, $updateUser, $$record{'id'});
+        croak "RM_ENGINE: Update failed. This hardware may have been removed before the update occured." if ($ret eq '0E0');
+    }
+    else
+    {
+        $sth = $self->dbh->prepare(qq!INSERT INTO hardware (name, manufacturer, size, image, support_url, spec_url, notes, meta_update_time, meta_update_user) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?)!);
+        $sth->execute($self->_validateHardwareUpdate($record), $updateTime, $updateUser);
+        $newId = $self->_lastInsertId('hardware');
+    }
+    return $newId || $$record{'id'};
+}
+
+sub deleteHardware
+{
+    my ($self, $updateTime, $updateUser, $record) = @_;
+    my $deleteId = (ref $record eq 'HASH') ? $$record{'id'} : $record;
+    croak "RM_ENGINE: Delete failed. No hardware id specified." unless ($deleteId);
+    my $sth = $self->dbh->prepare(qq!DELETE FROM hardware WHERE id = ?!);
+    my $ret = $sth->execute($deleteId);
+    croak "RM_ENGINE: Delete failed. This hardware does not currently exist, it may have been removed already." if ($ret eq '0E0');
+    return $deleteId;
+}
+
+sub _validateHardwareUpdate
+{
+    my ($self, $record) = @_;
+    croak "RM_ENGINE: Unable to validate hardware. No hardware record specified." unless ($record);
+
+    $$record{'support_url'} = $self->_httpFixer($$record{'support_url'});
+    $$record{'spec_url'}    = $self->_httpFixer($$record{'spec_url'});
+
+    croak "RM_ENGINE: You must specify a name for the hardware." unless (length($$record{'name'}) > 1);
+    croak "RM_ENGINE: Names must be less than " . $self->getConf('maxstring') . " characters." unless (length($$record{'name'}) <= $self->getConf('maxstring'));
+
+    # no validation for $$record{'manufacturer_id'} - foreign key constraints will catch
+    croak "RM_ENGINE: You must specify a size for your hardware model." unless $$record{'size'};
+    $$record{'size'} += 0;    # Force to numeric for comparison
+    croak "RM_ENGINE: Size must be between 1 and " . $self->getConf('maxracksize') . " units."
+      unless (($$record{'size'} > 0) && ($$record{'size'} <= $self->getConf('maxracksize')));
+    croak "RM_ENGINE: Image filenames must be between 0 and " . $self->getConf('maxstring') . " characters."
+      unless ((length($$record{'image'}) >= 0) && (length($$record{'image'}) <= $self->getConf('maxstring')));
+    croak "RM_ENGINE: Support URLs must be between 0 and " . $self->getConf('maxstring') . " characters."
+      unless ((length($$record{'support_url'}) >= 0) && (length($$record{'support_url'}) <= $self->getConf('maxstring')));
+    croak "RM_ENGINE: Specification URLs must be between 0 and " . $self->getConf('maxstring') . " characters."
+      unless ((length($$record{'spec_url'}) >= 0) && (length($$record{'spec_url'}) <= $self->getConf('maxstring')));
+    croak "RM_ENGINE: Notes cannot exceed " . $self->getConf('maxnote') . " characters." unless (length($$record{'notes'}) <= $self->getConf('maxnote'));
+
+    return ($$record{'name'}, $$record{'manufacturer_id'}, $$record{'size'}, $$record{'image'}, $$record{'support_url'}, $$record{'spec_url'}, $$record{'notes'});
+}
+
+sub hardwareDeviceCount
+{
+    my $self = shift;
+    my $sth  = $self->dbh->prepare(
+        qq!
+		SELECT
+			hardware.id AS id, 
+			hardware.name AS hardware, 
+			org.name AS manufacturer,
+			COUNT(device.id) AS num_devices,
+			hardware.meta_default_data AS hardware_meta_default_data,
+			org.meta_default_data AS hardware_manufacturer_meta_default_data,
+			SUM(hardware.size) AS space_used			
+		FROM device, hardware, org 
+		WHERE 
+			device.hardware = hardware.id AND
+			hardware.manufacturer = org.id 
+		GROUP BY hardware.id, hardware.name, org.name, hardware.meta_default_data, org.meta_default_data
+		ORDER BY num_devices DESC
+		LIMIT 10;
+	!
+    );
+    $sth->execute;
+    return $sth->fetchall_arrayref({});
+}
+
+sub hardwareWithDevice
+{
+    my $self = shift;
+    my $sth  = $self->dbh->prepare(
+        qq!
+		SELECT
+			DISTINCT hardware.id, hardware.name, hardware.meta_default_data
+		FROM 
+			device, hardware
+		WHERE 
+			device.hardware = hardware.id
+		ORDER BY
+		 	hardware.meta_default_data DESC,
+			hardware.name
+	!
+    );
+    $sth->execute;
+    return $sth->fetchall_arrayref({});
+}
+
+
+##############################################################################
+# Organisation Methods                                                       #
+##############################################################################
+
+sub org
+{
+    my ($self, $id) = @_;
+    my $sth = $self->dbh->prepare(
+        qq!
+		SELECT org.*
+		FROM org 
+		WHERE id = ?
+	!
+    );
+    $sth->execute($id);
+    my $org = $sth->fetchrow_hashref('NAME_lc');
+    croak 'RM_ENGINE: No such organisation id.' unless defined($$org{'id'});
+    return $org;
+}
+
+sub orgList
+{
+    my $self = shift;
+    my $orderBy = shift || '';
+    $orderBy = 'org.name' unless $orderBy =~ /^[a-z_]+\.[a-z_]+$/;
+    $orderBy .= ' DESC' if ($orderBy eq 'org.customer' or $orderBy eq 'org.hardware' or $orderBy eq 'org.software');    # yeses appear first
+    my $sth = $self->dbh->prepare(
+        qq!
+		SELECT org.*
+		FROM org
+		WHERE org.meta_default_data = 0
+		ORDER BY $orderBy
+	!
+    );
+    $sth->execute;
+    return $sth->fetchall_arrayref({});
+}
+
+sub manufacturerWithHardwareList
+{
+    my $self = shift;
+    my $sth  = $self->dbh->prepare(
+        qq!
+		SELECT DISTINCT 
+		    hardware.manufacturer AS id,
+		    hardware_manufacturer.name AS name,
+		    hardware_manufacturer.meta_default_data 
+		FROM hardware, hardware_manufacturer
+		WHERE 
+		    hardware.manufacturer = hardware_manufacturer.id
+		ORDER BY 
+		    hardware_manufacturer.meta_default_data DESC,
+		    hardware_manufacturer.name
+	!
+    );
+    $sth->execute;
+    return $sth->fetchall_arrayref({});
+}
+
+sub updateOrg
+{
+    my ($self, $updateTime, $updateUser, $record) = @_;
+    croak "RM_ENGINE: Unable to update org. No org record specified." unless ($record);
+
+    my ($sth, $newId);
+
+    if ($$record{'id'})
+    {
+        $sth = $self->dbh->prepare(qq!UPDATE org SET name = ?, account_no = ?, customer = ?, software = ?, hardware = ?, descript = ?, home_page = ?, notes = ?, meta_update_time = ?, meta_update_user = ? WHERE id = ?!);
+        my $ret = $sth->execute($self->_validateOrgUpdate($record), $updateTime, $updateUser, $$record{'id'});
+        croak "RM_ENGINE: Update failed. This org may have been removed before the update occured." if ($ret eq '0E0');
+    }
+    else
+    {
+        $sth = $self->dbh->prepare(qq!INSERT INTO org (name, account_no, customer, software, hardware, descript, home_page, notes, meta_update_time, meta_update_user) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?)!);
+        $sth->execute($self->_validateOrgUpdate($record), $updateTime, $updateUser);
+        $newId = $self->_lastInsertId('org');
+    }
+    return $newId || $$record{'id'};
+}
+
+sub deleteOrg
+{
+    my ($self, $updateTime, $updateUser, $record) = @_;
+    my $deleteId = (ref $record eq 'HASH') ? $$record{'id'} : $record;
+    croak "RM_ENGINE: Delete failed. No org id specified." unless ($deleteId);
+    my $sth = $self->dbh->prepare(qq!DELETE FROM org WHERE id = ?!);
+    my $ret = $sth->execute($deleteId);
+    croak "RM_ENGINE: Delete failed. This org does not currently exist, it may have been removed already." if ($ret eq '0E0');
+    return $deleteId;
+}
+
+sub _validateOrgUpdate
+{
+    my ($self, $record) = @_;
+
+    $$record{'home_page'} = $self->_httpFixer($$record{'home_page'});
+
+    croak "RM_ENGINE: You must specify a name for the organisation." unless (length($$record{'name'}) > 1);
+    croak "RM_ENGINE: Names must be less than " . $self->getConf('maxstring') . " characters." unless (length($$record{'name'}) <= $self->getConf('maxstring'));
+    croak "RM_ENGINE: Account numbers must be less than " . $self->getConf('maxstring') . " characters."
+      unless (length($$record{'account_no'}) <= $self->getConf('maxstring'));
+    croak "RM_ENGINE: Descriptions cannot exceed " . $self->getConf('maxnote') . " characters."
+      unless (length($$record{'descript'}) <= $self->getConf('maxnote'));
+    croak "RM_ENGINE: Home page URLs cannot exceed " . $self->getConf('maxstring') . " characters."
+      unless (length($$record{'home_page'}) <= $self->getConf('maxstring'));
+    croak "RM_ENGINE: Notes cannot exceed " . $self->getConf('maxnote') . " characters." unless (length($$record{'notes'}) <= $self->getConf('maxnote'));
+
+    # normalise input for boolean values
+    $$record{'customer'} = $$record{'customer'} ? 1 : 0;
+    $$record{'software'} = $$record{'software'} ? 1 : 0;
+    $$record{'hardware'} = $$record{'hardware'} ? 1 : 0;
+
+    return ($$record{'name'}, $$record{'account_no'}, $$record{'customer'}, $$record{'software'}, $$record{'hardware'}, $$record{'descript'}, $$record{'home_page'}, $$record{'notes'});
+}
+
+sub customerDeviceCount
+{
+    my $self = shift;
+    my $sth  = $self->dbh->prepare(
+        qq!
+		SELECT
+			org.id AS id, 
+			org.name AS customer,
+			COUNT(device.id) AS num_devices,
+			SUM(hardware.size) AS space_used
+		FROM device, org, hardware 
+		WHERE 
+			device.customer = org.id AND
+			device.hardware = hardware.id
+		GROUP BY org.id, org.name 
+		ORDER BY num_devices DESC
+		LIMIT 10;
+	!
+    );
+    $sth->execute;
+    return $sth->fetchall_arrayref({});
+}
+
+sub customerWithDevice
+{
+    my $self = shift;
+    my $sth  = $self->dbh->prepare(
+        qq!
+		SELECT
+			DISTINCT org.id, org.name, org.meta_default_data
+		FROM 
+			org, device
+		WHERE 
+			device.customer = org.id
+		ORDER BY 
+			org.meta_default_data DESC,
+			org.name
+	!
+    );
+    $sth->execute;
+    return $sth->fetchall_arrayref({});
+}
+
+
+##############################################################################
+# Operating System Methods                                                   #
+##############################################################################
+
+sub os
+{
+    my ($self, $id) = @_;
+    my $sth = $self->dbh->prepare(
+        qq!
+		SELECT 
+			os.*,
+			org.name 				AS manufacturer_name,
+			org.meta_default_data	As manufacturer_meta_default_data
+		FROM os, org 
+		WHERE 
+			os.manufacturer = org.id AND
+			os.id = ?
+	!
+    );
+
+    $sth->execute($id);
+    my $os = $sth->fetchrow_hashref('NAME_lc');
+    croak "RM_ENGINE: No such operating system id. This operating system may have been deleted." unless defined($$os{'id'});
+    return $os;
+}
+
+sub osList
+{
+    my $self = shift;
+    my $orderBy = shift || '';
+    $orderBy = 'os.name' unless $orderBy =~ /^[a-z_]+\.[a-z_]+$/;
+    $orderBy = 'org.meta_default_data, ' . $orderBy if ($orderBy =~ /^org.name/);
+
+    my $sth = $self->dbh->prepare(
+        qq!
+		SELECT 
+			os.*,
+			org.name 				AS manufacturer_name
+		FROM os, org 
+		WHERE 
+			os.meta_default_data = 0 AND
+			os.manufacturer = org.id
+		ORDER BY $orderBy
+	!
+    );
+    $sth->execute;
+    return $sth->fetchall_arrayref({});
+}
+
+sub updateOs
+{
+    my ($self, $updateTime, $updateUser, $record) = @_;
+    croak "RM_ENGINE: Unable to update OS. No OS record specified." unless ($record);
+
+    my ($sth, $newId);
+
+    if ($$record{'id'})
+    {
+        $sth = $self->dbh->prepare(qq!UPDATE os SET name = ?, manufacturer = ?, notes = ?, meta_update_time = ?, meta_update_user = ? WHERE id = ?!);
+        my $ret = $sth->execute($self->_validateOsUpdate($record), $updateTime, $updateUser, $$record{'id'});
+        croak "RM_ENGINE: Update failed. This OS may have been removed before the update occured." if ($ret eq '0E0');
+    }
+    else
+    {
+        $sth = $self->dbh->prepare(qq!INSERT INTO os (name, manufacturer, notes, meta_update_time, meta_update_user) VALUES(?, ?, ?, ?, ?)!);
+        $sth->execute($self->_validateOsUpdate($record), $updateTime, $updateUser);
+        $newId = $self->_lastInsertId('os');
+    }
+    return $newId || $$record{'id'};
+}
+
+sub deleteOs
+{
+    my ($self, $updateTime, $updateUser, $record) = @_;
+    my $deleteId = (ref $record eq 'HASH') ? $$record{'id'} : $record;
+    croak "RM_ENGINE: Delete failed. No OS id specified." unless ($deleteId);
+    my $sth = $self->dbh->prepare(qq!DELETE FROM os WHERE id = ?!);
+    my $ret = $sth->execute($deleteId);
+    croak "RM_ENGINE: Delete failed. This OS does not currently exist, it may have been removed already." if ($ret eq '0E0');
+    return $deleteId;
+}
+
+sub _validateOsUpdate
+{
+    my ($self, $record) = @_;
+    croak "RM_ENGINE: You must specify a name for the operating system." unless (length($$record{'name'}) > 1);
+    croak "RM_ENGINE: Names must be less than " . $self->getConf('maxstring') . " characters." unless (length($$record{'name'}) <= $self->getConf('maxstring'));
+
+    # no validation for $$record{'manufacturer_id'} - foreign key constraints will catch
+    croak "RM_ENGINE: Notes cannot exceed '.$self->getConf('maxnote').' characters." unless (length($$record{'notes'}) <= $self->getConf('maxnote'));
+    return ($$record{'name'}, $$record{'manufacturer_id'}, $$record{'notes'});
+}
+
+sub osDeviceCount
+{
+    my $self = shift;
+    my $sth  = $self->dbh->prepare(
+        qq!
+		SELECT 
+			os.id AS id,
+			os.name AS os, 
+			device.os_version AS version,
+			COUNT(device.id) AS num_devices,
+			os.meta_default_data AS os_meta_default_data,
+			SUM(hardware.size) AS space_used
+		FROM device, os, org, hardware
+		WHERE 
+			device.os = os.id AND
+			os.manufacturer = org.id AND
+			device.hardware = hardware.id
+		GROUP BY os.id, os.name, device.os_version, os.meta_default_data
+		ORDER BY num_devices DESC
+		LIMIT 10;
+	!
+    );
+    $sth->execute;
+    return $sth->fetchall_arrayref({});
+}
+
+sub osWithDevice
+{
+    my $self = shift;
+    my $sth  = $self->dbh->prepare(
+        qq!
+		SELECT
+			DISTINCT os.id, os.name, os.meta_default_data
+		FROM 
+			os, device
+		WHERE 
+			device.os = os.id
+		ORDER BY 
+			os.meta_default_data DESC,
+			os.name
+	!
+    );
+    $sth->execute;
+    return $sth->fetchall_arrayref({});
+}
+
+
+##############################################################################
+# Rack Methods                                                               #
+##############################################################################
+
+sub rack
+{
+    my ($self, $id) = @_;
+    my $sth = $self->dbh->prepare(
+        qq!
+		SELECT 
+			rack.*,
+			row.name			AS row_name,
+			row.hidden_row		AS row_hidden,
+			room.id				AS room,
+			room.name			AS room_name,
+			building.name		AS building_name,
+			building.name_short	AS building_name_short,
+			count(device.id)	AS device_count,
+			rack.size - COALESCE(SUM(hardware.size), 0)	AS free_space
+		FROM row, room, building, rack
+		LEFT OUTER JOIN device ON
+			(rack.id = device.rack)
+		LEFT OUTER JOIN hardware ON
+			(device.hardware = hardware.id)
+		WHERE
+			rack.row = row.id AND
+			row.room = room.id AND
+			room.building = building.id AND
+			rack.id = ?
+		GROUP BY rack.id, rack.name, rack.row, rack.row_pos, rack.hidden_rack, rack.numbering_direction, rack.size, rack.notes, rack.meta_default_data, rack.meta_update_time, rack.meta_update_user, row.name, row.hidden_row, room.id, room.name, building.name, building.name_short
+	!
+    );
+    $sth->execute($id);
+    my $rack = $sth->fetchrow_hashref('NAME_lc');
+    croak "RM_ENGINE: No such rack id." unless defined($$rack{'id'});
+    return $rack;
+}
+
+sub rackList
+{
+    my $self = shift;
+    my $orderBy = shift || '';
+    $orderBy = 'building.name, room.name, row.name, rack.row_pos'
+      unless $orderBy =~ /^[a-z_]+[\._][a-z_]+$/;    # by default, order by building name and room name first
+    $orderBy = $orderBy . ', rack.row_pos, rack.name'
+      unless ($orderBy eq 'rack.row_pos, rack.name' or $orderBy eq 'rack.name');    # default third ordering is rack name
+    my $sth = $self->dbh->prepare(
+        qq!
+		SELECT 
+			rack.*,
+			row.name			AS row_name,
+			row.hidden_row		AS row_hidden,
+			room.id				AS room,
+			room.name			AS room_name,
+			building.name		AS building_name,
+			building.name_short	AS building_name_short,
+			count(device.id)	AS device_count,
+			rack.size - COALESCE(SUM(hardware.size), 0)	AS free_space
+		FROM row, room, building, rack
+		LEFT OUTER JOIN device ON
+			(rack.id = device.rack)
+		LEFT OUTER JOIN hardware ON
+			(device.hardware = hardware.id)
+		WHERE
+			rack.meta_default_data = 0 AND
+			rack.row = row.id AND
+			row.room = room.id AND
+			room.building = building.id
+		GROUP BY rack.id, rack.name, rack.row, rack.row_pos, rack.hidden_rack, rack.size, rack.numbering_direction, rack.notes, rack.meta_default_data, rack.meta_update_time, rack.meta_update_user, row.name, row.hidden_row, room.id, room.name, building.name, building.name_short
+		ORDER BY $orderBy
+	!
+    );
+    $sth->execute;
+    return $sth->fetchall_arrayref({});
+}
+
+sub rackListInRoom
+{
+    my ($self, $room) = @_;
+    $room += 0;    # force room to be numeric
+    my $sth = $self->dbh->prepare(
+        qq!
+		SELECT 
+			rack.*,
+			row.name			AS row_name,
+			row.hidden_row		AS row_hidden,
+			room.id				AS room,
+			room.name			AS room_name,
+			building.name		AS building_name,
+			building.name_short	AS building_name_short
+		FROM rack, row, room, building 
+		WHERE
+			rack.meta_default_data = 0 AND
+			rack.row = row.id AND
+			row.room = room.id AND
+			room.building = building.id AND
+			row.room = ?
+		ORDER BY rack.row, rack.row_pos
+	!
+    );
+    $sth->execute($room);
+    return $sth->fetchall_arrayref({});
+}
+
+sub rackListBasic
+{
+    my ($self, $noMeta) = @_;
+
+    my $meta = '';
+    $meta = 'AND  rack.meta_default_data = 0' if ($noMeta);
+
+    my $sth = $self->dbh->prepare(
+        qq!
+		SELECT
+			rack.id,
+			rack.name,
+			rack.meta_default_data,
+			room.name		AS room_name, 
+			building.name	AS building_name,
+			building.name_short	AS building_name_short
+		FROM rack, row, room, building 
+		WHERE
+			rack.row = row.id AND
+			row.room = room.id AND
+			room.building = building.id
+			$meta
+		ORDER BY 
+			rack.meta_default_data DESC,
+			building.name,
+			room.name,
+			row.room_pos,
+			rack.row_pos
+	!
+    );
+    $sth->execute;
+    return $sth->fetchall_arrayref({});
+}
+
+sub rackPhysical
+{
+    my ($self, $rackid, $selectDev, $tableFormat) = @_;
+    my $devices = $self->deviceListInRack($rackid);
+    $selectDev   ||= -1;    # not zero so we don't select empty positions
+    $tableFormat ||= 0;
+
+    my $sth = $self->dbh->prepare(
+        qq!
+		SELECT 
+			rack.*
+		FROM rack
+		WHERE rack.id = ?
+	!
+    );
+    $sth->execute($rackid);
+    my $rack = $sth->fetchrow_hashref('NAME_lc');
+
+    my @rackLayout = (1 .. $$rack{'size'});    # populate the rack positions
+
+    # insert each device into the rack layout
+    for my $dev (@$devices)
+    {
+        my $sizeCount = $$dev{'hardware_size'};
+        my $position  = $$dev{'rack_pos'};
+
+        # select (highlight) device if requested
+        $$dev{'is_selected'} = ($$dev{'id'} == $selectDev);
+
+        while ($sizeCount > 0)
+        {
+            # make a copy of the device so we can adjust it independently of it's other appearances
+            my %devEntry = %$dev;
+            $devEntry{'rack_location'} = $rackLayout[$position - 1];
+            $rackLayout[$position - 1] = \%devEntry;
+            $sizeCount--;
+            $position++;
+        }
+    }
+
+    if ($tableFormat)
+    {
+        # unless numbering from the top of the rack we need to reverse the rack positions
+        @rackLayout = reverse @rackLayout unless ($$rack{'numbering_direction'});
+
+        # iterate over every position and replace multiple unit sized entries with one entry and placeholders
+        my $position = 0;
+        my %seenIds;
+
+        while ($position < $$rack{'size'})
+        {
+            if (ref $rackLayout[$position] eq 'HASH')
+            {
+                my $dev = $rackLayout[$position];
+                if (defined($seenIds{$$dev{'id'}})
+                    and $seenIds{$$dev{'id'}} == 1)    # if we've seen this device before put in a placeholder entry for this position
+                {
+                    $rackLayout[$position] = {
+                        'rack_pos'      => $position,
+                        'rack_location' => $$dev{'rack_location'},
+                        'id'            => $$dev{'id'},
+                        'name'          => $$dev{'name'},
+                        'hardware_size' => 0
+                    };
+                }
+                $seenIds{$$dev{'id'}} = 1;
+            }
+            else                                       # an empty position
+            {
+                $rackLayout[$position] = {'rack_id' => $$rack{'id'}, 'rack_location' => $rackLayout[$position], 'id' => 0, 'name' => '', 'hardware_size' => '1',};
+            }
+            $position++;
+        }
+    }
+    return \@rackLayout;
+}
+
+sub updateRack
+{
+    my ($self, $updateTime, $updateUser, $record) = @_;
+    croak "RM_ENGINE: Unable to update rack. No rack record specified." unless ($record);
+
+    my ($sth, $newId);
+
+    # if no row is specified we need to use the default one for the room (lowest id)
+    unless (defined $$record{'row'})
+    {
+        $sth = $self->dbh->prepare(qq!SELECT id FROM row WHERE room = ? ORDER BY id LIMIT 1!);
+        $sth->execute($$record{'room'});
+        $$record{'row'} = ($sth->fetchrow_array)[0];
+        croak "RM_ENGINE: Unable to update rack. Couldn't determine room or row for rack. Did you specify a row or room? If you did choose a row or room it may have been deleted by another user."
+          unless $$record{'row'};
+    }
+
+    # force row_pos to 0 until rows are supported
+    $$record{'row_pos'} = 0 unless (defined $$record{'row_pos'});
+
+    # hidden racks can't be created directly
+    $$record{'hidden_rack'} = 0;
+
+    if ($$record{'id'})
+    {
+        $sth = $self->dbh->prepare(qq!UPDATE rack SET name = ?, row = ?, row_pos = ?, hidden_rack = ?, size = ?, numbering_direction = ?, notes = ?, meta_update_time = ?, meta_update_user = ? WHERE id = ?!);
+        my $ret = $sth->execute($self->_validateRackUpdate($record), $updateTime, $updateUser, $$record{'id'});
+        croak "RM_ENGINE: Update failed. This rack may have been removed before the update occured." if ($ret eq '0E0');
+    }
+    else
+    {
+        $sth = $self->dbh->prepare(qq!INSERT INTO rack (name, row, row_pos, hidden_rack, size, numbering_direction, notes, meta_update_time, meta_update_user) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?)!);
+        $sth->execute($self->_validateRackUpdate($record), $updateTime, $updateUser);
+        $newId = $self->_lastInsertId('rack');
+    }
+    return $newId || $$record{'id'};
+}
+
+sub deleteRack
+{
+    my ($self, $updateTime, $updateUser, $record) = @_;
+    my $deleteId = (ref $record eq 'HASH') ? $$record{'id'} : $record;
+    croak "RM_ENGINE: Delete failed. No rack id specified." unless ($deleteId);
+    my $sth = $self->dbh->prepare(qq!DELETE FROM rack WHERE id = ?!);
+    my $ret = $sth->execute($deleteId);
+    croak "RM_ENGINE: Delete failed. This rack does not currently exist, it may have been removed already." if ($ret eq '0E0');
+    return $deleteId;
+}
+
+sub _validateRackUpdate
+{
+    my ($self, $record) = @_;
+    croak "RM_ENGINE: Unable to validate rack. No rack record specified." unless ($record);
+    $self->_checkName($$record{'name'});
+    $self->_checkNotes($$record{'notes'});
+    croak "RM_ENGINE: You must specify a size for your rack." unless $$record{'size'};
+    $$record{'size'} += 0;    # Force to numeric for comparison
+    croak "RM_ENGINE: Rack sizes must be between 1 and " . $self->getConf('maxracksize') . " units."
+      unless (($$record{'size'} > 0) && ($$record{'size'} < $self->getConf('maxracksize')));
+    $$record{'numbering_direction'} = $$record{'numbering_direction'} ? 1 : 0;
+    my $highestPos = $self->_highestUsedInRack($$record{'id'}) || 0;
+
+    if ($highestPos > $$record{'size'})
+    {
+        croak "RM_ENGINE: You cannot reduce the rack size to $$record{'size'} U as there is a device at position $highestPos.";
+    }
+    return ($$record{'name'}, $$record{'row'}, $$record{'row_pos'}, $$record{'hidden_rack'}, $$record{'size'}, $$record{'numbering_direction'}, $$record{'notes'});
+}
+
+sub _highestUsedInRack
+{
+    my ($self, $id) = @_;
+    my $sth = $self->dbh->prepare(
+        qq!
+		SELECT 
+			MAX(device.rack_pos + hardware.size - 1)
+		FROM device, rack, hardware
+		WHERE 
+			device.rack = rack.id AND
+			device.hardware = hardware.id AND
+			rack.id = ?
+	!
+    );
+    $sth->execute($id);
+    return ($sth->fetchrow_array)[0];
+}
+
+sub totalSizeRack
+{
+    my $self = shift;
+    my $sth  = $self->dbh->prepare(
+        qq!
+		SELECT COALESCE(SUM(size), 0) 
+		FROM rack; 
+	!
+    );
+    $sth->execute;
+    return ($sth->fetchrow_array)[0];
+}
+
+
 ##############################################################################
 # Role Methods                                                               #
 ##############################################################################
@@ -2205,6 +2100,310 @@ sub roleWithDevice
     return $sth->fetchall_arrayref({});
 }
 
+
+##############################################################################
+# Room Methods                                                               #
+##############################################################################
+
+sub room
+{
+    my ($self, $id) = @_;
+    croak "RM_ENGINE: Unable to retrieve room. No room id specified." unless ($id);
+    my $sth = $self->dbh->prepare(
+        qq!
+		SELECT 
+			room.*, 
+			building.name		AS building_name,
+			building.name_short	AS building_name_short
+		FROM room, building 
+		WHERE
+			room.building = building.id AND
+			room.id = ?
+	!
+    );
+    $sth->execute($id);
+    my $room = $sth->fetchrow_hashref('NAME_lc');
+    croak "RM_ENGINE: No such room id." unless defined($$room{'id'});
+    return $room;
+}
+
+sub roomList
+{
+    my $self = shift;
+    my $orderBy = shift || '';
+    $orderBy = 'building.name' unless $orderBy =~ /^[a-z_]+\.[a-z_]+$/;    # by default, order by building name first
+    $orderBy = $orderBy . ', room.name' unless $orderBy eq 'room.name';    # default second ordering is room name
+    my $sth = $self->dbh->prepare(
+        qq!
+		SELECT
+			room.*,
+			building.name		AS building_name,
+			building.name_short	AS building_name_short
+		FROM room, building
+		WHERE
+			room.meta_default_data = 0 AND
+			room.building = building.id
+		ORDER BY $orderBy
+	!
+    );
+    $sth->execute;
+    return $sth->fetchall_arrayref({});
+}
+
+sub roomListInBuilding
+{
+    my $self     = shift;
+    my $building = shift;
+    $building += 0;    # force building to be numeric
+    my $orderBy = shift || '';
+    $orderBy = 'building.name' unless $orderBy =~ /^[a-z_]+\.[a-z_]+$/;
+    my $sth = $self->dbh->prepare(
+        qq!
+		SELECT
+			room.*,
+			building.name		AS building_name,
+			building.name_short	AS building_name_short
+		FROM room, building
+		WHERE
+			room.meta_default_data = 0 AND
+			room.building = building.id AND
+			room.building = ?
+		ORDER BY $orderBy
+	!
+    );
+    $sth->execute($building);
+    return $sth->fetchall_arrayref({});
+}
+
+sub roomListBasic
+{
+    my $self = shift;
+    my $sth  = $self->dbh->prepare(
+        q!
+		SELECT 
+			room.id, 
+			room.name, 
+			building.name AS building_name,
+			building.name_short	AS building_name_short
+		FROM room, building 
+		WHERE 
+			room.meta_default_data = 0 AND
+			room.building = building.id 
+		ORDER BY 
+			room.meta_default_data DESC,
+			building.name,
+			room.name
+	!
+    );
+    $sth->execute;
+    return $sth->fetchall_arrayref({});
+}
+
+sub updateRoom
+{
+    my ($self, $updateTime, $updateUser, $record) = @_;
+    croak "RM_ENGINE: Unable to update room. No room record specified." unless ($record);
+
+    my ($sth, $newId);
+
+    if ($$record{'id'})
+    {
+        $sth = $self->dbh->prepare(qq!UPDATE room SET name = ?, building =?, notes = ?, meta_update_time = ?, meta_update_user = ? WHERE id = ?!);
+        my $ret = $sth->execute($self->_validateRoomUpdate($record), $updateTime, $updateUser, $$record{'id'});
+        croak "RM_ENGINE: Update failed. This room may have been removed before the update occured." if ($ret eq '0E0');
+    }
+    else
+    {
+        $sth = $self->dbh->prepare(qq!INSERT INTO room (name, building, notes, meta_update_time, meta_update_user) VALUES(?, ?, ?, ?, ?)!);
+        $sth->execute($self->_validateRoomUpdate($record), $updateTime, $updateUser);
+        $newId = $self->_lastInsertId('room');
+        my $hiddenRow = {'name' => '-', 'room' => "$newId", 'room_pos' => 0, 'hidden_row' => 1, 'notes' => ''};
+        $self->updateRow($updateTime, $updateUser, $hiddenRow);
+    }
+    return $newId || $$record{'id'};
+}
+
+sub deleteRoom
+{
+    my ($self, $updateTime, $updateUser, $record) = @_;
+    my $deleteId = (ref $record eq 'HASH') ? $$record{'id'} : $record;
+    croak "RM_ENGINE: Delete failed. No room id specified." unless ($deleteId);
+
+    my ($ret, $sth);
+    $sth = $self->dbh->prepare(qq!DELETE FROM row WHERE hidden_row = 1 AND room = ?!);
+    $sth->execute($deleteId);
+    $sth = $self->dbh->prepare(qq!DELETE FROM room WHERE id = ?!);
+    $ret = $sth->execute($deleteId);
+    croak "RM_ENGINE: This room does not currently exist, it may have been removed already." if ($ret eq '0E0');
+    return $deleteId;
+}
+
+sub _validateRoomUpdate
+{
+    my ($self, $record) = @_;
+    croak "RM_ENGINE: Unable to validate room. No room record specified." unless ($record);
+    $self->_checkName($$record{'name'});
+    $self->_checkNotes($$record{'notes'});
+    return ($$record{'name'}, $$record{'building_id'}, $$record{'notes'});
+}
+
+
+##############################################################################
+# Row Methods                                                                #
+##############################################################################
+
+sub row
+{
+    my ($self, $id) = @_;
+    my $sth = $self->dbh->prepare(
+        qq!
+		SELECT 
+			row.*,
+			room.name			AS room_name,
+			building.name		AS building_name,
+			building.name_short	AS building_name_short
+		FROM row, room, building 
+		WHERE
+			row.room = room.id AND
+			room.building = building.id AND
+			row.id = ?
+	!
+    );
+    $sth->execute($id);
+    my $row = $sth->fetchrow_hashref('NAME_lc');
+    croak "RM_ENGINE: No such row id." unless defined($$row{'id'});
+    return $row;
+}
+
+sub rowList
+{
+    my $self = shift;
+    my $orderBy = shift || '';
+    $orderBy = 'building.name, room.name' unless $orderBy =~ /^[a-z_]+\.[a-z_]+$/;    # by default, order by building name and room name first
+    $orderBy = $orderBy . ', row.name' unless $orderBy eq 'row.name';                 # default third ordering is row name
+    my $sth = $self->dbh->prepare(
+        qq!
+		SELECT 
+			row.*,
+			room.name			AS room_name,
+			building.name		AS building_name,
+			building.name_short	AS building_name_short
+		FROM row, room, building 
+		WHERE
+			row.meta_default_data = 0 AND
+			row.room = room.id AND
+			room.building = building.id
+		ORDER BY $orderBy
+	!
+    );
+    $sth->execute;
+    return $sth->fetchall_arrayref({});
+}
+
+sub rowListInRoom
+{
+    my ($self, $room) = @_;
+    $room += 0;    # force room to be numeric
+    my $sth = $self->dbh->prepare(
+        qq!
+		SELECT 
+			row.*,
+			room.name			AS room_name,
+			building.name		AS building_name,
+			building.name_short	AS building_name_short
+		FROM row, room, building 
+		WHERE
+			row.meta_default_data = 0 AND
+			row.room = room.id AND
+			room.building = building.id AND
+			row.room = ?
+		ORDER BY row.room_pos
+	!
+    );
+    $sth->execute($room);
+    return $sth->fetchall_arrayref({});
+}
+
+sub rowListInRoomBasic
+{
+    my ($self, $room) = @_;
+    $room += 0;    # force room to be numeric
+    my $sth = $self->dbh->prepare(
+        qq!
+		SELECT
+			row.id,
+			row.name
+		FROM row
+		WHERE
+			row.meta_default_data = 0 AND
+			row.room = ?
+		ORDER BY row.name
+	!
+    );
+    $sth->execute($room);
+    return $sth->fetchall_arrayref({});
+}
+
+sub rowCountInRoom
+{
+    my ($self, $room) = @_;
+    $room += 0;    # force room to be numeric
+    my $sth = $self->dbh->prepare(
+        qq!
+		SELECT
+			count(*)
+		FROM row
+		WHERE
+			row.meta_default_data = 0 AND
+			row.room = ?
+	!
+    );
+    $sth->execute($room);
+    my $countRef = $sth->fetch;
+    return $$countRef[0];
+}
+
+sub deleteRow
+{
+    my ($self, $updateTime, $updateUser, $record) = @_;
+    my $deleteId = (ref $record eq 'HASH') ? $$record{'id'} : $record;
+    croak "RM_ENGINE: Delete failed. No row id specified." unless ($deleteId);
+    croak "RM_ENGINE: This method is not yet supported.";
+    return $deleteId;
+}
+
+sub updateRow
+{
+    my ($self, $updateTime, $updateUser, $record) = @_;
+    croak "RM_ENGINE: Unable to update row. No row record specified." unless ($record);
+
+    my ($sth, $newId);
+
+    if ($$record{'id'})
+    {
+        $sth = $self->dbh->prepare(qq!UPDATE row SET name = ?, room = ?, room_pos = ?, hidden_row = ?, notes = ?, meta_update_time = ?, meta_update_user = ? WHERE id = ?!);
+        my $ret = $sth->execute($self->_validateRowUpdate($record), $updateTime, $updateUser, $$record{'id'});
+        croak "RM_ENGINE: Update failed. This row may have been removed before the update occured." if ($ret eq '0E0');
+    }
+    else
+    {
+        $sth = $self->dbh->prepare(qq!INSERT INTO row (name, room, room_pos, hidden_row, notes, meta_update_time, meta_update_user) VALUES(?, ?, ?, ?, ?, ?, ?)!);
+        $sth->execute($self->_validateRowUpdate($record), $updateTime, $updateUser);
+        $newId = $self->_lastInsertId('row');
+    }
+    return $newId || $$record{'id'};
+}
+
+sub _validateRowUpdate
+{
+    my ($self, $record) = @_;
+    croak "RM_ENGINE: Unable to validate row. No row record specified." unless ($record);
+    $self->_checkName($$record{'name'});
+    $self->_checkNotes($$record{'notes'});
+    return ($$record{'name'}, $$record{'room'}, $$record{'room_pos'}, $$record{'hidden_row'}, $$record{'notes'});
+}
+
+
 ##############################################################################
 # Service Level Methods                                                      #
 ##############################################################################
@@ -2284,188 +2483,6 @@ sub _validateServiceUpdate
       unless (length($$record{'descript'}) <= $self->getConf('maxstring'));
     croak "RM_ENGINE: Notes cannot exceed " . $self->getConf('maxnote') . " characters." unless (length($$record{'notes'}) <= $self->getConf('maxnote'));
     return ($$record{'name'}, $$record{'descript'}, $$record{'notes'});
-}
-
-##############################################################################
-# Application Methods                                                        #
-##############################################################################
-
-sub app
-{
-    my ($self, $id) = @_;
-    croak "RM_ENGINE: Unable to retrieve app. No app id specified." unless ($id);
-    my $sth = $self->dbh->prepare(
-        qq!
-		SELECT app.* 
-		FROM app 
-		WHERE id = ?
-	!
-    );
-    $sth->execute($id);
-    my $app = $sth->fetchrow_hashref('NAME_lc');
-    croak "RM_ENGINE: No such app id." unless defined($$app{'id'});
-    return $app;
-}
-
-sub appList
-{
-    my $self = shift;
-    my $orderBy = shift || '';
-    $orderBy = 'app.name' unless $orderBy =~ /^[a-z_]+\.[a-z_]+$/;
-    $orderBy = $orderBy . ', app.name' unless $orderBy eq 'app.name';    # default second ordering is name
-    my $sth = $self->dbh->prepare(
-        qq!
-		SELECT app.* 
-		FROM app
-		WHERE meta_default_data = 0
-		ORDER BY $orderBy
-	!
-    );
-    $sth->execute;
-    return $sth->fetchall_arrayref({});
-}
-
-sub appDevicesUsedList
-{
-    my ($self, $id) = @_;
-    my $sth = $self->dbh->prepare(
-        qq!
-		SELECT
-		    device_app.id               AS device_app_id,
-			device.id			        AS device_id,
-		 	device.name			        AS device_name, 
-			app.name			        AS app_name,
-			app_relation.id 	        AS app_relation_id,
-			app_relation.name 	        AS app_relation_name,
-			domain.name			        AS domain_name,
-			domain.meta_default_data	AS domain_meta_default_data
-		FROM
-			device, app_relation, device_app, app, domain 
-		WHERE
-		 	device_app.app = app.id AND 
-			device_app.device = device.id AND 
-			device_app.relation = app_relation.id AND
-			device.domain = domain.id AND 
-			app.id = ?
-	!
-    );
-    $sth->execute($id);
-    return $sth->fetchall_arrayref({});
-}
-
-sub appOnDeviceList
-{
-    my ($self, $id) = @_;
-    my $sth = $self->dbh->prepare(
-        qq!
-		SELECT
-		    device_app.id       AS device_app_id,
-		    app_relation.name   AS app_relation_name,
-			app.id				AS app_id,
-			app.name			AS app_name
-		FROM
-			device, app_relation, device_app, app 
-		WHERE
-		 	device_app.app = app.id AND 
-			device_app.device = device.id AND 
-			device_app.relation = app_relation.id AND
-			device.id = ?
-		ORDER BY
-			app.name
-	!
-    );
-    $sth->execute($id);
-    return $sth->fetchall_arrayref({});
-}
-
-sub updateApp
-{
-    my ($self, $updateTime, $updateUser, $record) = @_;
-    croak "RM_ENGINE: Unable to update app. No app record specified." unless ($record);
-
-    my ($sth, $newId);
-
-    if ($$record{'id'})
-    {
-        $sth = $self->dbh->prepare(qq!UPDATE app SET name = ?, descript = ?, notes = ?, meta_update_time = ?, meta_update_user = ? WHERE id = ?!);
-        my $ret = $sth->execute($self->_validateAppUpdate($record), $updateTime, $updateUser, $$record{'id'});
-        croak "RM_ENGINE: Update failed. This app may have been removed before the update occured." if ($ret eq '0E0');
-    }
-    else
-    {
-        $sth = $self->dbh->prepare(qq!INSERT INTO app (name, descript, notes, meta_update_time, meta_update_user) VALUES(?, ?, ?, ?, ?)!);
-        $sth->execute($self->_validateAppUpdate($record), $updateTime, $updateUser);
-        $newId = $self->_lastInsertId('app');
-    }
-    return $newId || $$record{'id'};
-}
-
-sub deleteApp
-{
-    my ($self, $updateTime, $updateUser, $record) = @_;
-    my $deleteId = (ref $record eq 'HASH') ? $$record{'id'} : $record;
-    croak "RM_ENGINE: Delete failed. No app id specified." unless ($deleteId);
-
-    # delete app with associated device relationships
-    my $sth = $self->dbh->prepare(qq!DELETE FROM device_app WHERE app = ?!);
-    my $ret = $sth->execute($deleteId);                                        # this return value isn't currently used
-    $sth = $self->dbh->prepare(qq!DELETE FROM app WHERE id = ?!);
-    $ret = $sth->execute($deleteId);
-
-    croak "RM_ENGINE: Delete failed. This app does not currently exist, it may have been removed already." if ($ret eq '0E0');
-
-    return $deleteId;
-}
-
-sub _validateAppUpdate
-{
-    my ($self, $record) = @_;
-    croak "RM_ENGINE: Unable to validate app. No app record specified." unless ($record);
-    $self->_checkName($$record{'name'});
-    $self->_checkNotes($$record{'notes'});
-    return ($$record{'name'}, $$record{'descript'}, $$record{'notes'});
-}
-
-sub updateDeviceApp
-{
-    my ($self, $updateTime, $updateUser, $record) = @_;
-    croak "RM_ENGINE: Unable to update device app relation. No record specified." unless ($record);
-
-    my ($sth, $newId);
-
-    if ($$record{'id'})
-    {
-        $sth = $self->dbh->prepare(qq!UPDATE device_app SET app = ?, device = ?, relation = ?, meta_update_time = ?, meta_update_user = ? WHERE id = ?!);
-        my $ret = $sth->execute($self->_validateDeviceAppUpdate($record), $updateTime, $updateUser, $$record{'id'});
-        croak "RM_ENGINE: Update failed. Objects may have been removed before the update occured." if ($ret eq '0E0');
-    }
-    else
-    {
-        $sth = $self->dbh->prepare(qq!INSERT INTO device_app (app, device, relation, meta_update_time, meta_update_user) VALUES(?, ?, ?, ?, ?)!);
-        $sth->execute($self->_validateDeviceAppUpdate($record), $updateTime, $updateUser);
-        $newId = $self->_lastInsertId('device_app');
-    }
-    return $newId || $$record{'id'};
-}
-
-sub deleteDeviceApp
-{
-    my ($self, $updateTime, $updateUser, $record) = @_;
-    my $deleteId = (ref $record eq 'HASH') ? $$record{'id'} : $record;
-    croak "RM_ENGINE: Delete failed. No device_app id specified." unless ($deleteId);
-    my $sth = $self->dbh->prepare(qq!DELETE FROM device_app WHERE id = ?!);
-    my $ret = $sth->execute($deleteId);
-    croak "RM_ENGINE: Delete failed. This device_app does not currently exist, it may have been removed already." if ($ret eq '0E0');
-    return $deleteId;
-}
-
-sub _validateDeviceAppUpdate
-{
-    my ($self, $record) = @_;
-    croak "RM_ENGINE: Unable to validate device app relation. No record specified." unless ($record);
-
-    # protected by fk, so no validation required
-    return ($$record{'app_id'}, $$record{'device_id'}, $$record{'relation_id'});
 }
 
 1;
