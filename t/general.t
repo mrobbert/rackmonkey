@@ -11,7 +11,6 @@ use warnings;
 
 use 5.006_001;
 
-use Data::Dumper;
 use Time::Local;
 use Test::Simple tests => 1;
 
