@@ -142,7 +142,7 @@ sub dbh
 sub simpleItem
 {
     my ($self, $id, $table) = @_;
-    croak 'RM_ENGINE: Not a valid table.' unless $table =~ /^[a-z_]+$/;
+    croak 'RM_ENGINE: Not a valid table.' unless $self->_checkTableName($table);
     my $sth = $self->dbh->prepare(
         qq!
 		SELECT id, name 
@@ -160,7 +160,7 @@ sub simpleList
 {
     my ($self, $table, $all) = @_;
     $all ||= 0;
-    croak "RM_ENGINE: Not a valid table." unless $table =~ /^[a-z_]+$/;
+    croak "RM_ENGINE: Not a valid table." unless $self->_checkTableName($table);
     my $sth;
 
     unless ($all)
@@ -202,7 +202,7 @@ sub simpleList
 sub itemCount
 {
     my ($self, $table) = @_;
-    croak "RM_ENGINE: Not a valid table" unless $table =~ /^[a-z_]+$/;
+    croak "RM_ENGINE: Not a valid table" unless $self->_checkTableName($table);
     my $sth = $self->dbh->prepare(
         qq!
 		SELECT count(*) 
@@ -289,6 +289,12 @@ sub _checkDate
     croak "RM_ENGINE: $year-$month-$day is not a valid date of the form YYYY-MM-DD. Check that the date exists. NB. Date validation currently only accepts years 1970 - 2038. This limitation will be lifted in a later release.\n$@"
       if ($@);
     return sprintf("%04d-%02d-%02d", $year, $month, $day);
+}
+
+sub _checkTableName
+{
+    my ($self, $table) = @_;
+    return ($table =~ /^[a-z_]+$/) ? 1: 0;
 }
 
 sub _httpFixer
