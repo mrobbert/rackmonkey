@@ -297,6 +297,12 @@ sub _checkTableName
     return ($table =~ /^[a-z_]+$/) ? 1: 0;
 }
 
+sub _checkOrderBy
+{
+    my ($self, $orderBy) = @_;
+    return ($orderBy =~ /^[a-z_]+\.[a-z_]+$/) ? 1: 0;
+}
+
 sub _httpFixer
 {
     my ($self, $url) = @_;
@@ -335,7 +341,7 @@ sub appList
 {
     my $self = shift;
     my $orderBy = shift || '';
-    $orderBy = 'app.name' unless $orderBy =~ /^[a-z_]+\.[a-z_]+$/;
+    $orderBy = 'app.name' unless $self->_checkOrderBy($orderBy);
     $orderBy = $orderBy . ', app.name' unless $orderBy eq 'app.name';    # default second ordering is name
     my $sth = $self->dbh->prepare(
         qq!
@@ -476,7 +482,7 @@ sub buildingList
 {
     my $self = shift;
     my $orderBy = shift || '';
-    $orderBy = 'building.name' unless $orderBy =~ /^[a-z_]+\.[a-z_]+$/;
+    $orderBy = 'building.name' unless $self->_checkOrderBy($orderBy);
     $orderBy = $orderBy . ', building.name' unless $orderBy eq 'building.name';    # default second ordering is name
     my $sth = $self->dbh->prepare(
         qq!
@@ -617,7 +623,7 @@ sub deviceList
 
     $deviceSearch = "AND ( lower(device.name) LIKE '%$deviceSearch%' OR lower(device.serial_no) LIKE '%$deviceSearch%' OR lower(device.asset_no) LIKE '%$deviceSearch%' )"
       if ($deviceSearch);
-    $orderBy = 'device.name' unless $orderBy =~ /^[a-z_]+\.[a-z_]+$/;
+    $orderBy = 'device.name' unless $self->_checkOrderBy($orderBy);
 
     # ensure meta_default entries appear last - need a better way to do this
     $orderBy = 'room.meta_default_data, ' . $orderBy                                 if ($orderBy =~ /^room.name/);
@@ -732,7 +738,7 @@ sub deviceListUnracked    # consider merging this with existing device method (t
         $filterBy .= " AND $f=" . $$filters{"$f"};
     }
 
-    $orderBy = 'device.name' unless $orderBy =~ /^[a-z_]+\.[a-z_]+$/;
+    $orderBy = 'device.name' unless $self->_checkOrderBy($orderBy);
 
     # ensure meta_default entries appear last - need a better way to do this
     $orderBy = 'rack.meta_default_data, ' . $orderBy . ', device.rack_pos'           if ($orderBy =~ /^rack.name/);
@@ -1091,7 +1097,7 @@ sub domainList
 {
     my $self = shift;
     my $orderBy = shift || '';
-    $orderBy = 'domain.name' unless $orderBy =~ /^[a-z_]+\.[a-z_]+$/;
+    $orderBy = 'domain.name' unless $self->_checkOrderBy($orderBy);
 
     my $sth = $self->dbh->prepare(
         qq!
@@ -1185,7 +1191,7 @@ sub hardwareList
     my $sth;
     unless ($manufacturer)
     {
-        $orderBy = 'org.name, hardware.name' unless $orderBy =~ /^[a-z_]+\.[a-z_]+$/;
+        $orderBy = 'org.name, hardware.name' unless $self->_checkOrderBy($orderBy);
         $orderBy = 'org.meta_default_data, ' . $orderBy if ($orderBy =~ /^org.name/);
 
         $sth = $self->dbh->prepare(
@@ -1203,7 +1209,7 @@ sub hardwareList
     }
     else
     {
-        $orderBy = 'hardware.name' unless $orderBy =~ /^[a-z_]+\.[a-z_]+$/;
+        $orderBy = 'hardware.name' unless $self->_checkOrderBy($orderBy);
         $orderBy = 'hardware.meta_default_data DESC, ' . $orderBy;
         $sth     = $self->dbh->prepare(
             qq!
@@ -1390,7 +1396,7 @@ sub orgList
 {
     my $self = shift;
     my $orderBy = shift || '';
-    $orderBy = 'org.name' unless $orderBy =~ /^[a-z_]+\.[a-z_]+$/;
+    $orderBy = 'org.name' unless $self->_checkOrderBy($orderBy);
     $orderBy .= ' DESC' if ($orderBy eq 'org.customer' or $orderBy eq 'org.hardware' or $orderBy eq 'org.software');    # yeses appear first
     my $sth = $self->dbh->prepare(
         qq!
@@ -1556,7 +1562,7 @@ sub osList
 {
     my $self = shift;
     my $orderBy = shift || '';
-    $orderBy = 'os.name' unless $orderBy =~ /^[a-z_]+\.[a-z_]+$/;
+    $orderBy = 'os.name' unless $self->_checkOrderBy($orderBy);
     $orderBy = 'org.meta_default_data, ' . $orderBy if ($orderBy =~ /^org.name/);
 
     my $sth = $self->dbh->prepare(
@@ -2006,7 +2012,7 @@ sub roleList
 {
     my $self = shift;
     my $orderBy = shift || '';
-    $orderBy = 'role.name' unless $orderBy =~ /^[a-z_]+\.[a-z_]+$/;
+    $orderBy = 'role.name' unless $self->_checkOrderBy($orderBy);
     my $sth = $self->dbh->prepare(
         qq!
 		SELECT role.* 
@@ -2137,7 +2143,7 @@ sub roomList
 {
     my $self = shift;
     my $orderBy = shift || '';
-    $orderBy = 'building.name' unless $orderBy =~ /^[a-z_]+\.[a-z_]+$/;    # by default, order by building name first
+    $orderBy = 'building.name' unless $self->_checkOrderBy($orderBy);    # by default, order by building name first
     $orderBy = $orderBy . ', room.name' unless $orderBy eq 'room.name';    # default second ordering is room name
     my $sth = $self->dbh->prepare(
         qq!
@@ -2162,7 +2168,7 @@ sub roomListInBuilding
     my $building = shift;
     $building += 0;    # force building to be numeric
     my $orderBy = shift || '';
-    $orderBy = 'building.name' unless $orderBy =~ /^[a-z_]+\.[a-z_]+$/;
+    $orderBy = 'building.name' unless $self->_checkOrderBy($orderBy);
     my $sth = $self->dbh->prepare(
         qq!
 		SELECT
@@ -2285,7 +2291,7 @@ sub rowList
 {
     my $self = shift;
     my $orderBy = shift || '';
-    $orderBy = 'building.name, room.name' unless $orderBy =~ /^[a-z_]+\.[a-z_]+$/;    # by default, order by building name and room name first
+    $orderBy = 'building.name, room.name' unless $self->_checkOrderBy($orderBy);    # by default, order by building name and room name first
     $orderBy = $orderBy . ', row.name' unless $orderBy eq 'row.name';                 # default third ordering is row name
     my $sth = $self->dbh->prepare(
         qq!
@@ -2434,7 +2440,7 @@ sub serviceList
 {
     my $self = shift;
     my $orderBy = shift || '';
-    $orderBy = 'service.name' unless $orderBy =~ /^[a-z_]+\.[a-z_]+$/;
+    $orderBy = 'service.name' unless $self->_checkOrderBy($orderBy);
     my $sth = $self->dbh->prepare(
         qq!
 		SELECT service.* 
