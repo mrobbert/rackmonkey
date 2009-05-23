@@ -234,9 +234,7 @@ sub performAct
 
     # calculate update time (always GMT)
     my ($sec, $min, $hour, $day, $month, $year) = (gmtime)[0, 1, 2, 3, 4, 5];
-    $year += 1900;
-    $month++;
-    my $updateTime = sprintf('%04d-%02d-%02d %02d:%02d:%02d', $year, $month, $day, $hour, $min, $sec);
+    my $updateTime = sprintf('%04d-%02d-%02d %02d:%02d:%02d', $year+1900, $month+1, $day, $hour, $min, $sec); # perl months begin at 0 and perl years at 1900
 
     $type = $act . ucfirst($type);
     my $lastId = $self->$type($updateTime, $updateUser, $record);
@@ -286,7 +284,7 @@ sub _checkDate
     croak "RM_ENGINE: Date not in valid format (YYYY-MM-DD)." unless $date =~ /^\d{4}-\d\d?-\d\d?$/;
     my ($year, $month, $day) = split '-', $date;
     eval { timelocal(0, 0, 12, $day, $month - 1, $year - 1900); };    # perl months begin at 0 and perl years at 1900
-    croak "RM_ENGINE: $year-$month-$day is not a valid date of the form YYYY-MM-DD. Check that the date exists. NB. Date validation currently only accepts years 1970 - 2038. This limitation will be lifted in a later release.\n$@"
+    croak "RM_ENGINE: $year-$month-$day is not a valid date of the form YYYY-MM-DD. Check that the date exists. NB. Date validation currently only accepts years 1970 - 2038.\n$@"
       if ($@);
     return sprintf("%04d-%02d-%02d", $year, $month, $day);
 }
@@ -1864,10 +1862,12 @@ sub rackPhysical
             if (ref $rackLayout[$position] eq 'HASH')
             {
                 my $dev = $rackLayout[$position];
-                if (defined($seenIds{$$dev{'id'}})
-                    and $seenIds{$$dev{'id'}} == 1)    # if we've seen this device before put in a placeholder entry for this position
+                
+                # if we've seen this device before put in a placeholder entry for this position
+                if (defined($seenIds{$$dev{'id'}}) and $seenIds{$$dev{'id'}} == 1)  
                 {
-                    $rackLayout[$position] = {
+                    $rackLayout[$position] = 
+                    {
                         'rack_pos'      => $position,
                         'rack_location' => $$dev{'rack_location'},
                         'id'            => $$dev{'id'},
@@ -1877,9 +1877,16 @@ sub rackPhysical
                 }
                 $seenIds{$$dev{'id'}} = 1;
             }
-            else                                       # an empty position
+            else # an empty position
             {
-                $rackLayout[$position] = {'rack_id' => $$rack{'id'}, 'rack_location' => $rackLayout[$position], 'id' => 0, 'name' => '', 'hardware_size' => '1',};
+                $rackLayout[$position] = 
+                {
+                    'rack_id' => $$rack{'id'}, 
+                    'rack_location' => $rackLayout[$position], 
+                    'id' => 0, 
+                    'name' => '', 
+                    'hardware_size' => '1'
+                };
             }
             $position++;
         }
