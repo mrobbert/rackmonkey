@@ -8,16 +8,19 @@
 You can read the latest version of this document in HTML format at:
 http://www.rackmonkey.org/doc
 
-v1.2.5 Preview 3 - Released 2009-xx-xx
+v1.2.5 Preview 3 - Released 2009-05-23
 --------------------------------------
 * Full support for associating apps with devices
-* Additional columns in the device table to aid with installs and
-  identification by MAC (e.g. for PXE+Kickstart)
 * New report showing duplicate OS licence keys, serial and asset numbers
 * Changed notes fields in MySQL schema to be of type TEXT (allows more than
   255 characters)
 * All updates now completed as one transaction for improved data integrity
   For example, an update will only occur if the log table is updated correctly
+* Added MAC address and install build columns to device table to aid with
+  device identification and automated building e.g. Kickstart or Jumpstart.
+  These fields aren't yet accessible through the GUI, but will be in v1.3.  
+* Added custom_info column to device table to allow the storage of free form
+  text data. Not exposed in GUI.
 * The default rack numbering direction is now configurable
 * All delete requests now have a confirmation pop-up
 * Requires DBI v1.45 or higher for all database engines
@@ -26,6 +29,9 @@ v1.2.5 Preview 3 - Released 2009-xx-xx
 * IE 8 now supported
 * Improved validation of submitted device information
 * Renamed methods entryBasic and listBasic to simpleItem and simpleList
+* SQL schemata migrations now work in Postgres 7.4
+* Size of 1U in rack diagrams can now be adjusted in rackmonkey.conf
+* Fixed a bug which prevented plugin URLs in some circumstances
 
 v1.2.5 Preview 2 - Released 2009-04-05
 --------------------------------------
