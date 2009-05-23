@@ -59,7 +59,7 @@ eval {
 
     my $loggedInUser = $ENV{'REMOTE_USER'} || $ENV{'REMOTE_ADDR'};
 
-    if ($act)    # perform act, and return status: 303 (See Other) to redirect to a view
+    if ($act) # perform act, and return status: 303 (See Other) to redirect to a view
     {
         die "RMERR: You are logged in as 'guest'. Guest users can't update RackMonkey." if (lc($loggedInUser) eq 'guest');
 
@@ -91,15 +91,14 @@ eval {
 
         $cgi->redirect303($redirectUrl);
     }
-    else                                   # display a view
+    else # display a view
     {
-        # check the view is valid
         unless ($view =~ /^(?:config|help|app|building|device|deviceApp|domain|hardware|network|power|org|os|rack|report|role|room|row|service|system)$/)
         {
             die "RMERR: '$view' is not a valid view. Did you type the URL manually? Note that view names are singular, for example device NOT devices.";
         }
 
-        if ($view eq 'system')             # check for this view first: it doesn't use templates
+        if ($view eq 'system') # check for this view first: it doesn't use templates
         {
             print $cgi->header('text/plain');
             my %sys = %{$backend->{'sys'}};
@@ -172,26 +171,6 @@ eval {
                     $$building{'notes'} = formatNotes($$building{'notes'});
                 }
                 $template->param($building);
-            }
-        }
-        elsif ($view eq 'deviceApp')
-        {
-            if ($viewType =~ /^create/)
-            {
-                my $app = $backend->app($id);
-                $template->param($app);
-
-                my $devices = $backend->simpleList('device');
-                unshift @$devices, {'id' => '', 'name' => '-'};
-                $template->param('devices' => $devices);
-
-                my $relations = $backend->simpleList('app_relation', 1);
-                unshift @$relations, {'id' => '', 'name' => '-'};
-                $template->param('relations' => $relations);
-            }
-            else
-            {
-                die "View 'deviceApp' only supports creation. Use 'app' view for other functions.";
             }
         }
         elsif ($view eq 'device')
@@ -310,10 +289,26 @@ eval {
                     $template->param('rolelist'                => $cgi->selectItem($backend->simpleList('role', 1), $selectedRole));
                     $template->param('customerlist'            => $cgi->selectItem($backend->simpleList('customer', 1), $selectedCustomer));
                     $template->param('servicelist'             => $cgi->selectItem($backend->simpleList('service', 1), $selectedService));
-                    $template->param('racklist' => $cgi->selectRack($backend->rackListBasic, $selectedRack));
-                    $template->param('domainlist' => $cgi->selectItem($backend->simpleList('domain', 1), $selectedDomain));
-                    $template->param('rack_pos' => $cgi->selectProperty('position'));
+                    $template->param('racklist'                => $cgi->selectRack($backend->rackListBasic, $selectedRack));
+                    $template->param('domainlist'              => $cgi->selectItem($backend->simpleList('domain', 1), $selectedDomain));
+                    $template->param('rack_pos'                => $cgi->selectProperty('position'));
                 }
+            }
+        }
+        elsif ($view eq 'deviceApp')
+        {
+            if ($viewType =~ /^create/)
+            {
+                my $app = $backend->app($id);
+                $template->param($app);
+
+                my $devices = $backend->simpleList('device');
+                unshift @$devices, {'id' => '', 'name' => '-'};
+                $template->param('devices' => $devices);
+
+                my $relations = $backend->simpleList('app_relation', 1);
+                unshift @$relations, {'id' => '', 'name' => '-'};
+                $template->param('relations' => $relations);
             }
         }
         elsif ($view eq 'domain')
