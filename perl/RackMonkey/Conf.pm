@@ -35,6 +35,7 @@ sub new
         'maxracksize'               => 255,
         'dellquery'                 => '',
         'number_from_top'           => 0,
+        'size_of_u'                 => 14,
         'bypass_db_driver_checks'   => 0
     };
     unless (open(CONFIG, "<$$self{'configpath'}"))

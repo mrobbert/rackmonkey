@@ -729,6 +729,8 @@ eval {
 
     $template->param('base_url' => $baseURL);
     $template->param('web_root' => $$conf{'wwwpath'});
+    $template->param('size_of_u' => $$conf{'size_of_u'});
+    
     $template->param('order_by' => $orderBy);
 
     print $cgi->header;
