@@ -16,7 +16,7 @@
 	border-color: black;
 	background-color: #444;
 	padding: 1px 2px;
-	height: 14px;	
+	height: 14px;	/* Overriden by size_of_u in the rackmonkey.conf file */
 }
 
 .rack_physical_dev
