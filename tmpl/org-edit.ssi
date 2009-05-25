@@ -1,4 +1,4 @@
-<!-- org edit include: Version 1.2.%BUILD% -->
+<!-- org edit include: Version 1.3.%BUILD% -->
 						<div>
 							<label for="name">Name</label><br />
 							<input id="name" name="name" type="text" size="60" value="<TMPL_VAR ESCAPE=HTML NAME=name>" />

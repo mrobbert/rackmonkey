@@ -1,8 +1,8 @@
 -- ---------------------------------------------------------------------------
 -- RackMonkey - Know Your Racks - http://www.rackmonkey.org                 --
--- Version 1.2.%BUILD%                                                      --
+-- Version 1.3.%BUILD%                                                      --
 -- (C)2004-2009 Will Green (wgreen at users.sourceforge.net)                --
--- Database schema v4 for Postgres                                          --
+-- Database schema v5 for Postgres                                          --
 -- ---------------------------------------------------------------------------
 
 BEGIN;
@@ -219,6 +219,22 @@ CREATE TABLE device_app
 	app INTEGER NOT NULL REFERENCES app,
 	device INTEGER NOT NULL REFERENCES device,
 	relation INTEGER NOT NULL REFERENCES app_relation,
+	meta_default_data INTEGER NOT NULL DEFAULT 0,
+	meta_update_time VARCHAR,
+	meta_update_user VARCHAR
+);
+
+
+-- For recording device power. All values are milli, e.g. millivolts, milliamps etc.
+-- Later schema revision will record details about power sources and phases
+CREATE TABLE device_power
+(
+    id SERIAL PRIMARY KEY,
+    device INTEGER NOT NULL REFERENCES device,
+	voltage INTEGER NOT NULL,
+	current INTEGER NOT NULL,
+	power INTEGER NOT NULL,
+	date_of_measurement VARCHAR,
 	meta_default_data INTEGER NOT NULL DEFAULT 0,
 	meta_update_time VARCHAR,
 	meta_update_user VARCHAR

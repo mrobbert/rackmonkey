@@ -1,4 +1,4 @@
-<!-- help nav bar include: Version 1.2.%BUILD% -->
+<!-- help nav bar include: Version 1.3.%BUILD% -->
 	<div id="navbar">
 		<div>
 			<a href="<TMPL_VAR NAME=base_url>"><img id="navlogo" width="33" height="23" src="<TMPL_VAR NAME=web_root>/graphics/logo.png" alt="Home"/></a>

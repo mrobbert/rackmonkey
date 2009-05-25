@@ -1,7 +1,7 @@
 package RackMonkey::CGI;
 ##############################################################################
 # RackMonkey - Know Your Racks - http://www.rackmonkey.org                   #
-# Version 1.2.%BUILD%                                                        #
+# Version 1.3.%BUILD%                                                        #
 # (C)2004-2009 Will Green (wgreen at users.sourceforge.net)                  #
 # CGI Support for Rackmonkey                                                 #
 ##############################################################################
@@ -15,7 +15,7 @@ use 5.006_001;
 
 use CGI;
 
-our $VERSION = '1.2.%BUILD%';
+our $VERSION = '1.3.%BUILD%';
 our $AUTHOR  = 'Will Green (wgreen at users.sourceforge.net)';
 
 ##############################################################################

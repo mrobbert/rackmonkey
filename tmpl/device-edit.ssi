@@ -1,4 +1,4 @@
-<!-- device edit include: Version 1.2.%BUILD% -->
+<!-- device edit include: Version 1.3.%BUILD% -->
             <script type="text/javascript">
               // create an array of hardware model IDs and names for each manufacturer: this will likely use ajax in a later release
               var hardwareModelIDs = new Array;

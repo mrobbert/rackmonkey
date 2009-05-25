@@ -1,7 +1,7 @@
 ﻿package RackMonkey::Engine;
 ##############################################################################
 # RackMonkey - Know Your Racks - http://www.rackmonkey.org                   #
-# Version 1.2.%BUILD%                                                        #
+# Version 1.3.%BUILD%                                                        #
 # (C)2004-2009 Will Green (wgreen at users.sourceforge.net)                  #
 # DBI Engine for Rackmonkey                                                  #
 ##############################################################################
@@ -17,7 +17,7 @@ use Time::Local;
 
 use RackMonkey::Conf;
 
-our $VERSION = '1.2.%BUILD%';
+our $VERSION = '1.3.%BUILD%';
 our $AUTHOR  = 'Will Green (wgreen at users.sourceforge.net)';
 
 ##############################################################################

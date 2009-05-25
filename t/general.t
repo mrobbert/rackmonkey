@@ -1,7 +1,7 @@
 #!/usr/bin/env perl
 ##############################################################################
 # RackMonkey - Know Your Racks - http://www.rackmonkey.org                   #
-# Version 1.2.%BUILD%                                                        #
+# Version 1.3.%BUILD%                                                        #
 # (C)2004-2009 Will Green (wgreen at users.sourceforge.net)                  #
 # RackMonkey Engine general methods test script                              #
 ##############################################################################
@@ -17,7 +17,7 @@ use Test::Simple tests => 1;
 use RackMonkey::Engine;
 use RackMonkey::Error;
 
-our $VERSION = '1.2.%BUILD%';
+our $VERSION = '1.3.%BUILD%';
 our $AUTHOR = 'Will Green (wgreen at users.sourceforge.net)';
 
 $ENV{'RACKMONKEY_CONF'} = 't/_rackmonkey-test.conf';
