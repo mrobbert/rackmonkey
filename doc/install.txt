@@ -45,6 +45,8 @@ shell prompt, you should not type them.
 ================
 You need the following in order to install and use RackMonkey.
 
+NB. RackMonkey v1.3 no longer supports Postgres 7.4. Please upgrade to v8.
+
 * Modern web browser
 For Windows/Unix users Firefox 3 currently provides the best results, for Mac 
 users we recommend Safari 3. For details see: http://www.rackmonkey.org/faq
