@@ -273,7 +273,7 @@ CREATE TABLE device_power
     id SERIAL PRIMARY KEY,
     device INTEGER NOT NULL REFERENCES device,
 	voltage INTEGER NOT NULL,
-	current INTEGER NOT NULL,
+	ampage INTEGER NOT NULL,
 	power INTEGER NOT NULL,
 	date_of_measurement VARCHAR,
 	meta_default_data INTEGER NOT NULL DEFAULT 0,
