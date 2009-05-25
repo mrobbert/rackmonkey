@@ -20,6 +20,9 @@ wwwpath =
 #plugin_xls = rack2xls.pl
 #plugin_dns = rackdns.pl
 
+# URL to query Dell warranty and spec information
+dellquery = http://support.euro.dell.com/support/topics/topic.aspx/emea/shared/support/my_systems_info/en/details?c=uk&cs=ukbsdt1&l=en&s=bsd&~ck=ln&lnki=2&ServiceTag=
+
 # Preference Constants
 defaultview = rack      # Default view loaded when none is specified
 dateformat = %Y-%m-%d   # Format used to display dates (not currently used)
