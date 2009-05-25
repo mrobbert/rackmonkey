@@ -67,6 +67,14 @@ INSERT INTO hardware (name, manufacturer, size, image, support_url, spec_url, no
 INSERT INTO hardware (name, manufacturer, size, image, support_url, spec_url, notes, meta_update_time, meta_update_user) VALUES('Fire T2000', 			24, 2, NULL, 'http://sunsolve.sun.com/handbook_pub/Systems/SunFireT2000_R/SunFireT2000_R.html', 'http://sunsolve.sun.com/handbook_pub/Systems/SunFireT2000_R/spec.html', '', '1985-07-24 00:00:00', 'install');
 INSERT INTO hardware (name, manufacturer, size, image, support_url, spec_url, notes, meta_update_time, meta_update_user) VALUES('Fire x4600',           24, 4, NULL, 'http://sunsolve.sun.com/handbook_pub/Systems/SunFireX4600_M2/SunFireX4600_M2.html', 'http://sunsolve.sun.com/handbook_pub/Systems/SunFireX4600_M2/spec.html', '', '1988-02-15 00:00:00', 'rackmonkey');
 
+-- sample hardware containers
+INSERT INTO container_hardware (name, manufacturer, size, device_rows, device_columns, devices_begin_at, devices_end_at, numbering_direction, image, support_url, spec_url, notes, meta_update_time, meta_update_user) VALUES('C7000', 12, 10, 2, 8, 0, 9, 0, '', '', '', '', '1988-02-15 00:00:00', 'rackmonkey');
+INSERT INTO container_hardware (name, manufacturer, size, device_rows, device_columns, devices_begin_at, devices_end_at, numbering_direction, image, support_url, spec_url, notes, meta_update_time, meta_update_user) VALUES('C3000', 12, 6, 4, 2, 0, 5, 1, '', '', '', '', '1988-02-15 00:00:00', 'rackmonkey');
+-- IBM BladeCenter E 
+-- IBM BladeCenter H
+-- Sun 6048
+-- Dell PowerEdge M1000e
+
 -- sample roles
 INSERT INTO role (name, descript, notes, meta_update_time, meta_update_user) VALUES('App Server', 			'Application Server', '', '1985-07-24 00:00:00', 'install');
 INSERT INTO role (name, descript, notes, meta_update_time, meta_update_user) VALUES('AV Encoder', 			'Audio/Video Encoder', '', '1985-07-24 00:00:00', 'install');
