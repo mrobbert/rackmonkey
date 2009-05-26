@@ -33,55 +33,7 @@
 			<a href="<TMPL_VAR NAME=base_url>?view=help&amp;view_type=legal">Legal</a>
 		</p>
 		<h2>RackMonkey Admin Guide</h2>
-		<p><strong>NB. This guide hasn't been updated for release v1.2.5.</strong></p>
-		<p>
-			For basic installation and configuration information see the install guide included with the RackMonkey download or
-			view the <a href="http://www.rackmonkey.org/doc/1.2.5">online docs</a>. This document will be expanded in future
-			releases.
-		</p>
-		<h3>Restricting Access and Recording Who Made Changes</h3>
-		<h4>Password Protecting RackMonkey</h4>
-		<p>
-			You can control access to RackMonkey using standard Apache auth (often configured in an .htaccess file).
-			If you set up accounts this way RackMonkey will use the username in the change log so you can see who
-			changed what and when (if you don't use accounts the IP is recorded instead).
-			I recommend you create a separate account for each RackMonkey user, that way you'll know
-			who updated what and when. For information on setting up authentication using Apache see:
-			<a href="http://httpd.apache.org/docs/2.2/howto/auth.html">Apache Docs</a> (online).
-		</p>
-		<h4>Read Only Access</h4>
-		<p>
-			To allow a user read only access to RackMonkey create an account called 'guest' (with any password you choose).
-			A guest account has full read access but cannot edit anything.
-		</p>
-		<h4>Change Log</h4>
-		<p>
-			Every time a record is edited in RackMonkey the details of the change are recorded. 
-			The time and user of the last change is visible at the bottom
-			of an entry, something like 'Entry last updated by bob at 2007-02-15 13:22:56 GMT'.
-			If you haven't set up accounts (see above), then the IP address of the user is shown instead.
-		</p>
-		<p>
-			To see the full change log for RackMonkey you need to use the <em>logdump</em> command line tool. 
-			Locate the perl directory from your RackMonkey install (contains the rackmonkey.pl script)
-			and cd into it (the logdump script needs to be run from the perl directory), you can then
-			run the logdump command to see all the changes. For example:
-		</p>
-<pre>$ cd /home/rackmonkey/perl
-$ bin/logdump
-       Table Action                Name     ID    Changed (GMT)     Changed By
-===============================================================================
-         app insert                 Foo      1 2008-07-02 20:07             ::1
-      device update                 mon      5 2008-07-07 11:10             ::1
-      device update                 db2      4 2008-07-07 11:10             ::1
-      device insert                 foo     10 2008-07-07 11:11             ::1
-      device delete                   -     10 2008-07-07 11:11             ::1
-===============================================================================
-</pre>
-		<p>
-			You can see more options by running <em>logdump -h</em>. 
-			In a later release this information will be available via the web interface.
-		</p>
+		<p><strong>This guide has yet to been written for release v1.3.</strong></p>
 	</div>
 	<TMPL_INCLUDE NAME="footer.ssi">
 </body>
