@@ -2,7 +2,7 @@
 -- RackMonkey - Know Your Racks - http://www.rackmonkey.org                 --
 -- Version 1.3.%BUILD%                                                      --
 -- (C)2004-2009 Will Green (wgreen at users.sourceforge.net)                --
--- Database schema v5 for Postgres                                          --
+-- Database schema version 5 for Postgres                                   --
 -- ---------------------------------------------------------------------------
 
 BEGIN;
@@ -147,28 +147,6 @@ CREATE TABLE hardware
 );
 
 
--- A specifc model of container hardware, e.g. HP C7000 blade chassis
-CREATE TABLE container_hardware
-(
-	id SERIAL PRIMARY KEY,
-	name VARCHAR UNIQUE NOT NULL,
-	manufacturer INTEGER NOT NULL REFERENCES org,
-	size INTEGER NOT NULL,
-	device_rows INTEGER NOT NULL,
-	device_columns INTEGER NOT NULL,
-	devices_begin_at INTEGER NOT NULL,
-	devices_end_at INTEGER NOT NULL,
-	numbering_direction INTEGER NOT NULL DEFAULT 0,
-	image VARCHAR,
-	support_url VARCHAR,
-	spec_url VARCHAR,
-	notes VARCHAR,
-	meta_default_data INTEGER NOT NULL DEFAULT 0,
-	meta_update_time VARCHAR,
-	meta_update_user VARCHAR	
-);
-
-
 -- Role played by the device, e.g. web server, Oracle server, router
 CREATE TABLE role
 (
@@ -182,21 +160,6 @@ CREATE TABLE role
 );
 
 
--- An instance of a blade chassis or similar, contains multiple devices
-CREATE TABLE container_instance
-(
-	id SERIAL PRIMARY KEY,
-	name VARCHAR NOT NULL,
-	rack INTEGER NOT NULL REFERENCES rack,
-	rack_pos INTEGER,    
-	container_hardware INTEGER NOT NULL REFERENCES container_hardware,
-	notes VARCHAR,
-	meta_default_data INTEGER NOT NULL DEFAULT 0,
-	meta_update_time VARCHAR,
-	meta_update_user VARCHAR
-);
-
-
 -- An individual piece of hardware
 CREATE TABLE device
 (
@@ -205,8 +168,6 @@ CREATE TABLE device
 	domain INTEGER NOT NULL REFERENCES domain,
 	rack INTEGER REFERENCES rack,
 	rack_pos INTEGER,
-	container INTEGER REFERENCES container_instance,
-	container_pos INTEGER,
 	hardware INTEGER NOT NULL REFERENCES hardware,
 	serial_no VARCHAR,
 	asset_no VARCHAR,
@@ -271,6 +232,7 @@ CREATE TABLE device_app
 CREATE TABLE device_power
 (
     id SERIAL PRIMARY KEY,
+    name VARCHAR,
     device INTEGER NOT NULL REFERENCES device,
 	voltage INTEGER NOT NULL,
 	ampage INTEGER NOT NULL,
