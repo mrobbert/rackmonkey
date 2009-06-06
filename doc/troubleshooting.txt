@@ -2,7 +2,7 @@
 # RackMonkey - Know Your Racks - http://www.rackmonkey.org                   #
 # Version 1.3.%BUILD%                                                        #
 # (C)2004-2009 Will Green (wgreen at users.sourceforge.net)                  #
-# RackMonkey v1.2.5 Troubleshooting Guide                                    #
+# RackMonkey 1.2.5 Troubleshooting Guide                                    #
 ##############################################################################
 
 You can read the latest version of this document in HTML format at:

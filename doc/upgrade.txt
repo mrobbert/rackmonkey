@@ -2,7 +2,7 @@
 # RackMonkey - Know Your Racks - http://www.rackmonkey.org                   #
 # Version 1.3.%BUILD%                                                        #
 # (C)2004-2009 Will Green (wgreen at users.sourceforge.net)                  #
-# RackMonkey v1.3.0 alpha 1 Upgrade Guide                                    #
+# RackMonkey 1.3.0 alpha 1 Upgrade Guide                                    #
 ##############################################################################
 
 You can read the latest version of this document in HTML format at:
@@ -13,5 +13,5 @@ author does not recommend using this release for production usage.
 The RackMonkey documentation is still being updated and you should expect to
 find omissions and inaccuracies in it.
 
-This document will be added later in the development process. Upgrades to v1.3
+This document will be added later in the development process. Upgrades to 1.3
 will be supported for beta releases.
