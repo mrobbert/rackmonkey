@@ -27,6 +27,7 @@ use 5.006_001;
 
 use Net::DNS;
 
+use lib '../';
 use RackMonkey::CGI;
 
 our $VERSION = '1.3.%BUILD%';

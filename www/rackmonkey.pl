@@ -700,11 +700,11 @@ eval {
         
         if ($rack2XLSURL =~ /rackmonkey\.pl/)
         {
-            $rack2XLSURL =~ s/\/(.*?)\.pl/$rackXLSName/;
+            $rack2XLSURL =~ s/\/(.*?)\.pl/plugins\/$rackXLSName/;
         }
         else
         {
-            $rack2XLSURL .= $rackXLSName;
+            $rack2XLSURL .= "plugins/$rackXLSName";
         }
         $template->param('rack2xls_url' => $rack2XLSURL);
     }
@@ -717,11 +717,11 @@ eval {
         
         if ($rackDNSURL =~ /rackmonkey\.pl/)
         {
-            $rackDNSURL =~ s/\/(.*?)\.pl/$rackDNSName/;
+            $rackDNSURL =~ s/\/(.*?)\.pl/plugins\/$rackDNSName/;
         }
         else
         {
-            $rackDNSURL .= $rackDNSName;
+            $rackDNSURL .= "plugins/$rackDNSName";
         }
         $template->param('rackdns_url' => $rackDNSURL);
     }

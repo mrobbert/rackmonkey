@@ -32,6 +32,7 @@ use DBI;
 use Time::Local;
 use Spreadsheet::WriteExcel;
 
+use lib '../';
 use RackMonkey::CGI;
 use RackMonkey::Engine;
 use RackMonkey::Error;
