@@ -7,8 +7,8 @@
 
 BEGIN;
 
--- Set NOT NULL for all foreign key constraints, this was missed in the RackMonkey v1.2.3 schema
--- Because there wasn't an automated migration from RackMonkey v1.2.3 to v1.2.4 this may also be needed for v1.2.4 users
+-- Set NOT NULL for all foreign key constraints, this was missed in the RackMonkey 1.2.3 schema
+-- Because there wasn't an automated migration from RackMonkey 1.2.3 to 1.2.4 this may also be needed for 1.2.4 users
 ALTER TABLE room ALTER COLUMN building SET NOT NULL;
 ALTER TABLE row ALTER COLUMN room SET NOT NULL;
 ALTER TABLE rack ALTER COLUMN row SET NOT NULL;
