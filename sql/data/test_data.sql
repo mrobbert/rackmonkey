@@ -20,7 +20,7 @@ INSERT INTO building (name, name_short, notes, meta_update_time, meta_update_use
 INSERT INTO room (name, building, has_rows, notes, meta_update_time, meta_update_user) VALUES('TFM4', 7, 0, 'Test data', '1988-02-15 00:00:00', 'rackmonkey');
 INSERT INTO room (name, building, has_rows, notes, meta_update_time, meta_update_user) VALUES('TFM8', 7, 0, 'Test data', '1988-02-15 00:00:00', 'rackmonkey');
 
--- Test Rows (not fully supported in v1.2.4 - so we add one hidden row per room)
+-- Test Rows (not fully supported in 1.2.4 - so we add one hidden row per room)
 INSERT INTO row (name, room, room_pos, hidden_row, notes, meta_update_time, meta_update_user) VALUES('-', 7, 0, 1, 'Test data', '1988-02-15 00:00:00', 'rackmonkey');
 INSERT INTO row (name, room, room_pos, hidden_row, notes, meta_update_time, meta_update_user) VALUES('-', 8, 0, 1, 'Test data', '1988-02-15 00:00:00', 'rackmonkey');
 
@@ -71,7 +71,7 @@ INSERT INTO device (name, domain, rack, rack_pos, hardware, serial_no, asset_no,
 -- Windows fileserver, includes OS licence key
 INSERT INTO device (name, domain, rack, rack_pos, hardware, serial_no, asset_no, purchased, os, os_version, os_licence_key, customer, service, role, in_service, notes, meta_default_data, meta_update_time, meta_update_user) VALUES ('winfs', 5, 7, 12, 4, 'T9909', '', '2007-09-24', 24, '2003', 'AAAAA-BBBBB-CCCCC-DDDDD-EEEEE', 27, 4, 12, 1, 'Test data', 0, '1988-02-15 00:00:00', 'rackmonkey');
 
--- A couple of devices for racks numbered from top, includes primary_mac and install_build fields (not exposed in GUI in v1.2.5)
+-- A couple of devices for racks numbered from top, includes primary_mac and install_build fields (not exposed in GUI in 1.2.5)
 INSERT INTO device (name, domain, rack, rack_pos, hardware, serial_no, asset_no, purchased, os, os_version, customer, service, role, in_service, primary_mac, install_build, notes, meta_default_data, meta_update_time, meta_update_user) VALUES ('www10', 5, 9, 10, 4, 'T9909', '', '2009-01-02', 21, '9.04', 27, 4, 3, 1, '00:1e:c2:04:63:94', 'ubuntu_8_04_web', 'Test data', 0, '1988-02-15 00:00:00', 'rackmonkey');
 INSERT INTO device (name, domain, rack, rack_pos, hardware, serial_no, asset_no, purchased, os, os_version, customer, service, role, in_service, primary_mac, install_build, notes, meta_default_data, meta_update_time, meta_update_user) VALUES ('www11', 5, 9, 11, 4, 'T9910', '', '2009-01-02', 21, '9.04', 27, 4, 3, 1, '00:1e:c2:04:63:95', 'ubuntu_8_04_web', 'Test data', 0, '1988-02-15 00:00:00', 'rackmonkey');
 
