@@ -68,15 +68,16 @@ RackMonkey::Conf - RackMonkey configuration information
 
 =head1 SYNOPSIS
 
-Documentation is still being written.
-
+ my $conf = RackMonkey::Conf->new;
+ print "DB connect string is: " . $$conf{'dbconnect'};
+ 
 =head1 DESCRIPTION
 
-Documentation is still being written.
+RackMonkey has used a text-based configuration files since release 1.2.4. This module parses that file, providing access to RackMonkey configuration information. RackMonkey::Conf looks for the configuration file in the location specified by the RACKMONKEY_CONF environment variable or falls back on '/etc/rackmonkey.conf'. At present access to the configuration information is directly via the conf hash, see synopsis.
 
 =head1 BUGS
 
-You can view and report bugs at http://www.rackmonkey.org
+You can view and report bugs at http://www.rackmonkey.org/issues
 
 =head1 LICENSE
 
