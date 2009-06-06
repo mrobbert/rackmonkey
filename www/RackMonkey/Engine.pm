@@ -89,7 +89,7 @@ sub new
         # All users now tequire DBI 1.45 or higher (due to last insert ID issues)
         if ($DBIVersion < 1.45)
         {
-            croak "RM_ENGINE: You tried to use an unsupported version of the DBI database interface. You need to use DBI version 1.45 or higher. You are using DBI $DBIVersion. Please consult the installation and troubleshooting documents.";
+            croak "RM_ENGINE: You tried to use an unsupported version of the DBI database interface. You need to use DBI version 1.45 or higher. You are using DBI v$DBIVersion. Please consult the installation and troubleshooting documents.";
         }
 
         # SQLite users require DBD::SQLite 1.12 or higher (this equates to SQLite 3.3.5)
@@ -759,9 +759,10 @@ sub deviceListUnracked    # consider merging this with existing device method (t
 			domain.name					AS domain_name,
 			domain.meta_default_data	AS domain_meta_default_data,
 			role.name 					AS role_name,
-			os.name 					AS os_name
+			os.name 					AS os_name,
+			customer.name 				AS customer_name
 			FROM
-			device, rack, row, room, building, hardware, org hardware_manufacturer, domain, role, os
+			device, rack, row, room, building, hardware, org hardware_manufacturer, org customer, domain, role, os
 		WHERE
 			device.meta_default_data = 0 AND
 			building.meta_default_data <> 0 AND
@@ -773,7 +774,8 @@ sub deviceListUnracked    # consider merging this with existing device method (t
 			hardware.manufacturer = hardware_manufacturer.id AND
 			device.domain = domain.id AND
 			device.role = role.id AND
-			device.os = os.id
+			device.os = os.id AND
+			device.customer = customer.id
 			$filterBy
 		ORDER BY $orderBy
 	!
@@ -865,15 +867,20 @@ sub _validateDeviceInput
     {
         croak "RM_ENGINE: OS licence keys cannot exceed " . $self->getConf('maxstring') . " characters.";
     }
-    unless (length($$record{'primary_mac'}) <= $self->getConf('maxstring'))
+    if (defined $$record{'primary_mac'}) # Not in UI by default: check defined to avoid warning message, should really be extended to all checks
     {
-        croak "RM_ENGINE: Primary MACs cannot exceed " . $self->getConf('maxstring') . " characters.";
+        unless (length($$record{'primary_mac'}) <= $self->getConf('maxstring'))
+        {
+            croak "RM_ENGINE: Primary MACs cannot exceed " . $self->getConf('maxstring') . " characters.";
+        }
     }
-    unless (length($$record{'install_build'}) <= $self->getConf('maxstring'))
+    if (defined $$record{'install_build'}) # Not in UI by default: check defined to avoid warning message, should really be extended to all checks
     {
-        croak "RM_ENGINE: Install build names cannot exceed " . $self->getConf('maxstring') . " characters.";
+        unless (length($$record{'install_build'}) <= $self->getConf('maxstring'))
+        {
+            croak "RM_ENGINE: Install build names cannot exceed " . $self->getConf('maxstring') . " characters.";
+        }
     }
-
     # check if we have a meta default location if so set rack position to zero, otherwise check we have a valid rack position
     my $rack = $self->rack($$record{'rack'});
     if ($$rack{'meta_default_data'})
@@ -882,8 +889,9 @@ sub _validateDeviceInput
     }
     else    # location is in a real rack
     {
-        # check we have a position
+        # check we have a position and make sure it's an integer
         croak "RM_ENGINE: You need to specify a Rack Position." unless (length($$record{'rack_pos'}) > 0);
+        $$record{'rack_pos'} = int($$record{'rack_pos'} + 0.5);
 
         # get the size of this hardware
         my $hardware     = $self->hardware($$record{'hardware_model'});
@@ -1065,8 +1073,10 @@ sub _validateDeviceAppUpdate
 {
     my ($self, $record) = @_;
     croak "RM_ENGINE: Unable to validate device app relation. No record specified." unless ($record);
-
-    # protected by fk, so no validation required
+    croak "RM_ENGINE: You need to choose a relationship between the app and the device." unless ($$record{'relation_id'});
+    croak "RM_ENGINE: You need to choose a device to associate the app with." unless ($$record{'device_id'});
+    
+    # protected by fk, so no detailed validation required
     return ($$record{'app_id'}, $$record{'device_id'}, $$record{'relation_id'});
 }
 
@@ -1309,7 +1319,7 @@ sub _validateHardwareUpdate
 
     # no validation for $$record{'manufacturer_id'} - foreign key constraints will catch
     croak "RM_ENGINE: You must specify a size for your hardware model." unless $$record{'size'};
-    $$record{'size'} += 0;    # Force to numeric for comparison
+    $$record{'size'} = int($$record{'size'} + 0.5);  # Only integer U supported, force size to be an integer
     croak "RM_ENGINE: Size must be between 1 and " . $self->getConf('maxracksize') . " units."
       unless (($$record{'size'} > 0) && ($$record{'size'} <= $self->getConf('maxracksize')));
     croak "RM_ENGINE: Image filenames must be between 0 and " . $self->getConf('maxstring') . " characters."
@@ -1949,10 +1959,13 @@ sub _validateRackUpdate
     croak "RM_ENGINE: Unable to validate rack. No rack record specified." unless ($record);
     $self->_checkName($$record{'name'});
     $self->_checkNotes($$record{'notes'});
+    
+    # check we have a size, make sure it's an integer and in the allowed range
     croak "RM_ENGINE: You must specify a size for your rack." unless $$record{'size'};
-    $$record{'size'} += 0;    # Force to numeric for comparison
+    $$record{'size'} = int($$record{'size'} + 0.5);
     croak "RM_ENGINE: Rack sizes must be between 1 and " . $self->getConf('maxracksize') . " units."
-      unless (($$record{'size'} > 0) && ($$record{'size'} < $self->getConf('maxracksize')));
+      unless (($$record{'size'} > 0) && ($$record{'size'} <= $self->getConf('maxracksize')));
+      
     $$record{'numbering_direction'} = $$record{'numbering_direction'} ? 1 : 0;
     my $highestPos = $self->_highestUsedInRack($$record{'id'}) || 0;
 
@@ -2514,7 +2527,7 @@ RackMonkey::Engine - A DBI-based backend for Rackmonkey
 
  use RackMonkey::Engine;
  my $backend = RackMonkey::Engine->new;
- my $devices = $backend->deviceList();
+ my $devices = $backend->deviceList;
  foreach my $dev (@$devices)
  {
      print $$dev{'name'}." is a ".$$dev{'hardware_name'}.".\n";
@@ -2528,36 +2541,65 @@ This module abstracts a DBI database for use by RackMonkey applications. Data ca
 
 A database with a suitable schema and a configuration file are required to use the engine. Both of these are supplied with the RackMonkey distribution. Please consult the RackMonkey install document and RackMonkey::Conf module for details.
 
+=head1 TYPES
+
+To work with RackMonkey data it's important to have a clear understanding of how the various types relate to each other:
+
+=over 4
+
+=item *
+
+Servers, routers, switches etc. are devices and are contained within racks.
+
+=item *
+
+A device has a hardware model and an operating system.
+
+=item *
+
+A device optionally has a domain (such as rackmonkey.org), a role (such as database server), a customer and a service level.
+
+=item *
+
+Apps run on devices.
+
+=item *
+
+Racks are organised in rows which reside in rooms within buildings.
+
+=back
+
+
 =head1 DATA STRUCTURES
 
-Data structures are generally references to hashes or lists of hashes. For example an operating system record returned by the os method looks like this:
+RackMonkey data isn't object-oriented because the data structures returned by DBI are usable straight away in HTML::Template and relatively little processing of the returned data goes on. This decision may be reviewed in future. Data structures are generally references to hashes or lists of hashes. An example an operating system record returned by the os method looks like this:
 
- $VAR1 = {
-           'meta_update_user' => 'install',
-           'name' => 'Red Hat Enterprise Linux',
-           'manufacturer_meta_default_data' => '0',
-           'meta_default_data' => '0',
-           'manufacturer' => '22',
-           'notes' => '',
-           'id' => '17',
-           'meta_update_time' => '1985-07-24 00:00:00',
-           'manufacturer_name' => 'Red Hat'
-         };
+ {
+   'meta_update_user' => 'install',
+   'name' => 'Red Hat Enterprise Linux',
+   'manufacturer_meta_default_data' => '0',
+   'meta_default_data' => '0',
+   'manufacturer' => '22',
+   'notes' => '',
+   'id' => '17',
+   'meta_update_time' => '1985-07-24 00:00:00',
+   'manufacturer_name' => 'Red Hat'
+ };
 
 And the data returned by simpleList('service') would look like this:
 
- $VAR1 = [
-           {
-             'name' => '24/7',
-             'id' => '4',
-             'meta_default_data' => '0'
-           },
-           {
-             'name' => 'Basic',
-             'id' => '3',
-             'meta_default_data' => '0'
-           }
-         ];
+ [
+    {
+        'name' => '24/7',
+        'id' => '4',
+        'meta_default_data' => '0'
+    },
+    {
+        'name' => 'Basic',
+        'id' => '3',
+        'meta_default_data' => '0'
+    }
+ ];
 
 All data structures contain a unique 'id' field that can used to identify a particular instance of a given item (device, operating system etc.).
 
@@ -2571,11 +2613,11 @@ meta_default_data - If true this indicates the item is not real, but represents 
 
 =item *
 
-meta_update_time - Is a string representing the time this record was last updated. This time is always GMT. This field is automatically updated by the engine when actions are performed via performAct, but if update methods (such as updateBuilding) are called directly the caller should supply this information. The time is in the format YYYY-MM-DD HH:MM:SS.
+meta_update_time - Is a string representing the time this record was last updated. This time is always GMT. This field is automatically updated by the engine when actions are performed via performAct(), but if update methods (such as updateBuilding) are called directly the caller should supply this information. The time is in the format YYYY-MM-DD HH:MM:SS.
 
 =item *
 
-meta_update_user - Is a string representing the user who last updated this record. The caller must supply this data, whether calling performAct or update methods directly. If a username is not available it is usual to store the IP of the client instead.
+meta_update_user - Is a string representing the user who last updated this record. The caller must supply this data, whether calling performAct() or update methods directly. If a username is not available it is usual to store the IP of the client instead.
 
 =back
 
@@ -2597,14 +2639,14 @@ Returns a config value given its key. Check RackMonkey::Conf for the available c
 
 =head3 simpleItem($id, $table)
 
-Returns the name and id of an item given its id and table.
+Returns the name and id of an item given its id and type (table it resides in).
 
  my $device = $backend->simpleItem(1, 'device');
  print "device id=".$$device{'id'}." is called: ".$$device{'name'};
 
-=head3 simpleList($table, $all)
+=head3 simpleList($type, $all)
 
-Returns a list of items of a given type, optionally including meta default items if $all is true. Only the name, id and the meta_default_data value of the items is returned. To get more information use the item specific methods (deviceList, orgList etc.).
+Returns a list of items of a given $type, optionally including meta default items if $all is true. Only the name, id and the meta_default_data value of the items is returned. To get more information use the item specific methods (deviceList, orgList etc.).
  
  # without meta default items
  my $buildings = $backend->simpleList('building');
@@ -2622,9 +2664,359 @@ Returns the count of the given type without meta default items.
 
 This method adds, updates or deletes item records. Further documentation on this method is still being written.
 
+=head2 APP METHODS
+
+=head3 app($app_id)
+
+Returns a reference to a hash for an app identified by $app_id.
+
+ my $app = $backend->app(3);
+ print "App with id=3 has name " . $$app{'name'};
+
+=head3 appList($orderBy)
+
+Returns a reference to a list of all apps ordered by $orderBy. $orderby is the name of a column in the app table, such as app.id. If an order isn't specified then the apps are ordered by app.name.
+
+ my $appList = $backend->apps('app.id'); # order by app.id
+ foreach my $app (@$appList)
+ {
+     print $$app{'id'} . " has name " . $$app{'name'} . ".\n";
+ }
+
+=head3 appDevicesUsedList($app_id)
+
+Returns a reference to a list of devices used by an app identified by $app_id.
+
+=head3 appOnDeviceList($device_id)
+
+Returns a reference to a list of apps using the device identified by $device_id. 
+
+=head3 updateApp($updateTime, $updateUser, $record)
+
+Updates or creates a new app using the reference to the hash $record, the user $updateUser and the time/date $updateTime. Returns the unique id for the item created or updated as a scalar. This method can be called directly, but you may prefer to use performAct() as it automatically handles updating the RackMonkey log, setting the time etc.
+
+ # Change the name of the app with id=3 to 'FishFinder'
+ my $app = $backend->app(3);
+ $$app{'name'} = 'FishFinder';
+ updateApp(gmtime, 'Mr Cod', $app);
+ 
+ # Create a new app with the name 'SharkTank' and print its ID
+ my $newApp = {'name' => 'SharkTank'};
+ my $appID = updateApp(gmtime, 'Mr Cod', $newApp);
+ print "My new app has id=$appID\n";
+
+=head3 deleteApp($updateTime, $updateUser, $record)
+
+Deletes the app identified by id, either stored as $$record{'id'} or directly as $record. $updateUser and updateTime are currently ignored by this method. This 
+method can be called directly, but you may prefer to use performAct() as it automatically handles updating the RackMonkey log, setting the time etc.
+
+ # delete the app with id=3
+ $backend->deleteApp(undef, undef, 3);
+
+=head2 BUILDING METHODS
+
+=head3 building($building_id)
+
+Returns a reference to a hash for a building identified by $building_id. See the app() method for an example.
+
+=head3 buildingList($orderBy)
+
+Returns a reference to a list of all buildings ordered by $orderBy. $orderby is the name of a column in the building table, such as building.id. If an order isn't specified then the buildings are ordered by building.name. See the appList() method for an example.
+
+=head3 updateBuilding($updateTime, $updateUser, $record)
+
+Updates or creates a new building using the reference to the hash $record, the user $updateUser and the time/date $updateTime. Returns the unique id for the item created or updated as a scalar. This method can be called directly, but you may prefer to use performAct() as it automatically handles updating the RackMonkey log, setting the time etc. See the updateApp() method for an example.
+
+=head3 deleteBuilding($updateTime, $updateUser, $record)
+
+Deletes the building identified by id, either stored as $$record{'id'} or directly as $record. $updateUser and updateTime are currently ignored by this method. This method can be called directly, but you may prefer to use performAct() as it automatically handles updating the RackMonkey log, setting the time etc. See the deleteApp() method for an example.
+
+=head2 DEVICE METHODS
+
+=head3 device($device_id)
+
+Returns a reference to a hash for a device identified by $device_id. See the app() method for an example.
+
+=head3 deviceList($orderBy, [$filter], [$deviceSearch])
+
+Returns a reference to a list of all devices ordered by $orderBy. $orderby is the name of a column in the devices table, such as device.id. If an order isn't specified then the devices are ordered by devices.name. Optionally also takes filter and search parameters. 
+
+$filter is a reference to a hash containing one or more of the following filters: filter_device_customer, filter_device_role, filter_device_hardware and filter_device_os as the keys, with the ID of the type as a value. For example, if $$filer{'filter_device_os'} = 6, then only devices whose os field is 6 will be included in the results. $deviceSearch is a string that restricts the list of returned devices to those whose name, serial or asset number includes the specified string. Search matching is case-insensitive. See the deivce_default templates and associated rackmonkey.pl code for examples of this. See the appList() method for a simple example of list methods.
+
+=head3 deviceListInRack($rack_id)
+
+Returns a reference to a list of devices in the rack identified by $rack_id. Otherwise similar to deviceList(), but without the order by, filter or search options.
+
+=head3 deviceListUnracked($orderBy, $filter, $filterBy, $deviceSearch)
+
+Returns a reference to a list of all devices not in a rack. Otherwise indentical to deviceList(). This method may be merged with deviceList() in a later release.
+
+=head3 deviceCountUnracked()
+
+Returns the number of devices that are not racked as a scalar. For example:
+
+ print $backend->deviceCountUnracked . "devices are unracked.\n";
+
+=head3 updateDevice($updateTime, $updateUser, $record)
+
+Updates or creates a new device using the reference to the hash $record, the user $updateUser and the time/date $updateTime. Returns the unique id for the item created or updated as a scalar. This method can be called directly, but you may prefer to use performAct() as it automatically handles updating the RackMonkey log, setting the time etc. See the updateApp() method for an example.
+
+=head3 deleteDevice($updateTime, $updateUser, $record)
+
+Deletes the device identified by id, either stored as $$record{'id'} or directly as $record. $updateUser and updateTime are currently ignored by this method. This method can be called directly, but you may prefer to use performAct() as it automatically handles updating the RackMonkey log, setting the time etc. See the deleteApp() method for an example.
+
+=head3 totalSizeDevice()
+
+Returns the total size of all devices in U as a scalar. For example:
+
+ print "Devices occupy " . $backend->totalSizeDevice . "U.\n";
+
+=head3 duplicateSerials()
+
+Returns a reference to a list of all devices having duplicate serial numbers. See the report_duplicates template and associated rackmonkey.pl code for an example of usage.
+
+=head3 duplicateAssets()
+
+Returns a reference to a list of all devices having duplicate asset numbers. See the report_duplicates template and associated rackmonkey.pl code for an example of usage.
+
+=head3 duplicateOSLicenceKey()
+
+Returns a reference to a list of all devices having duplicate OS licence keys. See the report_duplicates template and associated rackmonkey.pl code for an example of usage.
+
+=head2 DOMAIN METHODS
+
+=head3 domain($domain_id)
+
+Returns a reference to a hash for a domain identified by $domain_id. See the app() method for an example.
+
+=head3 domainList($orderBy)
+
+Returns a reference to a list of all domains ordered by $orderBy. $orderby is the name of a column in the domain table, such as domain.id. If an order isn't specified then the domains are ordered by domain.name. See the appList() method for an example.
+
+=head3 updateDomain($updateTime, $updateUser, $record)
+
+Updates or creates a new domain using the reference to the hash $record, the user $updateUser and the time/date $updateTime. Returns the unique id for the item created or updated as a scalar. This method can be called directly, but you may prefer to use performAct() as it automatically handles updating the RackMonkey log, setting the time etc. See the updateApp() method for an example.
+
+=head3 deleteDomain($updateTime, $updateUser, $record)
+
+Deletes the domain identified by id, either stored as $$record{'id'} or directly as $record. $updateUser and updateTime are currently ignored by this method. This method can be called directly, but you may prefer to use performAct() as it automatically handles updating the RackMonkey log, setting the time etc. See the deleteApp() method for an example.
+
+=head2 HARDWARE METHODS
+
+=head3 hardware($hardware_id)
+
+Returns a reference to a hash for a hardware model identified by $hardware_id. See the app() method for an example.
+
+=head3 hardwareList($orderBy)
+
+Returns a reference to a list of all hardware models ordered by $orderBy. $orderby is the name of a column in the hardware table, such as hardware.id. If an order isn't specified then the hardware models are ordered by hardware.name. See the appList() method for an example.
+
+=head3 hardwareListBasic()
+
+Returns a reference to a list of all hardware models with basic information, including the manufacturer. For situations when the full information returned by hardwareList() isn't needed.
+
+=head3 hardwareByManufacturer()
+
+Returns a reference to a list of hardware manufacturers, each of which contains a hash that includes a reference to a list of hardware models from that manufacturer. The data structure returned is of form shown below (only some fields are shown for compactness):
+
+ [
+     {
+     'maufacturer_id' => '18', 
+     'maufacturer_name' => 'NetApp' 
+     'models' => [
+         { 
+             'name' => 'FAS3170', 
+             'size' => '6', 
+             'manufacturer' => '18', 
+         }, {...}, ] 
+     },
+     {
+     'maufacturer_id' => '24', 
+     'maufacturer_name' => 'Sun',
+     'models' => [{...}, {...},]
+     },
+     {...},
+ ]
+
+=head3 updateHardware($updateTime, $updateUser, $record)
+
+Updates or creates a new hardware model using the reference to the hash $record, the user $updateUser and the time/date $updateTime. Returns the unique id for the item created or updated as a scalar. This method can be called directly, but you may prefer to use performAct() as it automatically handles updating the RackMonkey log, setting the time etc. See the updateApp() method for an example.
+
+=head3 deleteHardware($updateTime, $updateUser, $record)
+
+Deletes the hardware model identified by id, either stored as $$record{'id'} or directly as $record. $updateUser and updateTime are currently ignored by this method. This method can be called directly, but you may prefer to use performAct() as it automatically handles updating the RackMonkey log, setting the time etc. See the deleteApp() method for an example.
+
+=head3 hardwareDeviceCount()
+
+Returns a reference to a list of hardware models with the number of devices of that model and total space in U they occupy. See the report_count template and associated rackmonkey.pl code for an example of usage.
+
+=head3 hardwareWithDevice()
+
+Returns a reference to a list of hardware models that has at least one device. Otherwise similar to hardwareListBasic().
+
+=head2 ORGANISATION (ORG) METHODS
+
+=head3 org($org_id)
+
+Returns a reference to a hash for a org identified by $org_id. See the app() method for an example.
+
+=head3 orgList($orderBy)
+
+Returns a reference to a list of all orgs ordered by $orderBy. $orderby is the name of a column in the org table, such as org.id. If an order isn't specified then the orgs are ordered by org.name. See the appList() method for an example.
+
+=head3 manufacturerWithHardwareList()
+
+Returns a reference to a list of manufactuers that has at least one hardware model.
+
+=head3 updateOrg($updateTime, $updateUser, $record)
+
+Updates or creates a new org using the reference to the hash $record, the user $updateUser and the time/date $updateTime. Returns the unique id for the item created or updated as a scalar. This method can be called directly, but you may prefer to use performAct() as it automatically handles updating the RackMonkey log, setting the time etc. See the updateApp() method for an example.
+
+=head3 deleteOrg($updateTime, $updateUser, $record)
+
+Deletes the org identified by id, either stored as $$record{'id'} or directly as $record. $updateUser and updateTime are currently ignored by this method. This method can be called directly, but you may prefer to use performAct() as it automatically handles updating the RackMonkey log, setting the time etc. See the deleteApp() method for an example.
+
+=head3 customerDeviceCount()
+
+Returns a reference to a list of customers with the number of devices with that customer and total space in U they occupy. See the report_count template and associated rackmonkey.pl code for an example of usage.
+
+=head3 customerWithDevice()
+
+Returns a reference to a list of customers that has at least one device.
+
+=head2 OPERATING SYSTEM (OS) METHODS
+
+=head3 os($os_id)
+
+Returns a reference to a hash for a OS identified by $os_id. See the app() method for an example.
+
+=head3 osList($orderBy)
+
+Returns a reference to a list of all OS ordered by $orderBy. $orderby is the name of a column in the OS table, such as os.id. If an order isn't specified then the OS are ordered by os.name. See the appList() method for an example.
+
+=head3 updateOs($updateTime, $updateUser, $record)
+
+Updates or creates a new OS using the reference to the hash $record, the user $updateUser and the time/date $updateTime. Returns the unique id for the item created or updated as a scalar. This method can be called directly, but you may prefer to use performAct() as it automatically handles updating the RackMonkey log, setting the time etc. See the updateApp() method for an example.
+
+=head3 deleteOs($updateTime, $updateUser, $record)
+
+Deletes the OS identified by id, either stored as $$record{'id'} or directly as $record. $updateUser and updateTime are currently ignored by this method. This method can be called directly, but you may prefer to use performAct() as it automatically handles updating the RackMonkey log, setting the time etc. See the deleteApp() method for an example.
+
+=head3 osDeviceCount
+
+Returns a references to a list of OS with the number of devices using that OS and total space in U they occupy. See the report_count template and associated rackmonkey.pl code for an example of usage.
+
+=head3 osWithDevice
+
+Returns a reference to a list of OS that have at least one device using them.
+
+=head2 RACK METHODS
+
+=head3 rack($rack_id)
+
+Returns a reference to a hash for a rack identified by $rack_id. See the app() method for an example.
+
+=head3 rackList($orderBy)
+
+Returns a reference to a list of all racks ordered by $orderBy. $orderby is the name of a column in the rack table, such as rack.id. If an order isn't specified then the racks are ordered by rack.name. See the appList() method for an example.
+
+=head3 rackListInRoom($room_id)
+
+Returns a reference to a list of all racks within the room identified by $room_id.
+
+=head3 rackListBasic()
+
+Returns a reference to a list of all racks with basic information, including the room. For situations when the full information returned by rackList() isn't needed.
+
+=head3 rackPhysical($rack_id, [$selectDev], [$tableFormat])
+
+Returns a list of all the devices in a rack, optionally in table format if $tableFormat is true (useful for creating HTML tables and similar) and with device with the id $selectDev selected. See the rack_physical templates and associated rackmonkey.pl code for an example of usage.
+
+=head3 updateRack($updateTime, $updateUser, $record)
+
+Updates or creates a new rack using the reference to the hash $record, the user $updateUser and the time/date $updateTime. Returns the unique id for the item created or updated as a scalar. This method can be called directly, but you may prefer to use performAct() as it automatically handles updating the RackMonkey log, setting the time etc. See the updateApp() method for an example.
+
+=head3 deleteRack($updateTime, $updateUser, $record)
+
+Deletes the rack identified by id, either stored as $$record{'id'} or directly as $record. $updateUser and updateTime are currently ignored by this method. This method can be called directly, but you may prefer to use performAct() as it automatically handles updating the RackMonkey log, setting the time etc. See the deleteApp() method for an example.
+
+=head3 totalSizeRack()
+
+Returns a scalar with the total size in U of all racks.
+
+=head2 ROLE METHODS
+
+=head3 role($role_id)
+
+Returns a reference to a hash for a role identified by $role_id. See the app() method for an example.
+
+=head3 roleList($orderBy)
+
+Returns a reference to a list of all role ordered by $orderBy. $orderby is the name of a column in the role table, such as role.id. If an order isn't specified then the roles are ordered by role.name. See the appList() method for an example.
+
+=head3 updateRole($updateTime, $updateUser, $record)
+
+Updates or creates a new role using the reference to the hash $record, the user $updateUser and the time/date $updateTime. Returns the unique id for the item created or updated as a scalar. This method can be called directly, but you may prefer to use performAct() as it automatically handles updating the RackMonkey log, setting the time etc. See the updateApp() method for an example.
+
+=head3 deleteRole($updateTime, $updateUser, $record)
+
+Deletes the role identified by id, either stored as $$record{'id'} or directly as $record. $updateUser and updateTime are currently ignored by this method. This method can be called directly, but you may prefer to use performAct() as it automatically handles updating the RackMonkey log, setting the time etc. See the deleteApp() method for an example.
+
+=head3 roleDeviceCount
+
+Returns a references to a list of roles with the number of devices in that role and total space in U they occupy. See the report_count template and associated rackmonkey.pl code for an example of usage.
+
+=head3 roleWithDevice
+
+Returns a reference to a list of roles that have at least one device in that role.
+
+=head2 ROOM METHODS
+
+=head3 room($room_id)
+
+Returns a reference to a hash for a room identified by $room_id. See the app() method for an example.
+
+=head3 roomList($orderBy)
+
+Returns a reference to a list of all rooms ordered by $orderBy. $orderby is the name of a column in the room table, such as room.id. If an order isn't specified then the rooms are ordered by room.name within each building. See the appList() method for an example.
+
+=head3 updateRoom($updateTime, $updateUser, $record)
+
+Updates or creates a new room using the reference to the hash $record, the user $updateUser and the time/date $updateTime. Returns the unique id for the item created or updated as a scalar. This method can be called directly, but you may prefer to use performAct() as it automatically handles updating the RackMonkey log, setting the time etc. See the updateApp() method for an example.
+
+=head3 deleteRoom($updateTime, $updateUser, $record)
+
+Deletes the room identified by id, either stored as $$record{'id'} or directly as $record. $updateUser and updateTime are currently ignored by this method. This method can be called directly, but you may prefer to use performAct() as it automatically handles updating the RackMonkey log, setting the time etc. See the deleteApp() method for an example.
+
+=head3 roomListInBuilding($building_id)
+
+Returns a reference to a list of all rooms within the building identified by $building_id.
+
+=head2 ROW METHODS
+
+Rows are not fully supported in this release. Instead rows are automatically handled by rooms.
+
+=head2 SERVICE LEVEL METHODS
+
+=head3 service($service_id)
+
+Returns a reference to a hash for a service level identified by $service_id. See the app() method for an example.
+
+=head3 serviceList($orderBy)
+
+Returns a reference to a list of all service levels ordered by $orderBy. $orderby is the name of a column in the service table, such as service.id. If an order isn't specified then the service levels are ordered by service.name. See the appList() method for an example.
+
+=head3 updateService($updateTime, $updateUser, $record)
+
+Updates or creates a new service level using the reference to the hash $record, the user $updateUser and the time/date $updateTime. Returns the unique id for the item created or updated as a scalar. This method can be called directly, but you may prefer to use performAct() as it automatically handles updating the RackMonkey log, setting the time etc. See the updateApp() method for an example.
+
+=head3 deleteService($updateTime, $updateUser, $record)
+
+Deletes the service level identified by id, either stored as $$record{'id'} or directly as $record. $updateUser and updateTime are currently ignored by this method. This method can be called directly, but you may prefer to use performAct() as it automatically handles updating the RackMonkey log, setting the time etc. See the deleteApp() method for an example.
+
 =head1 BUGS
 
-You can view and report bugs at http://www.rackmonkey.org
+You can view and report bugs at http://www.rackmonkey.org/issues
 
 =head1 LICENSE
 
