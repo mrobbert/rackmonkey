@@ -23,7 +23,7 @@ sub enlighten
         $newErrStr = "Couldn't open template $1.\nCheck that the template path (tmplpath) in rackmonkey.conf is correct.";
     }
 
-    # SQLite foreign key constraint: delete table names with underscores (this will be fixed in RackMonkey v1.3)
+    # SQLite foreign key constraint: delete table names with underscores (messy: this should be fixed in RackMonkey 1.3)
     elsif ($errStr =~ /violates foreign key constraint "fkd_(.*?_.*?)_(.*?)_id"/)
     {
         my $refItem = $1;
@@ -260,7 +260,8 @@ sub display
 		<ul>
 			<li>Use the web browser back button to return to the previous page and correct the problem</li>
 			<li>View <a href="./rackmonkey.pl?view=help&amp;view_type=errors">Help for Error Messages</a> (local, may not work if RackMonkey has yet to initialize)</li>	
-			<li>View <a href="http://www.rackmonkey.org/doc/1.2.5">Online Help</a> (requires Internet connectivity)</li>			
+			<li>View <a href="http://www.rackmonkey.org/doc/1.2.5">Online Help</a> (requires Internet connectivity)</li>	
+			<li>Consult the troubleshooting.txt included with RackMonkey (covers database and installtion errors)</li>		
 			<li>Go to RackMonkey <a href="./rackmonkey.pl">home view</a></li>
 		</ul>
 		
@@ -301,7 +302,7 @@ RackMonkey::Error - Creates User-Friendly Error Messages
  eval
  {
      $backend = RackMonkey::Engine->new;
-     # run RackMonkey scripts/modules here
+     # run RackMonkey methods here
  };
  if ($@)
  {
@@ -313,11 +314,11 @@ RackMonkey::Error - Creates User-Friendly Error Messages
 
 =head1 DESCRIPTION
 
-This is draft documentation for RackMonkey::Error. More details will be added in future.
+The RackMonkey::Error helps present error messages to users in a clear and helpful way. It adds user-friendly descriptions to common messages, such as foreign key constraint violations.
 
 =head1 BUGS
 
-You can view and report bugs at http://www.rackmonkey.org
+You can view and report bugs at http://www.rackmonkey.org/issues
 
 =head1 LICENSE
 

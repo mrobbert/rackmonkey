@@ -6,7 +6,7 @@ package RackMonkey::CGI;
 # CGI Support for Rackmonkey                                                 #
 ##############################################################################
 
-# This module is due to be phased out in RackMonkey v1.3.0
+# This module is due to be phased out in RackMonkey 1.3.0
 
 use strict;
 use warnings;
@@ -74,17 +74,13 @@ sub baseUrl
 sub viewId
 {
     my $self = shift;
-    my $id   = $self->cgi->param('id');
-    $id += 0;
-    return $id;
+    return ($self->cgi->param('id') || 0) + 0;
 }
 
 sub actId
 {
     my $self = shift;
-    my $id   = $self->cgi->param('act_id');
-    $id += 0;
-    return $id;
+    return ($self->cgi->param('act_id') || 0) + 0;
 }
 
 sub act
@@ -170,9 +166,7 @@ sub header
 sub lastCreatedId
 {
     my $self = shift;
-    my $id   = $self->cgi->param('last_created_id');
-    $id += 0;
-    return $id;
+    return ($self->cgi->param('last_created_id') || 0) + 0;
 }
 
 sub returnView
@@ -190,9 +184,7 @@ sub returnViewType
 sub returnViewId
 {
     my $self = shift;
-    my $id   = $self->cgi->param('return_view_id');
-    $id += 0;
-    return $id;
+    return ($self->cgi->param('return_view_id') || 0) + 0;
 }
 
 sub customer
@@ -216,9 +208,7 @@ sub hardware
 sub id
 {
     my ($self, $view) = @_;
-    my $id = $self->cgi->param($view . '_id');
-    $id += 0;
-    return $id;
+    return ($self->cgi->param($view . '_id') || 0) + 0;
 }
 
 sub rackList
@@ -301,15 +291,15 @@ RackMonkey::CGI - Encapsulate CGI and other misc functionality
 
 =head1 SYNOPSIS
 
-This module is due to be replaced in RackMonkey v1.3.
+N/A
 
 =head1 DESCRIPTION
 
-This module is due to be replaced in RackMonkey v1.3.
+This module is due to be replaced in RackMonkey 1.3. Use by new applications is not recommended.
 
 =head1 BUGS
 
-You can view and report bugs at http://www.rackmonkey.org
+You can view and report bugs at http://www.rackmonkey.org/issues
 
 =head1 LICENSE
 
