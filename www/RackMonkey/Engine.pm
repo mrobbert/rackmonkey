@@ -86,10 +86,10 @@ sub new
         $$sys{'db_driver_version'} = $driverVersion;
         $$sys{'dbi_version'}       = $DBIVersion;
 
-        # All users now tequire DBI v1.45 or higher (due to last insert ID issues)
+        # All users now tequire DBI 1.45 or higher (due to last insert ID issues)
         if ($DBIVersion < 1.45)
         {
-            croak "RM_ENGINE: You tried to use an unsupported version of the DBI database interface. You need to use DBI version v1.45 or higher. You are using DBI v$DBIVersion. Please consult the installation and troubleshooting documents.";
+            croak "RM_ENGINE: You tried to use an unsupported version of the DBI database interface. You need to use DBI version 1.45 or higher. You are using DBI $DBIVersion. Please consult the installation and troubleshooting documents.";
         }
 
         # SQLite users require DBD::SQLite 1.12 or higher (this equates to SQLite 3.3.5)
