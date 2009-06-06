@@ -268,11 +268,13 @@ eval {
                     # clear values unique to a device if we're copying an existing device
                     if ($viewType =~ /^create/)
                     {
-                        $$device{'name'}       = '';
-                        $$device{'rack_pos'}   = '';
-                        $$device{'asset_no'}   = '';
-                        $$device{'serial_no'}  = '';
-                        $$device{'in_service'} = 1;    # default is in service
+                        $$device{'name'}            = '';
+                        $$device{'rack_pos'}        = '';
+                        $$device{'asset_no'}        = '';
+                        $$device{'serial_no'}       = '';
+                        $$device{'in_service'}      = 1;    # default is in service
+                        $$device{'notes'}           = '';
+                        $$device{'os_licence_key'}  = '';
                     }
 
                     $template->param($device);
@@ -281,8 +283,9 @@ eval {
                 {
                     $template->param('selected_manufacturer'   => $selectedManufacturer);
                     $template->param('selected_hardware_model' => $selectedHardwareModel);
-                    $template->param('manufacturerlist'        => $cgi->selectItem($backend->manufacturerWithHardwareList, 0));               # run selectItem to prefix - on meta_default items, should be separate sub from selectItem
-                    $template->param('modelList'               => $backend->hardwareByManufacturer);                                          # Need to work out how to prefix meta default items with - for this dropdown
+                    # manufacturerlist: run selectItem to prefix - on meta_default items, should be separate sub from selectItem
+                    $template->param('manufacturerlist'        => $cgi->selectItem($backend->manufacturerWithHardwareList, 0));
+                    $template->param('modelList'               => $backend->hardwareByManufacturer); # Todo: Need to add '-' prefix to meta default items
                     $template->param('oslist'                  => $cgi->selectItem($backend->simpleList('os', 1), $selectedOs));
                     $template->param('rolelist'                => $cgi->selectItem($backend->simpleList('role', 1), $selectedRole));
                     $template->param('customerlist'            => $cgi->selectItem($backend->simpleList('customer', 1), $selectedCustomer));
@@ -300,12 +303,10 @@ eval {
                 my $app = $backend->app($id);
                 $template->param($app);
 
-                my $devices = $backend->simpleList('device');
-                unshift @$devices, {'id' => '', 'name' => '-'};
+                my $devices = $backend->deviceList;
                 $template->param('devices' => $devices);
 
                 my $relations = $backend->simpleList('app_relation', 1);
-                unshift @$relations, {'id' => '', 'name' => '-'};
                 $template->param('relations' => $relations);
             }
         }
