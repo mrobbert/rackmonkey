@@ -15,7 +15,7 @@ our $AUTHOR  = 'Will Green (wgreen at users.sourceforge.net)';
 sub enlighten
 {
     my $errStr    = shift;
-    my $newErrStr = "An error occured.";
+    my $newErrStr = "An error occurred.";
 
     # HTML::Template couldn't open template
     if ($errStr =~ /HTML::Template->new\(\) : Cannot open included file (.+tmpl)/)
@@ -261,7 +261,7 @@ sub display
 			<li>Use the web browser back button to return to the previous page and correct the problem</li>
 			<li>View <a href="./rackmonkey.pl?view=help&amp;view_type=errors">Help for Error Messages</a> (local, may not work if RackMonkey has yet to initialize)</li>	
 			<li>View <a href="http://www.rackmonkey.org/doc/1.2.5">Online Help</a> (requires Internet connectivity)</li>	
-			<li>Consult the troubleshooting.txt included with RackMonkey (covers database and installtion errors)</li>		
+			<li>Consult the troubleshooting.txt included with RackMonkey (covers database and installation errors)</li>		
 			<li>Go to RackMonkey <a href="./rackmonkey.pl">home view</a></li>
 		</ul>
 		
