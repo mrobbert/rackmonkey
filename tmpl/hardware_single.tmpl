@@ -44,7 +44,7 @@
 					</div>		
 					<div>
 						<div class="key">Product ID</div>
-						<div class="value"><TMPL_VAR ESCAPE=HTML NAME=product_id></div>
+						<div class="value"><TMPL_IF NAME=product_id><TMPL_VAR ESCAPE=HTML NAME=product_id><TMPL_ELSE>&nbsp;-</TMPL_IF></div>
 					</div>		
 					<div>
 						<div class="key">Size (U)</div>
