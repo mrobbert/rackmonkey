@@ -10,6 +10,10 @@
 							</select>
 						</div>
 						<div>
+							<label for="product_id">Product ID</label><br />
+							<input type="text" size="24" name="product_id" id="product_id" value="<TMPL_VAR ESCAPE=HTML NAME=product_id>" />		
+						</div>
+						<div>
 							<label for="size">Size (U)</label><br />
 							<input style="text-align: right" type="text" size="4" name="size" id="size" value="<TMPL_VAR ESCAPE=HTML NAME=size>" />		
 						</div>

@@ -134,6 +134,7 @@ CREATE TABLE hardware
 	id SERIAL PRIMARY KEY,
 	name VARCHAR UNIQUE NOT NULL,
 	manufacturer INTEGER NOT NULL REFERENCES org,
+	product_id VARCHAR,
 	size INTEGER,
 	height INTEGER,
 	width INTEGER,
