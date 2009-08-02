@@ -13,6 +13,8 @@ author does not recommend using this release for production usage.
 The RackMonkey documentation is still being updated and you should expect to
 find omissions and inaccuracies in it.
 
+NB. This document needs updating in light of the move of perl files to the www
+directory.
 
 Contents
 ========
@@ -105,11 +107,10 @@ directory with the following layout:
   conf        Includes RackMonkey and Apache configuration files
   doc         Documentation for RackMonkey
   README      Read this before you start
-  perl        Contains the perl scripts and modules
   sql         SQL to create the RackMonkey database
   t           Test scripts
   tmpl        HTML::Template files for the web interface
-  www         Web space files, e.g. help, images, CSS files
+  www         Web space files, including perl, help, images, CSS files
 
 Copy the rackmonkey.pl file and the whole RackMonkey directory from the perl
 directory to a suitable location on your web server (e.g. /rackmonkey) and
