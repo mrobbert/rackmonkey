@@ -141,6 +141,7 @@ CREATE TABLE hardware
 	image VARCHAR,
 	support_url VARCHAR,
 	spec_url VARCHAR,
+	psu_count INTEGER,
 	notes VARCHAR,
 	meta_default_data INTEGER NOT NULL DEFAULT 0,
 	meta_update_time VARCHAR,
@@ -228,28 +229,41 @@ CREATE TABLE device_app
 );
 
 
--- For recording device power. All values are milli, e.g. millivolts, milliamps etc.
--- Later schema revision will record details about power sources and phases
-CREATE TABLE device_power
+-- Device power supplies
+CREATE TABLE psu
 (
     id SERIAL PRIMARY KEY,
-    name VARCHAR,
+    name VARCHAR,    
     device INTEGER NOT NULL REFERENCES device,
-	voltage INTEGER NOT NULL,
-	ampage INTEGER NOT NULL,
-	power INTEGER NOT NULL,
-	date_of_measurement VARCHAR,
-	meta_default_data INTEGER NOT NULL DEFAULT 0,
+    notes VARCHAR,
+    meta_default_data INTEGER NOT NULL DEFAULT 0,
 	meta_update_time VARCHAR,
 	meta_update_user VARCHAR
 );
 
 
 -- Conditions under which a power measurement was made, e.g. idle, peak load, booting
-CREATE TABLE device_power_conditions
+CREATE TABLE power_conditions
 (
     id SERIAL PRIMARY KEY,
     name VARCHAR UNIQUE NOT NULL,
+	meta_default_data INTEGER NOT NULL DEFAULT 0,
+	meta_update_time VARCHAR,
+	meta_update_user VARCHAR
+);
+
+
+-- For recording psu power. All values are milli, e.g. millivolts, milliamps etc.
+CREATE TABLE psu_power
+(
+    id SERIAL PRIMARY KEY,
+    psu INTEGER NOT NULL REFERENCES psu,
+	voltage INTEGER NOT NULL,
+	ampage INTEGER NOT NULL,
+	power INTEGER NOT NULL,
+	date_of_measurement VARCHAR,
+	conditions INTEGER NOT NULL REFERENCES power_conditions,
+	notes VARCHAR,
 	meta_default_data INTEGER NOT NULL DEFAULT 0,
 	meta_update_time VARCHAR,
 	meta_update_user VARCHAR
