@@ -33,6 +33,7 @@ sub new
         'maxnote'                   => 4095,
         'maxstring'                 => 255,
         'maxracksize'               => 255,
+        'maxpsucount'               => 8,        
         'dellquery'                 => '',
         'number_from_top'           => 0,
         'size_of_u'                 => 14,

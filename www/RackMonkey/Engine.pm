@@ -1282,13 +1282,13 @@ sub updateHardware
 
     if ($$record{'id'})
     {
-        $sth = $self->dbh->prepare(qq!UPDATE hardware SET name = ?, manufacturer =?, product_id = ?, size = ?, image = ?, support_url = ?, spec_url = ?, notes = ?, meta_update_time = ?, meta_update_user = ? WHERE id = ?!);
+        $sth = $self->dbh->prepare(qq!UPDATE hardware SET name = ?, manufacturer =?, product_id = ?, size = ?, psu_count = ?, image = ?, support_url = ?, spec_url = ?, notes = ?, meta_update_time = ?, meta_update_user = ? WHERE id = ?!);
         my $ret = $sth->execute($self->_validateHardwareUpdate($record), $updateTime, $updateUser, $$record{'id'});
         croak "RM_ENGINE: Update failed. This hardware may have been removed before the update occured." if ($ret eq '0E0');
     }
     else
     {
-        $sth = $self->dbh->prepare(qq!INSERT INTO hardware (name, manufacturer, product_id, size, image, support_url, spec_url, notes, meta_update_time, meta_update_user) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?)!);
+        $sth = $self->dbh->prepare(qq!INSERT INTO hardware (name, manufacturer, product_id, size, psu_count, image, support_url, spec_url, notes, meta_update_time, meta_update_user) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?)!);
         $sth->execute($self->_validateHardwareUpdate($record), $updateTime, $updateUser);
         $newId = $self->_lastInsertId('hardware');
     }
@@ -1322,6 +1322,8 @@ sub _validateHardwareUpdate
     $$record{'size'} = int($$record{'size'} + 0.5);  # Only integer U supported, force size to be an integer
     croak "RM_ENGINE: Size must be between 1 and " . $self->getConf('maxracksize') . " units."
       unless (($$record{'size'} > 0) && ($$record{'size'} <= $self->getConf('maxracksize')));
+      croak "RM_ENGINE: Maximum PSU count must be between 1 and " . $self->getConf('maxpsucount') . "."
+        unless (($$record{'psu_count'} > 0) && ($$record{'psu_count'} <= $self->getConf('maxpsucount')));
     croak "RM_ENGINE: Image filenames must be between 0 and " . $self->getConf('maxstring') . " characters."
       unless ((length($$record{'image'}) >= 0) && (length($$record{'image'}) <= $self->getConf('maxstring')));
     croak "RM_ENGINE: Support URLs must be between 0 and " . $self->getConf('maxstring') . " characters."
@@ -1330,7 +1332,7 @@ sub _validateHardwareUpdate
       unless ((length($$record{'spec_url'}) >= 0) && (length($$record{'spec_url'}) <= $self->getConf('maxstring')));
     croak "RM_ENGINE: Notes cannot exceed " . $self->getConf('maxnote') . " characters." unless (length($$record{'notes'}) <= $self->getConf('maxnote'));
 
-    return ($$record{'name'}, $$record{'manufacturer_id'}, $$record{'product_id'}, $$record{'size'}, $$record{'image'}, $$record{'support_url'}, $$record{'spec_url'}, $$record{'notes'});
+    return ($$record{'name'}, $$record{'manufacturer_id'}, $$record{'product_id'}, $$record{'size'}, $$record{'psu_count'}, $$record{'image'}, $$record{'support_url'}, $$record{'spec_url'}, $$record{'notes'});
 }
 
 sub hardwareDeviceCount

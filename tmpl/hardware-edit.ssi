@@ -18,6 +18,10 @@
 							<input style="text-align: right" type="text" size="4" name="size" id="size" value="<TMPL_VAR ESCAPE=HTML NAME=size>" />		
 						</div>
 						<div>
+							<label for="psu_count">Maximum PSU Count</label><br />
+							<input style="text-align: right" type="text" size="4" name="psu_count" id="psu_count" value="<TMPL_VAR ESCAPE=HTML NAME=psu_count>" />		
+						</div>
+						<div>
 							<label for="image">Image File</label><br />
 							<input type="text" size="60" name="image" id="image" value="<TMPL_VAR ESCAPE=HTML NAME=image>" />
 						</div>
