@@ -20,8 +20,9 @@ wwwpath =
 #plugin_xls = rack2xls.pl
 #plugin_dns = rackdns.pl
 
-# URL to query Dell warranty and spec information
+# URLs to query warranty and spec information
 dellquery = http://support.euro.dell.com/support/topics/topic.aspx/emea/shared/support/my_systems_info/en/details?c=uk&cs=ukbsdt1&l=en&s=bsd&~ck=ln&lnki=2&ServiceTag=
+hpquery = http://itrc.hp.com/service/ewarranty/warrantyResults.do
 
 # Preference Constants
 defaultview = rack      # Default view loaded when none is specified
