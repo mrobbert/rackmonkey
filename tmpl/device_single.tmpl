@@ -94,6 +94,11 @@
 							<div class="key">Service Level</div>
 							<div class="value"><TMPL_VAR ESCAPE=HTML NAME=service_name><TMPL_UNLESS NAME=service_meta_default_data> &nbsp; <a class="small" title="View details for this service level" href="<TMPL_VAR NAME=base_url>?view=service&amp;view_type=single&amp;id=<TMPL_VAR ESCAPE=URL NAME=service>">Details&hellip;</a></TMPL_UNLESS></div>
 						</div>
+					</div>
+					<hr style="clear: both" />
+					<div>
+						<div class="key">Power Supplies</div>
+						<div class="value">Hardware supports <TMPL_VAR ESCAPE=HTML NAME=hardware_psu_count> PSUs:</div>
 					</div><TMPL_IF NAME=apps>
 					<hr style="clear: both" />
 					<div>
