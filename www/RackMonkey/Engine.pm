@@ -568,12 +568,14 @@ sub device
 			building.id					AS building_id,	
 			building.meta_default_data	AS building_meta_default_data,
 			hardware.name 				AS hardware_name,
-			hardware.size 				AS hardware_size,
+			hardware.size 				AS hardware_size,			
 			hardware.psu_count 			AS hardware_psu_count,	
 			hardware.meta_default_data	AS hardware_meta_default_data,
 			hardware_manufacturer.id	AS hardware_manufacturer_id,
 			hardware_manufacturer.name	AS hardware_manufacturer_name,
 			hardware_manufacturer.meta_default_data AS hardware_manufacturer_meta_default_data,
+			cpu_arch.name    			AS cpu_arch_name,	
+			cpu_arch.id    			    AS cpu_arch_id,	
 			role.name 					AS role_name, 
 			role.meta_default_data		AS role_meta_default_data,
 			os.name 					AS os_name,
@@ -584,7 +586,7 @@ sub device
 			service.meta_default_data	AS service_meta_default_data,
 			domain.name					AS domain_name,
 			domain.meta_default_data	AS domain_meta_default_data
-		FROM device, rack, row, room, building, hardware, org hardware_manufacturer, role, os, org customer, service, domain 
+		FROM device, rack, row, room, building, hardware, cpu_arch, org hardware_manufacturer, role, os, org customer, service, domain 
 		WHERE 
 			device.rack = rack.id AND 
 			rack.row = row.id AND
@@ -592,6 +594,7 @@ sub device
 			room.building = building.id AND			
 			device.hardware = hardware.id AND 
 			hardware.manufacturer = hardware_manufacturer.id AND
+			hardware.cpu_arch = cpu_arch.id AND
 			device.role = role.id AND
 			device.os = os.id AND
 			device.customer = customer.id AND
@@ -653,13 +656,15 @@ sub deviceList
 			hardware_manufacturer.id	AS hardware_manufacturer_id,
 			hardware_manufacturer.name	AS hardware_manufacturer_name,
 			hardware_manufacturer.meta_default_data	AS hardware_manufacturer_meta_default_data,
+			cpu_arch.name    			AS cpu_arch_name,	
+			cpu_arch.id    			    AS cpu_arch_id,
 			role.name 					AS role_name, 
 			os.name 					AS os_name, 
 			customer.name 				AS customer_name,
 			service.name 				AS service_name,
 			domain.name					AS domain_name,
 			domain.meta_default_data	AS domain_meta_default_data
-		FROM device, rack, row, room, building, hardware, org hardware_manufacturer, role, os, org customer, service, domain 
+		FROM device, rack, row, room, building, hardware, cpu_arch, org hardware_manufacturer, role, os, org customer, service, domain 
 		WHERE 
 			device.meta_default_data = 0 AND
 			device.rack = rack.id AND 
@@ -668,6 +673,7 @@ sub deviceList
 			room.building = building.id AND			
 			device.hardware = hardware.id AND 
 			hardware.manufacturer = hardware_manufacturer.id AND
+			hardware.cpu_arch = cpu_arch.id AND
 			device.role = role.id AND
 			device.os = os.id AND
 			device.customer = customer.id AND
@@ -701,12 +707,14 @@ sub deviceListInRack
 			hardware_manufacturer.meta_default_data	AS hardware_manufacturer_meta_default_data,
 			hardware.size				AS hardware_size,
 			hardware.psu_count 			AS hardware_psu_count,	
+			cpu_arch.name    			AS cpu_arch_name,	
+			cpu_arch.id    			    AS cpu_arch_id,
 			domain.name					AS domain_name,
 			domain.meta_default_data	AS domain_meta_default_data,
 			role.name 					AS role_name, 
 			customer.name 				AS customer_name
 		FROM
-			device, rack, row, room, building, hardware, org hardware_manufacturer, domain, role, org customer
+			device, rack, row, room, building, hardware, cpu_arch, org hardware_manufacturer, domain, role, org customer
 		WHERE
 			device.meta_default_data = 0 AND
 			device.rack = rack.id AND 
@@ -715,6 +723,7 @@ sub deviceListInRack
 			room.building = building.id AND				
 			device.hardware = hardware.id AND
 			hardware.manufacturer = hardware_manufacturer.id AND
+			hardware.cpu_arch = cpu_arch.id AND
 			device.domain = domain.id AND
 			device.role = role.id AND
 			device.customer = customer.id AND
@@ -760,13 +769,15 @@ sub deviceListUnracked    # consider merging this with existing device method (t
 			hardware_manufacturer.meta_default_data	AS hardware_manufacturer_meta_default_data,
 			hardware.size				AS hardware_size,
 			hardware.psu_count 			AS hardware_psu_count,	
+			cpu_arch.name    			AS cpu_arch_name,	
+			cpu_arch.id    			    AS cpu_arch_id,
 			domain.name					AS domain_name,
 			domain.meta_default_data	AS domain_meta_default_data,
 			role.name 					AS role_name,
 			os.name 					AS os_name,
 			customer.name 				AS customer_name
 			FROM
-			device, rack, row, room, building, hardware, org hardware_manufacturer, org customer, domain, role, os
+			device, rack, row, room, building, hardware, cpu_arch, org hardware_manufacturer, org customer, domain, role, os
 		WHERE
 			device.meta_default_data = 0 AND
 			building.meta_default_data <> 0 AND
@@ -776,6 +787,7 @@ sub deviceListUnracked    # consider merging this with existing device method (t
 			room.building = building.id AND				
 			device.hardware = hardware.id AND
 			hardware.manufacturer = hardware_manufacturer.id AND
+			hardware.cpu_arch = cpu_arch.id AND
 			device.domain = domain.id AND
 			device.role = role.id AND
 			device.os = os.id AND
