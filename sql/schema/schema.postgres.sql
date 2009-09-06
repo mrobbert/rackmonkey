@@ -233,7 +233,8 @@ CREATE TABLE device_app
 CREATE TABLE psu
 (
     id SERIAL PRIMARY KEY,
-    name VARCHAR,    
+    name VARCHAR,
+    rated_output INTEGER, -- milliwatts    
     device INTEGER NOT NULL REFERENCES device,
     notes VARCHAR,
     meta_default_data INTEGER NOT NULL DEFAULT 0,
@@ -298,6 +299,7 @@ CREATE UNIQUE INDEX device_name_unique ON device (name, domain); -- ensure name 
 CREATE UNIQUE INDEX rack_row_unique ON rack (name, row); -- ensure row and rack name are together unique
 CREATE UNIQUE INDEX row_room_unique ON row (name, room); -- ensure room and row name are together unique
 CREATE UNIQUE INDEX room_building_unique ON room (name, building); -- ensure building and room name are together unique
+CREATE UNIQUE INDEX psu_name_unique ON psu (name, device); -- ensure PSU name is unique on a given device
 CREATE UNIQUE INDEX device_app_unique ON device_app (app, device, relation); -- ensure we don't create identical device/app relationships
 
 
