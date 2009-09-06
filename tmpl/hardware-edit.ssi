@@ -18,6 +18,12 @@
 							<input style="text-align: right" type="text" size="4" name="size" id="size" value="<TMPL_VAR ESCAPE=HTML NAME=size>" />		
 						</div>
 						<div>
+							<label for="cpu_arch">CPU Architecture</label><br />
+							<select id="cpu_arch" name="cpu_arch"><TMPL_LOOP NAME=cpuarchlist>
+										<option<TMPL_IF NAME=selected> selected="selected"</TMPL_IF> value="<TMPL_VAR ESCAPE=HTML NAME=id>"><TMPL_VAR ESCAPE=HTML NAME=name></option></TMPL_LOOP>
+							</select>
+						</div>
+						<div>
 							<label for="psu_count">Maximum PSU Count</label><br />
 							<input style="text-align: right" type="text" size="4" name="psu_count" id="psu_count" value="<TMPL_VAR ESCAPE=HTML NAME=psu_count>" />		
 						</div>

@@ -358,7 +358,8 @@ eval {
             else
             {
                 my $selectedManufacturer = $cgi->lastCreatedId;    # need to sort out this mess of CGI vars and make clearer!
-
+                my $selectedCPUArch;
+                
                 if (($viewType =~ /^edit/) || ($viewType =~ /^single/))
                 {
                     my $hardware = $backend->hardware($id);
@@ -366,7 +367,11 @@ eval {
                     {
                         $$hardware{'notes'} = formatNotes($$hardware{'notes'});
                     }
-                    $selectedManufacturer = $$hardware{'manufacturer'} if (!$selectedManufacturer);    # Use database value for selected if none in CGI
+                    else
+                    {
+                        $selectedManufacturer = $$hardware{'manufacturer'} if (!$selectedManufacturer);    # Use database value for selected if none in CGI
+                        $selectedCPUArch = $$hardware{'cpu_arch'};
+                    }
                     $$hardware{'support_url_short'} = shortURL($$hardware{'support_url'});             # not actually needed by edit view
                     $$hardware{'spec_url_short'}    = shortURL($$hardware{'spec_url'});                # not actually needed by edit view
                     $template->param($hardware);
@@ -375,6 +380,7 @@ eval {
                 if (($viewType =~ /^edit/) || ($viewType =~ /^create/))
                 {
                     $template->param('manufacturerlist' => $cgi->selectItem($backend->simpleList('hardware_manufacturer', 1), $selectedManufacturer));
+                    $template->param('cpuarchlist' => $cgi->selectItem($backend->simpleList('cpu_arch', 1), $selectedCPUArch));
                 }
             }
         }

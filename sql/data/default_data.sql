@@ -49,8 +49,23 @@ INSERT INTO domain (name, descript, notes, meta_default_data, meta_update_time, 
 INSERT INTO os (name, manufacturer, notes, meta_default_data, meta_update_time, meta_update_user) VALUES('unknown', 1, '', 2, '1970-01-01 00:00:00', 'install');
 INSERT INTO os (name, manufacturer, notes, meta_default_data, meta_update_time, meta_update_user) VALUES('not applicable', 2, '', 1, '1970-01-01 00:00:00', 'install');
 
+-- CPU Architecture
+INSERT INTO cpu_arch (name, meta_default_data, meta_update_time, meta_update_user) VALUES ('unknown', 2, '1970-01-01 00:00:00', 'install');
+INSERT INTO cpu_arch (name, meta_default_data, meta_update_time, meta_update_user) VALUES ('other', 1, '1970-01-01 00:00:00', 'install');
+INSERT INTO cpu_arch (name, meta_default_data, meta_update_time, meta_update_user) VALUES ('68k', 0, '1970-01-01 00:00:00', 'install');
+INSERT INTO cpu_arch (name, meta_default_data, meta_update_time, meta_update_user) VALUES ('Alpha', 0, '1970-01-01 00:00:00', 'install');
+INSERT INTO cpu_arch (name, meta_default_data, meta_update_time, meta_update_user) VALUES ('ARM', 0, '1970-01-01 00:00:00', 'install');
+INSERT INTO cpu_arch (name, meta_default_data, meta_update_time, meta_update_user) VALUES ('Itanium (IA-64)', 0, '1970-01-01 00:00:00', 'install');
+INSERT INTO cpu_arch (name, meta_default_data, meta_update_time, meta_update_user) VALUES ('MIPS', 0, '1970-01-01 00:00:00', 'install');
+INSERT INTO cpu_arch (name, meta_default_data, meta_update_time, meta_update_user) VALUES ('PA-RISC', 0, '1970-01-01 00:00:00', 'install');
+INSERT INTO cpu_arch (name, meta_default_data, meta_update_time, meta_update_user) VALUES ('POWER', 0, '1970-01-01 00:00:00', 'install');
+INSERT INTO cpu_arch (name, meta_default_data, meta_update_time, meta_update_user) VALUES ('PowerPC', 0, '1970-01-01 00:00:00', 'install');
+INSERT INTO cpu_arch (name, meta_default_data, meta_update_time, meta_update_user) VALUES ('SPARC', 0, '1970-01-01 00:00:00', 'install');
+INSERT INTO cpu_arch (name, meta_default_data, meta_update_time, meta_update_user) VALUES ('x86', 0, '1970-01-01 00:00:00', 'install');
+INSERT INTO cpu_arch (name, meta_default_data, meta_update_time, meta_update_user) VALUES ('Z/Architecture', 0, '1970-01-01 00:00:00', 'install');
+
 -- default hardware
-INSERT INTO hardware (name, manufacturer, size, image, support_url, spec_url, notes, meta_default_data, meta_update_time, meta_update_user) VALUES('unknown', 1, 1, NULL, NULL, NULL, '', 1, '1970-01-01 00:00:00', 'install');
+INSERT INTO hardware (name, manufacturer, size, cpu_arch, image, support_url, spec_url, notes, meta_default_data, meta_update_time, meta_update_user) VALUES('unknown', 1, 1, 1, NULL, NULL, NULL, '', 1, '1970-01-01 00:00:00', 'install');
 
 -- default roles
 INSERT INTO role (name, descript, notes, meta_default_data, meta_update_time, meta_update_user) VALUES('unknown', 'Role not known.', '', 2, '1970-01-01 00:00:00', 'install');

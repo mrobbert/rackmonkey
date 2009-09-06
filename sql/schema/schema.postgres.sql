@@ -128,6 +128,17 @@ CREATE TABLE os
 );
 
 
+-- CPU architecture
+CREATE TABLE cpu_arch
+(
+    id SERIAL PRIMARY KEY,
+    name VARCHAR UNIQUE NOT NULL,
+	meta_default_data INTEGER NOT NULL DEFAULT 0,
+	meta_update_time VARCHAR,
+	meta_update_user VARCHAR
+);
+
+
 -- A specifc model of hardware, e.g. Sun v240, Apple Xserve 
 CREATE TABLE hardware
 (
@@ -135,6 +146,7 @@ CREATE TABLE hardware
 	name VARCHAR UNIQUE NOT NULL,
 	manufacturer INTEGER NOT NULL REFERENCES org,
 	product_id VARCHAR,
+	cpu_arch INTEGER NOT NULL REFERENCES cpu_arch,
 	size INTEGER,
 	height INTEGER,
 	width INTEGER,

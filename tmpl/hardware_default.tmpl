@@ -33,6 +33,7 @@
 				<th><a title="Sort by manufacturer" href="<TMPL_VAR NAME=base_url>?view=hardware&amp;order_by=org.name">Manufacturer</a></th>	
 				<th><a title="Sort by product ID" href="<TMPL_VAR NAME=base_url>?view=hardware&amp;order_by=hardware.product_id">Product ID</a></th>	
 				<th><a title="Sort by size" href="<TMPL_VAR NAME=base_url>?view=hardware&amp;order_by=hardware.size">Size (U)</a></th>	
+				<th><a title="Sort by CPU Architecture" href="<TMPL_VAR NAME=base_url>?view=hardware&amp;order_by=cpu_arch.name">CPU Arch</a></th>	
 				<th><a title="Sort by maximum PSU count" href="<TMPL_VAR NAME=base_url>?view=hardware&amp;order_by=hardware.psu_count">Max PSUs</a></th>	
 				<th><a title="Sort by support site" href="<TMPL_VAR NAME=base_url>?view=hardware&amp;order_by=hardware.support_url">Supp</a></th>		
 				<th><a title="Sort by specification site" href="<TMPL_VAR NAME=base_url>?view=hardware&amp;order_by=hardware.spec_url">Spec</a></th>
@@ -47,13 +48,14 @@
 				<td><TMPL_VAR ESCAPE=HTML NAME=manufacturer_name></td>
 				<td><TMPL_VAR ESCAPE=HTML NAME=product_id></td>
 				<td><TMPL_VAR ESCAPE=HTML NAME=size></td>
+				<td><TMPL_VAR ESCAPE=HTML NAME=cpu_arch_name></td>
 				<td><TMPL_VAR ESCAPE=HTML NAME=psu_count></td>
 				<td><TMPL_IF NAME=support_url><a title="View support page for this hardware" href="<TMPL_VAR ESCAPE=HTML NAME=support_url>">&gt;&gt;</a><TMPL_ELSE>-</TMPL_IF></td>
 				<td><TMPL_IF NAME=spec_url><a title="View specification page for this hardware" href="<TMPL_VAR ESCAPE=HTML NAME=spec_url>">&gt;&gt;</a><TMPL_ELSE>-</TMPL_IF></td>
 				<td><TMPL_IF NAME=notes_short><span title="<TMPL_VAR NAME=notes>"><TMPL_VAR NAME=notes_short></span><TMPL_ELSE><TMPL_IF NAME=notes><TMPL_VAR NAME=notes><TMPL_ELSE>-</TMPL_IF></TMPL_IF></td>
 			</tr></TMPL_LOOP></TMPL_IF>
 			<tr>
-				<td colspan="10" class="footer">
+				<td colspan="11" class="footer">
 					Showing <TMPL_VAR ESCAPE=HTML NAME=listed_hardware_count> of <TMPL_VAR ESCAPE=HTML NAME=total_hardware_count> hardware models
 				</td>
 			</tr>

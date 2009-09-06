@@ -1179,10 +1179,13 @@ sub hardware
         qq!
 		SELECT
 			hardware.*,
+			cpu_arch.name           AS cpu_arch_name,
+			cpu_arch.id             AS cpu_arch_id,
 			org.name 				AS manufacturer_name,
 			org.meta_default_data	As manufacturer_meta_default_data
-		FROM hardware, org
+		FROM hardware, cpu_arch, org
 		WHERE 
+		    hardware.cpu_arch = cpu_arch.id AND
 			hardware.manufacturer = org.id AND
 			hardware.id = ?
 	!
@@ -1210,9 +1213,12 @@ sub hardwareList
             qq!
     		SELECT
     			hardware.*,
+    			cpu_arch.name           AS cpu_arch_name,
+    			cpu_arch.id             AS cpu_arch_id,
     			org.name 				AS manufacturer_name
-    		FROM hardware, org
+    		FROM hardware, cpu_arch, org
     		WHERE
+    		    hardware.cpu_arch = cpu_arch.id AND
     			hardware.meta_default_data = 0 AND
     			hardware.manufacturer = org.id
     		ORDER BY $orderBy
@@ -1226,9 +1232,12 @@ sub hardwareList
         $sth     = $self->dbh->prepare(
             qq!
     		SELECT
-    			hardware.*
-    	    FROM hardware
+    			hardware.*,
+    			cpu_arch.name           AS cpu_arch_name,
+    			cpu_arch.id             AS cpu_arch_id
+    	    FROM hardware, cpu_arch
     		WHERE
+    		    hardware.cpu_arch = cpu_arch.id AND
     			hardware.manufacturer = $manufacturer
     		ORDER BY $orderBy
     	!
@@ -1286,13 +1295,13 @@ sub updateHardware
 
     if ($$record{'id'})
     {
-        $sth = $self->dbh->prepare(qq!UPDATE hardware SET name = ?, manufacturer =?, product_id = ?, size = ?, psu_count = ?, image = ?, support_url = ?, spec_url = ?, notes = ?, meta_update_time = ?, meta_update_user = ? WHERE id = ?!);
+        $sth = $self->dbh->prepare(qq!UPDATE hardware SET name = ?, manufacturer =?, product_id = ?, size = ?, cpu_arch = ?, psu_count = ?, image = ?, support_url = ?, spec_url = ?, notes = ?, meta_update_time = ?, meta_update_user = ? WHERE id = ?!);
         my $ret = $sth->execute($self->_validateHardwareUpdate($record), $updateTime, $updateUser, $$record{'id'});
         croak "RM_ENGINE: Update failed. This hardware may have been removed before the update occured." if ($ret eq '0E0');
     }
     else
     {
-        $sth = $self->dbh->prepare(qq!INSERT INTO hardware (name, manufacturer, product_id, size, psu_count, image, support_url, spec_url, notes, meta_update_time, meta_update_user) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?)!);
+        $sth = $self->dbh->prepare(qq!INSERT INTO hardware (name, manufacturer, product_id, size, cpu_arch = ?, psu_count, image, support_url, spec_url, notes, meta_update_time, meta_update_user) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?)!);
         $sth->execute($self->_validateHardwareUpdate($record), $updateTime, $updateUser);
         $newId = $self->_lastInsertId('hardware');
     }
@@ -1336,7 +1345,7 @@ sub _validateHardwareUpdate
       unless ((length($$record{'spec_url'}) >= 0) && (length($$record{'spec_url'}) <= $self->getConf('maxstring')));
     croak "RM_ENGINE: Notes cannot exceed " . $self->getConf('maxnote') . " characters." unless (length($$record{'notes'}) <= $self->getConf('maxnote'));
 
-    return ($$record{'name'}, $$record{'manufacturer_id'}, $$record{'product_id'}, $$record{'size'}, $$record{'psu_count'}, $$record{'image'}, $$record{'support_url'}, $$record{'spec_url'}, $$record{'notes'});
+    return ($$record{'name'}, $$record{'manufacturer_id'}, $$record{'product_id'}, $$record{'size'}, $$record{'cpu_arch'}, $$record{'psu_count'}, $$record{'image'}, $$record{'support_url'}, $$record{'spec_url'}, $$record{'notes'});
 }
 
 sub hardwareDeviceCount
