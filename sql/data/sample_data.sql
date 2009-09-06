@@ -33,7 +33,6 @@ INSERT INTO org (name, account_no, customer, software, hardware, descript, home_
 INSERT INTO org (name, account_no, customer, software, hardware, descript, home_page, notes, meta_update_time, meta_update_user) VALUES('Sun', 			NULL, 0, 1, 1, 'Sun Microsystems', 'http://www.sun.com', '', '1985-07-24 00:00:00', 'install');
 INSERT INTO org (name, account_no, customer, software, hardware, descript, home_page, notes, meta_update_time, meta_update_user) VALUES('VMWare', 		NULL, 0, 1, 0, 'VMWare', 'http://www.vmware.com', '', '1985-07-24 00:00:00', 'install');
 
-
 -- sample operating systems
 INSERT INTO os (name, manufacturer, notes, meta_update_time, meta_update_user) VALUES('AIX', 						13, '', '1985-07-24 00:00:00', 'install');
 INSERT INTO os (name, manufacturer, notes, meta_update_time, meta_update_user) VALUES('CentOS', 					5, '', '1985-07-24 00:00:00', 'install');
