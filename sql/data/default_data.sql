@@ -65,7 +65,7 @@ INSERT INTO app_relation (name, meta_default_data, meta_update_time, meta_update
 INSERT INTO app_relation (name, meta_default_data, meta_update_time, meta_update_user) VALUES ('uses', 0, '1970-01-01 00:00:00', 'install');
 
 -- default power conditions
-INSERT INTO device_power_conditions (name, meta_default_data, meta_update_time, meta_update_user) VALUES ('idle', 0, '1970-01-01 00:00:00', 'install');
-INSERT INTO device_power_conditions (name, meta_default_data, meta_update_time, meta_update_user) VALUES ('typical load', 0, '1970-01-01 00:00:00', 'install');
-INSERT INTO device_power_conditions (name, meta_default_data, meta_update_time, meta_update_user) VALUES ('peak load', 0, '1970-01-01 00:00:00', 'install');
-INSERT INTO device_power_conditions (name, meta_default_data, meta_update_time, meta_update_user) VALUES ('boot', 0, '1970-01-01 00:00:00', 'install');
+INSERT INTO power_conditions (name, meta_default_data, meta_update_time, meta_update_user) VALUES ('idle', 0, '1970-01-01 00:00:00', 'install');
+INSERT INTO power_conditions (name, meta_default_data, meta_update_time, meta_update_user) VALUES ('typical load', 0, '1970-01-01 00:00:00', 'install');
+INSERT INTO power_conditions (name, meta_default_data, meta_update_time, meta_update_user) VALUES ('peak load', 0, '1970-01-01 00:00:00', 'install');
+INSERT INTO power_conditions (name, meta_default_data, meta_update_time, meta_update_user) VALUES ('boot', 0, '1970-01-01 00:00:00', 'install');
