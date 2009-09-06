@@ -2,7 +2,7 @@
 -- RackMonkey - Know Your Racks - http://www.rackmonkey.org                 --
 -- Version 1.3.%BUILD%                                                      --
 -- (C)2004-2009 Will Green (wgreen at users.sourceforge.net)                --
--- Database schema version 5 for Postgres                                   --
+-- Database schema version 5 for Postgres 8.0.3 or later                    --
 -- ---------------------------------------------------------------------------
 
 BEGIN;
