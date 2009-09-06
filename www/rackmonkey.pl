@@ -209,6 +209,7 @@ eval {
                     $$d{'age'}         = calculateAge($$d{'purchased'});    # determine age in years from purchased date
                     $$d{'notes'}       = formatNotes($$d{'notes'}, 1);
                     $$d{'notes_short'} = shortStr($$d{'notes'});
+                    $$d{'ram_installed'} = formatMagnitude(1024 * $$d{'ram_installed'}); # format ram size, it's kept as KB in the DB
                 }
 
                 $template->param('device_search' => $deviceSearch);
@@ -245,7 +246,8 @@ eval {
                     if ($viewType =~ /^single/)
                     {
                         $$device{'notes'} = formatNotes($$device{'notes'});
-
+                        $$device{'ram_installed'} = formatMagnitude(1024 * $$device{'ram_installed'}); # format ram size, it's kept as KB in the DB
+                        
                         if (lc($$device{'hardware_manufacturer_name'}) =~ /dell/)    # not very extensible
                         {
                             $template->param('dell_query' => $$conf{'dellquery'});
@@ -275,6 +277,22 @@ eval {
                         $$device{'in_service'}      = 1;    # default is in service
                         $$device{'notes'}           = '';
                         $$device{'os_licence_key'}  = '';
+                    }
+                    
+                    if ($viewType =~ /^edit/) # format RAM size for editing, DB stores in KB
+                    {
+                        if ($$device{'ram_installed'} > 0)
+                        {
+                            $$device{'ram_installed'} = $$device{'ram_installed'} / 1024;
+                            if ($$device{'ram_installed'} < 1024)
+                            {
+                                $template->param('ram_units_mb' => 1);
+                            }
+                            else
+                            {
+                                $$device{'ram_installed'} = $$device{'ram_installed'} / 1024;
+                            }
+                        }
                     }
 
                     $template->param($device);
@@ -827,4 +845,42 @@ sub formatNotes
     }
 
     return $note;
+}
+
+# Formats data sizes to fit in a sensible range with units, e.g. 16 MB, 144GB. Supports kilo to peta.
+sub formatMagnitude
+{
+    my $value = shift;
+    my $style = shift || 1024;
+    return '' unless ($value > 0);
+    my $unit;
+    if ($value >= $style)
+    {
+        $value /= 1024;
+        $unit = 'K';
+    }
+    if ($value >= $style)
+    {
+        $value /= 1024;
+        $unit = 'M';
+    }
+    if ($value >= $style)
+    {
+        $value /= 1024;
+        $unit = 'G';
+    }
+    if ($value >= $style)
+    {
+        $value /= 1024;
+        $unit = 'T';
+    }
+    if ($value >= $style)
+    {
+        $value /= 1024;
+        $unit = 'P';
+    }
+    
+    # use xB or xb depending on whether we're using 2^10 or 10^3 as base for units
+    $unit .= ($style == 1024) ? 'B' : 'b';
+    return sprintf("%.2f $unit", $value); # Format to two decimal places
 }

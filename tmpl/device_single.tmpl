@@ -57,8 +57,18 @@
 					</div>
 					<div style="clear:both">
 						<div style="width: 50%; float:left">
-							<div class="key">Operating System</div>
-							<div class="value"><TMPL_VAR ESCAPE=HTML NAME=os_name><TMPL_IF NAME=os_version> <TMPL_VAR ESCAPE=HTML NAME=os_version></TMPL_IF><TMPL_UNLESS NAME=os_meta_default_data> &nbsp; <a class="small" title="View details for this operating system" href="<TMPL_VAR NAME=base_url>?view=os&amp;view_type=single&amp;id=<TMPL_VAR ESCAPE=URL NAME=os>">Details&hellip;</a></TMPL_UNLESS></div>
+							<div class="key">Installed RAM</div>
+							<div class="value"><TMPL_IF NAME=ram_installed><TMPL_VAR ESCAPE=HTML NAME=ram_installed><TMPL_ELSE><em>unknown</em></TMPL_IF></div>
+						</div>
+						<div>
+              <div class="key">Operating System</div>
+          		<div class="value"><TMPL_VAR ESCAPE=HTML NAME=os_name><TMPL_IF NAME=os_version> <TMPL_VAR ESCAPE=HTML NAME=os_version></TMPL_IF><TMPL_UNLESS NAME=os_meta_default_data> &nbsp; <a class="small" title="View details for this operating system" href="<TMPL_VAR NAME=base_url>?view=os&amp;view_type=single&amp;id=<TMPL_VAR ESCAPE=URL NAME=os>">Details&hellip;</a></TMPL_UNLESS></div>
+						</div>
+					</div>
+					<div style="clear:both">
+						<div style="width: 50%; float:left">
+						  <div class="key">OS Kernel</div>
+							<div class="value"><TMPL_IF NAME=os_kernel><TMPL_VAR ESCAPE=HTML NAME=os_kernel><TMPL_ELSE><em>unknown</em></TMPL_IF></div>
 						</div>
 						<div>
 							<div class="key">OS Licence Key</div>

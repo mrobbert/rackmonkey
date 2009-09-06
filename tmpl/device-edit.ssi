@@ -48,11 +48,23 @@
 						</div>
 						<div style="clear: both">
 							<div style="width: 50%; float: left">
-								<label for="os">OS / Version</label><br />
+								<label for="ram_installed">Installed RAM</label><br />
+								<input id="ram_installed" name="ram_installed" type="text" size="10" value="<TMPL_VAR ESCAPE=HTML NAME=ram_installed>" />
+								<input type="radio" id="ram_units_mb" name="ram_units" value="MB" <TMPL_IF NAME=ram_units_mb>checked="checked"</TMPL_IF> /> <label for="ram_units_mb">MB</label>
+              	<input type="radio" id="ram_units_gb" name="ram_units" value="GB" <TMPL_UNLESS NAME=ram_units_mb>checked="checked"</TMPL_UNLESS> /> <label for="ram_units_gb">GB</label>
+							</div>
+							<div>
+                <label for="os">OS / Version</label><br />
 								<select id="os" name="os"><TMPL_LOOP NAME=oslist>
 									<option <TMPL_IF NAME=selected>selected="selected" </TMPL_IF>value="<TMPL_VAR ESCAPE=HTML NAME=id>"><TMPL_VAR ESCAPE=HTML NAME=name></option></TMPL_LOOP>
 								</select>
 								<input type="text" size="8" name="os_version" value="<TMPL_VAR ESCAPE=HTML NAME=os_version>" />
+							</div>
+						</div>
+						<div style="clear: both">
+							<div style="width: 50%; float: left">
+								<label for="os_kernel">OS Kernel</label><br />
+								<input id="os_kernel" name="os_kernel" type="text" size="32" value="<TMPL_VAR ESCAPE=HTML NAME=os_kernel>" />
 							</div>
 							<div>
 								<label for="os_licence_key">OS Licence Key</label><br />

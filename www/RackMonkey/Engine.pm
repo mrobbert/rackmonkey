@@ -829,13 +829,13 @@ sub updateDevice
 
     if ($$record{'id'})
     {
-        $sth = $self->dbh->prepare(qq!UPDATE device SET name = ?, domain = ?, rack = ?, rack_pos = ?, hardware = ?, serial_no = ?, asset_no = ?, purchased = ?, os = ?, os_version = ?, os_licence_key = ?, customer = ?, service = ?, role = ?, in_service = ?, notes = ?, meta_update_time = ?, meta_update_user = ? WHERE id = ?!);
+        $sth = $self->dbh->prepare(qq!UPDATE device SET name = ?, domain = ?, rack = ?, rack_pos = ?, hardware = ?, ram_installed = ?, serial_no = ?, asset_no = ?, purchased = ?, os = ?, os_version = ?, os_licence_key = ?, os_kernel = ?, customer = ?, service = ?, role = ?, in_service = ?, notes = ?, meta_update_time = ?, meta_update_user = ? WHERE id = ?!);
         my $ret = $sth->execute($self->_validateDeviceInput($record), $updateTime, $updateUser, $$record{'id'});
         croak "RM_ENGINE: Update failed. This device may have been removed before the update occured." if ($ret eq '0E0');
     }
     else
     {
-        $sth = $self->dbh->prepare(qq!INSERT INTO device (name, domain, rack, rack_pos, hardware, serial_no, asset_no, purchased, os, os_version, os_licence_key, customer, service, role, in_service, notes, meta_update_time, meta_update_user) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)!);
+        $sth = $self->dbh->prepare(qq!INSERT INTO device (name, domain, rack, rack_pos, hardware, ram_installed, serial_no, asset_no, purchased, os, os_version, os_licence_key, os_kernel, customer, service, role, in_service, notes, meta_update_time, meta_update_user) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)!);
         $sth->execute($self->_validateDeviceInput($record), $updateTime, $updateUser);
         $newId = $self->_lastInsertId('device');
     }
@@ -883,6 +883,30 @@ sub _validateDeviceInput
     {
         croak "RM_ENGINE: OS licence keys cannot exceed " . $self->getConf('maxstring') . " characters.";
     }
+    unless (length($$record{'os_kernel'}) <= $self->getConf('maxstring'))
+    {
+        croak "RM_ENGINE: OS kernels/builds cannot exceed " . $self->getConf('maxstring') . " characters.";
+    }
+    
+    if ($$record{'ram_installed'} + 0 > 0) # Is a numerical RAM size provided
+    {
+        # RAM is recorded in KB, need to adjust submitted values if the MB or GB flag is set
+        if ($$record{'ram_units'} eq 'MB')
+        {
+            $$record{'ram_installed'} *= 1024;
+        }
+        elsif ($$record{'ram_units'} eq 'GB')
+        {
+            $$record{'ram_installed'} *= 1024 * 1024;
+        }
+        # RAM is stored as an integer, so truncate here, this is crude, but sub KB accuracy isn't expected
+        $$record{'ram_installed'} = int($$record{'ram_installed'});
+    }
+    else 
+    {
+        $$record{'ram_installed'} = undef; # if we don't have a numerical set to NULL in DB so we know it's unknown
+    }   
+
     if (defined $$record{'primary_mac'}) # Not in UI by default: check defined to avoid warning message, should really be extended to all checks
     {
         unless (length($$record{'primary_mac'}) <= $self->getConf('maxstring'))
@@ -943,7 +967,7 @@ sub _validateDeviceInput
         $$record{'os_version'} = '';
     }
 
-    return ($$record{'name'}, $$record{'domain'}, $$record{'rack'}, $$record{'rack_pos'}, $$record{'hardware_model'}, $$record{'serial_no'}, $$record{'asset_no'}, $$record{'purchased'}, $$record{'os'}, $$record{'os_version'}, $$record{'os_licence_key'}, $$record{'customer'}, $$record{'service'}, $$record{'role'}, $$record{'in_service'}, $$record{'notes'});
+    return ($$record{'name'}, $$record{'domain'}, $$record{'rack'}, $$record{'rack_pos'}, $$record{'hardware_model'}, $$record{'ram_installed'}, $$record{'serial_no'}, $$record{'asset_no'}, $$record{'purchased'}, $$record{'os'}, $$record{'os_version'}, $$record{'os_licence_key'}, $$record{'os_kernel'}, $$record{'customer'}, $$record{'service'}, $$record{'role'}, $$record{'in_service'}, $$record{'notes'});
 }
 
 sub totalSizeDevice
