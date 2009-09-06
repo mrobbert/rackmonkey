@@ -107,7 +107,7 @@ eval {
         my $templatePath = $$conf{'tmplpath'} . "/${view}_${viewType}.tmpl";
         $template = HTML::Template->new('filename' => $templatePath, 'die_on_bad_params' => 0, 'global_vars' => 1, 'case_sensitive' => 1, 'loop_context_vars' => 1);
 
-        if (($view eq 'config') || ($view eq 'help') || ($view eq 'network') || ($view eq 'power'))
+        if (($view eq 'config') || ($view eq 'help') || ($view eq 'network'))
         {
             # do nothing - pages are static content
         }
@@ -448,6 +448,26 @@ eval {
                 {
                     $template->param('manufacturerlist' => $cgi->selectItem($backend->simpleList('software_manufacturer', 1), $selectedManufacturer));
                 }
+            }
+        }
+        elsif ($view eq 'power')
+        {
+            if ($viewType =~ /^default/)
+            {
+                my $psu = $backend->psuList($orderBy);
+                for my $p (@$psu)
+                {
+                    $$p{'notes'} = formatNotes($$p{'notes'}, 1);
+                    $$p{'notes_short'} = shortStr($$p{'notes'});
+                    $$p{'rated_output'} = int($$p{'rated_output'} / 1000);
+                    
+                }
+                my $totalPSUCount  = $backend->itemCount('psu');
+                my $listedPSUCount = @$psu;
+                $template->param('total_psu_count'   => $totalPSUCount);
+                $template->param('listed_psu_count'  => $listedPSUCount);
+                $template->param('all_psu_listed'    => ($totalPSUCount == $listedPSUCount));
+                $template->param('powersupplies' => $psu);
             }
         }
         elsif ($view eq 'rack')

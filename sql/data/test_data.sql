@@ -84,3 +84,8 @@ INSERT INTO device_app (app, device, relation, meta_update_time, meta_update_use
 INSERT INTO device_app (app, device, relation, meta_update_time, meta_update_user) VALUES (1, 4, 6, '1988-02-15 00:00:00', 'rackmonkey');
 INSERT INTO device_app (app, device, relation, meta_update_time, meta_update_user) VALUES (1, 12, 1, '1988-02-15 00:00:00', 'rackmonkey');
 INSERT INTO device_app (app, device, relation, meta_update_time, meta_update_user) VALUES (2, 11, 1, '1988-02-15 00:00:00', 'rackmonkey');
+
+-- Test power supplies
+INSERT INTO psu (name, rated_output, device, notes, meta_default_data, meta_update_time, meta_update_user) VALUES ('PSU0', 700000, 15, 'Test data', 0, '1988-02-15 00:00:00', 'rackmonkey');
+INSERT INTO psu (name, rated_output, device, notes, meta_default_data, meta_update_time, meta_update_user) VALUES ('PSU1', 700000, 15, 'Test data', 0, '1988-02-15 00:00:00', 'rackmonkey');
+INSERT INTO psu (name, rated_output, device, notes, meta_default_data, meta_update_time, meta_update_user) VALUES ('PSU0', 700000, 16, 'Test data', 0, '1988-02-15 00:00:00', 'rackmonkey');

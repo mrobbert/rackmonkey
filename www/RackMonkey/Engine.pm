@@ -1687,6 +1687,54 @@ sub osWithDevice
 
 
 ##############################################################################
+# Power Methods                                                              #
+##############################################################################
+
+sub psu
+{
+    my ($self, $id) = @_;
+    my $sth = $self->dbh->prepare(
+        qq!
+		SELECT 
+		    psu.*,
+		    device.id AS device_id,
+		    device.name AS device_name
+		FROM psu, device
+		WHERE
+		    psu.device = device.id AND 
+		    id = ?
+	!
+    );
+    $sth->execute($id);
+    my $psu = $sth->fetchrow_hashref('NAME_lc');
+    croak 'RM_ENGINE: No such power supply id. This power supply may have been deleted.' unless defined($$psu{'id'});
+    return $psu;
+}
+
+sub psuList
+{
+    my $self = shift;
+    my $orderBy = shift || '';
+    $orderBy = 'device.name' unless $self->_checkOrderBy($orderBy);
+    $orderBy .= ', psu.name';
+    my $sth = $self->dbh->prepare(
+        qq!
+		SELECT psu.*,
+		    device.id AS device_id,
+	        device.name AS device_name
+		FROM psu, device
+		WHERE 
+		    psu.device = device.id AND 
+		    psu.meta_default_data = 0
+		ORDER BY $orderBy
+	!
+    );
+    $sth->execute;
+    return $sth->fetchall_arrayref({});
+}
+
+
+##############################################################################
 # Rack Methods                                                               #
 ##############################################################################
 
