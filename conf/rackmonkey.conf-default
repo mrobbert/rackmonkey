@@ -24,7 +24,13 @@ wwwpath =
 dellquery = http://support.euro.dell.com/support/topics/topic.aspx/emea/shared/support/my_systems_info/en/details?c=uk&cs=ukbsdt1&l=en&s=bsd&~ck=ln&lnki=2&ServiceTag=
 hpquery = http://itrc.hp.com/service/ewarranty/warrantyResults.do
 
-# Preference Constants
+# Features
+# Set to 0 to disable support for these features (no data will be lost, but it will be hidden in the web interface)
+apps = 1                # Include apps and the ability to associate them with devices
+customer_service = 1    # Include customer and service level fields
+power = 1               # Include power supply and usage fields
+
+# Preferences
 defaultview = rack      # Default view loaded when none is specified
 dateformat = %Y-%m-%d   # Format used to display dates (not currently used)
 shorttextlen = 32       # Shorten text longer than this for table views
