@@ -2,7 +2,7 @@
 -- RackMonkey - Know Your Racks - http://www.rackmonkey.org                 --
 -- Version 1.3.%BUILD%                                                      --
 -- (C)2004-2009 Will Green (wgreen at users.sourceforge.net)                --
--- Database schema version 5 for SQLite                                     --
+-- Database schema version 5 for SQLite 3.3.6 or later                      --
 -- ---------------------------------------------------------------------------
 
 BEGIN EXCLUSIVE TRANSACTION;
