@@ -21,6 +21,18 @@
 <body>
 	<TMPL_INCLUDE NAME="nav-power.ssi">
 	<div id="main">
+	  <form id="power_options" method="get" action="<TMPL_VAR NAME=base_url>">
+			<p>
+				<label style="float: left">View Type</label>
+				<select class="view_type" name="view_type" onchange="submit()">
+					<option selected="selected" value="default">PSU</option>
+					<option value="default_device">Device</option>
+					<option value="default_rack">Rack</option>
+				</select>
+				<TMPL_IF NAME=rack2xls_url><button title="Export the power table to an Excel spreadsheet" onclick="window.location = '<TMPL_VAR NAME=rack2xls_url>?view=power&amp;view_type=xls_export&amp;id=<TMPL_VAR ESCAPE=URL NAME=id>'; return false;">Export XLS</button></TMPL_IF>
+				<TMPL_IF NAME=rack2pdf_url><button title="Export the powe table to a PDF document" onclick="window.location = '<TMPL_VAR NAME=rack2pdf_url>?view=power&amp;view_type=pdf_export&amp;id=<TMPL_VAR ESCAPE=URL NAME=id>'; return false;">Export PDF</button></TMPL_IF>
+			</p>
+		</form>
 		<table class="itemtable">
 			<tr>
 				<th colspan="3">

@@ -108,8 +108,10 @@ table.itemtable td.footer a
 	text-decoration: underline;	
 }
 
-#device_options select
+select.view_type
 {
 	font-family: verdana, helvetica, sans-serif;
   	font-size: 0.8em;
+  	margin-right: 20px; 
+  	margin-left: 4px
 }
