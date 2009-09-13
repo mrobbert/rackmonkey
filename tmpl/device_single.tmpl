@@ -107,8 +107,8 @@
 					</div>
 					<hr style="clear: both" />
 					<div>
-						<div class="key">Power Supplies</div>
-						<div class="value">Hardware supports <TMPL_VAR ESCAPE=HTML NAME=hardware_psu_count> PSUs:</div>
+						<div class="key">Power Supplies (Supports <TMPL_VAR ESCAPE=HTML NAME=hardware_psu_count>)</div>
+						<div class="value"><TMPL_IF NAME=psus><TMPL_LOOP NAME=psus><TMPL_VAR ESCAPE=HTML NAME=name><TMPL_UNLESS __last__>,</TMPL_UNLESS> </TMPL_LOOP><TMPL_ELSE><em>no information available</em></TMPL_IF></div>
 					</div><TMPL_IF NAME=apps>
 					<hr style="clear: both" />
 					<div>

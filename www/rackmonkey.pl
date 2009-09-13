@@ -246,12 +246,14 @@ eval {
                     if ($viewType =~ /^single/)
                     {
                         $$device{'notes'} = formatNotes($$device{'notes'});
-                        $$device{'ram_installed'} = formatMagnitude(1024 * $$device{'ram_installed'}); # format ram size, it's kept as KB in the DB
+                        $$device{'ram_installed'} = formatMagnitude(1024 * $$device{'ram_installed'}); # format ram size, it's kept as KB in the DB, this factor should be stored in config
                         
                         if (lc($$device{'hardware_manufacturer_name'}) =~ /dell/)    # not very extensible
                         {
                             $template->param('dell_query' => $$conf{'dellquery'});
                         }
+                        
+                        $template->param('psus' =>  $backend->psuOnDeviceList($id));
                     }
 
                     if ($viewType !~ /^single/)

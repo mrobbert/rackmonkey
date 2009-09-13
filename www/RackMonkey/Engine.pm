@@ -1778,6 +1778,23 @@ sub psuList
     return $sth->fetchall_arrayref({});
 }
 
+sub psuOnDeviceList
+{
+    my ($self, $id) = @_;
+    my $sth = $self->dbh->prepare(
+        qq!
+		SELECT psu.*
+		FROM psu
+		WHERE 
+		    psu.device = ?
+		ORDER BY
+    		psu.name
+	!
+    );
+    $sth->execute($id);
+    return $sth->fetchall_arrayref({});
+}
+
 
 ##############################################################################
 # Rack Methods                                                               #
