@@ -121,6 +121,7 @@ CREATE TABLE os
 	id SERIAL PRIMARY KEY,
 	name VARCHAR UNIQUE NOT NULL,
 	manufacturer INTEGER NOT NULL REFERENCES org,
+	home_page VARCHAR,
 	notes VARCHAR,
 	meta_default_data INTEGER NOT NULL DEFAULT 0,
 	meta_update_time VARCHAR,
