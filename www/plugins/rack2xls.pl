@@ -2,12 +2,12 @@
 ##############################################################################
 # RackMonkey - Know Your Racks - http://www.rackmonkey.org                   #
 # Version 1.3.%BUILD%                                                        #
-# (C)2004-2009 Will Green (wgreen at users.sourceforge.net)                  #
+# (C)2004-2010 Will Green (wgreen at users.sourceforge.net)                  #
 # RackMonkey XLS Spreadsheet Export Script                                   #
 ##############################################################################
 
 # Portions of this code contributed by Pierre Larsson,
-#	(C)2007-2008 Pierre Larsson
+#   (C)2007-2008 Pierre Larsson
 
 # This program is free software; you can redistribute it and/or modify it
 # under the terms of the GNU General Public License as published by the Free
@@ -79,26 +79,27 @@ eval {
         my ($format, $headers_format, $footerFormat, $url_format) = formatSpreadsheet($workbook);
 
         # create the headers and set the column widths
-        $worksheet->write(0, 0,  "Device",         $headers_format);
-        $worksheet->write(0, 1,  "Domain",         $headers_format);
-        $worksheet->write(0, 2,  "In Service",     $headers_format);
-        $worksheet->write(0, 3,  "Status",         $headers_format);
-        $worksheet->write(0, 4,  "Position",       $headers_format);
-        $worksheet->write(0, 5,  "Rack",           $headers_format);
-        $worksheet->write(0, 6,  "Room",           $headers_format);
-        $worksheet->write(0, 7,  "Building",       $headers_format);
-        $worksheet->write(0, 8,  "Role",           $headers_format);
-        $worksheet->write(0, 9,  "Manufacturer",   $headers_format);
-        $worksheet->write(0, 10, "Hardware",       $headers_format);
-        $worksheet->write(0, 11, "Size (U)",       $headers_format);
-        $worksheet->write(0, 12, "OS",             $headers_format);
-        $worksheet->write(0, 13, "OS Version",     $headers_format);
-        $worksheet->write(0, 14, "OS Licence Key", $headers_format);
-        $worksheet->write(0, 15, "Serial",         $headers_format);
-        $worksheet->write(0, 16, "Asset",          $headers_format);
-        $worksheet->write(0, 17, "Customer",       $headers_format);
-        $worksheet->write(0, 18, "Service Level",  $headers_format);
-        $worksheet->write(0, 19, "Notes",          $headers_format);
+        $worksheet->write(0, 0,  "Device",          $headers_format);
+        $worksheet->write(0, 1,  "Domain",          $headers_format);
+        $worksheet->write(0, 2,  "In Service",      $headers_format);
+        $worksheet->write(0, 3,  "Status",          $headers_format);
+        $worksheet->write(0, 4,  "Position",        $headers_format);
+        $worksheet->write(0, 5,  "Rack",            $headers_format);
+        $worksheet->write(0, 6,  "Room",            $headers_format);
+        $worksheet->write(0, 7,  "Building",        $headers_format);
+        $worksheet->write(0, 8,  "Role",            $headers_format);
+        $worksheet->write(0, 9,  "Manufacturer",    $headers_format);
+        $worksheet->write(0, 10, "Hardware",        $headers_format);
+        $worksheet->write(0, 11, "Size (U)",        $headers_format);
+        $worksheet->write(0, 12, "OS",              $headers_format);
+        $worksheet->write(0, 13, "OS Version",      $headers_format);
+        $worksheet->write(0, 14, "OS Licence Key",  $headers_format);
+        $worksheet->write(0, 15, "Serial",          $headers_format);
+        $worksheet->write(0, 16, "Asset",           $headers_format);
+        $worksheet->write(0, 17, "Purchased",       $headers_format);
+        $worksheet->write(0, 18, "Customer",        $headers_format);
+        $worksheet->write(0, 19, "Service Level",   $headers_format);
+        $worksheet->write(0, 20, "Notes",           $headers_format);
 
         $worksheet->set_column(0,  0,  20);
         $worksheet->set_column(1,  1,  30);
@@ -114,8 +115,8 @@ eval {
         $worksheet->set_column(12, 12, 22);
         $worksheet->set_column(13, 13, 13);
         $worksheet->set_column(14, 14, 38);
-        $worksheet->set_column(15, 18, 22);
-        $worksheet->set_column(19, 19, 100);
+        $worksheet->set_column(15, 19, 22);
+        $worksheet->set_column(20, 20, 100);
 
         # start writing data in the first column and below the header
         my $col = 0;
@@ -186,7 +187,7 @@ eval {
             {
                 $worksheet->write($row, $col++, '-', $format);
             }
-
+            $worksheet->write($row, $col++, $device->{'purchased'},          $format);
             $worksheet->write($row, $col++, $device->{'customer_name'},      $format);
             $worksheet->write($row, $col++, $device->{'service_name'},       $format);
             $worksheet->write($row, $col++, formatNotes($device->{'notes'}), $format);

@@ -1,9 +1,11 @@
 -- ---------------------------------------------------------------------------
 -- RackMonkey - Know Your Racks - http://www.rackmonkey.org                 --
 -- Version 1.3.%BUILD%                                                      --
--- (C)2004-2009 Will Green (wgreen at users.sourceforge.net)                --
+-- (C)2004-2010 Will Green (wgreen at users.sourceforge.net)                --
 -- Database schema version 5 for MySQL 5.0.22 or later                      --
 -- ---------------------------------------------------------------------------
+
+-- Note: this schema hasn't been updated to include RackMonkey 1.3 features
 
 BEGIN;
 
