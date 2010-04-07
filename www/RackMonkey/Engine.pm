@@ -1649,13 +1649,13 @@ sub updateOs
 
     if ($$record{'id'})
     {
-        $sth = $self->dbh->prepare(qq!UPDATE os SET name = ?, manufacturer = ?, notes = ?, meta_update_time = ?, meta_update_user = ? WHERE id = ?!);
+        $sth = $self->dbh->prepare(qq!UPDATE os SET name = ?, manufacturer = ?, home_page = ?, notes = ?, meta_update_time = ?, meta_update_user = ? WHERE id = ?!);
         my $ret = $sth->execute($self->_validateOsUpdate($record), $updateTime, $updateUser, $$record{'id'});
         croak "RM_ENGINE: Update failed. This OS may have been removed before the update occured." if ($ret eq '0E0');
     }
     else
     {
-        $sth = $self->dbh->prepare(qq!INSERT INTO os (name, manufacturer, notes, meta_update_time, meta_update_user) VALUES(?, ?, ?, ?, ?)!);
+        $sth = $self->dbh->prepare(qq!INSERT INTO os (name, manufacturer, home_page, notes, meta_update_time, meta_update_user) VALUES(?, ?, ?, ?, ?, ?)!);
         $sth->execute($self->_validateOsUpdate($record), $updateTime, $updateUser);
         $newId = $self->_lastInsertId('os');
     }
@@ -1678,10 +1678,12 @@ sub _validateOsUpdate
     my ($self, $record) = @_;
     croak "RM_ENGINE: You must specify a name for the operating system." unless (length($$record{'name'}) > 1);
     croak "RM_ENGINE: Names must be less than " . $self->getConf('maxstring') . " characters." unless (length($$record{'name'}) <= $self->getConf('maxstring'));
-
+    croak "RM_ENGINE: Home page URLs cannot exceed " . $self->getConf('maxstring') . " characters."
+      unless (length($$record{'home_page'}) <= $self->getConf('maxstring'));
+      
     # no validation for $$record{'manufacturer_id'} - foreign key constraints will catch
     croak "RM_ENGINE: Notes cannot exceed '.$self->getConf('maxnote').' characters." unless (length($$record{'notes'}) <= $self->getConf('maxnote'));
-    return ($$record{'name'}, $$record{'manufacturer_id'}, $$record{'notes'});
+    return ($$record{'name'}, $$record{'manufacturer_id'}, $$record{'home_page'}, $$record{'notes'});
 }
 
 sub osDeviceCount
