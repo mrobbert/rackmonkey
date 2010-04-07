@@ -4,7 +4,7 @@
 ##############################################################################
 # RackMonkey - Know Your Racks - http://www.rackmonkey.org                   #
 # Version 1.3.%BUILD%                                                        #
-# (C)2004-2009 Will Green (wgreen at users.sourceforge.net)                  #
+# (C)2004-2010 Will Green (wgreen at users.sourceforge.net)                  #
 # Org single view template                                                   #
 ##############################################################################
 -->
@@ -62,7 +62,7 @@
 					</div>
 					<div>
 						<div class="key">Home Page</div>
-						<div class="value"><TMPL_IF NAME=home_page><a href="<TMPL_VAR ESCAPE=HTML NAME=home_page>"><TMPL_VAR ESCAPE=HTML NAME=home_page></a><TMPL_ELSE>&nbsp;-</TMPL_IF></div>
+						<div class="value"><TMPL_IF NAME=home_page><a href="<TMPL_VAR ESCAPE=HTML NAME=home_page>"><TMPL_IF NAME=home_page_short><TMPL_VAR ESCAPE=HTML NAME=home_page_short><TMPL_ELSE><TMPL_VAR ESCAPE=HTML NAME=home_page></TMPL_IF></a><TMPL_ELSE>&nbsp;-</TMPL_IF></div>
 					</div><TMPL_IF NAME=notes>
 					<hr />
 					<div>

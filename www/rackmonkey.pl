@@ -2,7 +2,7 @@
 ##############################################################################
 # RackMonkey - Know Your Racks - http://www.rackmonkey.org                   #
 # Version 1.3.%BUILD%                                                        #
-# (C)2004-2009 Will Green (wgreen at users.sourceforge.net)                  #
+# (C)2004-2010 Will Green (wgreen at users.sourceforge.net)                  #
 # Main RackMonkey CGI script                                                 #
 ##############################################################################
 
@@ -429,6 +429,7 @@ eval {
                 my $org = $backend->org($id);
                 if ($viewType =~ /^single/)
                 {
+                    $$org{'home_page_short'} = shortURL($$org{'home_page'});
                     $$org{'notes'} = formatNotes($$org{'notes'});
                 }
                 $template->param($org);
@@ -464,6 +465,7 @@ eval {
                     my $operatingSystem = $backend->os($id);
                     if ($viewType =~ /^single/)
                     {
+                        $$operatingSystem{'home_page_short'} = shortURL($$operatingSystem{'home_page'});
                         $$operatingSystem{'notes'} = formatNotes($$operatingSystem{'notes'});
                     }
                     $template->param($operatingSystem);
