@@ -74,6 +74,7 @@ table.form div.key
 	margin-bottom: 0.25em;
 }
 
+table.form label,
 table.form span.key
 {
 	font-weight: bold;
