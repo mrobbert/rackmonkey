@@ -32,6 +32,8 @@ INSERT INTO org (name, account_no, customer, software, hardware, descript, home_
 INSERT INTO org (name, account_no, customer, software, hardware, descript, home_page, notes, meta_update_time, meta_update_user) VALUES('Slackware',    NULL, 0, 1, 0, 'Slackware Linux Project', 'http://www.slackware.org', '', '1985-07-24 00:00:00', 'install');
 INSERT INTO org (name, account_no, customer, software, hardware, descript, home_page, notes, meta_update_time, meta_update_user) VALUES('Sun',          NULL, 0, 1, 1, 'Sun Microsystems', 'http://www.sun.com', '', '1985-07-24 00:00:00', 'install');
 INSERT INTO org (name, account_no, customer, software, hardware, descript, home_page, notes, meta_update_time, meta_update_user) VALUES('VMWare',       NULL, 0, 1, 0, 'VMWare', 'http://www.vmware.com', '', '1985-07-24 00:00:00', 'install');
+INSERT INTO org (name, account_no, customer, software, hardware, descript, home_page, notes, meta_update_time, meta_update_user) VALUES('Oracle',       NULL, 0, 1, 1, 'Oracle', 'http://www.oracle.com', '', '1985-07-24 00:00:00', 'install');
+INSERT INTO org (name, account_no, customer, software, hardware, descript, home_page, notes, meta_update_time, meta_update_user) VALUES('EMC',          NULL, 0, 1, 1, 'EMC', 'http://www.emc.com', '', '1985-07-24 00:00:00', 'install');
 
 -- sample operating systems
 INSERT INTO os (name, manufacturer, home_page, notes, meta_update_time, meta_update_user) VALUES('AIX',                         13, 'http://www.ibm.com/aix', '', '1985-07-24 00:00:00', 'install');
