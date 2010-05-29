@@ -1936,6 +1936,13 @@ sub rackListBasic
     return $sth->fetchall_arrayref({});
 }
 
+# experimental sub to produce rack layout at half U resolution
+sub rackPhysicalHalf
+{
+    
+    
+}
+
 sub rackPhysical
 {
     my ($self, $rackid, $selectDev, $tableFormat) = @_;

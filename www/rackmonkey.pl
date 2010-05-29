@@ -25,6 +25,7 @@ use warnings;
 
 use 5.006_001;
 
+use POSIX qw(floor);
 use HTML::Template;
 use HTML::Entities;
 use Time::Local;
@@ -210,6 +211,7 @@ eval {
                     $$d{'notes'}       = formatNotes($$d{'notes'}, 1);
                     $$d{'notes_short'} = shortStr($$d{'notes'});
                     $$d{'ram_installed'} = formatMagnitude(1024 * $$d{'ram_installed'}); # format ram size, it's kept as KB in the DB
+                    $$d{'hardware_size'} = formatUSize($$d{'hardware_size'});
                 }
 
                 $template->param('device_search' => $deviceSearch);
@@ -241,6 +243,7 @@ eval {
                         $device          = $backend->device($id);
                         $$device{'age'}  = calculateAge($$device{'purchased'});
                         $$device{'apps'} = $backend->appOnDeviceList($id);
+                        $$device{'hardware_size'} = formatUSize($$device{'hardware_size'});
                     }
 
                     if ($viewType =~ /^single/)
@@ -367,6 +370,7 @@ eval {
                 {
                     $$h{'notes'} = formatNotes($$h{'notes'}, 1);
                     $$h{'notes_short'} = shortStr($$h{'notes'});
+                    $$h{'size'} = formatUSize($$h{'size'});
                 }
                 my $totalHardwareCount  = $backend->itemCount('hardware');
                 my $listedHardwareCount = @$hardware;
@@ -383,6 +387,8 @@ eval {
                 if (($viewType =~ /^edit/) || ($viewType =~ /^single/))
                 {
                     my $hardware = $backend->hardware($id);
+                    $$hardware {'size'} = formatUSize($$hardware {'size'});
+                    
                     if ($viewType =~ /^single/)
                     {
                         $$hardware{'notes'} = formatNotes($$hardware{'notes'});
@@ -507,6 +513,8 @@ eval {
                 {
                     $$r{'notes'} = formatNotes($$r{'notes'}, 1);
                     $$r{'notes_short'} = shortStr($$r{'notes'});
+                    $$r{'size'} = formatUSize($$r{'size'});
+                    $$r{'free_space'} = formatUSize($$r{'free_space'});
                 }
                 my $totalRackCount  = $backend->itemCount('rack');
                 my $listedRackCount = @$racks;
@@ -542,6 +550,8 @@ eval {
                     if ($id)    # used if copying, editing or displaying single view, but not for a plain create
                     {
                         $rack = $backend->rack($id);
+                        $$rack{'size'} = formatUSize($$rack{'size'});
+                        $$rack{'free_space'} = formatUSize($$rack{'free_space'});
                     }
                     else
                     {
@@ -887,4 +897,21 @@ sub formatMagnitude
     # use xB or xb depending on whether we're using 2^10 or 10^3 as base for units
     $unit .= ($style == 1024) ? 'B' : 'b';
     return sprintf("%.2f $unit", $value); # Format to two decimal places
+}
+
+# format the display of U values (stored internally as 1/10th U)
+# could be rewritten less verbosely
+sub formatUSize
+{
+    my $value = shift; 
+    $value = $value / 10.0;   
+    if (($value - floor($value)) > 0.1)
+    {
+        $value = sprintf("%.1f", $value);
+    }
+    else
+    {
+        $value = sprintf("%.0f", $value);
+    }
+    return $value;
 }
