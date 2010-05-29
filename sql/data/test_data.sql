@@ -25,10 +25,10 @@ INSERT INTO row (name, room, room_pos, hidden_row, notes, meta_update_time, meta
 INSERT INTO row (name, room, room_pos, hidden_row, notes, meta_update_time, meta_update_user) VALUES('-', 8, 0, 1, 'Test data', '1988-02-15 00:00:00', 'rackmonkey');
 
 -- Test Racks
-INSERT INTO rack (name, row, row_pos, hidden_rack, size, numbering_direction, notes, meta_update_time, meta_update_user) VALUES('A1', 7, 0, 0, 20, 0, 'Test data', '1988-02-15 00:00:00', 'rackmonkey');
-INSERT INTO rack (name, row, row_pos, hidden_rack, size, numbering_direction, notes, meta_update_time, meta_update_user) VALUES('A2', 7, 0, 0, 20, 0, 'Test data', '1988-02-15 00:00:00', 'rackmonkey');
-INSERT INTO rack (name, row, row_pos, hidden_rack, size, numbering_direction, notes, meta_update_time, meta_update_user) VALUES('R100', 8, 0, 0, 42, 1, 'Test data', '1988-02-15 00:00:00', 'rackmonkey');
-INSERT INTO rack (name, row, row_pos, hidden_rack, size, numbering_direction, notes, meta_update_time, meta_update_user) VALUES('R101', 8, 0, 0, 42, 1, 'Test data', '1988-02-15 00:00:00', 'rackmonkey');
+INSERT INTO rack (name, row, row_pos, hidden_rack, size, numbering_direction, notes, meta_update_time, meta_update_user) VALUES('A1', 7, 0, 0, 200, 0, 'Test data', '1988-02-15 00:00:00', 'rackmonkey');
+INSERT INTO rack (name, row, row_pos, hidden_rack, size, numbering_direction, notes, meta_update_time, meta_update_user) VALUES('A2', 7, 0, 0, 200, 0, 'Test data', '1988-02-15 00:00:00', 'rackmonkey');
+INSERT INTO rack (name, row, row_pos, hidden_rack, size, numbering_direction, notes, meta_update_time, meta_update_user) VALUES('R100', 8, 0, 0, 420, 1, 'Test data', '1988-02-15 00:00:00', 'rackmonkey');
+INSERT INTO rack (name, row, row_pos, hidden_rack, size, numbering_direction, notes, meta_update_time, meta_update_user) VALUES('R101', 8, 0, 0, 420, 1, 'Test data', '1988-02-15 00:00:00', 'rackmonkey');
 
 -- Test Domains
 INSERT INTO domain (name, descript, notes, meta_default_data, meta_update_time, meta_update_user) VALUES('coyote.example.com', '', 'Test data', 0, '1988-02-15 00:00:00', 'rackmonkey');
@@ -74,6 +74,10 @@ INSERT INTO device (name, domain, rack, rack_pos, hardware, serial_no, asset_no,
 -- A couple of devices for racks numbered from top, includes primary_mac and install_build fields (not exposed in GUI in 1.2.5)
 INSERT INTO device (name, domain, rack, rack_pos, hardware, ram_installed, serial_no, asset_no, purchased, os, os_version, os_kernel, customer, service, role, in_service, primary_mac, install_build, notes, meta_default_data, meta_update_time, meta_update_user) VALUES ('www10', 5, 9, 10, 4, 16777216, 'T9909', '', '2009-01-02', 21, '9.04', '2.6.28-13-generic', 29, 4, 3, 1, '00:1e:c2:04:63:94', 'ubuntu_9_04_web', 'Test data', 0, '1988-02-15 00:00:00', 'rackmonkey');
 INSERT INTO device (name, domain, rack, rack_pos, hardware, ram_installed, serial_no, asset_no, purchased, os, os_version, os_kernel, customer, service, role, in_service, primary_mac, install_build, notes, meta_default_data, meta_update_time, meta_update_user) VALUES ('www11', 5, 9, 11, 4, 16777216, 'T9910', '', '2009-01-02', 21, '9.04', '2.6.28-13-generic', 29, 4, 3, 1, '00:1e:c2:04:63:95', 'ubuntu_9_04_web', 'Test data', 0, '1988-02-15 00:00:00', 'rackmonkey');
+
+-- A couple of 1.5U patch panels
+INSERT INTO device (name, domain, rack, rack_pos, hardware, serial_no, asset_no, purchased, os, os_version, customer, service, role, in_service, notes, meta_default_data, meta_update_time, meta_update_user) VALUES ('panel1', 3, 7, 40, 2, 'ZBC123', 'PA1001', '2004-02-29', 11, '12', 28, 2, 21, 1, 'Test data', 0, '1988-02-15 00:00:00', 'rackmonkey');
+INSERT INTO device (name, domain, rack, rack_pos, hardware, serial_no, asset_no, purchased, os, os_version, customer, service, role, in_service, notes, meta_default_data, meta_update_time, meta_update_user) VALUES ('panel2', 3, 8, 40, 2, 'ZBC124', 'PA1002', '2004-02-29', 11, '12', 28, 2, 21, 1, 'Test data', 0, '1988-02-15 00:00:00', 'rackmonkey');
 
 -- Test Apps
 INSERT INTO app (name, descript, notes, meta_default_data, meta_update_time, meta_update_user) VALUES ('Acme CDB', 'Acme Customer Database', 'Test data', 0, '1988-02-15 00:00:00', 'rackmonkey');

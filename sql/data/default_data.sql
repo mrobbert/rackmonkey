@@ -50,7 +50,8 @@ INSERT INTO os (name, manufacturer, notes, meta_default_data, meta_update_time, 
 INSERT INTO os (name, manufacturer, notes, meta_default_data, meta_update_time, meta_update_user) VALUES('not applicable', 2, '', 1, '1970-01-01 00:00:00', 'install');
 
 -- CPU Architecture
-INSERT INTO cpu_arch (name, meta_default_data, meta_update_time, meta_update_user) VALUES ('unknown', 2, '1970-01-01 00:00:00', 'install');
+INSERT INTO cpu_arch (name, meta_default_data, meta_update_time, meta_update_user) VALUES ('unknown', 3, '1970-01-01 00:00:00', 'install');
+INSERT INTO cpu_arch (name, meta_default_data, meta_update_time, meta_update_user) VALUES ('not applicable', 2, '1970-01-01 00:00:00', 'install');
 INSERT INTO cpu_arch (name, meta_default_data, meta_update_time, meta_update_user) VALUES ('other', 1, '1970-01-01 00:00:00', 'install');
 INSERT INTO cpu_arch (name, meta_default_data, meta_update_time, meta_update_user) VALUES ('68k', 0, '1970-01-01 00:00:00', 'install');
 INSERT INTO cpu_arch (name, meta_default_data, meta_update_time, meta_update_user) VALUES ('Alpha', 0, '1970-01-01 00:00:00', 'install');
