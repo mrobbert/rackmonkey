@@ -210,7 +210,7 @@ eval {
                     $$d{'age'}         = calculateAge($$d{'purchased'});    # determine age in years from purchased date
                     $$d{'notes'}       = formatNotes($$d{'notes'}, 1);
                     $$d{'notes_short'} = shortStr($$d{'notes'});
-                    $$d{'ram_installed'} = formatMagnitude(1024 * $$d{'ram_installed'}); # format ram size, it's kept as KB in the DB
+                    $$d{'ram_installed'} = formatMagnitude(1024 * $$d{'ram_installed'}) if defined($$d{'ram_installed'}); # format ram size, it's kept as KB in the DB
                     $$d{'hardware_size'} = formatUSize($$d{'hardware_size'});
                 }
 
@@ -249,7 +249,7 @@ eval {
                     if ($viewType =~ /^single/)
                     {
                         $$device{'notes'} = formatNotes($$device{'notes'});
-                        $$device{'ram_installed'} = formatMagnitude(1024 * $$device{'ram_installed'}); # format ram size, it's kept as KB in the DB, this factor should be stored in config
+                        $$device{'ram_installed'} = formatMagnitude(1024 * $$device{'ram_installed'}) if defined($$device{'ram_installed'}); # format ram size, it's kept as KB in the DB, this factor should be stored in config
                         
                         if (lc($$device{'hardware_manufacturer_name'}) =~ /dell/)    # not very extensible
                         {
