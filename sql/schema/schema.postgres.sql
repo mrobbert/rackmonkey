@@ -5,6 +5,10 @@
 -- Database schema version 5 for Postgres 8.0.3 or later                    --
 -- ---------------------------------------------------------------------------
 
+-- NB. All U sizes are now in units of 1/10th of U. For example:
+--     A 1.5U switch is recorded as size 15
+--     A server in in rack position 17 is recorded as rack_pos 170
+
 BEGIN;
 
 -- Building the device resides in
@@ -149,8 +153,6 @@ CREATE TABLE hardware
 	product_id VARCHAR,
 	cpu_arch INTEGER NOT NULL REFERENCES cpu_arch,
 	size INTEGER,
-	height INTEGER,
-	width INTEGER,
 	image VARCHAR,
 	support_url VARCHAR,
 	spec_url VARCHAR,
