@@ -12,7 +12,9 @@ use warnings;
 use 5.006_001;
 
 use Carp;
+use Data::Dumper;
 use DBI;
+use POSIX qw(floor);
 use Time::Local;
 
 use RackMonkey::Conf;
@@ -1943,10 +1945,14 @@ sub rackPhysicalHalf
     
 }
 
+# Old method that only deals with integer U. It rounds 1.5U down to 1U etc.
+# This allows display to work, but shows space free that doesn't exist
+# Will be replaced by method in sub rackPhysicalHalf once this has been worked out
 sub rackPhysical
 {
     my ($self, $rackid, $selectDev, $tableFormat) = @_;
     my $devices = $self->deviceListInRack($rackid);
+    
     $selectDev   ||= -1;    # not zero so we don't select empty positions
     $tableFormat ||= 0;
 
@@ -1961,14 +1967,17 @@ sub rackPhysical
     $sth->execute($rackid);
     my $rack = $sth->fetchrow_hashref('NAME_lc');
 
+    $$rack{'size'} = floor($$rack{'size'}/10);
     my @rackLayout = (1 .. $$rack{'size'});    # populate the rack positions
 
     # insert each device into the rack layout
     for my $dev (@$devices)
     {
+        $$dev{'rack_pos'} = floor($$dev{'rack_pos'}/10);
+        $$dev{'hardware_size'} = floor($$dev{'hardware_size'}/10);
         my $sizeCount = $$dev{'hardware_size'};
-        my $position  = $$dev{'rack_pos'};
-
+        my $position  = $$dev{'rack_pos'}; 
+        
         # select (highlight) device if requested
         $$dev{'is_selected'} = ($$dev{'id'} == $selectDev);
 
