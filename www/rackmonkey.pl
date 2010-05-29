@@ -25,9 +25,9 @@ use warnings;
 
 use 5.006_001;
 
-use POSIX qw(floor);
 use HTML::Template;
 use HTML::Entities;
+use POSIX qw(floor);
 use Time::Local;
 
 use RackMonkey::CGI;
@@ -80,6 +80,12 @@ eval {
             $$actData{'id'} = $$actData{'act_id'};
             delete $$actData{'act_id'};
         }
+        
+        # Need to multiply to following values by 10 and turn into integers:
+        # hardware - size
+        # device - rack_pos
+        # rack - size
+        
 
         my $lastCreatedId = $backend->performAct($cgi->actOn, $act, $loggedInUser, scalar($cgi->vars));
         $id = $lastCreatedId if (!$id);    # use lastCreatedId if there isn't an id
@@ -212,6 +218,7 @@ eval {
                     $$d{'notes_short'} = shortStr($$d{'notes'});
                     $$d{'ram_installed'} = formatMagnitude(1024 * $$d{'ram_installed'}) if defined($$d{'ram_installed'}); # format ram size, it's kept as KB in the DB
                     $$d{'hardware_size'} = formatUSize($$d{'hardware_size'});
+                    $$d{'rack_pos'}      = formatUSize($$d{'rack_pos'});
                 }
 
                 $template->param('device_search' => $deviceSearch);
@@ -240,10 +247,11 @@ eval {
 
                     if ($id)
                     {
-                        $device          = $backend->device($id);
-                        $$device{'age'}  = calculateAge($$device{'purchased'});
-                        $$device{'apps'} = $backend->appOnDeviceList($id);
+                        $device                   = $backend->device($id);
+                        $$device{'age'}           = calculateAge($$device{'purchased'});
+                        $$device{'apps'}          = $backend->appOnDeviceList($id);
                         $$device{'hardware_size'} = formatUSize($$device{'hardware_size'});
+                        $$device{'rack_pos'}      = formatUSize($$device{'rack_pos'});
                     }
 
                     if ($viewType =~ /^single/)
